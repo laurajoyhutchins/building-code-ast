@@ -19,6 +19,7 @@ class ParserTests(unittest.TestCase):
         ast = parse_provision(source)
 
         self.assertEqual(ast.to_dict(), expected)
+        self.assertEqual(ast.exceptions[0].section, "12.4")
         validate_ast(ast)
 
     def test_prohibition_is_distinct_from_requirement(self) -> None:
