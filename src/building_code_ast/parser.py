@@ -32,7 +32,7 @@ _THRESHOLD_PATTERN = re.compile(
 
 _EXCEPTION_PATTERN = re.compile(
     r",?\s*except\s+as\s+(?:provided|permitted|required)\s+(?:for\s+)?(?:in|by)\s+"
-    r"Section\s+(?P<section>[A-Za-z0-9.()_-]+)\.?$",
+    r"Section\s+(?P<section>[A-Za-z0-9]+(?:[._-][A-Za-z0-9]+)*(?:\([A-Za-z0-9]+\))*)\.?$",
     re.IGNORECASE,
 )
 
