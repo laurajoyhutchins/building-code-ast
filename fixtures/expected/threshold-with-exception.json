@@ -1,0 +1,51 @@
+{
+  "action": {
+    "normalized_verb": "provide",
+    "object_text": "two marked evacuation routes",
+    "span": {
+      "end": 90,
+      "start": 54,
+      "text": "provide two marked evacuation routes"
+    },
+    "text": "provide two marked evacuation routes"
+  },
+  "ast_version": "0.1.0",
+  "conditions": [
+    {
+      "operator": ">",
+      "span": {
+        "end": 47,
+        "start": 20,
+        "text": "exceeding 40 feet in height"
+      },
+      "subject_property": "height",
+      "threshold": {
+        "original_text": "exceeding 40 feet in height",
+        "unit": "ft",
+        "value": 40.0
+      },
+      "type": "comparison"
+    }
+  ],
+  "diagnostics": [],
+  "exceptions": [
+    {
+      "section": "12.4",
+      "span": {
+        "end": 127,
+        "start": 123,
+        "text": "12.4"
+      },
+      "type": "section_reference"
+    }
+  ],
+  "modality": "requirement",
+  "source_span": {
+    "end": 128,
+    "start": 0,
+    "text": "Research facilities exceeding 40 feet in height shall provide two marked evacuation routes, except as permitted by Section 12.4."
+  },
+  "source_text": "Research facilities exceeding 40 feet in height shall provide two marked evacuation routes, except as permitted by Section 12.4.",
+  "subject": "Research facilities",
+  "type": "provision"
+}
