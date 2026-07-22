@@ -27,6 +27,16 @@ def build_parser() -> argparse.ArgumentParser:
     parse_command = subcommands.add_parser("parse", help="parse one provision")
     parse_command.add_argument("text", nargs="?", help="provision text")
     parse_command.add_argument("--file", help="read provision text from a UTF-8 file")
+    parse_command.add_argument(
+        "--source-artifact-id",
+        default="inline",
+        help="durable identifier for the source document or edition",
+    )
+    parse_command.add_argument(
+        "--provision-locator",
+        default="inline",
+        help="locator for this provision within the source artifact",
+    )
     parse_command.add_argument("--compact", action="store_true", help="emit compact JSON")
     return parser
 
@@ -36,7 +46,11 @@ def main(argv: list[str] | None = None) -> int:
     if args.command != "parse":
         raise AssertionError(f"unexpected command: {args.command}")
 
-    ast = parse_provision(_read_source(args))
+    ast = parse_provision(
+        _read_source(args),
+        source_artifact_id=args.source_artifact_id,
+        provision_locator=args.provision_locator,
+    )
     indent = None if args.compact else 2
     print(json.dumps(ast.to_dict(), indent=indent, sort_keys=True))
     return 0
