@@ -9,7 +9,7 @@
     },
     "text": "provide two marked evacuation routes"
   },
-  "ast_version": "0.1.0",
+  "ast_version": "0.2.0",
   "conditions": [
     {
       "operator": ">",
@@ -40,6 +40,15 @@
     }
   ],
   "modality": "requirement",
+  "modality_span": {
+    "end": 53,
+    "start": 48,
+    "text": "shall"
+  },
+  "source_artifact": {
+    "artifact_id": "synthetic:threshold-with-exception:v1",
+    "provision_locator": "fixture:1"
+  },
   "source_span": {
     "end": 128,
     "start": 0,
@@ -47,5 +56,10 @@
   },
   "source_text": "Research facilities exceeding 40 feet in height shall provide two marked evacuation routes, except as permitted by Section 12.4.",
   "subject": "Research facilities",
+  "subject_span": {
+    "end": 19,
+    "start": 0,
+    "text": "Research facilities"
+  },
   "type": "provision"
 }
