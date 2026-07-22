@@ -8,23 +8,39 @@
     "ast_version",
     "type",
     "source_text",
+    "source_artifact",
     "source_span",
     "modality",
+    "modality_span",
     "subject",
+    "subject_span",
     "conditions",
     "action",
     "exceptions",
     "diagnostics"
   ],
   "properties": {
-    "ast_version": { "const": "0.1.0" },
+    "ast_version": { "const": "0.2.0" },
     "type": { "const": "provision" },
     "source_text": { "type": "string", "minLength": 1 },
+    "source_artifact": { "$ref": "#/$defs/sourceArtifact" },
     "source_span": { "$ref": "#/$defs/sourceSpan" },
     "modality": {
       "enum": ["requirement", "prohibition", "permission", "unknown"]
     },
+    "modality_span": {
+      "oneOf": [
+        { "$ref": "#/$defs/sourceSpan" },
+        { "type": "null" }
+      ]
+    },
     "subject": { "type": "string" },
+    "subject_span": {
+      "oneOf": [
+        { "$ref": "#/$defs/sourceSpan" },
+        { "type": "null" }
+      ]
+    },
     "conditions": {
       "type": "array",
       "items": { "$ref": "#/$defs/comparisonCondition" }
@@ -40,6 +56,15 @@
     }
   },
   "$defs": {
+    "sourceArtifact": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["artifact_id", "provision_locator"],
+      "properties": {
+        "artifact_id": { "type": "string", "minLength": 1 },
+        "provision_locator": { "type": "string", "minLength": 1 }
+      }
+    },
     "sourceSpan": {
       "type": "object",
       "additionalProperties": false,
