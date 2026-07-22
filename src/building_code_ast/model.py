@@ -11,7 +11,7 @@ from enum import StrEnum
 from typing import Any
 
 
-AST_VERSION = "0.1.0"
+AST_VERSION = "0.2.0"
 
 
 class Modality(StrEnum):
@@ -32,6 +32,15 @@ class SourceSpan:
     start: int
     end: int
     text: str
+
+    def to_dict(self) -> dict[str, Any]:
+        return asdict(self)
+
+
+@dataclass(frozen=True, slots=True)
+class SourceArtifact:
+    artifact_id: str
+    provision_locator: str
 
     def to_dict(self) -> dict[str, Any]:
         return asdict(self)
@@ -107,8 +116,11 @@ class SectionReference:
 @dataclass(frozen=True, slots=True)
 class ProvisionAst:
     source_text: str
+    source_artifact: SourceArtifact
     modality: Modality
+    modality_span: SourceSpan | None
     subject: str
+    subject_span: SourceSpan | None
     action: Action
     source_span: SourceSpan
     conditions: tuple[ComparisonCondition, ...] = ()
@@ -121,9 +133,12 @@ class ProvisionAst:
             "ast_version": self.ast_version,
             "type": "provision",
             "source_text": self.source_text,
+            "source_artifact": self.source_artifact.to_dict(),
             "source_span": self.source_span.to_dict(),
             "modality": self.modality.value,
+            "modality_span": self.modality_span.to_dict() if self.modality_span else None,
             "subject": self.subject,
+            "subject_span": self.subject_span.to_dict() if self.subject_span else None,
             "conditions": [condition.to_dict() for condition in self.conditions],
             "action": self.action.to_dict(),
             "exceptions": [exception.to_dict() for exception in self.exceptions],
