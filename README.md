@@ -6,7 +6,7 @@ The project is intentionally narrower than "AI understands the building code." I
 
 ```text
 source provision
-  -> normalized source document
+  -> exact original source text plus artifact identity
   -> semantic provision AST
   -> structural validation
   -> exact source-span traceability
@@ -24,9 +24,10 @@ The first vertical slice recognizes a bounded family of synthetic code-style pro
 - simple numeric threshold conditions;
 - generic actions;
 - section-reference exceptions;
-- exact source spans and parser diagnostics.
+- durable source-artifact identity and provision locators;
+- exact source spans for recognized modality, subject, conditions, action, exceptions, and diagnostics.
 
-Unsupported language remains visible in the output instead of being silently guessed.
+The parser preserves the exact original input, including leading and trailing whitespace. All offsets address that unmodified string. Unsupported language remains visible in the output instead of being silently guessed.
 
 ## Example
 
@@ -40,10 +41,12 @@ Run:
 
 ```bash
 python -m building_code_ast.cli parse \
+  --source-artifact-id "synthetic:example:v1" \
+  --provision-locator "example:1" \
   "Research facilities exceeding 40 feet in height shall provide two marked evacuation routes, except as permitted by Section 12.4."
 ```
 
-The output records the requirement, threshold condition, action, exception reference, source text, and exact spans used to derive each node.
+The output records source identity, the requirement and its evidence span, the regulated subject and its evidence span, the threshold condition, action, exception reference, exact original source text, and parser diagnostics.
 
 ## Quick start
 
@@ -59,7 +62,7 @@ python -m unittest discover -s tests -v
 building-code-ast parse "Doors shall not be obstructed."
 ```
 
-The runtime package has no third-party dependencies.
+The runtime package has no third-party dependencies. CLI calls default source identity and locator to `inline`; production ingestion should provide durable values tied to the source artifact and provision location.
 
 ## Repository layout
 
@@ -68,6 +71,7 @@ The runtime package has no third-party dependencies.
 - `fixtures/`: synthetic source and expected-output fixtures
 - `tests/`: parser, provenance, and regression tests
 - `docs/architecture.md`: representation boundaries and staged compiler model
+- `docs/compatibility.md`: public AST version compatibility notes
 - `docs/corpus-policy.md`: source, copyright, and redistribution rules
 - `docs/legal-safety-boundary.md`: interpretation and product-safety constraints
 
