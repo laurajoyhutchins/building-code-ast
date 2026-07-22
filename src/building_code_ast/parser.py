@@ -13,6 +13,7 @@ from .model import (
     ProvisionAst,
     Quantity,
     SectionReference,
+    SourceArtifact,
     SourceSpan,
 )
 from .validation import validate_ast
@@ -69,6 +70,14 @@ def _span(source: str, start: int, end: int) -> SourceSpan:
     return SourceSpan(start=start, end=end, text=source[start:end])
 
 
+def _trimmed_bounds(source: str, start: int, end: int) -> tuple[int, int]:
+    while start < end and source[start].isspace():
+        start += 1
+    while end > start and source[end - 1].isspace():
+        end -= 1
+    return start, end
+
+
 def _modality(modal: str) -> Modality:
     normalized = " ".join(modal.lower().split())
     if normalized in {"shall", "must"}:
@@ -95,10 +104,13 @@ def _extract_exception(source: str, action_start: int, action_text: str) -> tupl
     return core_action, (exception,)
 
 
-def _extract_condition(source: str, subject_start: int, subject_text: str) -> tuple[str, tuple[ComparisonCondition, ...]]:
+def _extract_condition(
+    source: str, subject_start: int, subject_text: str
+) -> tuple[str, SourceSpan | None, tuple[ComparisonCondition, ...]]:
     match = _THRESHOLD_PATTERN.search(subject_text)
     if not match:
-        return subject_text.strip(), ()
+        subject_end = subject_start + len(subject_text)
+        return subject_text, _span(source, subject_start, subject_end) if subject_text else None, ()
 
     condition_start = subject_start + match.start("marker")
     condition_end = subject_start + match.end("property")
@@ -116,8 +128,10 @@ def _extract_condition(source: str, subject_start: int, subject_text: str) -> tu
         ),
         span=_span(source, condition_start, condition_end),
     )
-    regulated_subject = subject_text[: match.start()].strip()
-    return regulated_subject, (condition,)
+    subject_end = subject_start + match.start()
+    subject_start, subject_end = _trimmed_bounds(source, subject_start, subject_end)
+    regulated_subject = source[subject_start:subject_end]
+    return regulated_subject, _span(source, subject_start, subject_end) if regulated_subject else None, (condition,)
 
 
 def _parse_action(source: str, action_start: int, action_text: str) -> tuple[Action, tuple[Diagnostic, ...]]:
@@ -153,29 +167,47 @@ def _parse_action(source: str, action_start: int, action_text: str) -> tuple[Act
     )
 
 
-def parse_provision(source_text: str) -> ProvisionAst:
+def parse_provision(
+    source_text: str,
+    *,
+    source_artifact_id: str = "inline",
+    provision_locator: str = "inline",
+) -> ProvisionAst:
     """Parse one provision from the initial bounded grammar.
 
-    The parser is intentionally conservative. It preserves unsupported text and
-    emits diagnostics rather than fabricating structure.
+    Offsets always address the exact ``source_text`` supplied by the caller.
+    Source identity and provision location distinguish identical text from
+    different artifacts or editions.
     """
 
-    source = source_text.strip()
-    if not source:
+    if not source_text.strip():
         raise ValueError("source_text must not be empty")
+    if not source_artifact_id.strip():
+        raise ValueError("source_artifact_id must not be empty")
+    if not provision_locator.strip():
+        raise ValueError("provision_locator must not be empty")
 
-    modal_match = _MODAL_PATTERN.search(source)
+    source = source_text
+    source_artifact = SourceArtifact(
+        artifact_id=source_artifact_id,
+        provision_locator=provision_locator,
+    )
+    content_start, content_end = _trimmed_bounds(source, 0, len(source))
+    modal_match = _MODAL_PATTERN.search(source, content_start, content_end)
     if modal_match is None:
         action = Action(
-            text=source,
+            text=source[content_start:content_end],
             normalized_verb=None,
             object_text=None,
-            span=_span(source, 0, len(source)),
+            span=_span(source, content_start, content_end),
         )
         ast = ProvisionAst(
             source_text=source,
+            source_artifact=source_artifact,
             modality=Modality.UNKNOWN,
+            modality_span=None,
             subject="",
+            subject_span=None,
             action=action,
             source_span=_span(source, 0, len(source)),
             diagnostics=(
@@ -183,26 +215,21 @@ def parse_provision(source_text: str) -> ProvisionAst:
                     code="missing-modality",
                     severity=DiagnosticSeverity.ERROR,
                     message="No supported requirement, prohibition, or permission modal was found.",
-                    span=_span(source, 0, len(source)),
+                    span=_span(source, content_start, content_end),
                 ),
             ),
         )
         validate_ast(ast)
         return ast
 
-    subject_start = 0
-    subject_end = modal_match.start()
-    raw_subject = source[subject_start:subject_end].strip()
-    leading_subject_space = len(source[subject_start:subject_end]) - len(source[subject_start:subject_end].lstrip())
-    subject_offset = subject_start + leading_subject_space
+    subject_start, subject_end = _trimmed_bounds(source, content_start, modal_match.start())
+    raw_subject = source[subject_start:subject_end]
 
-    action_start = modal_match.end()
-    while action_start < len(source) and source[action_start].isspace():
-        action_start += 1
-    raw_action = source[action_start:]
+    action_start, action_end = _trimmed_bounds(source, modal_match.end(), content_end)
+    raw_action = source[action_start:action_end]
 
     action_text, exceptions = _extract_exception(source, action_start, raw_action)
-    subject, conditions = _extract_condition(source, subject_offset, raw_subject)
+    subject, subject_span, conditions = _extract_condition(source, subject_start, raw_subject)
     action, action_diagnostics = _parse_action(source, action_start, action_text)
 
     diagnostics = list(action_diagnostics)
@@ -212,14 +239,17 @@ def parse_provision(source_text: str) -> ProvisionAst:
                 code="no-structured-condition",
                 severity=DiagnosticSeverity.INFO,
                 message="No supported numeric threshold condition was found; the subject was preserved as written.",
-                span=_span(source, subject_offset, subject_offset + len(raw_subject)),
+                span=_span(source, subject_start, subject_end),
             )
         )
 
     ast = ProvisionAst(
         source_text=source,
+        source_artifact=source_artifact,
         modality=_modality(modal_match.group("modal")),
+        modality_span=_span(source, modal_match.start("modal"), modal_match.end("modal")),
         subject=subject,
+        subject_span=subject_span,
         conditions=conditions,
         action=action,
         exceptions=exceptions,
