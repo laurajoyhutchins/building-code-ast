@@ -70,10 +70,12 @@ The runtime package has no third-party dependencies. CLI calls default source id
 - `schemas/`: versioned JSON Schema projections of the public AST contract
 - `fixtures/`: synthetic source and expected-output fixtures
 - `tests/`: parser, provenance, and regression tests
+- `docs/README.md`: Diátaxis documentation map and authoring guidance
 - `docs/architecture.md`: representation boundaries and staged compiler model
 - `docs/compatibility.md`: public AST version compatibility notes
 - `docs/corpus-policy.md`: source, copyright, and redistribution rules
 - `docs/legal-safety-boundary.md`: interpretation and product-safety constraints
+- `docs/reference/legal-source-publication.md`: legal authorities and public-source publication analysis
 
 ## Relationship to Building Code Map
 
@@ -100,7 +102,7 @@ CI executes both commands on Python 3.12 and 3.13.
 
 ## Data and publication boundary
 
-This repository contains project-authored software, documentation, schemas, and synthetic fixtures. Do not commit proprietary model-code text, standards text, licensed commentary, or bulk source material merely because it is technically obtainable. See [`docs/corpus-policy.md`](docs/corpus-policy.md).
+This repository contains project-authored software, documentation, schemas, and synthetic fixtures. Do not commit proprietary model-code text, standards text, licensed commentary, or bulk source material merely because it is technically obtainable. See [`docs/corpus-policy.md`](docs/corpus-policy.md) and the [`legal source publication reference`](docs/reference/legal-source-publication.md).
 
 ## License
 
