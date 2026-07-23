@@ -34,3 +34,7 @@ Restricted or uncertain source artifacts should remain outside Git. A future ing
 ## Synthetic fixtures
 
 Synthetic fixtures must be labeled as synthetic and should test grammatical and semantic structures rather than imitate long passages from a specific publication.
+
+## Legal reference
+
+See [`reference/legal-source-publication.md`](reference/legal-source-publication.md) for the government-edicts cases, building-code and incorporated-standard decisions, and the operational distinction among enacted law, privately authored publications, editorial material, and project-authored transformations.
