@@ -1,0 +1,138 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://laurajoyhutchins.github.io/building-code-ast/schemas/provision-ast.schema.json",
+  "title": "Building Code Provision AST",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "ast_version",
+    "type",
+    "source_text",
+    "source_artifact",
+    "source_span",
+    "modality",
+    "modality_span",
+    "subject",
+    "subject_span",
+    "conditions",
+    "action",
+    "exceptions",
+    "diagnostics"
+  ],
+  "properties": {
+    "ast_version": { "const": "0.2.0" },
+    "type": { "const": "provision" },
+    "source_text": { "type": "string", "minLength": 1 },
+    "source_artifact": { "$ref": "#/$defs/sourceArtifact" },
+    "source_span": { "$ref": "#/$defs/sourceSpan" },
+    "modality": {
+      "enum": ["requirement", "prohibition", "permission", "unknown"]
+    },
+    "modality_span": {
+      "oneOf": [
+        { "$ref": "#/$defs/sourceSpan" },
+        { "type": "null" }
+      ]
+    },
+    "subject": { "type": "string" },
+    "subject_span": {
+      "oneOf": [
+        { "$ref": "#/$defs/sourceSpan" },
+        { "type": "null" }
+      ]
+    },
+    "conditions": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/comparisonCondition" }
+    },
+    "action": { "$ref": "#/$defs/action" },
+    "exceptions": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/sectionReference" }
+    },
+    "diagnostics": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/diagnostic" }
+    }
+  },
+  "$defs": {
+    "sourceArtifact": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["artifact_id", "provision_locator"],
+      "properties": {
+        "artifact_id": { "type": "string", "minLength": 1 },
+        "provision_locator": { "type": "string", "minLength": 1 }
+      }
+    },
+    "sourceSpan": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["start", "end", "text"],
+      "properties": {
+        "start": { "type": "integer", "minimum": 0 },
+        "end": { "type": "integer", "minimum": 0 },
+        "text": { "type": "string" }
+      }
+    },
+    "quantity": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["value", "unit", "original_text"],
+      "properties": {
+        "value": { "type": "number" },
+        "unit": { "type": "string" },
+        "original_text": { "type": "string" }
+      }
+    },
+    "comparisonCondition": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["type", "subject_property", "operator", "threshold", "span"],
+      "properties": {
+        "type": { "const": "comparison" },
+        "subject_property": { "type": "string" },
+        "operator": { "enum": [">", ">=", "<", "<=", "=="] },
+        "threshold": { "$ref": "#/$defs/quantity" },
+        "span": { "$ref": "#/$defs/sourceSpan" }
+      }
+    },
+    "action": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["text", "normalized_verb", "object_text", "span"],
+      "properties": {
+        "text": { "type": "string" },
+        "normalized_verb": { "type": ["string", "null"] },
+        "object_text": { "type": ["string", "null"] },
+        "span": { "$ref": "#/$defs/sourceSpan" }
+      }
+    },
+    "sectionReference": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["type", "section", "span"],
+      "properties": {
+        "type": { "const": "section_reference" },
+        "section": { "type": "string" },
+        "span": { "$ref": "#/$defs/sourceSpan" }
+      }
+    },
+    "diagnostic": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["code", "severity", "message", "span"],
+      "properties": {
+        "code": { "type": "string" },
+        "severity": { "enum": ["info", "warning", "error"] },
+        "message": { "type": "string" },
+        "span": {
+          "oneOf": [
+            { "$ref": "#/$defs/sourceSpan" },
+            { "type": "null" }
+          ]
+        }
+      }
+    }
+  }
+}
