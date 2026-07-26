@@ -12,6 +12,7 @@ Current status: no dedicated tutorial yet.
 
 Future examples:
 
+- construct and validate a synthetic document tree;
 - parse and inspect a synthetic provision end to end;
 - extend the grammar with a reviewed synthetic fixture;
 - trace a source span from input through JSON output.
@@ -33,8 +34,9 @@ Precise factual contracts, policies, compatibility information, and decision cri
 
 Current reference material:
 
-- [`compatibility.md`](compatibility.md): AST version compatibility;
+- [`compatibility.md`](compatibility.md): independent document and provision AST version compatibility;
 - [`corpus-policy.md`](corpus-policy.md): source inclusion and redistribution rules;
+- [`reference/document-ast.md`](reference/document-ast.md): document AST fields, identity algorithm, and validation invariants;
 - [`reference/legal-source-publication.md`](reference/legal-source-publication.md): legal authorities and operational publication boundaries.
 
 Reference pages should state what the system, format, or policy is. Extended rationale belongs in explanation pages.

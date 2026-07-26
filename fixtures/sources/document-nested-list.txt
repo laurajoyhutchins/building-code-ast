@@ -1,0 +1,6 @@
+Chapter 1 General
+Section 1.1 Scope
+1.1.1 Applicability
+Buildings in the sample district.
+(a) Primary classification.
+    (1) Nested classification.

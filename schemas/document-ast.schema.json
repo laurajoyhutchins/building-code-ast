@@ -1,0 +1,181 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://laurajoyhutchins.github.io/building-code-ast/schemas/document-ast.schema.json",
+  "title": "Building Code Document Structure AST",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "ast_version",
+    "type",
+    "source_text",
+    "source_artifact",
+    "root",
+    "diagnostics"
+  ],
+  "properties": {
+    "ast_version": {
+      "const": "0.1.0"
+    },
+    "type": {
+      "const": "document_tree"
+    },
+    "source_text": {
+      "type": "string",
+      "minLength": 1
+    },
+    "source_artifact": {
+      "$ref": "#/$defs/sourceArtifact"
+    },
+    "root": {
+      "$ref": "#/$defs/documentNode"
+    },
+    "diagnostics": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/diagnostic"
+      }
+    }
+  },
+  "$defs": {
+    "sourceArtifact": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "artifact_id",
+        "edition_id"
+      ],
+      "properties": {
+        "artifact_id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "edition_id": {
+          "type": "string",
+          "minLength": 1
+        }
+      }
+    },
+    "sourceSpan": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "start",
+        "end",
+        "text"
+      ],
+      "properties": {
+        "start": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "end": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "text": {
+          "type": "string"
+        }
+      }
+    },
+    "documentNode": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "node_id",
+        "type",
+        "locator",
+        "span",
+        "label",
+        "attributes",
+        "children"
+      ],
+      "properties": {
+        "node_id": {
+          "type": "string",
+          "pattern": "^docnode:[0-9a-f]{64}$"
+        },
+        "type": {
+          "enum": [
+            "document",
+            "chapter",
+            "section",
+            "subsection",
+            "paragraph",
+            "list_item",
+            "definition_entry",
+            "table",
+            "table_heading",
+            "table_column",
+            "table_row",
+            "table_cell",
+            "heading",
+            "note",
+            "footnote",
+            "unsupported"
+          ]
+        },
+        "locator": {
+          "type": "string",
+          "minLength": 1
+        },
+        "span": {
+          "$ref": "#/$defs/sourceSpan"
+        },
+        "label": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "attributes": {
+          "type": "object",
+          "additionalProperties": {
+            "type": "string"
+          }
+        },
+        "children": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/documentNode"
+          }
+        }
+      }
+    },
+    "diagnostic": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "code",
+        "severity",
+        "message",
+        "span"
+      ],
+      "properties": {
+        "code": {
+          "type": "string",
+          "minLength": 1
+        },
+        "severity": {
+          "enum": [
+            "info",
+            "warning",
+            "error"
+          ]
+        },
+        "message": {
+          "type": "string"
+        },
+        "span": {
+          "oneOf": [
+            {
+              "$ref": "#/$defs/sourceSpan"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        }
+      }
+    }
+  }
+}

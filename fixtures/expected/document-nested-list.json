@@ -1,0 +1,149 @@
+{
+  "ast_version": "0.1.0",
+  "diagnostics": [],
+  "root": {
+    "attributes": {},
+    "children": [
+      {
+        "attributes": {},
+        "children": [
+          {
+            "attributes": {},
+            "children": [],
+            "label": "Chapter 1 General",
+            "locator": "chapter:1/heading",
+            "node_id": "docnode:a185499a02cba2c042ced1bcc2c7647cd49fdd1d053c72362fbbc43cd0adaac5",
+            "span": {
+              "end": 17,
+              "start": 0,
+              "text": "Chapter 1 General"
+            },
+            "type": "heading"
+          },
+          {
+            "attributes": {},
+            "children": [
+              {
+                "attributes": {},
+                "children": [],
+                "label": "Section 1.1 Scope",
+                "locator": "section:1.1/heading",
+                "node_id": "docnode:1d766debcf27bf8015753bef54fc7ee3bc25f7f4f124edf3b09c895b0d2ed551",
+                "span": {
+                  "end": 35,
+                  "start": 18,
+                  "text": "Section 1.1 Scope"
+                },
+                "type": "heading"
+              },
+              {
+                "attributes": {},
+                "children": [
+                  {
+                    "attributes": {},
+                    "children": [],
+                    "label": "1.1.1 Applicability",
+                    "locator": "section:1.1.1/heading",
+                    "node_id": "docnode:f01d67ae186863a511d9e26441916e96b7b64e9911817f2afb04d49f53f00db6",
+                    "span": {
+                      "end": 55,
+                      "start": 36,
+                      "text": "1.1.1 Applicability"
+                    },
+                    "type": "heading"
+                  },
+                  {
+                    "attributes": {},
+                    "children": [],
+                    "label": null,
+                    "locator": "section:1.1.1/paragraph:1",
+                    "node_id": "docnode:1a48c5c4a59d6c0a3c12d18ce246fad0f43f4abaab38860083ad4dba31f7654f",
+                    "span": {
+                      "end": 89,
+                      "start": 56,
+                      "text": "Buildings in the sample district."
+                    },
+                    "type": "paragraph"
+                  },
+                  {
+                    "attributes": {
+                      "marker": "(a)"
+                    },
+                    "children": [
+                      {
+                        "attributes": {
+                          "marker": "(1)"
+                        },
+                        "children": [],
+                        "label": "(1)",
+                        "locator": "section:1.1.1/list:a/list:1",
+                        "node_id": "docnode:2b61b5fef175c8f4b2785a42a8de867287634f099be56455c9ff13398119fa2c",
+                        "span": {
+                          "end": 148,
+                          "start": 122,
+                          "text": "(1) Nested classification."
+                        },
+                        "type": "list_item"
+                      }
+                    ],
+                    "label": "(a)",
+                    "locator": "section:1.1.1/list:a",
+                    "node_id": "docnode:46240297234390d9438ba7fee0aa91d4dd0bb548b76520cb3d775eae63b3b919",
+                    "span": {
+                      "end": 148,
+                      "start": 90,
+                      "text": "(a) Primary classification.\n    (1) Nested classification."
+                    },
+                    "type": "list_item"
+                  }
+                ],
+                "label": "1.1.1",
+                "locator": "section:1.1.1",
+                "node_id": "docnode:3f0012d8aff712860415c032b0aad75c5eb6094d86014845dd731f9dfbba2f3b",
+                "span": {
+                  "end": 148,
+                  "start": 36,
+                  "text": "1.1.1 Applicability\nBuildings in the sample district.\n(a) Primary classification.\n    (1) Nested classification."
+                },
+                "type": "subsection"
+              }
+            ],
+            "label": "Section 1.1",
+            "locator": "section:1.1",
+            "node_id": "docnode:a927b30cfcdafc9a90caacda9be7a5ade9a3835d63b6300aea0f4a04e40283f9",
+            "span": {
+              "end": 148,
+              "start": 18,
+              "text": "Section 1.1 Scope\n1.1.1 Applicability\nBuildings in the sample district.\n(a) Primary classification.\n    (1) Nested classification."
+            },
+            "type": "section"
+          }
+        ],
+        "label": "Chapter 1",
+        "locator": "chapter:1",
+        "node_id": "docnode:c917c006e83269b6821e3cda0d74ba739d7bb764b3a3d1a1c725fe228968ccfd",
+        "span": {
+          "end": 148,
+          "start": 0,
+          "text": "Chapter 1 General\nSection 1.1 Scope\n1.1.1 Applicability\nBuildings in the sample district.\n(a) Primary classification.\n    (1) Nested classification."
+        },
+        "type": "chapter"
+      }
+    ],
+    "label": null,
+    "locator": "document",
+    "node_id": "docnode:0644a95bd5a4a1417885299547b6c5836277610c680082c98151242dff3d46c3",
+    "span": {
+      "end": 148,
+      "start": 0,
+      "text": "Chapter 1 General\nSection 1.1 Scope\n1.1.1 Applicability\nBuildings in the sample district.\n(a) Primary classification.\n    (1) Nested classification."
+    },
+    "type": "document"
+  },
+  "source_artifact": {
+    "artifact_id": "synthetic:document:nested-list",
+    "edition_id": "v1"
+  },
+  "source_text": "Chapter 1 General\nSection 1.1 Scope\n1.1.1 Applicability\nBuildings in the sample district.\n(a) Primary classification.\n    (1) Nested classification.",
+  "type": "document_tree"
+}
