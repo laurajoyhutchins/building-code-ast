@@ -52,7 +52,9 @@ The output records source identity, the requirement and its evidence span, the r
 
 Prerequisites:
 
-- Python 3.12 or newer
+- Python 3.12
+
+Python 3.12 is the only supported and tested runtime during the project's pre-1.0 phase. Runtime support can expand later when an integration or downstream user establishes a concrete compatibility requirement.
 
 From the repository root:
 
@@ -98,7 +100,7 @@ python -m unittest discover -s tests -v
 python -m compileall -q src tests
 ```
 
-CI executes both commands on Python 3.12 and 3.13.
+CI executes both commands on Python 3.12.
 
 ## Data and publication boundary
 
