@@ -7,7 +7,7 @@ name = "building-code-ast"
 version = "0.2.0.dev0"
 description = "Provenance-preserving ASTs for selected natural-language building-code provisions"
 readme = "README.md"
-requires-python = ">=3.12"
+requires-python = ">=3.12,<3.13"
 license = { text = "Apache-2.0" }
 authors = [{ name = "Laura Joy Hutchins" }]
 dependencies = []
@@ -16,7 +16,6 @@ classifiers = [
   "License :: OSI Approved :: Apache Software License",
   "Programming Language :: Python :: 3",
   "Programming Language :: Python :: 3.12",
-  "Programming Language :: Python :: 3.13",
   "Typing :: Typed",
 ]
 
