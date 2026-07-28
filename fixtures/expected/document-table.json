@@ -1,0 +1,237 @@
+{
+  "ast_version": "0.1.0",
+  "diagnostics": [],
+  "root": {
+    "attributes": {},
+    "children": [
+      {
+        "attributes": {},
+        "children": [
+          {
+            "attributes": {},
+            "children": [],
+            "label": "Table 3.1 Synthetic occupant load",
+            "locator": "table:3.1/heading",
+            "node_id": "docnode:425f29d937759b085df60f559b6a0492417f5875c662e8a9d6b75c3c84fa0ed1",
+            "span": {
+              "end": 33,
+              "start": 0,
+              "text": "Table 3.1 Synthetic occupant load"
+            },
+            "type": "table_heading"
+          },
+          {
+            "attributes": {},
+            "children": [],
+            "label": "Use",
+            "locator": "table:3.1/column:use",
+            "node_id": "docnode:9bce83962f2c6b00c4c2c871fae035df6291cf91923998c5bda8fc6fb9f0051b",
+            "span": {
+              "end": 37,
+              "start": 34,
+              "text": "Use"
+            },
+            "type": "table_column"
+          },
+          {
+            "attributes": {},
+            "children": [],
+            "label": "Factor",
+            "locator": "table:3.1/column:factor",
+            "node_id": "docnode:df0a63a77d43210990568e0a8c5017abd023882257313d968ef2b39b6edffb01",
+            "span": {
+              "end": 46,
+              "start": 40,
+              "text": "Factor"
+            },
+            "type": "table_column"
+          },
+          {
+            "attributes": {
+              "role": "header"
+            },
+            "children": [
+              {
+                "attributes": {
+                  "column_locator": "table:3.1/column:use"
+                },
+                "children": [],
+                "label": null,
+                "locator": "table:3.1/row:header/cell:use",
+                "node_id": "docnode:8b7b6d1ef84262c4f77154eeeaa8f7e1926edf0b3013b3901441fa7826b8fde5",
+                "span": {
+                  "end": 37,
+                  "start": 34,
+                  "text": "Use"
+                },
+                "type": "table_cell"
+              },
+              {
+                "attributes": {
+                  "column_locator": "table:3.1/column:factor"
+                },
+                "children": [],
+                "label": null,
+                "locator": "table:3.1/row:header/cell:factor",
+                "node_id": "docnode:7d030773b1677e723c9784690d7108179d249c63dbf48c656a7d40a4c12ec183",
+                "span": {
+                  "end": 46,
+                  "start": 40,
+                  "text": "Factor"
+                },
+                "type": "table_cell"
+              }
+            ],
+            "label": null,
+            "locator": "table:3.1/row:header",
+            "node_id": "docnode:9d25fdef623fd6ce07664710b2eb10b26d279cb183bd65b514952ec45073f503",
+            "span": {
+              "end": 46,
+              "start": 34,
+              "text": "Use | Factor"
+            },
+            "type": "table_row"
+          },
+          {
+            "attributes": {},
+            "children": [
+              {
+                "attributes": {
+                  "column_locator": "table:3.1/column:use"
+                },
+                "children": [],
+                "label": null,
+                "locator": "table:3.1/row:office/cell:use",
+                "node_id": "docnode:3fb46b065b9dbc5d53f50f4e466d3474a25a8682d665773135ac54ce824b4f20",
+                "span": {
+                  "end": 53,
+                  "start": 47,
+                  "text": "Office"
+                },
+                "type": "table_cell"
+              },
+              {
+                "attributes": {
+                  "column_locator": "table:3.1/column:factor"
+                },
+                "children": [],
+                "label": null,
+                "locator": "table:3.1/row:office/cell:factor",
+                "node_id": "docnode:88f46a68051bf94c2c8ba8e9a5164e2d7d8b45eb48eec6c56187786fb68d3eef",
+                "span": {
+                  "end": 59,
+                  "start": 56,
+                  "text": "150"
+                },
+                "type": "table_cell"
+              }
+            ],
+            "label": null,
+            "locator": "table:3.1/row:office",
+            "node_id": "docnode:cce49c8373f7f102d372a12dc42d769d446ce424c9cd0b2eec603395b0dd6390",
+            "span": {
+              "end": 59,
+              "start": 47,
+              "text": "Office | 150"
+            },
+            "type": "table_row"
+          },
+          {
+            "attributes": {},
+            "children": [
+              {
+                "attributes": {
+                  "column_locator": "table:3.1/column:use"
+                },
+                "children": [],
+                "label": null,
+                "locator": "table:3.1/row:assembly/cell:use",
+                "node_id": "docnode:0a944119c01858e3bf5bd026115c4a39901002a869a52b1c164c088007a92b38",
+                "span": {
+                  "end": 68,
+                  "start": 60,
+                  "text": "Assembly"
+                },
+                "type": "table_cell"
+              },
+              {
+                "attributes": {
+                  "column_locator": "table:3.1/column:factor"
+                },
+                "children": [],
+                "label": null,
+                "locator": "table:3.1/row:assembly/cell:factor",
+                "node_id": "docnode:b3ffdb8292d353a2532c7adb3450254b29c6b518aca738857a2f40c376812df8",
+                "span": {
+                  "end": 73,
+                  "start": 71,
+                  "text": "15"
+                },
+                "type": "table_cell"
+              }
+            ],
+            "label": null,
+            "locator": "table:3.1/row:assembly",
+            "node_id": "docnode:c2d578cde9947c81856626097bc9eb986ae99a996619a0e18f3072f90a04b682",
+            "span": {
+              "end": 73,
+              "start": 60,
+              "text": "Assembly | 15"
+            },
+            "type": "table_row"
+          }
+        ],
+        "label": "Table 3.1",
+        "locator": "table:3.1",
+        "node_id": "docnode:6136c9a3940fee6c67d4d8a37c99c419c9c4ed2eba7469b77beb893fbc49dff7",
+        "span": {
+          "end": 73,
+          "start": 0,
+          "text": "Table 3.1 Synthetic occupant load\nUse | Factor\nOffice | 150\nAssembly | 15"
+        },
+        "type": "table"
+      },
+      {
+        "attributes": {},
+        "children": [],
+        "label": "Note",
+        "locator": "note:1",
+        "node_id": "docnode:3b4ecf1f91d5ba29eac63b9a89dafb8b46b543e18ddd03fdb7247d777541cb43",
+        "span": {
+          "end": 101,
+          "start": 74,
+          "text": "Note: Values are synthetic."
+        },
+        "type": "note"
+      },
+      {
+        "attributes": {},
+        "children": [],
+        "label": "Footnote 1",
+        "locator": "footnote:1",
+        "node_id": "docnode:ac71b9ac5b12286e50e39d4c7e9ddeecd0eb85df91770a970cc55f05cf3da067",
+        "span": {
+          "end": 127,
+          "start": 102,
+          "text": "Footnote 1: Example only."
+        },
+        "type": "footnote"
+      }
+    ],
+    "label": null,
+    "locator": "document",
+    "node_id": "docnode:a26fe290a9958ba5d6107b55f3e8c8892c98eba99966379a64a02195905dc59b",
+    "span": {
+      "end": 127,
+      "start": 0,
+      "text": "Table 3.1 Synthetic occupant load\nUse | Factor\nOffice | 150\nAssembly | 15\nNote: Values are synthetic.\nFootnote 1: Example only."
+    },
+    "type": "document"
+  },
+  "source_artifact": {
+    "artifact_id": "synthetic:document:table",
+    "edition_id": "v1"
+  },
+  "source_text": "Table 3.1 Synthetic occupant load\nUse | Factor\nOffice | 150\nAssembly | 15\nNote: Values are synthetic.\nFootnote 1: Example only.",
+  "type": "document_tree"
+}

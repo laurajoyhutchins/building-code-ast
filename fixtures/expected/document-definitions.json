@@ -1,0 +1,77 @@
+{
+  "ast_version": "0.1.0",
+  "diagnostics": [],
+  "root": {
+    "attributes": {},
+    "children": [
+      {
+        "attributes": {},
+        "children": [
+          {
+            "attributes": {},
+            "children": [],
+            "label": "Section 2 Definitions",
+            "locator": "section:2/heading",
+            "node_id": "docnode:02a8098230886640a421c5beabe17d5d65d236135a4d12a70f9d97f53953580a",
+            "span": {
+              "end": 21,
+              "start": 0,
+              "text": "Section 2 Definitions"
+            },
+            "type": "heading"
+          },
+          {
+            "attributes": {},
+            "children": [],
+            "label": "Accessible route",
+            "locator": "section:2/definition:accessible-route",
+            "node_id": "docnode:8d51eb50c8a0ba29029be25127a92ef32187254e9e9d272f396304892e920069",
+            "span": {
+              "end": 71,
+              "start": 22,
+              "text": "Accessible route: A continuous unobstructed path."
+            },
+            "type": "definition_entry"
+          },
+          {
+            "attributes": {},
+            "children": [],
+            "label": "Exit",
+            "locator": "section:2/definition:exit",
+            "node_id": "docnode:d515762f3ea0cfdb8939e60aa33d7f42c669d1854741b8d7ae5ed974e1438fd0",
+            "span": {
+              "end": 102,
+              "start": 72,
+              "text": "Exit: A way out of a building."
+            },
+            "type": "definition_entry"
+          }
+        ],
+        "label": "Section 2",
+        "locator": "section:2",
+        "node_id": "docnode:d7856c9410630a238340a0540d2302a9951d7bd17ce866e4173d12185e2aedf1",
+        "span": {
+          "end": 102,
+          "start": 0,
+          "text": "Section 2 Definitions\nAccessible route: A continuous unobstructed path.\nExit: A way out of a building."
+        },
+        "type": "section"
+      }
+    ],
+    "label": null,
+    "locator": "document",
+    "node_id": "docnode:29bf2251594fdc41d972f5bef10516472febd46846b5623af7bde6a8efa36af4",
+    "span": {
+      "end": 102,
+      "start": 0,
+      "text": "Section 2 Definitions\nAccessible route: A continuous unobstructed path.\nExit: A way out of a building."
+    },
+    "type": "document"
+  },
+  "source_artifact": {
+    "artifact_id": "synthetic:document:definitions",
+    "edition_id": "v1"
+  },
+  "source_text": "Section 2 Definitions\nAccessible route: A continuous unobstructed path.\nExit: A way out of a building.",
+  "type": "document_tree"
+}

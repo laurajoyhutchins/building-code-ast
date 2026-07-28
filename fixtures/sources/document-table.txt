@@ -1,0 +1,6 @@
+Table 3.1 Synthetic occupant load
+Use | Factor
+Office | 150
+Assembly | 15
+Note: Values are synthetic.
+Footnote 1: Example only.

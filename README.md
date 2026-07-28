@@ -1,12 +1,13 @@
 # Building Code AST
 
-Building Code AST is an early-stage parser and semantic-modeling project for converting selected natural-language regulatory provisions into reviewable, provenance-preserving abstract syntax trees.
+Building Code AST is an early-stage parser and semantic-modeling project for converting selected natural-language regulatory publications into reviewable, provenance-preserving abstract syntax trees.
 
-The project is intentionally narrower than "AI understands the building code." Its first goal is a deterministic vertical slice:
+The project is intentionally narrower than "AI understands the building code." Its compiler boundary now has two explicit representations:
 
 ```text
-source provision
-  -> exact original source text plus artifact identity
+source artifact and edition
+  -> publication structure document AST
+  -> selected provision text
   -> semantic provision AST
   -> structural validation
   -> exact source-span traceability
@@ -17,7 +18,24 @@ source provision
 
 ## What works today
 
-The first vertical slice recognizes a bounded family of synthetic code-style provisions containing:
+### Document structure AST `0.1.0`
+
+The document contract represents publication structure before semantic interpretation:
+
+- source artifact and edition identity;
+- document, chapter, section, subsection, paragraph, and nested list nodes;
+- definition entries;
+- table headings, columns, rows, and cells;
+- headings, notes, footnotes, and unsupported structures;
+- deterministic node identity from artifact ID, edition ID, node type, and structural locator;
+- exact source spans for every node and diagnostic;
+- strict dependency-free JSON deserialization and recursive provenance validation.
+
+The document contract does not contain modality, condition, action, compliance, or interpretation fields. It is a source-structure layer, not a rule meaning layer.
+
+### Provision AST `0.2.0`
+
+The provision parser recognizes a bounded family of synthetic code-style provisions containing:
 
 - requirement, prohibition, and permission modalities;
 - a regulated subject;
@@ -29,7 +47,7 @@ The first vertical slice recognizes a bounded family of synthetic code-style pro
 
 The parser preserves the exact original input, including leading and trailing whitespace. All offsets address that unmodified string. Unsupported language remains visible in the output instead of being silently guessed.
 
-## Example
+## Provision example
 
 Input:
 
@@ -64,29 +82,30 @@ python -m unittest discover -s tests -v
 building-code-ast parse "Doors shall not be obstructed."
 ```
 
-The runtime package has no third-party dependencies. CLI calls default source identity and locator to `inline`; production ingestion should provide durable values tied to the source artifact and provision location.
+The runtime package has no third-party dependencies. CLI calls default provision source identity and locator to `inline`; durable ingestion should provide stable identifiers tied to a source artifact, edition, and location.
 
 ## Repository layout
 
-- `src/building_code_ast/`: AST model, parser, validation, and CLI
-- `schemas/`: versioned JSON Schema projections of the public AST contract
+- `src/building_code_ast/`: document and provision AST models, strict input handling, parsing, and validation
+- `schemas/`: versioned JSON Schema projections of the public AST contracts
 - `fixtures/`: synthetic source and expected-output fixtures
-- `tests/`: parser, provenance, and regression tests
+- `tests/`: parser, provenance, malformed-input, and regression tests
 - `docs/README.md`: Diátaxis documentation map and authoring guidance
 - `docs/architecture.md`: representation boundaries and staged compiler model
 - `docs/compatibility.md`: public AST version compatibility notes
+- `docs/reference/document-ast.md`: document AST fields, identity, and invariants
 - `docs/corpus-policy.md`: source, copyright, and redistribution rules
 - `docs/legal-safety-boundary.md`: interpretation and product-safety constraints
 - `docs/reference/legal-source-publication.md`: legal authorities and public-source publication analysis
 
 ## Relationship to Building Code Map
 
-[Building Code Map](https://github.com/laurajoyhutchins/building-code-map) is concerned with determining which authorities and adopted codes apply to a location. Building Code AST is concerned with representing selected provisions from those sources faithfully enough for review and later, separately governed evaluation.
+[Building Code Map](https://github.com/laurajoyhutchins/building-code-map) is concerned with determining which authorities and adopted codes apply to a location. Building Code AST is concerned with representing selected publication structure and provisions from those sources faithfully enough for review and later, separately governed evaluation.
 
 The intended long-term boundary is:
 
 ```text
-location -> authority and adopted source -> selected provision -> AST -> reviewed rule model
+location -> authority and adopted source -> document AST -> selected provision -> provision AST -> reviewed rule model
 ```
 
 Jurisdiction resolution does not imply that code text may be redistributed, and parsing does not imply that a provision has been authoritatively interpreted.

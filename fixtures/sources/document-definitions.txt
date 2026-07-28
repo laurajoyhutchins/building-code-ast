@@ -1,0 +1,3 @@
+Section 2 Definitions
+Accessible route: A continuous unobstructed path.
+Exit: A way out of a building.
