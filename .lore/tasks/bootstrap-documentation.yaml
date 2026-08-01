@@ -19,9 +19,9 @@ paths:
 - schemas/document-ast.schema.json
 - schemas/provision-ast.schema.json
 components:
-- document-structure
-- provision-parser
-- validation
+- component.document-structure
+- component.provision-parser
+- component.validation
 tags:
 - architecture
 - condition-expressions
