@@ -1,31 +1,43 @@
 # Composable Provision Condition Expressions
 
 Date: 2026-08-01
-Status: Approved design
+Status: Approved and self-reviewed design
 Target provision AST version: `0.3.0`
+Target package version: `0.3.0.dev0`
 Related issue: #3
 
 ## Context
 
 Provision AST `0.2.0` represents conditions as a flat tuple of numeric comparisons. That model cannot preserve whether multiple conditions are conjunctive or disjunctive, and it cannot later represent nested condition logic without another public-contract change.
 
-The next increment adds enough structure to represent deterministic conjunction and disjunction while retaining the project's core boundaries:
+This increment introduces a recursive condition-expression boundary while retaining the project's core constraints:
 
 - exact source text remains authoritative evidence;
 - every derived node has an exact source span;
 - unsupported or ambiguous language remains explicit;
 - parser output is not a compliance determination;
-- the change stays smaller than the full scope of issue #3.
+- the slice remains smaller than the full scope of issue #3.
+
+## Decision
+
+Provision AST `0.3.0` replaces `ProvisionAst.conditions` with a required nullable `ProvisionAst.condition` field.
+
+A condition expression is either:
+
+- one `ComparisonCondition` leaf;
+- an `all_of` logical group;
+- an `any_of` logical group.
+
+The runtime model and JSON Schema permit recursive groups. The initial parser emits only one logical group level and only from homogeneous chains of the existing comparison grammar.
 
 ## Goals
 
-1. Introduce a recursive condition-expression contract.
-2. Represent one comparison, an `all_of` conjunction, or an `any_of` disjunction.
-3. Parse a bounded family of compatible numeric threshold clauses joined by one repeated connector.
-4. Preserve exact source spans for comparison leaves and logical groups.
-5. Diagnose mixed or malformed candidate groups instead of inventing precedence or returning partial meaning.
-6. Version the semantic contract explicitly as provision AST `0.3.0`.
-7. Update runtime models, validation, JSON Schema, fixtures, tests, and compatibility documentation together.
+1. Represent one comparison, conjunction, or disjunction without losing source order.
+2. Preserve exact spans for leaves and groups.
+3. Parse repeated `and` or repeated `or` chains conservatively.
+4. Reject mixed, grouped, or malformed candidate chains without partial semantic output.
+5. Make the breaking migration from provision AST `0.2.0` explicit.
+6. Keep the document AST and unrelated semantic families unchanged.
 
 ## Non-goals
 
@@ -33,40 +45,37 @@ This slice does not add:
 
 - general applicability or scope clauses;
 - negated conditions;
-- alternatives or substitutions in the action;
+- action alternatives or substitutions;
 - inline exception expressions;
 - definition resolution;
-- section-reference graph resolution;
+- reference graph resolution;
 - calculations or table lookups;
 - authority discretion;
 - project-specific compliance evaluation;
-- arbitrary natural-language Boolean parsing.
-
-These remain later slices of issue #3 or subsequent graph work.
-
-## Approaches considered
-
-### 1. Keep the flat condition array and add a connector field
-
-A top-level field such as `condition_operator: "and" | "or"` would represent one homogeneous list. It would not support nesting, would create another breaking change later, and would couple logical meaning to array position. Rejected.
-
-### 2. Introduce recursive condition expressions
-
-A tagged union represents comparison leaves and logical groups. It is slightly more verbose, but it preserves structure, supports future nesting, and gives validation a clear recursive boundary. Selected.
-
-### 3. Add a general expression language now
-
-A broad expression grammar could include negation, references, calculations, and arbitrary nesting immediately. That would exceed the reviewed corpus and invite false confidence. Rejected.
+- arbitrary Boolean-language parsing;
+- new units, comparison operators, participles, or implied properties.
 
 ## Public contract
 
-`ProvisionAst.conditions` is replaced by a required nullable `condition` field.
+`ProvisionAst` changes from:
 
-A provision with no recognized structured condition has `condition: null` and retains the existing informational diagnostic.
+```python
+conditions: tuple[ComparisonCondition, ...] = ()
+```
 
-A condition expression is one of the following tagged node families.
+to:
+
+```python
+condition: ConditionExpression | None = None
+```
+
+The serialized top-level `condition` property is required. A provision with no recognized structured condition serializes `"condition": null`.
+
+The old `conditions` property is removed rather than retained as a competing representation.
 
 ### Comparison condition
+
+The existing comparison leaf shape remains:
 
 ```json
 {
@@ -86,7 +95,7 @@ A condition expression is one of the following tagged node families.
 }
 ```
 
-### Logical condition group
+### Logical condition
 
 ```json
 {
@@ -131,12 +140,31 @@ A condition expression is one of the following tagged node families.
 }
 ```
 
-Logical group types are:
+`all_of` represents a repeated `and` chain. `any_of` represents a repeated `or` chain. Every logical group contains at least two operands.
 
-- `all_of` for repeated `and` connectors;
-- `any_of` for repeated `or` connectors.
+## Runtime model
 
-Each logical group must contain at least two operands. The initial parser emits only one logical level. The runtime model, validator, and JSON Schema allow recursive operands so later parser slices do not require another contract redesign.
+The Python model introduces exactly:
+
+```python
+class LogicalConditionType(StrEnum):
+    ALL_OF = "all_of"
+    ANY_OF = "any_of"
+
+
+@dataclass(frozen=True, slots=True)
+class LogicalCondition:
+    type: LogicalConditionType
+    operands: tuple[ComparisonCondition | LogicalCondition, ...]
+    span: SourceSpan
+
+
+ConditionExpression = ComparisonCondition | LogicalCondition
+```
+
+`LogicalCondition.to_dict()` serializes the enum value and recursively serializes operands in source order.
+
+The object model has value semantics. Shared Python object identity is not part of the public contract. Validation rejects actual recursion cycles by tracking the active recursion path, but it does not reject finite reuse of an equivalent subtree merely because two references point to the same Python object.
 
 ## Parser grammar
 
@@ -152,11 +180,11 @@ It additionally recognizes a homogeneous chain:
 <regulated subject> <comparison clause> (<connector> <comparison clause>)+
 ```
 
-Supported connectors are case-insensitive `and` and `or`.
+Supported connectors are case-insensitive whole words `and` and `or`.
 
-Each clause must independently match the existing numeric threshold grammar. This slice does not add new units, operators, clause-introducing participles, or implied properties.
+Each clause must independently match the existing numeric comparison grammar in full. The slice does not add units, operators, clause-introducing participles, or implied values or properties.
 
-The first reviewed examples are:
+Reviewed examples are:
 
 ```text
 Research facilities exceeding 40 feet in height and exceeding 20000 square feet in floor area shall provide two marked evacuation routes.
@@ -166,136 +194,134 @@ Research facilities exceeding 40 feet in height and exceeding 20000 square feet 
 Research facilities exceeding 40 feet in height or exceeding 20000 square feet in floor area shall provide two marked evacuation routes.
 ```
 
-The parser locates the first supported threshold marker in the pre-modal subject text. Text before that marker remains the regulated subject. The candidate condition tail begins at that marker.
+The parser locates the first supported threshold marker in the pre-modal text. Text before that marker is the regulated subject candidate. Text from that marker to the modal is the condition candidate tail.
 
-For a homogeneous chain, the parser splits the candidate tail on the connector while preserving each segment's absolute source offsets. Every segment must match the comparison grammar in full. The parser must not infer omitted properties, units, values, or operators.
+For a homogeneous chain, the parser splits on the repeated connector while preserving absolute offsets. Every resulting segment must match the comparison grammar in full. A successful single comparison produces a `ComparisonCondition`. A successful chain produces one `LogicalCondition` whose operands are the parsed comparisons.
 
-## Ambiguity and failure behavior
+## Failure behavior and diagnostic precedence
 
-The parser fails visibly rather than assigning conventional Boolean precedence.
+Condition parsing is all-or-nothing.
 
-For a candidate tail containing both `and` and `or`, the parser:
+### No candidate marker
 
-1. preserves the entire pre-modal text as the subject;
-2. returns `condition: null`;
-3. emits an `ambiguous-condition-connectors` warning spanning the candidate tail;
-4. does not emit partially trusted comparison nodes.
+When the pre-modal text contains no supported threshold marker:
 
-Parentheses are not interpreted in this slice. A parenthesized candidate tail receives an `unsupported-condition-grouping` warning, preserves the entire pre-modal text as the subject, and returns `condition: null`.
+- the complete pre-modal text remains the subject;
+- `condition` is `null`;
+- the parser emits the existing `no-structured-condition` informational diagnostic.
 
-If one clause in a homogeneous chain does not match the bounded comparison grammar, the parser emits `unsupported-condition-clause` over the candidate tail, preserves the entire pre-modal text as the subject, and returns `condition: null`.
+### Mixed connectors
 
-This all-or-nothing rule prevents a partially parsed condition from appearing more complete than the source supports.
+When a candidate tail contains both whole-word `and` and whole-word `or`:
+
+- the complete pre-modal text remains the subject;
+- `condition` is `null`;
+- the parser emits `ambiguous-condition-connectors` as a warning over the candidate tail;
+- no partial comparison is emitted;
+- `no-structured-condition` is not also emitted.
+
+### Parenthesized grouping
+
+When a candidate tail contains `(` or `)`:
+
+- the complete pre-modal text remains the subject;
+- `condition` is `null`;
+- the parser emits `unsupported-condition-grouping` as a warning over the candidate tail;
+- no partial comparison is emitted;
+- `no-structured-condition` is not also emitted.
+
+### Malformed homogeneous chain
+
+When a repeated-connector chain contains a segment that does not fully match the comparison grammar:
+
+- the complete pre-modal text remains the subject;
+- `condition` is `null`;
+- the parser emits `unsupported-condition-clause` as a warning over the candidate tail;
+- no partial comparison is emitted;
+- `no-structured-condition` is not also emitted.
+
+Specific condition diagnostics may coexist with independent action diagnostics. The existing missing-modality path remains unchanged and does not attempt condition parsing.
 
 ## Source-span invariants
 
 Every condition node must round-trip to the exact original source text.
 
-For comparison leaves:
+For every comparison leaf:
 
 - `span` covers the complete comparison clause;
-- `threshold.original_text` equals the comparison span text;
+- `source_text[span.start:span.end] == span.text`;
+- `threshold.original_text == span.text`;
 - offsets address the unmodified provision source.
 
-For logical groups:
+For every logical group:
 
-- `span` starts at the first operand start;
-- `span` ends at the last operand end;
-- the span includes the literal connectors and intervening source text;
-- every operand span is contained within the group span;
+- the group span starts exactly at the first operand start;
+- the group span ends exactly at the last operand end;
+- the group span includes connectors and intervening source text;
+- every operand is contained in the group span;
 - operands appear in strictly increasing source order;
 - operand spans do not overlap.
 
-When a condition is recognized, the regulated `subject` and `subject_span` exclude the complete condition tail. When a candidate group is rejected, the complete pre-modal text remains the subject so the parser does not silently discard unsupported language.
+When condition parsing succeeds, `subject` and `subject_span` exclude the complete condition tail. When a candidate tail is rejected, `subject` and `subject_span` cover the complete pre-modal text so unsupported language is not silently discarded.
 
-## Runtime model
+## Runtime validation
 
-The Python model introduces exactly:
+Validation recursively checks:
 
-```python
-class LogicalConditionType(StrEnum):
-    ALL_OF = "all_of"
-    ANY_OF = "any_of"
-
-@dataclass(frozen=True, slots=True)
-class LogicalCondition:
-    type: LogicalConditionType
-    operands: tuple[ComparisonCondition | LogicalCondition, ...]
-    span: SourceSpan
-
-ConditionExpression = ComparisonCondition | LogicalCondition
-```
-
-`ProvisionAst` changes from:
-
-```python
-conditions: tuple[ComparisonCondition, ...] = ()
-```
-
-to:
-
-```python
-condition: ConditionExpression | None = None
-```
-
-The old `conditions` tuple is removed from `ProvisionAst` in `0.3.0` rather than retained as a competing representation.
-
-Serialization remains deterministic and preserves operand order from the source. `LogicalCondition.to_dict()` serializes `type` to its string value and recursively serializes operands.
-
-## Validation
-
-Runtime validation recursively checks:
-
-- the expression is a `ComparisonCondition` or `LogicalCondition`;
-- every node span round-trips to the exact source text;
-- comparison operators remain in the supported set;
-- logical types are `ALL_OF` or `ANY_OF`;
+- each expression is a `ComparisonCondition` or `LogicalCondition`;
+- every node span round-trips to `source_text`;
+- every comparison operator is supported;
+- every comparison has `threshold.original_text == span.text`;
+- every logical type is `ALL_OF` or `ANY_OF`;
 - every logical group has at least two operands;
-- child spans are contained in the parent group span;
-- child spans appear in strictly increasing source order;
-- child spans do not overlap;
-- the same in-memory logical node is not revisited during one validation traversal.
+- every child span is contained in its parent span;
+- child spans are strictly source ordered and non-overlapping;
+- each group start equals its first operand start;
+- each group end equals its last operand end;
+- no object on the active recursion path is visited again.
 
-`condition: null` is structurally valid. Validation does not infer whether the source should have produced a condition. That remains parser behavior, not an AST invariant.
-
-Validation does not attempt to prove semantic equivalence between the wording and the parsed expression. It proves structural and provenance invariants only.
+`condition: null` is structurally valid. Validation does not infer whether source text should have produced a condition, and it does not inspect connector wording to prove semantic equivalence between source prose and a logical tag. Those are parser and review responsibilities.
 
 ## JSON Schema
 
 `schemas/provision-ast.schema.json` advances to provision AST `0.3.0` and:
 
+- changes `ast_version` to `0.3.0`;
 - replaces required `conditions` with required `condition`;
 - defines `condition` as comparison, logical group, or `null`;
-- defines recursive logical operands using `$ref`;
+- defines recursive logical operands through `$ref`;
 - requires at least two operands;
 - restricts logical `type` to `all_of` or `any_of`;
 - keeps `additionalProperties: false` throughout;
-- retains all existing provenance, modality, subject, action, exception, and diagnostic fields.
+- retains all existing source, modality, subject, action, exception, and diagnostic fields.
 
 ## Fixtures and tests
 
-The implementation adds reviewed synthetic fixtures for:
+The implementation adds or updates reviewed synthetic fixtures for:
 
-1. two comparisons joined by `and`;
-2. two comparisons joined by `or`;
-3. three homogeneous comparisons to verify operand ordering;
-4. mixed `and` and `or`, producing no structured condition;
-5. one malformed clause in an otherwise homogeneous chain;
-6. parenthesized grouping, explicitly unsupported;
-7. the existing single threshold with exception, migrated to the new `condition` field;
-8. provisions with no structured condition, producing `condition: null`.
+1. one comparison;
+2. two comparisons joined by `and`;
+3. two comparisons joined by `or`;
+4. three homogeneous comparisons;
+5. mixed `and` and `or`;
+6. one malformed clause in a homogeneous chain;
+7. parenthesized grouping;
+8. the existing threshold-with-exception fixture migrated to `condition`;
+9. a provision with no condition candidate.
 
 Tests cover:
 
 - exact expected JSON for reviewed fixtures;
-- recursive validation;
-- group and leaf span round-tripping;
-- group containment and operand ordering;
-- malformed logical groups rejected by validation;
-- cycle detection in recursive logical nodes;
-- deterministic serialization;
+- deterministic serialization and operand order;
+- leaf and group span round-tripping;
+- exact group boundary equality;
+- containment, ordering, and non-overlap;
+- rejection of a mismatched `threshold.original_text`;
+- rejection of malformed logical groups;
+- active-path cycle detection;
+- specific condition diagnostic precedence without redundant `no-structured-condition` output;
 - preservation of source identity and exact whitespace;
-- unchanged modality, action, exception, and diagnostic behavior outside the condition contract.
+- unchanged modality, action, exception, and missing-modality behavior.
 
 ## Compatibility
 
@@ -305,47 +331,51 @@ Provision AST `0.3.0` is intentionally incompatible with `0.2.0` because:
 - `condition` may be a recursive expression or `null`;
 - consumers must handle logical groups.
 
-Migration for a valid `0.2.0` object is deterministic only in these cases:
+Migration is deterministic only for these valid `0.2.0` values:
 
 - zero `conditions` becomes `condition: null`;
 - one condition becomes that comparison object as `condition`.
 
 More than one `conditions` value cannot be migrated safely because `0.2.0` did not encode conjunction or disjunction. Migration must fail and require source re-parsing or human review.
 
-No automatic migration utility is required in this slice. Compatibility documentation must state this rule explicitly.
+No automatic migration utility is required in this slice. `docs/compatibility.md` must state the rule explicitly.
 
 ## Implementation boundaries
 
-The change remains focused in:
+The implementation changes only:
 
 - `src/building_code_ast/model.py`;
 - `src/building_code_ast/parser.py`;
 - `src/building_code_ast/validation.py`;
 - `schemas/provision-ast.schema.json`;
 - provision fixtures and tests;
-- `README.md` and `docs/compatibility.md`;
-- `pyproject.toml` if the package version must advance with the semantic contract.
+- `README.md`;
+- `docs/compatibility.md`;
+- `pyproject.toml`, advancing the package version to `0.3.0.dev0`.
 
-Unrelated document AST code remains unchanged.
+The document AST and its schema, fixtures, validation, and documentation remain unchanged.
 
 ## Verification
 
-The implementation is complete when:
+The implementation is complete when all of the following pass on Python 3.12:
 
 ```bash
 python -m unittest discover -s tests -v
 python -m compileall -q src tests
+python -c "import json; json.load(open('schemas/provision-ast.schema.json', encoding='utf-8'))"
 ```
 
-pass on Python 3.12, the schema parses as JSON, all reviewed fixtures match deterministic parser output, and CI passes at the exact pull-request head.
+All reviewed fixtures must match deterministic parser output, and GitHub Actions must pass at the exact pull-request head.
 
 ## Acceptance criteria
 
 - Provision AST reports version `0.3.0`.
-- Public output contains `condition`, not `conditions`.
+- Package metadata reports `0.3.0.dev0`.
+- Public output contains required nullable `condition`, not `conditions`.
 - Single comparisons and homogeneous `all_of` or `any_of` groups parse deterministically.
-- Mixed or malformed candidate groups produce diagnostics and no partial expression.
+- Mixed, grouped, or malformed candidate chains produce one specific condition diagnostic and no partial expression.
 - Every condition span round-trips to the original source.
+- Comparison evidence text and logical group boundaries are validated exactly.
 - Logical operands are ordered, contained, and non-overlapping.
 - Existing non-condition behavior remains covered by regression tests.
 - Documentation states the breaking migration boundary.
