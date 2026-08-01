@@ -1,0 +1,33 @@
+schema_version: 1
+id: bootstrap-documentation
+title: Bootstrap repository knowledge
+description: Capture the current Building Code AST architecture, component boundaries, safety constraints, and verification procedure from exact repository evidence.
+paths:
+- README.md
+- pyproject.toml
+- docs/architecture.md
+- docs/corpus-policy.md
+- docs/legal-safety-boundary.md
+- docs/reference/document-ast.md
+- src/building_code_ast/document_model.py
+- src/building_code_ast/document_io.py
+- src/building_code_ast/document_validation.py
+- src/building_code_ast/model.py
+- src/building_code_ast/parser.py
+- src/building_code_ast/validation.py
+- schemas/document-ast.schema.json
+- schemas/provision-ast.schema.json
+components:
+- document-structure
+- provision-parser
+- validation
+tags:
+- architecture
+- provenance
+- safety
+- verification
+audiences:
+- maintainers
+- contributors
+- integrators
+history: false
