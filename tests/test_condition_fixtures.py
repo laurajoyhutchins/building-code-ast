@@ -1,10 +1,12 @@
 from __future__ import annotations
 
 import json
+import tomllib
 import unittest
 from pathlib import Path
 
 from building_code_ast import parse_provision
+from building_code_ast.model import AST_VERSION
 
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -30,13 +32,23 @@ class ConditionFixtureTests(unittest.TestCase):
             )
         )
 
-        self.assertEqual(schema["properties"]["ast_version"]["const"], "0.3.0")
+        self.assertEqual(AST_VERSION, "0.3.0")
+        self.assertEqual(schema["properties"]["ast_version"]["const"], AST_VERSION)
         self.assertIn("condition", schema["required"])
         self.assertNotIn("conditions", schema["properties"])
         self.assertEqual(
             schema["$defs"]["logicalCondition"]["properties"]["operands"]["minItems"],
             2,
         )
+
+    def test_package_metadata_matches_provision_contract(self) -> None:
+        pyproject = tomllib.loads(
+            (ROOT / "pyproject.toml").read_text(encoding="utf-8")
+        )
+
+        self.assertEqual(pyproject["project"]["version"], "0.3.0.dev0")
+        self.assertEqual(pyproject["project"]["dependencies"], [])
+        self.assertEqual(pyproject["project"]["requires-python"], ">=3.12,<3.13")
 
 
 if __name__ == "__main__":
