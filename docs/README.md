@@ -25,7 +25,8 @@ Current material:
 
 - the root [`README.md`](../README.md) contains the initial installation and CLI quick start;
 - [`CONTRIBUTING.md`](../CONTRIBUTING.md) contains contribution and verification procedures;
-- [`how-to/ingest-nec-2017.md`](how-to/ingest-nec-2017.md) explains how to generate private ArticleSeed files from a locally supplied NEC 2017 PDF.
+- [`how-to/ingest-nec-2017.md`](how-to/ingest-nec-2017.md) explains how to generate private ArticleSeed files from a locally supplied NEC 2017 PDF;
+- [`how-to/build-nec-semantic-seed.md`](how-to/build-nec-semantic-seed.md) explains how to generate the private Article 100 definition index and selected Article 90/110 section reviews.
 
 Future how-to guides should remain in `docs/how-to/` and preserve the repository's source-publication boundary.
 
@@ -38,6 +39,8 @@ Current reference material:
 - [`compatibility.md`](compatibility.md): independent document and provision AST version compatibility;
 - [`corpus-policy.md`](corpus-policy.md): source inclusion and redistribution rules;
 - [`reference/document-ast.md`](reference/document-ast.md): document AST fields, identity algorithm, and validation invariants;
+- [`reference/nec-definition-index.md`](reference/nec-definition-index.md): structured Article 100 definition fields and provenance invariants;
+- [`reference/nec-section-review.md`](reference/nec-section-review.md): selected-section review, modal-language policy, and definition-link boundaries;
 - [`reference/legal-source-publication.md`](reference/legal-source-publication.md): legal authorities and operational publication boundaries.
 
 Reference pages should state what the system, format, or policy is. Extended rationale belongs in explanation pages.
