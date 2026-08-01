@@ -1,0 +1,16 @@
+{
+  "$id": "transaction",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema_version", "transaction_id", "proposal_id", "base_revision", "accepted_at", "records", "outputs"],
+  "properties": {
+    "schema_version": { "const": 1 },
+    "transaction_id": { "type": "string", "pattern": "^tx-[0-9a-f]{24}$" },
+    "proposal_id": { "type": "string", "pattern": "^[a-z0-9]+(?:[.-][a-z0-9]+)*$" },
+    "base_revision": { "type": "string", "pattern": "^[0-9a-f]{40}$" },
+    "accepted_at": { "type": "string", "format": "date-time" },
+    "records": { "type": "array", "items": { "type": "string", "minLength": 1 }, "uniqueItems": true },
+    "outputs": { "type": "array", "items": { "type": "string", "minLength": 1 }, "uniqueItems": true }
+  }
+}
