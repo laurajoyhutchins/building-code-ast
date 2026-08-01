@@ -1,0 +1,83 @@
+name: LORE
+
+on:
+  push:
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Check out pinned LORE
+        uses: actions/checkout@v4
+        with:
+          repository: laurajoyhutchins/LORE
+          ref: a8792bd594db34fcbf3065239b70ef4383f7e186
+          path: _lore_tool
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+
+      - name: Build pinned LORE
+        shell: bash
+        run: |
+          set -euo pipefail
+          mv _lore_tool "$RUNNER_TEMP/lore"
+          cd "$RUNNER_TEMP/lore"
+          node scripts/restore-verified-lockfile.mjs
+          corepack enable
+          pnpm install --frozen-lockfile
+          pnpm build
+
+      - name: Bootstrap or verify LORE knowledge
+        shell: bash
+        run: |
+          set -euo pipefail
+          LORE="$RUNNER_TEMP/lore/dist/cli/main.js"
+
+          if find .lore/records -type f -name '*.yaml' -print -quit 2>/dev/null | grep -q .; then
+            node "$LORE" extract --check
+            node "$LORE" validate
+            node "$LORE" project --check
+          else
+            node "$LORE" extract
+            mkdir -p .lore/context .lore/proposals
+            node "$LORE" context .lore/tasks/bootstrap-documentation.yaml \
+              > .lore/context/bootstrap-documentation.yaml
+
+            base_revision="$(git rev-parse HEAD)"
+            skill_digest="$(sha256sum skills/maintain-repository-documentation/SKILL.md | awk '{print $1}')"
+            sed \
+              -e "s/__BASE_REVISION__/${base_revision}/g" \
+              -e "s/__SKILL_DIGEST__/${skill_digest}/g" \
+              .lore/proposals/bootstrap-documentation.template.yaml \
+              > .lore/proposals/bootstrap-documentation.yaml
+
+            node "$LORE" validate-proposal .lore/proposals/bootstrap-documentation.yaml
+            node "$LORE" apply .lore/proposals/bootstrap-documentation.yaml
+            node "$LORE" validate
+            node "$LORE" project --check
+          fi
+
+      - name: Upload LORE state
+        uses: actions/upload-artifact@v4
+        with:
+          name: lore-state
+          if-no-files-found: error
+          path: |
+            .lore/context/bootstrap-documentation.yaml
+            .lore/extracted
+            .lore/proposals/bootstrap-documentation.yaml
+            .lore/records
+            .lore/transactions
+            docs/generated
