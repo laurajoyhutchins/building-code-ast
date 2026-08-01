@@ -4,6 +4,7 @@ on:
   push:
     branches:
       - agent/lore-style-documentation
+  pull_request:
 
 permissions:
   contents: read
@@ -22,7 +23,7 @@ jobs:
       - name: Check out candidate trust root
         uses: actions/checkout@v4
         with:
-          ref: ${{ github.sha }}
+          ref: ${{ github.event.pull_request.head.sha || github.sha }}
           fetch-depth: 0
           path: candidate
 
