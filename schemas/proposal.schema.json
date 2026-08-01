@@ -1,0 +1,96 @@
+{
+  "$id": "proposal",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$defs": {
+    "evidence": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["revision", "path"],
+      "properties": {
+        "revision": { "type": "string", "pattern": "^[0-9a-f]{40}$" },
+        "path": { "type": "string", "minLength": 1 },
+        "symbol": { "type": "string", "minLength": 1 },
+        "lines": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["start", "end"],
+          "properties": {
+            "start": { "type": "integer", "minimum": 1 },
+            "end": { "type": "integer", "minimum": 1 }
+          }
+        }
+      }
+    },
+    "operation": {
+      "oneOf": [
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["operation", "record"],
+          "properties": {
+            "operation": { "const": "append_record" },
+            "record": { "$ref": "record" }
+          }
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["operation", "record_id", "from", "to", "evidence"],
+          "properties": {
+            "operation": { "const": "transition_record" },
+            "record_id": { "type": "string", "pattern": "^[a-z0-9]+(?:[.-][a-z0-9]+)*$" },
+            "from": { "enum": ["draft", "active", "superseded", "deprecated", "resolved", "withdrawn"] },
+            "to": { "enum": ["draft", "active", "deprecated", "resolved", "withdrawn"] },
+            "evidence": { "type": "array", "minItems": 1, "items": { "$ref": "#/$defs/evidence" } }
+          }
+        }
+      ]
+    }
+  },
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["protocol", "proposal_id", "base_revision", "skill", "result", "operations", "uncertainties"],
+  "properties": {
+    "protocol": { "const": "lore-proposal/v1" },
+    "proposal_id": { "type": "string", "pattern": "^[a-z0-9]+(?:[.-][a-z0-9]+)*$" },
+    "base_revision": { "type": "string", "pattern": "^[0-9a-f]{40}$" },
+    "producer": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "type": { "type": "string", "minLength": 1 },
+        "name": { "type": "string", "minLength": 1 },
+        "model": { "type": "string", "minLength": 1 }
+      }
+    },
+    "skill": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["path", "digest"],
+      "properties": {
+        "path": { "type": "string", "minLength": 1 },
+        "digest": { "type": "string", "pattern": "^sha256:[0-9a-f]{64}$" }
+      }
+    },
+    "result": { "enum": ["changes_proposed", "no_documentation_change"] },
+    "reason": { "type": "string", "minLength": 1 },
+    "operations": { "type": "array", "items": { "$ref": "#/$defs/operation" } },
+    "uncertainties": { "type": "array", "items": { "type": "string" } }
+  },
+  "allOf": [
+    {
+      "if": { "properties": { "result": { "const": "changes_proposed" } }, "required": ["result"] },
+      "then": { "properties": { "operations": { "type": "array", "minItems": 1 } } }
+    },
+    {
+      "if": { "properties": { "result": { "const": "no_documentation_change" } }, "required": ["result"] },
+      "then": {
+        "required": ["reason"],
+        "properties": {
+          "reason": { "type": "string", "minLength": 1 },
+          "operations": { "type": "array", "maxItems": 0 }
+        }
+      }
+    }
+  ]
+}

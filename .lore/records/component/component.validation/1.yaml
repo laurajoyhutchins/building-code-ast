@@ -1,0 +1,54 @@
+disclosure:
+  audiences:
+    - maintainers
+    - contributors
+    - integrators
+  tags:
+    - component
+    - component.validation
+    - schemas
+  weight: 90
+evidence:
+  - path: src/building_code_ast/document_validation.py
+    revision: 0353060b97818baa92d1864a9ccf52a611d32029
+  - path: src/building_code_ast/validation.py
+    revision: 0353060b97818baa92d1864a9ccf52a611d32029
+  - path: schemas/document-ast.schema.json
+    revision: 0353060b97818baa92d1864a9ccf52a611d32029
+  - path: schemas/provision-ast.schema.json
+    revision: 0353060b97818baa92d1864a9ccf52a611d32029
+id: component.validation
+kind: component
+payload:
+  depends_on:
+    - Document structure AST
+    - Provision parser
+  feeds:
+    - CLI output
+    - Downstream consumers
+    - Regression fixtures
+  paths:
+    - src/building_code_ast/document_validation.py
+    - src/building_code_ast/validation.py
+    - schemas/
+  responsibilities:
+    - Prove that source spans round-trip to exact source text.
+    - Reject duplicate, malformed, out-of-bounds, or identity-inconsistent structures.
+    - Keep JSON Schema projections aligned with runtime contracts.
+  status: active
+provenance:
+  producer: GPT-5.6 Thinking
+  source: proposal
+  transaction: tx-fde02b038c41159837c3c058
+revision: 1
+schema_version: 1
+scope:
+  components:
+    - component.document-structure
+    - component.provision-parser
+    - component.validation
+  repository: building-code-ast
+status: active
+summary: Enforces schema, identity, source-span, containment, and malformed-input invariants for both public AST representations.
+supersedes: null
+title: Validation and contracts

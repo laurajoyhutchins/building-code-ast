@@ -1,0 +1,61 @@
+name: LORE
+
+on:
+  push:
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          ref: ${{ github.event.pull_request.head.sha || github.sha }}
+
+      - name: Check out pinned LORE
+        uses: actions/checkout@v4
+        with:
+          repository: laurajoyhutchins/LORE
+          ref: 85d2b9db2f8152780038fdfd7ff5897b8d93198f
+          path: _lore_tool
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+
+      - name: Build pinned LORE
+        shell: bash
+        run: |
+          set -euo pipefail
+          mv _lore_tool "$RUNNER_TEMP/lore"
+          cd "$RUNNER_TEMP/lore"
+          node scripts/restore-verified-lockfile.mjs
+          corepack enable
+          pnpm install --frozen-lockfile
+          pnpm build
+
+      - name: Verify LORE knowledge
+        shell: bash
+        run: |
+          set -euo pipefail
+          LORE="$RUNNER_TEMP/lore/dist/src/cli/main.js"
+          node "$LORE" extract --check
+          node "$LORE" validate
+          node "$LORE" project --check
+
+      - name: Upload verified LORE state
+        uses: actions/upload-artifact@v4
+        with:
+          name: lore-state
+          if-no-files-found: error
+          path: |
+            .lore/extracted
+            .lore/records
+            .lore/transactions
+            docs/generated

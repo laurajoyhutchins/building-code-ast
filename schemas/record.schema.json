@@ -1,0 +1,75 @@
+{
+  "$id": "record",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema_version", "id", "kind", "revision", "status", "title", "summary", "scope", "evidence", "disclosure", "provenance", "supersedes", "payload"],
+  "properties": {
+    "schema_version": { "const": 1 },
+    "id": { "type": "string", "pattern": "^[a-z0-9]+(?:[.-][a-z0-9]+)*$" },
+    "kind": { "enum": ["repository", "component", "relationship", "decision", "finding", "constraint", "procedure"] },
+    "revision": { "type": "integer", "minimum": 1 },
+    "status": { "enum": ["draft", "active", "superseded", "deprecated", "resolved", "withdrawn"] },
+    "title": { "type": "string", "minLength": 1 },
+    "summary": { "type": "string", "minLength": 1 },
+    "scope": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["repository", "components"],
+      "properties": {
+        "repository": { "type": "string", "minLength": 1 },
+        "components": { "type": "array", "items": { "type": "string", "minLength": 1 }, "uniqueItems": true }
+      }
+    },
+    "evidence": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["revision", "path"],
+        "properties": {
+          "revision": { "type": "string", "pattern": "^[0-9a-f]{40}$" },
+          "path": { "type": "string", "minLength": 1 },
+          "symbol": { "type": "string", "minLength": 1 },
+          "lines": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": ["start", "end"],
+            "properties": {
+              "start": { "type": "integer", "minimum": 1 },
+              "end": { "type": "integer", "minimum": 1 }
+            }
+          }
+        }
+      }
+    },
+    "disclosure": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["audiences", "tags", "weight"],
+      "properties": {
+        "audiences": { "type": "array", "items": { "type": "string", "minLength": 1 }, "uniqueItems": true },
+        "tags": { "type": "array", "items": { "type": "string", "minLength": 1 }, "uniqueItems": true },
+        "weight": { "type": "integer", "minimum": 0, "maximum": 100 }
+      }
+    },
+    "provenance": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["source", "transaction", "producer"],
+      "properties": {
+        "source": { "enum": ["bootstrap", "proposal"] },
+        "transaction": {
+          "oneOf": [
+            { "type": "null" },
+            { "type": "string", "pattern": "^tx-[0-9a-f]{24}$" }
+          ]
+        },
+        "producer": { "type": "string", "minLength": 1 }
+      }
+    },
+    "supersedes": { "type": ["string", "null"] },
+    "payload": { "type": "object" }
+  }
+}

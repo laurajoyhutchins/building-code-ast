@@ -1,0 +1,49 @@
+disclosure:
+  audiences:
+    - maintainers
+    - contributors
+    - integrators
+  tags:
+    - component
+    - parser
+    - provision-ast
+  weight: 90
+evidence:
+  - path: src/building_code_ast/parser.py
+    revision: 0353060b97818baa92d1864a9ccf52a611d32029
+  - path: src/building_code_ast/model.py
+    revision: 0353060b97818baa92d1864a9ccf52a611d32029
+  - path: src/building_code_ast/validation.py
+    revision: 0353060b97818baa92d1864a9ccf52a611d32029
+  - path: README.md
+    revision: 0353060b97818baa92d1864a9ccf52a611d32029
+id: component.provision-parser
+kind: component
+payload:
+  depends_on:
+    - Selected source provision text
+  feeds:
+    - Future reviewed normalized rule model
+  paths:
+    - src/building_code_ast/parser.py
+    - src/building_code_ast/model.py
+    - src/building_code_ast/validation.py
+  responsibilities:
+    - Recognize requirement, prohibition, permission, subject, simple numeric condition, action, and section-reference exception structures.
+    - Preserve the exact original input and evidence spans for recognized structures.
+    - Emit diagnostics rather than silently guessing beyond the supported grammar.
+  status: active
+provenance:
+  producer: GPT-5.6 Thinking
+  source: proposal
+  transaction: tx-fde02b038c41159837c3c058
+revision: 1
+schema_version: 1
+scope:
+  components:
+    - component.provision-parser
+  repository: building-code-ast
+status: active
+summary: Parses a deliberately bounded family of synthetic code-style provisions into semantic AST nodes while preserving unsupported or ambiguous language.
+supersedes: null
+title: Provision parser

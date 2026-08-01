@@ -1,0 +1,32 @@
+extractors:
+- enabled: true
+  id: repository-metadata
+hydration:
+  max_characters: 40000
+  max_records: 20
+maintenance:
+  proposal_schema: skills/maintain-repository-documentation/schemas/proposal.schema.json
+  skill: skills/maintain-repository-documentation/SKILL.md
+paths:
+  extracted: .lore/extracted
+  generated_docs: docs/generated
+  proposals: .lore/proposals
+  records: .lore/records
+  skills: skills
+  transactions: .lore/transactions
+projections:
+- id: repository-card
+  output: docs/generated/repository-card.md
+- id: architecture
+  output: docs/generated/architecture.md
+- id: component-catalog
+  output: docs/generated/component-catalog.md
+- id: current-decisions
+  output: docs/generated/current-decisions.md
+- id: maintainer-guide
+  output: docs/generated/maintainer-guide.md
+repository:
+  id: building-code-ast
+  name: Building Code AST
+  root: .
+schema_version: 1

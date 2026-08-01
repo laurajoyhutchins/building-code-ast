@@ -1,0 +1,21 @@
+accepted_at: 2026-08-01T16:19:47Z
+base_revision: 0353060b97818baa92d1864a9ccf52a611d32029
+outputs:
+  - docs/generated/architecture.md
+  - docs/generated/component-catalog.md
+  - docs/generated/current-decisions.md
+  - docs/generated/maintainer-guide.md
+  - docs/generated/repository-card.md
+proposal_id: bootstrap.repository-knowledge
+records:
+  - .lore/records/component/component.document-structure/1.yaml
+  - .lore/records/component/component.provision-parser/1.yaml
+  - .lore/records/component/component.validation/1.yaml
+  - .lore/records/constraint/constraint.corpus-and-legal-boundary/1.yaml
+  - .lore/records/decision/decision.composable-condition-expressions/1.yaml
+  - .lore/records/decision/decision.provenance-before-interpretation/1.yaml
+  - .lore/records/decision/decision.staged-representations/1.yaml
+  - .lore/records/procedure/procedure.verification/1.yaml
+  - .lore/records/repository/repository.building-code-ast/1.yaml
+schema_version: 1
+transaction_id: tx-fde02b038c41159837c3c058
