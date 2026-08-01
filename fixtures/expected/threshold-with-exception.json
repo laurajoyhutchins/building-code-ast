@@ -9,24 +9,22 @@
     },
     "text": "provide two marked evacuation routes"
   },
-  "ast_version": "0.2.0",
-  "conditions": [
-    {
-      "operator": ">",
-      "span": {
-        "end": 47,
-        "start": 20,
-        "text": "exceeding 40 feet in height"
-      },
-      "subject_property": "height",
-      "threshold": {
-        "original_text": "exceeding 40 feet in height",
-        "unit": "ft",
-        "value": 40.0
-      },
-      "type": "comparison"
-    }
-  ],
+  "ast_version": "0.3.0",
+  "condition": {
+    "operator": ">",
+    "span": {
+      "end": 47,
+      "start": 20,
+      "text": "exceeding 40 feet in height"
+    },
+    "subject_property": "height",
+    "threshold": {
+      "original_text": "exceeding 40 feet in height",
+      "unit": "ft",
+      "value": 40.0
+    },
+    "type": "comparison"
+  },
   "diagnostics": [],
   "exceptions": [
     {
