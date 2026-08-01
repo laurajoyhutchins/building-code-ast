@@ -200,7 +200,15 @@ For a homogeneous chain, the parser splits on the repeated connector while prese
 
 ## Failure behavior and diagnostic precedence
 
-Condition parsing is all-or-nothing.
+Condition parsing is all-or-nothing. At most one condition-specific diagnostic is emitted for a candidate tail.
+
+When more than one rejection rule applies, the parser uses this fixed precedence:
+
+1. `unsupported-condition-grouping` when the candidate contains `(` or `)`;
+2. `ambiguous-condition-connectors` when the remaining candidate contains both whole-word `and` and whole-word `or`;
+3. `unsupported-condition-clause` when a single candidate clause or any segment of a homogeneous chain fails full comparison matching.
+
+This order is part of the parser contract and fixture expectations.
 
 ### No candidate marker
 
@@ -210,17 +218,7 @@ When the pre-modal text contains no supported threshold marker:
 - `condition` is `null`;
 - the parser emits the existing `no-structured-condition` informational diagnostic.
 
-### Mixed connectors
-
-When a candidate tail contains both whole-word `and` and whole-word `or`:
-
-- the complete pre-modal text remains the subject;
-- `condition` is `null`;
-- the parser emits `ambiguous-condition-connectors` as a warning over the candidate tail;
-- no partial comparison is emitted;
-- `no-structured-condition` is not also emitted.
-
-### Parenthesized grouping
+### Unsupported grouping
 
 When a candidate tail contains `(` or `)`:
 
@@ -228,17 +226,29 @@ When a candidate tail contains `(` or `)`:
 - `condition` is `null`;
 - the parser emits `unsupported-condition-grouping` as a warning over the candidate tail;
 - no partial comparison is emitted;
-- `no-structured-condition` is not also emitted.
+- no lower-precedence condition diagnostic is emitted;
+- `no-structured-condition` is not emitted.
 
-### Malformed homogeneous chain
+### Mixed connectors
 
-When a repeated-connector chain contains a segment that does not fully match the comparison grammar:
+When a non-parenthesized candidate tail contains both whole-word `and` and whole-word `or`:
+
+- the complete pre-modal text remains the subject;
+- `condition` is `null`;
+- the parser emits `ambiguous-condition-connectors` as a warning over the candidate tail;
+- no partial comparison is emitted;
+- no lower-precedence condition diagnostic is emitted;
+- `no-structured-condition` is not emitted.
+
+### Unsupported clause
+
+When a single candidate clause does not fully match the comparison grammar, or any segment of a homogeneous chain fails full matching:
 
 - the complete pre-modal text remains the subject;
 - `condition` is `null`;
 - the parser emits `unsupported-condition-clause` as a warning over the candidate tail;
 - no partial comparison is emitted;
-- `no-structured-condition` is not also emitted.
+- `no-structured-condition` is not emitted.
 
 Specific condition diagnostics may coexist with independent action diagnostics. The existing missing-modality path remains unchanged and does not attempt condition parsing.
 
@@ -304,10 +314,12 @@ The implementation adds or updates reviewed synthetic fixtures for:
 3. two comparisons joined by `or`;
 4. three homogeneous comparisons;
 5. mixed `and` and `or`;
-6. one malformed clause in a homogeneous chain;
-7. parenthesized grouping;
-8. the existing threshold-with-exception fixture migrated to `condition`;
-9. a provision with no condition candidate.
+6. one malformed single comparison candidate;
+7. one malformed clause in a homogeneous chain;
+8. parenthesized grouping;
+9. a candidate with both grouping and mixed connectors to prove diagnostic precedence;
+10. the existing threshold-with-exception fixture migrated to `condition`;
+11. a provision with no condition candidate.
 
 Tests cover:
 
@@ -319,7 +331,8 @@ Tests cover:
 - rejection of a mismatched `threshold.original_text`;
 - rejection of malformed logical groups;
 - active-path cycle detection;
-- specific condition diagnostic precedence without redundant `no-structured-condition` output;
+- deterministic condition diagnostic precedence;
+- specific condition diagnostics without redundant `no-structured-condition` output;
 - preservation of source identity and exact whitespace;
 - unchanged modality, action, exception, and missing-modality behavior.
 
@@ -373,7 +386,8 @@ All reviewed fixtures must match deterministic parser output, and GitHub Actions
 - Package metadata reports `0.3.0.dev0`.
 - Public output contains required nullable `condition`, not `conditions`.
 - Single comparisons and homogeneous `all_of` or `any_of` groups parse deterministically.
-- Mixed, grouped, or malformed candidate chains produce one specific condition diagnostic and no partial expression.
+- Mixed, grouped, or malformed candidate chains produce exactly one specific condition diagnostic and no partial expression.
+- Diagnostic precedence is deterministic when multiple rejection rules apply.
 - Every condition span round-trips to the original source.
 - Comparison evidence text and logical group boundaries are validated exactly.
 - Logical operands are ordered, contained, and non-overlapping.
