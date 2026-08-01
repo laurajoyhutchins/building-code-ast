@@ -1,0 +1,380 @@
+{
+  "protocol": "lore-proposal/v1",
+  "proposal_id": "bootstrap.repository-knowledge",
+  "base_revision": "__BASE_REVISION__",
+  "producer": {
+    "type": "agent",
+    "name": "GPT-5.6 Thinking",
+    "model": "GPT-5.6 Thinking"
+  },
+  "skill": {
+    "path": "skills/maintain-repository-documentation/SKILL.md",
+    "digest": "sha256:__SKILL_DIGEST__"
+  },
+  "result": "changes_proposed",
+  "operations": [
+    {
+      "operation": "append_record",
+      "record": {
+        "schema_version": 1,
+        "id": "repository.building-code-ast",
+        "kind": "repository",
+        "revision": 1,
+        "status": "active",
+        "title": "Building Code AST repository",
+        "summary": "A provenance-preserving compiler substrate for representing selected regulatory publication structure and bounded provision semantics.",
+        "scope": {
+          "repository": "building-code-ast",
+          "components": []
+        },
+        "evidence": [
+          { "revision": "__BASE_REVISION__", "path": "README.md" },
+          { "revision": "__BASE_REVISION__", "path": "pyproject.toml" },
+          { "revision": "__BASE_REVISION__", "path": "docs/architecture.md" }
+        ],
+        "disclosure": {
+          "audiences": ["maintainers", "contributors", "integrators"],
+          "tags": ["repository", "purpose", "trust-boundary"],
+          "weight": 100
+        },
+        "provenance": {
+          "source": "proposal",
+          "transaction": null,
+          "producer": "GPT-5.6 Thinking"
+        },
+        "supersedes": null,
+        "payload": {
+          "status_note": "pre-1.0 research and engineering",
+          "runtime": "Python 3.12",
+          "purpose": "Convert selected regulatory publications into reviewable structural and semantic representations without erasing source identity, exact spans, uncertainty, or unsupported language.",
+          "trust_boundary": "Source artifacts, parser output, generated documentation, and model-assisted proposals are evidence-bearing inputs, not authoritative legal interpretation or compliance determinations.",
+          "non_goals": [
+            "Automatically interpret arbitrary building-code language.",
+            "Decide whether a real project complies.",
+            "Redistribute licensed model-code or standards text.",
+            "Collapse publication structure, semantic parsing, and reviewed rule evaluation into one opaque step."
+          ]
+        }
+      }
+    },
+    {
+      "operation": "append_record",
+      "record": {
+        "schema_version": 1,
+        "id": "component.document-structure",
+        "kind": "component",
+        "revision": 1,
+        "status": "active",
+        "title": "Document structure AST",
+        "summary": "Represents publication structure, deterministic node identity, and exact source provenance before semantic interpretation.",
+        "scope": {
+          "repository": "building-code-ast",
+          "components": ["document-structure"]
+        },
+        "evidence": [
+          { "revision": "__BASE_REVISION__", "path": "src/building_code_ast/document_model.py" },
+          { "revision": "__BASE_REVISION__", "path": "src/building_code_ast/document_io.py" },
+          { "revision": "__BASE_REVISION__", "path": "src/building_code_ast/document_validation.py" },
+          { "revision": "__BASE_REVISION__", "path": "docs/reference/document-ast.md" }
+        ],
+        "disclosure": {
+          "audiences": ["maintainers", "contributors", "integrators"],
+          "tags": ["component", "document-ast", "provenance"],
+          "weight": 90
+        },
+        "provenance": {
+          "source": "proposal",
+          "transaction": null,
+          "producer": "GPT-5.6 Thinking"
+        },
+        "supersedes": null,
+        "payload": {
+          "status": "active",
+          "responsibilities": [
+            "Represent document, chapter, section, subsection, paragraph, list, definition, table, heading, note, footnote, and unsupported nodes.",
+            "Derive stable node identity from source artifact, edition, node type, and structural locator.",
+            "Preserve exact source spans and recursively validate containment, uniqueness, and identity."
+          ],
+          "paths": [
+            "src/building_code_ast/document_model.py",
+            "src/building_code_ast/document_io.py",
+            "src/building_code_ast/document_validation.py"
+          ],
+          "depends_on": [],
+          "feeds": ["Provision parser", "Future cross-reference and definition graph"]
+        }
+      }
+    },
+    {
+      "operation": "append_record",
+      "record": {
+        "schema_version": 1,
+        "id": "component.provision-parser",
+        "kind": "component",
+        "revision": 1,
+        "status": "active",
+        "title": "Provision parser",
+        "summary": "Parses a deliberately bounded family of synthetic code-style provisions into semantic AST nodes while preserving unsupported or ambiguous language.",
+        "scope": {
+          "repository": "building-code-ast",
+          "components": ["provision-parser"]
+        },
+        "evidence": [
+          { "revision": "__BASE_REVISION__", "path": "src/building_code_ast/parser.py" },
+          { "revision": "__BASE_REVISION__", "path": "src/building_code_ast/model.py" },
+          { "revision": "__BASE_REVISION__", "path": "src/building_code_ast/validation.py" },
+          { "revision": "__BASE_REVISION__", "path": "README.md" }
+        ],
+        "disclosure": {
+          "audiences": ["maintainers", "contributors", "integrators"],
+          "tags": ["component", "parser", "provision-ast"],
+          "weight": 90
+        },
+        "provenance": {
+          "source": "proposal",
+          "transaction": null,
+          "producer": "GPT-5.6 Thinking"
+        },
+        "supersedes": null,
+        "payload": {
+          "status": "active",
+          "responsibilities": [
+            "Recognize requirement, prohibition, permission, subject, simple numeric condition, action, and section-reference exception structures.",
+            "Preserve the exact original input and evidence spans for recognized structures.",
+            "Emit diagnostics rather than silently guessing beyond the supported grammar."
+          ],
+          "paths": [
+            "src/building_code_ast/parser.py",
+            "src/building_code_ast/model.py",
+            "src/building_code_ast/validation.py"
+          ],
+          "depends_on": ["Selected source provision text"],
+          "feeds": ["Future reviewed normalized rule model"]
+        }
+      }
+    },
+    {
+      "operation": "append_record",
+      "record": {
+        "schema_version": 1,
+        "id": "component.validation",
+        "kind": "component",
+        "revision": 1,
+        "status": "active",
+        "title": "Validation and contracts",
+        "summary": "Enforces schema, identity, source-span, containment, and malformed-input invariants for both public AST representations.",
+        "scope": {
+          "repository": "building-code-ast",
+          "components": ["document-structure", "provision-parser", "validation"]
+        },
+        "evidence": [
+          { "revision": "__BASE_REVISION__", "path": "src/building_code_ast/document_validation.py" },
+          { "revision": "__BASE_REVISION__", "path": "src/building_code_ast/validation.py" },
+          { "revision": "__BASE_REVISION__", "path": "schemas/document-ast.schema.json" },
+          { "revision": "__BASE_REVISION__", "path": "schemas/provision-ast.schema.json" }
+        ],
+        "disclosure": {
+          "audiences": ["maintainers", "contributors", "integrators"],
+          "tags": ["component", "validation", "schemas"],
+          "weight": 90
+        },
+        "provenance": {
+          "source": "proposal",
+          "transaction": null,
+          "producer": "GPT-5.6 Thinking"
+        },
+        "supersedes": null,
+        "payload": {
+          "status": "active",
+          "responsibilities": [
+            "Prove that source spans round-trip to exact source text.",
+            "Reject duplicate, malformed, out-of-bounds, or identity-inconsistent structures.",
+            "Keep JSON Schema projections aligned with runtime contracts."
+          ],
+          "paths": [
+            "src/building_code_ast/document_validation.py",
+            "src/building_code_ast/validation.py",
+            "schemas/"
+          ],
+          "depends_on": ["Document structure AST", "Provision parser"],
+          "feeds": ["CLI output", "Downstream consumers", "Regression fixtures"]
+        }
+      }
+    },
+    {
+      "operation": "append_record",
+      "record": {
+        "schema_version": 1,
+        "id": "decision.staged-representations",
+        "kind": "decision",
+        "revision": 1,
+        "status": "active",
+        "title": "Keep compiler representations staged",
+        "summary": "Publication structure, provision semantics, cross-reference resolution, reviewed normalization, and project evaluation remain distinct representations.",
+        "scope": {
+          "repository": "building-code-ast",
+          "components": ["document-structure", "provision-parser"]
+        },
+        "evidence": [
+          { "revision": "__BASE_REVISION__", "path": "docs/architecture.md" },
+          { "revision": "__BASE_REVISION__", "path": "src/building_code_ast/document_model.py" },
+          { "revision": "__BASE_REVISION__", "path": "src/building_code_ast/parser.py" }
+        ],
+        "disclosure": {
+          "audiences": ["maintainers", "contributors", "integrators"],
+          "tags": ["decision", "architecture", "representation-boundary"],
+          "weight": 95
+        },
+        "provenance": {
+          "source": "proposal",
+          "transaction": null,
+          "producer": "GPT-5.6 Thinking"
+        },
+        "supersedes": null,
+        "payload": {
+          "decision": "Do not place modality, applicability, actions, compliance conclusions, or professional interpretation in the document structure AST.",
+          "rationale": "Separate stages preserve reviewability, allow parsers to evolve independently, and prevent later interpretation from overwriting source structure.",
+          "consequences": [
+            "Document and provision ASTs are versioned independently.",
+            "Later graph and evaluation stages must retain links to earlier source evidence.",
+            "Consumers must choose the representation matching their compiler stage."
+          ]
+        }
+      }
+    },
+    {
+      "operation": "append_record",
+      "record": {
+        "schema_version": 1,
+        "id": "decision.provenance-before-interpretation",
+        "kind": "decision",
+        "revision": 1,
+        "status": "active",
+        "title": "Preserve provenance before interpretation",
+        "summary": "Exact source identity, original text, spans, deterministic identities, and diagnostics are mandatory before semantic claims are trusted.",
+        "scope": {
+          "repository": "building-code-ast",
+          "components": ["document-structure", "provision-parser", "validation"]
+        },
+        "evidence": [
+          { "revision": "__BASE_REVISION__", "path": "docs/architecture.md" },
+          { "revision": "__BASE_REVISION__", "path": "src/building_code_ast/document_validation.py" },
+          { "revision": "__BASE_REVISION__", "path": "src/building_code_ast/validation.py" }
+        ],
+        "disclosure": {
+          "audiences": ["maintainers", "contributors", "integrators"],
+          "tags": ["decision", "provenance", "safety"],
+          "weight": 100
+        },
+        "provenance": {
+          "source": "proposal",
+          "transaction": null,
+          "producer": "GPT-5.6 Thinking"
+        },
+        "supersedes": null,
+        "payload": {
+          "decision": "Treat provenance and uncertainty as first-class contract data rather than incidental parser metadata.",
+          "rationale": "Regulatory language is high-consequence and often ambiguous; downstream review must be able to reconstruct exactly what text supported each structure.",
+          "consequences": [
+            "Derived nodes carry exact evidence spans.",
+            "Unsupported language remains visible through diagnostics.",
+            "Model-assisted extensions must satisfy the same contracts and may not bypass deterministic validation."
+          ]
+        }
+      }
+    },
+    {
+      "operation": "append_record",
+      "record": {
+        "schema_version": 1,
+        "id": "constraint.corpus-and-legal-boundary",
+        "kind": "constraint",
+        "revision": 1,
+        "status": "active",
+        "title": "Respect corpus and legal safety boundaries",
+        "summary": "Repository contents and outputs must not imply redistribution rights, authoritative interpretation, or project compliance.",
+        "scope": {
+          "repository": "building-code-ast",
+          "components": []
+        },
+        "evidence": [
+          { "revision": "__BASE_REVISION__", "path": "docs/corpus-policy.md" },
+          { "revision": "__BASE_REVISION__", "path": "docs/legal-safety-boundary.md" },
+          { "revision": "__BASE_REVISION__", "path": "README.md" }
+        ],
+        "disclosure": {
+          "audiences": ["maintainers", "contributors", "integrators"],
+          "tags": ["constraint", "corpus", "legal-safety"],
+          "weight": 100
+        },
+        "provenance": {
+          "source": "proposal",
+          "transaction": null,
+          "producer": "GPT-5.6 Thinking"
+        },
+        "supersedes": null,
+        "payload": {
+          "constraint": "Only project-authored software, documentation, schemas, and synthetic fixtures belong in the repository unless a source has been reviewed for lawful inclusion.",
+          "required_practices": [
+            "Do not commit proprietary model-code text, standards text, licensed commentary, or bulk source material for convenience.",
+            "Label parsed output as non-authoritative and preserve source provenance.",
+            "Keep jurisdiction resolution, parsing, interpretation, and professional judgment as separate responsibilities."
+          ]
+        }
+      }
+    },
+    {
+      "operation": "append_record",
+      "record": {
+        "schema_version": 1,
+        "id": "procedure.verification",
+        "kind": "procedure",
+        "revision": 1,
+        "status": "active",
+        "title": "Verify repository changes",
+        "summary": "Run the Python test and compilation lanes, then use the pinned LORE CLI to verify extracted facts, accepted records, and generated projections.",
+        "scope": {
+          "repository": "building-code-ast",
+          "components": ["document-structure", "provision-parser", "validation"]
+        },
+        "evidence": [
+          { "revision": "__BASE_REVISION__", "path": "CONTRIBUTING.md" },
+          { "revision": "__BASE_REVISION__", "path": ".github/workflows/ci.yml" },
+          { "revision": "__BASE_REVISION__", "path": ".github/workflows/lore.yml" },
+          { "revision": "__BASE_REVISION__", "path": "lore.yaml" }
+        ],
+        "disclosure": {
+          "audiences": ["maintainers", "contributors", "integrators"],
+          "tags": ["procedure", "verification", "maintenance"],
+          "weight": 95
+        },
+        "provenance": {
+          "source": "proposal",
+          "transaction": null,
+          "producer": "GPT-5.6 Thinking"
+        },
+        "supersedes": null,
+        "payload": {
+          "commands": [
+            "python -m unittest discover -s tests -v",
+            "python -m compileall -q src tests",
+            "lore extract --check",
+            "lore validate",
+            "lore project --check"
+          ],
+          "steps": [
+            "Run the Python commands from the repository root on Python 3.12.",
+            "Run LORE from the exact upstream revision pinned by the workflow.",
+            "Report the exact commands actually run.",
+            "Do not claim validation that was not performed.",
+            "For semantic documentation changes, run the shipped maintenance skill, validate its single proposal artifact, and let LORE apply and project it."
+          ]
+        }
+      }
+    }
+  ],
+  "uncertainties": [
+    "LORE is pre-1.0 and this integration is pinned to upstream commit a8792bd594db34fcbf3065239b70ef4383f7e186.",
+    "The repository-metadata extractor is currently the only shipped extractor applicable to this Python repository; Python module and unittest extraction are not yet available."
+  ]
+}
