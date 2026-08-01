@@ -14,13 +14,13 @@
     "modality_span",
     "subject",
     "subject_span",
-    "conditions",
+    "condition",
     "action",
     "exceptions",
     "diagnostics"
   ],
   "properties": {
-    "ast_version": { "const": "0.2.0" },
+    "ast_version": { "const": "0.3.0" },
     "type": { "const": "provision" },
     "source_text": { "type": "string", "minLength": 1 },
     "source_artifact": { "$ref": "#/$defs/sourceArtifact" },
@@ -41,9 +41,11 @@
         { "type": "null" }
       ]
     },
-    "conditions": {
-      "type": "array",
-      "items": { "$ref": "#/$defs/comparisonCondition" }
+    "condition": {
+      "oneOf": [
+        { "$ref": "#/$defs/conditionExpression" },
+        { "type": "null" }
+      ]
     },
     "action": { "$ref": "#/$defs/action" },
     "exceptions": {
@@ -85,6 +87,12 @@
         "original_text": { "type": "string" }
       }
     },
+    "conditionExpression": {
+      "oneOf": [
+        { "$ref": "#/$defs/comparisonCondition" },
+        { "$ref": "#/$defs/logicalCondition" }
+      ]
+    },
     "comparisonCondition": {
       "type": "object",
       "additionalProperties": false,
@@ -94,6 +102,20 @@
         "subject_property": { "type": "string" },
         "operator": { "enum": [">", ">=", "<", "<=", "=="] },
         "threshold": { "$ref": "#/$defs/quantity" },
+        "span": { "$ref": "#/$defs/sourceSpan" }
+      }
+    },
+    "logicalCondition": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["type", "operands", "span"],
+      "properties": {
+        "type": { "enum": ["all_of", "any_of"] },
+        "operands": {
+          "type": "array",
+          "minItems": 2,
+          "items": { "$ref": "#/$defs/conditionExpression" }
+        },
         "span": { "$ref": "#/$defs/sourceSpan" }
       }
     },
