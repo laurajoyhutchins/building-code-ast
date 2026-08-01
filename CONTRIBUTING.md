@@ -12,6 +12,28 @@ Changes to the public AST contract require:
 
 Do not add a field solely because one example is difficult to parse. Prefer a small, coherent vocabulary that can preserve uncertainty.
 
+## Repository knowledge changes
+
+Before changing architecture, component boundaries, decisions, constraints, findings, relationships, or maintenance procedures, read `skills/maintain-repository-documentation/SKILL.md` and evaluate the documentation impact.
+
+The LORE maintenance workflow is:
+
+1. generate a bounded maintainer context packet for the task;
+2. use the shipped maintenance skill to produce exactly one `lore-proposal/v1` artifact;
+3. cite repository evidence at full Git commit SHAs;
+4. validate the proposal with LORE;
+5. apply it through LORE's transaction engine;
+6. validate accepted records and check deterministic projections.
+
+Do not directly edit:
+
+- `.lore/extracted/`;
+- `.lore/records/`;
+- `.lore/transactions/`;
+- `docs/generated/`.
+
+Accepted semantic history is append-only. Reuse stable record IDs, append the next revision, and preserve uncertainty rather than inventing evidence.
+
 ## Verification
 
 Run:
@@ -19,6 +41,14 @@ Run:
 ```bash
 python -m unittest discover -s tests -v
 python -m compileall -q src tests
+```
+
+The pinned LORE verification lane runs:
+
+```text
+lore extract --check
+lore validate
+lore project --check
 ```
 
 Pull requests should report the exact commands actually run and must not claim validation that was not performed.
