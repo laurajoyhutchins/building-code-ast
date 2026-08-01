@@ -1,0 +1,80 @@
+name: Bootstrap LORE state
+
+on:
+  push:
+    branches:
+      - agent/lore-style-documentation
+
+permissions:
+  contents: write
+
+jobs:
+  bootstrap:
+    if: github.actor != 'github-actions[bot]'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out bootstrap branch
+        uses: actions/checkout@v4
+        with:
+          ref: agent/lore-style-documentation
+          fetch-depth: 0
+
+      - name: Check out pinned LORE
+        uses: actions/checkout@v4
+        with:
+          repository: laurajoyhutchins/LORE
+          ref: a7b1f60deb7577692f302286915199760600f01c
+          path: _lore_tool
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+
+      - name: Build pinned LORE
+        shell: bash
+        run: |
+          set -euo pipefail
+          mv _lore_tool "$RUNNER_TEMP/lore"
+          cd "$RUNNER_TEMP/lore"
+          node scripts/restore-verified-lockfile.mjs
+          corepack enable
+          pnpm install --frozen-lockfile
+          pnpm build
+
+      - name: Extract, propose, transact, and project
+        shell: bash
+        run: |
+          set -euo pipefail
+          LORE="$RUNNER_TEMP/lore/dist/src/cli/main.js"
+
+          git config user.name github-actions[bot]
+          git config user.email 41898282+github-actions[bot]@users.noreply.github.com
+
+          node "$LORE" extract
+          git add .lore/extracted
+          git commit -m "docs: extract repository metadata with LORE"
+
+          mkdir -p .lore/context .lore/proposals
+          node "$LORE" context .lore/tasks/bootstrap-documentation.yaml \
+            > .lore/context/bootstrap-documentation.yaml
+
+          base_revision="$(git rev-parse HEAD)"
+          skill_digest="$(sha256sum skills/maintain-repository-documentation/SKILL.md | awk '{print $1}')"
+          sed \
+            -e "s/__BASE_REVISION__/${base_revision}/g" \
+            -e "s/__SKILL_DIGEST__/${skill_digest}/g" \
+            -e 's/"document-structure"/"component.document-structure"/g' \
+            -e 's/"provision-parser"/"component.provision-parser"/g' \
+            -e 's/"validation"/"component.validation"/g' \
+            .lore/proposals/bootstrap-documentation.template.yaml \
+            > .lore/proposals/bootstrap-documentation.generated.yaml
+
+          node "$LORE" validate-proposal .lore/proposals/bootstrap-documentation.generated.yaml
+          node "$LORE" apply .lore/proposals/bootstrap-documentation.generated.yaml
+          node "$LORE" validate
+          node "$LORE" project --check
+
+          git add .lore/records .lore/transactions docs/generated
+          git commit -m "docs: accept Building Code AST knowledge with LORE"
+          git push origin HEAD:agent/lore-style-documentation
