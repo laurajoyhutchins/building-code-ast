@@ -1,0 +1,148 @@
+name: Rebuild LORE bootstrap
+
+on:
+  push:
+    branches:
+      - agent/lore-style-documentation
+
+permissions:
+  contents: read
+
+jobs:
+  rebuild:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out durable evidence base
+        uses: actions/checkout@v4
+        with:
+          ref: 5ec088dad55e5b80fc0abc637314fdc077b62db6
+          fetch-depth: 0
+          path: base
+
+      - name: Check out candidate trust root
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ github.sha }}
+          fetch-depth: 0
+          path: candidate
+
+      - name: Check out pinned LORE
+        uses: actions/checkout@v4
+        with:
+          repository: laurajoyhutchins/LORE
+          ref: 85d2b9db2f8152780038fdfd7ff5897b8d93198f
+          path: tool
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+
+      - name: Build pinned LORE
+        shell: bash
+        run: |
+          set -euo pipefail
+          cd tool
+          node scripts/restore-verified-lockfile.mjs
+          corepack enable
+          pnpm install --frozen-lockfile
+          pnpm build
+
+      - name: Prepare durable-base workspace
+        shell: bash
+        run: |
+          set -euo pipefail
+          cp candidate/lore.yaml base/lore.yaml
+          mkdir -p base/skills
+          cp -R candidate/skills/maintain-repository-documentation base/skills/
+          for schema in extracted-facts.schema.json hydration.schema.json manifest.schema.json proposal.schema.json record.schema.json task.schema.json transaction.schema.json; do
+            cp "candidate/schemas/$schema" "base/schemas/$schema"
+          done
+          mkdir -p base/.lore/extracted base/.lore/proposals base/.lore/records base/.lore/transactions base/docs/generated
+          cp candidate/.lore/extracted/repository.yaml base/.lore/extracted/repository.yaml
+
+      - name: Build bounded proposal from durable evidence
+        shell: bash
+        env:
+          DURABLE_BASE: 5ec088dad55e5b80fc0abc637314fdc077b62db6
+        run: |
+          set -euo pipefail
+          cd tool
+          node --input-type=module <<'EOF'
+          import { createHash } from 'node:crypto';
+          import { readFile, writeFile } from 'node:fs/promises';
+          import path from 'node:path';
+          import YAML from 'yaml';
+
+          const workspace = process.env.GITHUB_WORKSPACE;
+          const candidate = path.join(workspace, 'candidate');
+          const base = path.join(workspace, 'base');
+          const durableBase = process.env.DURABLE_BASE;
+          const recordPaths = [
+            '.lore/records/component/component.document-structure/1.yaml',
+            '.lore/records/component/component.provision-parser/1.yaml',
+            '.lore/records/component/component.validation/1.yaml',
+            '.lore/records/constraint/constraint.corpus-and-legal-boundary/1.yaml',
+            '.lore/records/decision/decision.composable-condition-expressions/1.yaml',
+            '.lore/records/decision/decision.provenance-before-interpretation/1.yaml',
+            '.lore/records/decision/decision.staged-representations/1.yaml',
+            '.lore/records/repository/repository.building-code-ast/1.yaml',
+          ];
+
+          const operations = [];
+          for (const relative of recordPaths) {
+            const record = YAML.parse(await readFile(path.join(candidate, relative), 'utf8'));
+            record.evidence = record.evidence.map((entry) => ({ ...entry, revision: durableBase }));
+            record.provenance = { ...record.provenance, transaction: null };
+            operations.push({ operation: 'append_record', record });
+          }
+
+          const skillPath = 'skills/maintain-repository-documentation/SKILL.md';
+          const skill = await readFile(path.join(candidate, skillPath));
+          const proposal = {
+            protocol: 'lore-proposal/v1',
+            proposal_id: 'bootstrap.repository-knowledge',
+            base_revision: durableBase,
+            producer: {
+              type: 'assistant',
+              name: 'GPT-5.6 Thinking',
+              model: 'GPT-5.6 Thinking',
+            },
+            skill: {
+              path: skillPath,
+              digest: `sha256:${createHash('sha256').update(skill).digest('hex')}`,
+            },
+            result: 'changes_proposed',
+            operations,
+            uncertainties: [
+              'The LORE verification and maintenance procedure introduced by this pull request is intentionally deferred until its files exist on durable main history.',
+            ],
+          };
+
+          await writeFile(
+            path.join(base, '.lore/proposals/rebuild-bootstrap.generated.yaml'),
+            YAML.stringify(proposal, { lineWidth: 0, aliasDuplicateObjects: false }),
+          );
+          EOF
+
+      - name: Apply and verify rebuilt transaction
+        shell: bash
+        run: |
+          set -euo pipefail
+          LORE="$GITHUB_WORKSPACE/tool/dist/src/cli/main.js"
+          cd base
+          node "$LORE" validate-proposal .lore/proposals/rebuild-bootstrap.generated.yaml
+          node "$LORE" apply .lore/proposals/rebuild-bootstrap.generated.yaml
+          node "$LORE" validate
+          node "$LORE" project --check
+
+      - name: Upload rebuilt state
+        uses: actions/upload-artifact@v4
+        with:
+          name: rebuilt-lore-state
+          if-no-files-found: error
+          path: |
+            base/.lore/proposals/rebuild-bootstrap.generated.yaml
+            base/.lore/records
+            base/.lore/transactions
+            base/docs/generated
