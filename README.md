@@ -84,12 +84,25 @@ building-code-ast parse "Doors shall not be obstructed."
 
 The runtime package has no third-party dependencies. CLI calls default provision source identity and locator to `inline`; durable ingestion should provide stable identifiers tied to a source artifact, edition, and location.
 
+## Local NEC 2017 ingestion
+
+The optional local ingestion adapter can convert selected articles from a user-supplied 2017 NEC PDF into validated document AST seeds with block-level PDF coordinates. PyMuPDF is isolated in the `nec-pdf` optional dependency group; the base runtime remains dependency-free.
+
+```bash
+python -m pip install -e '.[nec-pdf]'
+python scripts/ingest_nec_2017.py /path/to/nec-2017.pdf \
+  --output-dir generated-private/nec-2017
+```
+
+The default slice produces Articles 90, 100, and 110. Generated files may reproduce protected source expression and must remain private and outside public Git. The repository contains only the ingestion code, synthetic tests, and source-policy documentation. See [`docs/how-to/ingest-nec-2017.md`](docs/how-to/ingest-nec-2017.md).
+
 ## Repository layout
 
-- `src/building_code_ast/`: document and provision AST models, strict input handling, parsing, and validation
+- `src/building_code_ast/`: document and provision AST models, strict input handling, parsing, validation, and local ingestion adapters
 - `schemas/`: versioned JSON Schema projections of the public AST contracts
 - `fixtures/`: synthetic source and expected-output fixtures
 - `tests/`: parser, provenance, malformed-input, and regression tests
+- `scripts/ingest_nec_2017.py`: local-only coordinate-aware NEC 2017 ingestion CLI
 - `docs/README.md`: Diátaxis documentation map and authoring guidance
 - `docs/architecture.md`: representation boundaries and staged compiler model
 - `docs/compatibility.md`: public AST version compatibility notes
