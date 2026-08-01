@@ -250,7 +250,7 @@ def parse_provision(
         modality_span=_span(source, modal_match.start("modal"), modal_match.end("modal")),
         subject=subject,
         subject_span=subject_span,
-        conditions=conditions,
+        condition=conditions[0] if conditions else None,
         action=action,
         exceptions=exceptions,
         diagnostics=tuple(diagnostics),
