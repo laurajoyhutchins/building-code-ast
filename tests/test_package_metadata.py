@@ -15,7 +15,10 @@ class PackageMetadataTests(unittest.TestCase):
         self.assertIn("classifiers", payload["project"])
         self.assertEqual(
             payload["project"]["optional-dependencies"],
-            {"nec-pdf": ["PyMuPDF>=1.24,<2"]},
+            {
+                "ibc-pdf": ["PyMuPDF>=1.24,<2"],
+                "nec-pdf": ["PyMuPDF>=1.24,<2"],
+            },
         )
 
 
