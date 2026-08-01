@@ -2,7 +2,7 @@
 
 Building Code AST is an early-stage parser and semantic-modeling project for converting selected natural-language regulatory publications into reviewable, provenance-preserving abstract syntax trees.
 
-The project is intentionally narrower than "AI understands the building code." Its compiler boundary now has two explicit representations:
+The project is intentionally narrower than "AI understands the building code." Its compiler boundary has two explicit representations:
 
 ```text
 source artifact and edition
@@ -33,17 +33,23 @@ The document contract represents publication structure before semantic interpret
 
 The document contract does not contain modality, condition, action, compliance, or interpretation fields. It is a source-structure layer, not a rule meaning layer.
 
-### Provision AST `0.2.0`
+### Provision AST `0.3.0`
 
 The provision parser recognizes a bounded family of synthetic code-style provisions containing:
 
 - requirement, prohibition, and permission modalities;
 - a regulated subject;
-- simple numeric threshold conditions;
+- one numeric comparison condition;
+- homogeneous chains of numeric comparisons joined entirely by `and` or entirely by `or`;
+- recursive `all_of` and `any_of` condition expressions;
 - generic actions;
 - section-reference exceptions;
 - durable source-artifact identity and provision locators;
-- exact source spans for recognized modality, subject, conditions, action, exceptions, and diagnostics.
+- exact source spans for recognized modality, subject, every condition leaf and group, action, exceptions, and diagnostics.
+
+The serialized `condition` property is always present. It contains a comparison, a logical group, or `null` when no supported structured condition was recognized.
+
+Condition parsing is deliberately all-or-nothing. Parenthesized grouping, mixed `and` and `or` connectors, and malformed comparison clauses are preserved as subject evidence and reported with explicit diagnostics. The parser does not return a partially trusted condition expression.
 
 The parser preserves the exact original input, including leading and trailing whitespace. All offsets address that unmodified string. Unsupported language remains visible in the output instead of being silently guessed.
 
@@ -64,7 +70,15 @@ python -m building_code_ast.cli parse \
   "Research facilities exceeding 40 feet in height shall provide two marked evacuation routes, except as permitted by Section 12.4."
 ```
 
-The output records source identity, the requirement and its evidence span, the regulated subject and its evidence span, the threshold condition, action, exception reference, exact original source text, and parser diagnostics.
+The output records source identity, the requirement and its evidence span, the regulated subject and its evidence span, the comparison condition, action, exception reference, exact original source text, and parser diagnostics.
+
+A supported logical chain follows the same grammar in every segment:
+
+```text
+Research facilities exceeding 40 feet in height and exceeding 20000 square feet in floor area shall provide two marked evacuation routes.
+```
+
+That condition serializes as an `all_of` group containing two comparison operands in source order.
 
 ## Quick start
 
@@ -117,9 +131,10 @@ Run:
 ```bash
 python -m unittest discover -s tests -v
 python -m compileall -q src tests
+python -c "import json; json.load(open('schemas/provision-ast.schema.json', encoding='utf-8'))"
 ```
 
-CI executes both commands on Python 3.12.
+CI installs the package and executes the test and compilation commands on Python 3.12. The test suite also parses the provision JSON Schema and compares reviewed condition fixtures with exact parser output.
 
 ## Data and publication boundary
 
