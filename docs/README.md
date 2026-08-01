@@ -24,9 +24,10 @@ Task-oriented procedures for readers who already understand the basics.
 Current material:
 
 - the root [`README.md`](../README.md) contains the initial installation and CLI quick start;
-- [`CONTRIBUTING.md`](../CONTRIBUTING.md) contains contribution and verification procedures.
+- [`CONTRIBUTING.md`](../CONTRIBUTING.md) contains contribution and verification procedures;
+- [`how-to/ingest-nec-2017.md`](how-to/ingest-nec-2017.md) explains how to generate private ArticleSeed files from a locally supplied NEC 2017 PDF.
 
-Future how-to guides should move into a dedicated `docs/how-to/` section when their number or complexity justifies it.
+Future how-to guides should remain in `docs/how-to/` and preserve the repository's source-publication boundary.
 
 ## Reference
 
