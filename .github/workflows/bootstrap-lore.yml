@@ -1,9 +1,7 @@
 name: Bootstrap LORE state
 
 on:
-  push:
-    branches:
-      - agent/lore-style-documentation
+  pull_request:
 
 permissions:
   contents: write
