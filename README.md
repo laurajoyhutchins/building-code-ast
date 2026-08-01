@@ -96,6 +96,18 @@ python scripts/ingest_nec_2017.py /path/to/nec-2017.pdf \
 
 The default slice produces Articles 90, 100, and 110. Generated files may reproduce protected source expression and must remain private and outside public Git. The repository contains only the ingestion code, synthetic tests, and source-policy documentation. See [`docs/how-to/ingest-nec-2017.md`](docs/how-to/ingest-nec-2017.md).
 
+## Local IBC 2018 ingestion
+
+The IBC adapter converts a bounded set of chapters from a user-supplied 2018 IBC PDF into validated ChapterSeed files with positioned PDF fragments. The verified source has no usable outline and exposes individual glyphs rather than ordinary text lines, so this adapter reconstructs visual lines and fails closed outside known page ranges.
+
+```bash
+python -m pip install -e '.[ibc-pdf]'
+python scripts/ingest_ibc_2018.py /path/to/icc-2018.pdf \
+  --output-dir generated-private/ibc-2018
+```
+
+The first slice produces Chapters 1, 2, and 3. Publisher user-note commentary is excluded from the code seed. Complex table layouts are retained with diagnostics rather than guessed into cells. Generated files may reproduce protected source expression and must remain private and outside public Git. See [`docs/how-to/ingest-ibc-2018.md`](docs/how-to/ingest-ibc-2018.md).
+
 ## Repository layout
 
 - `src/building_code_ast/`: document and provision AST models, strict input handling, parsing, validation, and local ingestion adapters
@@ -103,6 +115,7 @@ The default slice produces Articles 90, 100, and 110. Generated files may reprod
 - `fixtures/`: synthetic source and expected-output fixtures
 - `tests/`: parser, provenance, malformed-input, and regression tests
 - `scripts/ingest_nec_2017.py`: local-only coordinate-aware NEC 2017 ingestion CLI
+- `scripts/ingest_ibc_2018.py`: local-only positioned-glyph IBC 2018 ingestion CLI
 - `docs/README.md`: Diátaxis documentation map and authoring guidance
 - `docs/architecture.md`: representation boundaries and staged compiler model
 - `docs/compatibility.md`: public AST version compatibility notes
