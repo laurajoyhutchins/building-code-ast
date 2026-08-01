@@ -50,8 +50,8 @@ jobs:
             node "$LORE" extract --check
             node "$LORE" validate
             node "$LORE" project --check
-          else
-            node "$LORE" extract
+          elif find .lore/extracted -type f -name '*.yaml' -print -quit 2>/dev/null | grep -q .; then
+            node "$LORE" extract --check
             mkdir -p .lore/context .lore/proposals
             node "$LORE" context .lore/tasks/bootstrap-documentation.yaml \
               > .lore/context/bootstrap-documentation.yaml
@@ -65,12 +65,14 @@ jobs:
               -e 's/"provision-parser"/"component.provision-parser"/g' \
               -e 's/"validation"/"component.validation"/g' \
               .lore/proposals/bootstrap-documentation.template.yaml \
-              > .lore/proposals/bootstrap-documentation.yaml
+              > .lore/proposals/bootstrap-documentation.generated.yaml
 
-            node "$LORE" validate-proposal .lore/proposals/bootstrap-documentation.yaml
-            node "$LORE" apply .lore/proposals/bootstrap-documentation.yaml
+            node "$LORE" validate-proposal .lore/proposals/bootstrap-documentation.generated.yaml
+            node "$LORE" apply .lore/proposals/bootstrap-documentation.generated.yaml
             node "$LORE" validate
             node "$LORE" project --check
+          else
+            node "$LORE" extract
           fi
 
       - name: Upload LORE state
@@ -81,7 +83,7 @@ jobs:
           path: |
             .lore/context/bootstrap-documentation.yaml
             .lore/extracted
-            .lore/proposals/bootstrap-documentation.yaml
+            .lore/proposals/bootstrap-documentation.generated.yaml
             .lore/records
             .lore/transactions
             docs/generated
