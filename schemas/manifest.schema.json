@@ -1,0 +1,99 @@
+{
+  "$id": "manifest",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "repository",
+    "paths",
+    "extractors",
+    "projections",
+    "maintenance",
+    "hydration"
+  ],
+  "properties": {
+    "schema_version": { "const": 1 },
+    "repository": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "name", "root"],
+      "properties": {
+        "id": { "type": "string", "minLength": 1 },
+        "name": { "type": "string", "minLength": 1 },
+        "root": { "type": "string", "minLength": 1 }
+      }
+    },
+    "paths": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "extracted",
+        "records",
+        "proposals",
+        "transactions",
+        "generated_docs",
+        "skills"
+      ],
+      "properties": {
+        "extracted": { "type": "string", "minLength": 1 },
+        "records": { "type": "string", "minLength": 1 },
+        "proposals": { "type": "string", "minLength": 1 },
+        "transactions": { "type": "string", "minLength": 1 },
+        "generated_docs": { "type": "string", "minLength": 1 },
+        "skills": { "type": "string", "minLength": 1 }
+      }
+    },
+    "extractors": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["id", "enabled"],
+        "properties": {
+          "id": { "type": "string", "minLength": 1 },
+          "enabled": { "type": "boolean" }
+        }
+      }
+    },
+    "projections": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["id", "output"],
+        "properties": {
+          "id": {
+            "enum": [
+              "readme",
+              "repository-card",
+              "architecture",
+              "component-catalog",
+              "current-decisions",
+              "maintainer-guide"
+            ]
+          },
+          "output": { "type": "string", "minLength": 1 }
+        }
+      }
+    },
+    "maintenance": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["skill", "proposal_schema"],
+      "properties": {
+        "skill": { "type": "string", "minLength": 1 },
+        "proposal_schema": { "type": "string", "minLength": 1 }
+      }
+    },
+    "hydration": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["max_records", "max_characters"],
+      "properties": {
+        "max_records": { "type": "integer", "minimum": 1 },
+        "max_characters": { "type": "integer", "minimum": 1 }
+      }
+    }
+  }
+}
