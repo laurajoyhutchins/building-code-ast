@@ -1,6 +1,4 @@
-extractors:
-- enabled: true
-  id: repository-metadata
+extractors: []
 hydration:
   max_characters: 40000
   max_records: 20
