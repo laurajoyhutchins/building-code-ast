@@ -1,7 +1,7 @@
 schema_version: 1
 id: bootstrap-documentation
 title: Bootstrap repository knowledge
-description: Capture the current Building Code AST architecture, component boundaries, safety constraints, and verification procedure from exact repository evidence.
+description: Capture the current Building Code AST architecture, component boundaries, approved condition-expression design, safety constraints, and verification procedure from exact repository evidence.
 paths:
 - README.md
 - pyproject.toml
@@ -9,6 +9,7 @@ paths:
 - docs/corpus-policy.md
 - docs/legal-safety-boundary.md
 - docs/reference/document-ast.md
+- docs/superpowers/specs/2026-08-01-composable-condition-expressions-design.md
 - src/building_code_ast/document_model.py
 - src/building_code_ast/document_io.py
 - src/building_code_ast/document_validation.py
@@ -23,6 +24,7 @@ components:
 - validation
 tags:
 - architecture
+- condition-expressions
 - provenance
 - safety
 - verification
