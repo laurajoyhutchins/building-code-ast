@@ -21,7 +21,7 @@ jobs:
         uses: actions/checkout@v4
         with:
           repository: laurajoyhutchins/LORE
-          ref: a7b1f60deb7577692f302286915199760600f01c
+          ref: 85d2b9db2f8152780038fdfd7ff5897b8d93198f
           path: _lore_tool
 
       - name: Set up Node.js
