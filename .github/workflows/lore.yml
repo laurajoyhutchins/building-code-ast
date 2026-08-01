@@ -47,11 +47,9 @@ jobs:
           LORE="$RUNNER_TEMP/lore/dist/src/cli/main.js"
 
           if find .lore/records -type f -name '*.yaml' -print -quit 2>/dev/null | grep -q .; then
-            node "$LORE" extract --check
             node "$LORE" validate
             node "$LORE" project --check
-          elif find .lore/extracted -type f -name '*.yaml' -print -quit 2>/dev/null | grep -q .; then
-            node "$LORE" extract --check
+          else
             mkdir -p .lore/context .lore/proposals
             node "$LORE" context .lore/tasks/bootstrap-documentation.yaml \
               > .lore/context/bootstrap-documentation.yaml
@@ -67,12 +65,27 @@ jobs:
               .lore/proposals/bootstrap-documentation.template.yaml \
               > .lore/proposals/bootstrap-documentation.generated.yaml
 
+            node <<'NODE'
+          const fs = require('node:fs');
+          const proposalPath = '.lore/proposals/bootstrap-documentation.generated.yaml';
+          const proposal = JSON.parse(fs.readFileSync(proposalPath, 'utf8'));
+          for (const operation of proposal.operations) {
+            const record = operation.record;
+            if (record?.id === 'procedure.verification') {
+              record.summary = 'Run the Python test and compilation lanes, then use the pinned LORE CLI to verify accepted records and generated projections.';
+              record.payload.commands = record.payload.commands.filter(
+                (command) => command !== 'lore extract --check',
+              );
+            }
+          }
+          proposal.uncertainties[1] = "LORE's shipped extractors are TypeScript- and Vitest-oriented, so deterministic extraction is intentionally disabled for this Python repository.";
+          fs.writeFileSync(proposalPath, `${JSON.stringify(proposal, null, 2)}\n`);
+          NODE
+
             node "$LORE" validate-proposal .lore/proposals/bootstrap-documentation.generated.yaml
             node "$LORE" apply .lore/proposals/bootstrap-documentation.generated.yaml
             node "$LORE" validate
             node "$LORE" project --check
-          else
-            node "$LORE" extract
           fi
 
       - name: Upload LORE state
@@ -82,7 +95,6 @@ jobs:
           if-no-files-found: error
           path: |
             .lore/context/bootstrap-documentation.yaml
-            .lore/extracted
             .lore/proposals/bootstrap-documentation.generated.yaml
             .lore/records
             .lore/transactions
