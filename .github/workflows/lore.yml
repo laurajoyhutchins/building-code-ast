@@ -21,7 +21,7 @@ jobs:
         uses: actions/checkout@v4
         with:
           repository: laurajoyhutchins/LORE
-          ref: a8792bd594db34fcbf3065239b70ef4383f7e186
+          ref: a7b1f60deb7577692f302286915199760600f01c
           path: _lore_tool
 
       - name: Set up Node.js
@@ -40,62 +40,22 @@ jobs:
           pnpm install --frozen-lockfile
           pnpm build
 
-      - name: Bootstrap or verify LORE knowledge
+      - name: Verify LORE knowledge
         shell: bash
         run: |
           set -euo pipefail
           LORE="$RUNNER_TEMP/lore/dist/src/cli/main.js"
+          node "$LORE" extract --check
+          node "$LORE" validate
+          node "$LORE" project --check
 
-          if find .lore/records -type f -name '*.yaml' -print -quit 2>/dev/null | grep -q .; then
-            node "$LORE" validate
-            node "$LORE" project --check
-          else
-            mkdir -p .lore/context .lore/proposals
-            node "$LORE" context .lore/tasks/bootstrap-documentation.yaml \
-              > .lore/context/bootstrap-documentation.yaml
-
-            base_revision="$(git rev-parse HEAD)"
-            skill_digest="$(sha256sum skills/maintain-repository-documentation/SKILL.md | awk '{print $1}')"
-            sed \
-              -e "s/__BASE_REVISION__/${base_revision}/g" \
-              -e "s/__SKILL_DIGEST__/${skill_digest}/g" \
-              -e 's/"document-structure"/"component.document-structure"/g' \
-              -e 's/"provision-parser"/"component.provision-parser"/g' \
-              -e 's/"validation"/"component.validation"/g' \
-              .lore/proposals/bootstrap-documentation.template.yaml \
-              > .lore/proposals/bootstrap-documentation.generated.yaml
-
-            node <<'NODE'
-          const fs = require('node:fs');
-          const proposalPath = '.lore/proposals/bootstrap-documentation.generated.yaml';
-          const proposal = JSON.parse(fs.readFileSync(proposalPath, 'utf8'));
-          for (const operation of proposal.operations) {
-            const record = operation.record;
-            if (record?.id === 'procedure.verification') {
-              record.summary = 'Run the Python test and compilation lanes, then use the pinned LORE CLI to verify accepted records and generated projections.';
-              record.payload.commands = record.payload.commands.filter(
-                (command) => command !== 'lore extract --check',
-              );
-            }
-          }
-          proposal.uncertainties[1] = "LORE's shipped extractors are TypeScript- and Vitest-oriented, so deterministic extraction is intentionally disabled for this Python repository.";
-          fs.writeFileSync(proposalPath, `${JSON.stringify(proposal, null, 2)}\n`);
-          NODE
-
-            node "$LORE" validate-proposal .lore/proposals/bootstrap-documentation.generated.yaml
-            node "$LORE" apply .lore/proposals/bootstrap-documentation.generated.yaml
-            node "$LORE" validate
-            node "$LORE" project --check
-          fi
-
-      - name: Upload LORE state
+      - name: Upload verified LORE state
         uses: actions/upload-artifact@v4
         with:
           name: lore-state
           if-no-files-found: error
           path: |
-            .lore/context/bootstrap-documentation.yaml
-            .lore/proposals/bootstrap-documentation.generated.yaml
+            .lore/extracted
             .lore/records
             .lore/transactions
             docs/generated
