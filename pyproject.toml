@@ -11,6 +11,9 @@ requires-python = ">=3.12,<3.13"
 license = { text = "Apache-2.0" }
 authors = [{ name = "Laura Joy Hutchins" }]
 dependencies = []
+
+[project.optional-dependencies]
+nec-pdf = ["PyMuPDF>=1.24,<2"]
 classifiers = [
   "Development Status :: 2 - Pre-Alpha",
   "License :: OSI Approved :: Apache Software License",
