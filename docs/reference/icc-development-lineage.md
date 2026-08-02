@@ -21,6 +21,10 @@ The closed JSON projection is [`schemas/icc-development-record.schema.json`](../
 
 `DevelopmentLineage` requires unique semantic record keys and unique sequence values within each proposal. Every parent key must resolve to a record in the same loaded lineage, including deliberate cross-proposal supersession links.
 
+Each proposal identifier must contain exactly one proposal record at sequence 1. Every non-proposal record must have a parent and must be connected through its ancestors to that proposal record. The complete parent graph must be acyclic. These rules prevent a set of individually valid records from masquerading as a valid process chain while containing cycles, detached actions, or no proposal origin.
+
+A proposal record may retain a cross-proposal parent to represent supersession or derivation, but that relationship cannot create a cycle.
+
 The controlling record is selected by process stage, then sequence:
 
 1. final action;

@@ -56,5 +56,12 @@
     "replacement_text": {"type": ["string", "null"], "minLength": 1},
     "source_page": {"type": "integer", "minimum": 1},
     "source_anchor": {"type": "string", "minLength": 1}
-  }
+  },
+  "allOf": [
+    {
+      "if": {"properties": {"operation": {"const": "delete"}}},
+      "then": {"properties": {"replacement_text": {"type": "null"}}},
+      "else": {"properties": {"replacement_text": {"type": "string", "minLength": 1}}}
+    }
+  ]
 }

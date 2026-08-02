@@ -222,6 +222,43 @@ def development_record_from_dict(value: Mapping[str, Any]) -> DevelopmentRecord:
     return record
 
 
+def _assert_acyclic(records_by_key: Mapping[str, DevelopmentRecord]) -> None:
+    visiting: set[str] = set()
+    visited: set[str] = set()
+
+    def visit(key: str) -> None:
+        if key in visited:
+            return
+        if key in visiting:
+            raise ValueError(f"development lineage contains a parent cycle at {key}")
+        visiting.add(key)
+        for parent in records_by_key[key].parent_keys:
+            visit(parent)
+        visiting.remove(key)
+        visited.add(key)
+
+    for record_key in records_by_key:
+        visit(record_key)
+
+
+def _has_proposal_ancestor(
+    record: DevelopmentRecord,
+    proposal_key: str,
+    records_by_key: Mapping[str, DevelopmentRecord],
+) -> bool:
+    pending = list(record.parent_keys)
+    seen: set[str] = set()
+    while pending:
+        parent_key = pending.pop()
+        if parent_key == proposal_key:
+            return True
+        if parent_key in seen:
+            continue
+        seen.add(parent_key)
+        pending.extend(records_by_key[parent_key].parent_keys)
+    return False
+
+
 @dataclass(frozen=True, slots=True)
 class DevelopmentLineage:
     records: tuple[DevelopmentRecord, ...]
@@ -234,13 +271,15 @@ class DevelopmentLineage:
         keys = [record.record_key for record in self.records]
         if len(set(keys)) != len(keys):
             raise ValueError("record_key values must be unique")
-        key_set = set(keys)
+        records_by_key = {record.record_key: record for record in self.records}
         for record in self.records:
             for parent in record.parent_keys:
-                if parent not in key_set:
+                if parent not in records_by_key:
                     raise ValueError(
                         f"unresolved parent {parent} for record {record.record_key}"
                     )
+        _assert_acyclic(records_by_key)
+
         by_proposal: dict[str, list[DevelopmentRecord]] = {}
         for record in self.records:
             by_proposal.setdefault(record.proposal_id, []).append(record)
@@ -248,6 +287,29 @@ class DevelopmentLineage:
             sequences = [record.sequence for record in proposal_records]
             if len(set(sequences)) != len(sequences):
                 raise ValueError(f"duplicate sequence in proposal {proposal_id}")
+            proposals = [
+                record
+                for record in proposal_records
+                if record.kind is DevelopmentRecordKind.PROPOSAL
+            ]
+            if len(proposals) != 1:
+                raise ValueError(
+                    f"proposal {proposal_id} must contain exactly one proposal record"
+                )
+            proposal = proposals[0]
+            if proposal.sequence != 1:
+                raise ValueError(f"proposal record for {proposal_id} must have sequence 1")
+            for record in proposal_records:
+                if record is proposal:
+                    continue
+                if not record.parent_keys:
+                    raise ValueError(
+                        f"non-proposal record {record.record_key} must have a parent"
+                    )
+                if not _has_proposal_ancestor(record, proposal.record_key, records_by_key):
+                    raise ValueError(
+                        f"record {record.record_key} is disconnected from its proposal record"
+                    )
             finals = [
                 record
                 for record in proposal_records

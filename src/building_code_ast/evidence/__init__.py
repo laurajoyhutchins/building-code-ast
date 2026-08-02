@@ -13,6 +13,7 @@ from .amendments import (
     AmendmentOperation,
     AmendmentSet,
     JurisdictionalAmendmentPatch,
+    NormalizedWashingtonWacHtmlAdapter,
     WashingtonWacHtmlAdapter,
     amendment_patch_from_dict,
 )
@@ -83,6 +84,7 @@ __all__ = [
     "IccDevelopmentTextAdapter",
     "IccErrataPdfAdapter",
     "JurisdictionalAmendmentPatch",
+    "NormalizedWashingtonWacHtmlAdapter",
     "PublicationIdentity",
     "RightsStatus",
     "SourceRegion",
