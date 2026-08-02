@@ -12,7 +12,7 @@ from dataclasses import dataclass, field
 import csv
 import io
 import re
-from typing import Any, Iterable, Sequence
+from typing import Any, Sequence
 
 from ..document_model import (
     DocumentNode,
@@ -571,6 +571,19 @@ def compare_hierarchy(
                 actual=locator,
             )
         )
+
+    for index, (expected_item, actual_item) in enumerate(zip(expected, actual)):
+        if expected_item.locator != actual_item.locator:
+            mismatches.append(
+                HierarchyMismatch(
+                    code="order-mismatch",
+                    locator=expected_item.locator,
+                    message="The expected and inferred locator sequences diverge.",
+                    expected=f"{index}:{expected_item.locator}",
+                    actual=f"{index}:{actual_item.locator}",
+                )
+            )
+            break
 
     clean_matches = 0
     for locator in sorted(expected_map.keys() & actual_map.keys()):
