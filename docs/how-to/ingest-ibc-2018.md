@@ -2,7 +2,7 @@
 
 ## Purpose
 
-This procedure generates private ChapterSeed JSON files from the supported chapters of a locally supplied 2018 International Building Code PDF. Each seed contains a source manifest, normalized chapter text, positioned PDF fragments, and a validated document AST.
+This procedure generates private ChapterSeed JSON files from the supported chapters of a locally supplied 2018 International Building Code PDF. Each seed contains a source manifest, normalized chapter text, positioned PDF fragments, layout-analysis evidence, and a validated document AST.
 
 The command does not determine which edition is legally controlling, interpret compliance, resolve cross-references, or publish the source material.
 
@@ -23,7 +23,7 @@ python scripts/ingest_ibc_2018.py /path/to/icc-2018.pdf \
   --output-dir generated-private/ibc-2018
 ```
 
-The first bounded slice produces Chapters 1, 2, and 3. The supplied PDF has no usable outline and exposes individual positioned glyphs instead of ordinary words, so the adapter is deliberately tied to the verified physical page ranges in this edition. Unsupported chapter numbers fail closed rather than guessing page boundaries.
+The bounded slice produces Chapters 1, 2, and 3. The supported source has no usable outline and exposes individually positioned glyphs instead of ordinary words, so the adapter uses verified physical page ranges. Unsupported chapter numbers fail closed rather than guessing boundaries.
 
 Select a subset with:
 
@@ -39,8 +39,8 @@ The command refuses to replace a nonempty output directory. Add `--force` only a
 
 The output directory contains:
 
-- `manifest.json`: source checksum, edition identity, extractor identity, reconstruction method, and chapter file list;
-- `chapter-<number>.json`: source map, document AST, diagnostics, and structural counts for one chapter.
+- `manifest.json`: source checksum, edition identity, extractor identity, seed version, layout-analysis version, reconstruction method, and chapter file list;
+- `chapter-<number>.json`: source map, private layout evidence, document AST, diagnostics, and structural counts for one chapter.
 
 Source identity is edition-scoped:
 
@@ -49,7 +49,7 @@ artifact_id: icc:ibc
 edition_id: 2018:pdf:sha256:<exact PDF digest>
 ```
 
-The manifest records the file name but not the absolute local path.
+The manifest records the file name but not the absolute local path. ChapterSeed `0.2.0` adds private layout evidence while the public Document AST remains at `0.1.0`.
 
 ## Private-output boundary
 
@@ -62,20 +62,20 @@ Only project-authored ingestion code, synthetic fixtures, checksums, source loca
 The extractor:
 
 1. reads only the verified physical page ranges for supported chapters;
-2. reconstructs visual lines from individually positioned glyphs;
-3. removes recurring headers and footers;
-4. merges split same-baseline fragments without merging distant table columns;
-5. reads opening matter top-to-bottom, then two-column body text left before right;
-6. excludes publisher user-note commentary while retaining chapter and code headings;
-7. repairs deterministic line-break hyphenation;
-8. classifies chapter, part, section, provision, note, list, definition, paragraph, heading, and unsupported table-like structures;
-9. validates every document AST span against the normalized chapter text.
+2. reconstructs visual lines from individually positioned glyphs and preserves font and bounding-box evidence;
+3. detects recurring headers and footers across each selected chapter, with fixed coordinate limits retained as a safety backstop;
+4. estimates the body font and records heading evidence without replacing IBC-specific heading rules;
+5. infers page-local reading order from stable line-start clusters, falling back to top-to-bottom when two columns are not supported;
+6. excludes publisher user-note commentary while retaining an explicit removal reason for every excluded line;
+7. reconstructs announced ruled tables from vector boundaries into deterministic base-grid rows and cells;
+8. classifies chapter, part, section, provision, note, list, definition, paragraph, heading, table, and unsupported structures;
+9. proves that every retained visual line is consumed exactly once and that block, row, cell, fragment, source-map, and AST spans round-trip.
 
-Complex tables remain visible as unsupported structures with diagnostics rather than being silently reconstructed into cells.
+Confidence values and evidence identifiers are review aids. They are not probabilities, code interpretations, or legal reliability claims. Table reconstruction is structural only and does not infer semantic row spans, column spans, units, applicability, or regulatory meaning.
 
 ## Known limitations
 
-The first slice supports Chapters 1 through 3 only. It does not infer arbitrary chapter boundaries, reconstruct complex tables, interpret revision markings, resolve definitions or references, or convert provisions into semantic rules. Glyph reconstruction can preserve extraction artifacts that are ambiguous in the PDF text layer; coordinates and fragments remain attached for review.
+The adapter supports Chapters 1 through 3 only. It does not infer arbitrary chapter boundaries, interpret revision markings, resolve definitions or references, or convert provisions into semantic rules. Ruled tables are projected onto the finest stable boundary grid; merged visual headers remain base-grid cells rather than inferred semantic spans. Ambiguous non-ruled table layouts remain visible with diagnostics instead of being guessed.
 
 ## Verify generated seeds without displaying source text
 
@@ -83,9 +83,11 @@ A private validation process should check:
 
 - source SHA-256, size, edition identity, and page count;
 - chapter number, title, physical page range, and output file name;
-- source-map span round-tripping;
-- document AST validation;
+- recurring-furniture removal counts and page-order modes;
+- source-map and document AST span round-tripping;
+- exact retained-line and fragment consumption;
 - expected definition-entry presence in Chapter 2;
-- explicit diagnostics for retained table-like layout in Chapter 3.
+- ruled table, row, and cell counts in Chapter 3;
+- explicit diagnostics for any ambiguous table-like layout.
 
 Avoid printing source text in shared logs.
