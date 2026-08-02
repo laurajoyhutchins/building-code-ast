@@ -63,7 +63,7 @@ The extractor:
 
 1. reads only the verified physical page ranges for supported chapters;
 2. reconstructs visual lines from individually positioned glyphs and preserves font and bounding-box evidence;
-3. detects recurring headers and footers across each selected chapter, with fixed coordinate limits retained as a safety backstop;
+3. detects recurring headers and footers across each selected chapter and removes a line only when both its normalized structure and margin position support removal;
 4. estimates the body font and records heading evidence without replacing IBC-specific heading rules;
 5. infers page-local reading order from stable line-start clusters, falling back to top-to-bottom when two columns are not supported;
 6. excludes publisher user-note commentary while retaining an explicit removal reason for every excluded line;
