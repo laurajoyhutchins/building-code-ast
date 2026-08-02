@@ -25,7 +25,10 @@ _NORMALIZED_DIRECTIVE_RE = re.compile(
     r"is added|is replaced|is deleted|is reserved|applies only as follows)\.$",
     re.IGNORECASE,
 )
-_WAC_CITATION_RE = re.compile(r"(?:PDF\s*)?(?:WAC\s*)?(51-50-[0-9]+)", re.IGNORECASE)
+_WAC_CITATION_RE = re.compile(
+    r"^\s*(?:PDF\s*)?(?:WAC\s*)?(51-50-[0-9]+)\s*$",
+    re.IGNORECASE,
+)
 _CLAUSE_RE = re.compile(
     r"^(?:\[[A-Z]+\]\s*)?"
     r"(?P<locator>[A-Z]?\d{3,}(?:\.\d+)*(?:\([A-Za-z0-9]+\))*)"
