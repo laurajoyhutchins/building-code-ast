@@ -26,6 +26,7 @@ Current material:
 - the root [`README.md`](../README.md) contains the initial installation and CLI quick start;
 - [`CONTRIBUTING.md`](../CONTRIBUTING.md) contains contribution and verification procedures;
 - [`how-to/ingest-nec-2017.md`](how-to/ingest-nec-2017.md) explains how to generate private ArticleSeed files from a locally supplied NEC 2017 PDF;
+- [`how-to/validate-nec-hierarchy.md`](how-to/validate-nec-hierarchy.md) explains how to compare inferred hierarchy with the locally supplied NEC 2017 clause oracle without making it a runtime dependency;
 - [`how-to/build-nec-semantic-seed.md`](how-to/build-nec-semantic-seed.md) explains how to generate the private Article 100 definition index and selected Article 90/110 section reviews.
 
 Future how-to guides should remain in `docs/how-to/` and preserve the repository's source-publication boundary.
