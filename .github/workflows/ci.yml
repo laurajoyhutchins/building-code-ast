@@ -32,6 +32,8 @@ jobs:
           python-version: "3.12"
       - name: Install PDF validation dependencies
         run: python -m pip install -e '.[evidence-pdf]'
+      - name: Inspect source-free ICC development diagnostics
+        run: python tools/debug_official_development.py
       - name: Validate registered official evidence
         run: python tools/validate_official_evidence.py
       - uses: actions/upload-artifact@v4
