@@ -43,6 +43,7 @@ Current reference material:
 - [`reference/document-ast.md`](reference/document-ast.md): document AST fields, identity algorithm, and validation invariants;
 - [`reference/nec-definition-index.md`](reference/nec-definition-index.md): structured Article 100 definition fields and provenance invariants;
 - [`reference/nec-section-review.md`](reference/nec-section-review.md): selected-section review, modal-language policy, and definition-link boundaries;
+- [`reference/nec-style-manual-profile.md`](reference/nec-style-manual-profile.md): edition-aware editorial rules used as parser priors and validation context;
 - [`reference/nec-change-history.md`](reference/nec-change-history.md): source manifests, development evidence, expected and observed changes, precedence, and reconciliation outcomes;
 - [`reference/legal-source-publication.md`](reference/legal-source-publication.md): legal authorities and operational publication boundaries.
 
