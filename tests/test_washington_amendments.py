@@ -40,7 +40,7 @@ BASE_STATE = PublicationIdentity(
 )
 
 
-def _source() -> SourceRegisterEntry:
+def _source(content: bytes = HTML_BYTES) -> SourceRegisterEntry:
     return SourceRegisterEntry(
         source_id="wa:wac:51-50:2021-ibc-amendments",
         ast_source=AstSourceIdentity(
@@ -60,7 +60,7 @@ def _source() -> SourceRegisterEntry:
             effective_on="2024-03-15",
         ),
         retrieved_at="2026-08-02T10:30:00-06:00",
-        sha256=hashlib.sha256(HTML_BYTES).hexdigest(),
+        sha256=hashlib.sha256(content).hexdigest(),
         media_type="text/html",
         access_scope=AccessScope.PUBLIC,
         rights_status=RightsStatus.PUBLIC_OFFICIAL,
@@ -213,12 +213,13 @@ class WashingtonAmendmentTests(unittest.TestCase):
 <section><h3>WAC 51-50-0007</h3><p>Section 101.4.7 applies only as follows.</p><p>Only to synthetic existing buildings.</p></section>
 </body></html>
 """
+        content = html.encode("utf-8")
         adapter = WashingtonWacHtmlAdapter(
             base_publication_state_id=publication_state_id(BASE_STATE),
             effective_from="2024-03-15",
             known_base_locators=frozenset({"107.3", "403", "110", "312", "101.4.7"}),
         )
-        result = run_evidence_adapter(adapter, _source(), html.encode("utf-8"))
+        result = run_evidence_adapter(adapter, _source(content), content)
 
         self.assertEqual(
             tuple(record.operation for record in result.records),
@@ -243,12 +244,13 @@ class WashingtonAmendmentTests(unittest.TestCase):
 <section><h3>WAC 51-50-0888</h3><p>Section 888 is replaced.</p><p>Synthetic replacement text.</p></section>
 </body></html>
 """
+        content = html.encode("utf-8")
         adapter = WashingtonWacHtmlAdapter(
             base_publication_state_id=publication_state_id(BASE_STATE),
             effective_from="2024-03-15",
             known_base_locators=frozenset({"107.3"}),
         )
-        result = run_evidence_adapter(adapter, _source(), html.encode("utf-8"))
+        result = run_evidence_adapter(adapter, _source(content), content)
 
         self.assertEqual(result.records, ())
         self.assertEqual(
