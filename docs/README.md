@@ -40,6 +40,7 @@ Current reference material:
 - [`compatibility.md`](compatibility.md): independent document and provision AST version compatibility;
 - [`corpus-policy.md`](corpus-policy.md): source inclusion and redistribution rules;
 - [`reference/document-ast.md`](reference/document-ast.md): document AST fields, identity algorithm, and validation invariants;
+- [`reference/source-evidence.md`](reference/source-evidence.md): publication-state identity, source registration, rights handling, and guarded evidence-adapter execution;
 - [`reference/nec-definition-index.md`](reference/nec-definition-index.md): structured Article 100 definition fields and provenance invariants;
 - [`reference/nec-section-review.md`](reference/nec-section-review.md): selected-section review, modal-language policy, and definition-link boundaries;
 - [`reference/nec-style-manual-profile.md`](reference/nec-style-manual-profile.md): edition-aware editorial rules used as parser priors and validation context;
