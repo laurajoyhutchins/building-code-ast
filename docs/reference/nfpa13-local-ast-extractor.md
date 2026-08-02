@@ -1,6 +1,6 @@
 # NFPA 13 (2019) local AST extractor
 
-`tools/extract_nfpa13_2019_ast.py` converts an owner-supplied NFPA 13 (2019) PDF into a deterministic, source-linked local bundle. It builds on `extract_nfpa13_2019_hierarchy.py`; the hierarchy extractor remains authoritative for numbered structural identity.
+`tools/build_nfpa13_2019_bundle.py` is the canonical local entry point. It runs the low-level PDF engine in `tools/extract_nfpa13_2019_ast.py`, then upgrades that raw extraction into the strict `nfpa13-ast-bundle/0.2.0` contract.
 
 The tool is intentionally local-only. Do not commit the source PDF, canonical source text, table contents, generated AST, or overlay PDFs.
 
@@ -8,7 +8,8 @@ The tool is intentionally local-only. Do not commit the source PDF, canonical so
 
 - Python 3.12 or later
 - PyMuPDF for local PDF processing
-- The NFPA 13 hierarchy extractor in the same `tools/` directory
+- the repository source tree, including the Document AST `0.1.0` reader and schema
+- the exact Git commit that produced the bundle
 
 The verified source artifact has SHA-256:
 
@@ -19,51 +20,55 @@ The verified source artifact has SHA-256:
 ## Run
 
 ```bash
-python tools/extract_nfpa13_2019_ast.py /path/to/nfpa-2019.pdf \
+python tools/build_nfpa13_2019_bundle.py /path/to/nfpa-2019.pdf \
+  --producer-commit <full-40-character-git-sha> \
   --output local-output/nfpa13-2019-source-linked-ast.json \
   --report local-output/nfpa13-2019-source-linked-ast-validation.md \
   --overlays-dir local-output/overlays \
-  --overlay-pages 21,169,182,323,489,509
+  --overlay-pages 22,181,182,323,489,513
 ```
 
-The default expected hash fails closed when the input artifact differs. Pass an empty `--expected-sha256` only when deliberately testing another source artifact.
+The default expected source hash fails closed when the input artifact differs. Pass an empty `--expected-sha256` only when deliberately testing another source artifact.
 
-## Pipeline
+## Contract stages
 
-1. Extract a page-, column-, font-, and bounding-box-aware canonical source stream.
-2. Anchor the validated clause hierarchy into that stream.
-3. Compute structural ranges using actual ancestry rather than depth alone.
-4. Assign every retained non-whitespace source character to exactly one leaf node.
-5. Parse paragraphs, nested list items, definitions, notes, exceptions, figures, and unsupported graphical text.
-6. Build conservative geometry-backed table heading, row, and cell subtrees.
-7. Extract clause, chapter, table, figure, and external NFPA references.
-8. Add bounded semantic annotations without producing compliance conclusions.
-9. Emit evidence-linked diagnostics and validate the complete bundle.
+1. The low-level engine extracts a page-, column-, font-, and bounding-box-aware source stream and builds the source-linked Document AST.
+2. The strict wrapper round-trips that Document AST through the repository’s authoritative `document_ast_from_dict` reader.
+3. Only explicit Annex A clauses emit `explains` relationships. Synthesized ancestry containers remain structural only.
+4. Every relationship records whether its target is internal, an identified external standard, or an unspecified document. Unresolved references never guess a target artifact.
+5. External publication identifiers include NFPA, ASTM, ASME, AWWA, ANSI, ANSI/UL, IEEE, ISO, and UL families.
+6. Lexical annotations record `method`, parser revision, and review state. Deterministic execution is not represented as semantic confidence.
+7. The bundle records exact producer provenance: repository commit, engine and wrapper content hashes, Python version, PyMuPDF version, and normalized options.
+8. The complete bundle passes both the low-level provenance validator and the strict bundle-contract validator.
 
 ## Bundle contract
 
-The local envelope is `nfpa13-ast-bundle/0.1.0` and contains:
+The canonical local envelope is `nfpa13-ast-bundle/0.2.0` and contains:
 
+- exact producer metadata;
 - source identity and PDF boundaries;
-- a `document_tree` AST with deterministic node IDs and exact spans;
-- reference and Annex A correspondence relations;
-- bounded semantic annotations;
+- a Document AST `0.1.0` value accepted by the existing strict reader;
+- target-domain-aware relationships;
+- bounded lexical semantic annotations with explicit review status;
 - geometry-derived table matrices;
 - source-map locations for rendering and audit;
-- aggregate statistics and validation results.
+- aggregate statistics and separate engine and contract validation reports.
 
-Table and figure interpretation is deliberately conservative. Table rows and cells reflect detected page geometry, not reviewed semantic column meaning. Figure captions are preserved, but image and diagram semantics are reported as unsupported. Semantic annotations are deterministic lexical classifications, remain unreviewed, and are not engineering interpretations or compliance decisions.
+The machine-readable contract is `schemas/nfpa13-ast-bundle.schema.json`.
 
-## Validation
+## Reviewed cases
 
-A complete run fails unless:
+`fixtures/reviewed/nfpa13-2019-golden-cases.json` stores non-reconstructive expectations from source review. It covers normative and annex structure, definitions, artifact filtering, a table shape, internal and unresolved references, explicit-versus-implicit Annex A relationships, and external-standard families.
 
-- every explicit hierarchy node has a source anchor;
-- node locators and deterministic IDs are unique;
-- all node and evidence spans reproduce the exact canonical source text;
-- every child is contained by its parent;
-- resolved relations target nodes or declared aliases;
-- every retained non-whitespace character is owned exactly once;
-- isolated revision markers do not leak into source blocks.
+Verify those expectations against a local complete bundle:
 
-The verified complete-source run produced 5,100 explicit clauses, 39,566 document nodes, 27,291 source-owning leaves, 223 accepted tables, 3,423 relations, and 15,755 bounded semantic annotations. It emitted 569 evidence-linked diagnostics: 429 unsupported figure interpretations, 84 unresolved references, and 56 table captions whose geometry was preserved without guessed rows or cells. Two complete runs produced byte-identical JSON with SHA-256 `b7aa0e569b29811e93f9ff0fd06cc86dd9607ba6d69e2f0490f095ac0e1186f1`. Aggregate counts are suitable for the public repository; the text-bearing bundle is not.
+```bash
+python tools/verify_nfpa13_2019_reviewed_cases.py \
+  local-output/nfpa13-2019-source-linked-ast.json
+```
+
+The registry contains locators, labels, structural counts, relationship expectations, and geometry shapes. It does not contain clause bodies or table contents.
+
+## Interpretation boundary
+
+Table rows and cells reflect detected page geometry, not reviewed semantic column meaning. Figure captions are preserved, but image and diagram semantics remain unsupported. Lexical annotations are deterministic parser outputs and default to `review_status=unreviewed`; they are not engineering interpretations, compliance decisions, or substitutes for the source publication.
