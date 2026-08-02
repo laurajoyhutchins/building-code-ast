@@ -25,14 +25,64 @@ from ..model import Diagnostic, DiagnosticSeverity, SourceSpan
 
 HIERARCHY_VERSION = "0.1.0"
 
+_MARKER_TOKEN = r"(?:[A-Za-z]|\d+)"
 _LOCATOR_RE = re.compile(
-    r"^(?P<article>\d{2,3})(?P<section>\.\d+[A-Za-z]?)?"
-    r"(?P<markers>(?:\([A-Za-z0-9]+\))*)$"
+    rf"^(?P<article>\d{{2,3}})(?P<section>\.\d+[A-Za-z]?)?"
+    rf"(?P<markers>(?:\({_MARKER_TOKEN}\))*)$"
 )
-_MARKER_RE = re.compile(r"^\((?P<marker>[A-Za-z0-9]+)\)")
+_MARKER_RE = re.compile(rf"^\((?P<marker>{_MARKER_TOKEN})\)\s+")
+_MARKER_SCAN_RE = re.compile(
+    rf"(?<![A-Za-z0-9.])\((?P<marker>{_MARKER_TOKEN})\)\s+"
+)
 _PART_RE = re.compile(r"^Part\s+(?P<number>[IVXLC]+)\.\s*(?P<title>.*)$")
 _SECTION_TEXT_RE = re.compile(
     r"^(?P<locator>\d{2,3}\.\d+[A-Za-z]?)\s+(?P<body>.*)$"
+)
+_TITLE_WORD_RE = re.compile(r"[A-Za-z][A-Za-z’'-]*|\d+")
+_TITLE_STOP_WORDS = frozenset(
+    {
+        "a",
+        "an",
+        "and",
+        "as",
+        "at",
+        "by",
+        "for",
+        "from",
+        "in",
+        "into",
+        "less",
+        "not",
+        "of",
+        "on",
+        "only",
+        "or",
+        "over",
+        "than",
+        "the",
+        "to",
+        "with",
+        "without",
+    }
+)
+_SENTENCE_SIGNAL_WORDS = frozenset(
+    {
+        "because",
+        "except",
+        "if",
+        "may",
+        "must",
+        "provided",
+        "shall",
+        "that",
+        "unless",
+        "when",
+        "where",
+        "which",
+        "while",
+        "who",
+        "whose",
+    }
 )
 
 
@@ -104,11 +154,10 @@ class HierarchyConformanceReport:
 
 
 def canonical_nec_locator(value: str) -> str:
-    """Return one whitespace-free NEC article or clause locator."""
+    """Return one whitespace-free NEC Article or clause locator."""
 
     compact = re.sub(r"\s+", "", value)
-    match = _LOCATOR_RE.fullmatch(compact)
-    if match is None:
+    if _LOCATOR_RE.fullmatch(compact) is None:
         raise ValueError(f"invalid NEC locator: {value!r}")
     return compact
 
@@ -142,6 +191,14 @@ def _marker_kind(marker: str) -> str:
     return "other"
 
 
+def _marker_ordinal(marker: str) -> int | None:
+    if marker.isdigit():
+        return int(marker)
+    if len(marker) == 1 and marker.isalpha():
+        return ord(marker.casefold()) - ord("a") + 1
+    return None
+
+
 def _node_text(node: DocumentNode) -> str:
     return node.span.text.strip()
 
@@ -156,15 +213,49 @@ def _section_identity(node: DocumentNode) -> tuple[str, str] | None:
     return locator, title
 
 
+def _title_candidate(body: str) -> str | None:
+    """Return a likely NEC subdivision title, rejecting sentence-like list text."""
+
+    period = body.find(".")
+    if period < 0:
+        return None
+    candidate = body[:period].strip()
+    if not candidate or len(candidate) > 140:
+        return None
+
+    words = _TITLE_WORD_RE.findall(candidate)
+    if not words or len(words) > 14:
+        return None
+    folded = {word.casefold() for word in words}
+    if folded & _SENTENCE_SIGNAL_WORDS:
+        return None
+
+    significant = [
+        word
+        for word in words
+        if word.casefold() not in _TITLE_STOP_WORDS
+        and not word.isdigit()
+        and len(word) > 1
+    ]
+    if not significant:
+        return None
+    title_case_words = sum(
+        1 for word in significant if word[0].isupper() or word.isupper()
+    )
+    if title_case_words / len(significant) < 0.72:
+        return None
+    return candidate
+
+
 def _marker_identity(node: DocumentNode) -> tuple[str, str] | None:
     text = _node_text(node)
     match = _MARKER_RE.match(text)
     if match is None:
         return None
-    marker = match.group("marker")
-    body = text[match.end() :].strip()
-    title = body.split(".", 1)[0].strip() if "." in body else ""
-    return marker, title
+    title = _title_candidate(text[match.end() :])
+    if title is None:
+        return None
+    return match.group("marker"), title
 
 
 def _part_identity(node: DocumentNode) -> tuple[str, str] | None:
@@ -172,6 +263,113 @@ def _part_identity(node: DocumentNode) -> tuple[str, str] | None:
     if match is None:
         return None
     return match.group("number"), match.group("title").strip()
+
+
+def _trimmed_bounds(source_text: str, start: int, end: int) -> tuple[int, int]:
+    while start < end and source_text[start].isspace():
+        start += 1
+    while end > start and source_text[end - 1].isspace():
+        end -= 1
+    return start, end
+
+
+def _segment_node(
+    node: DocumentNode,
+    *,
+    source_text: str,
+    source_artifact: DocumentSourceArtifact,
+) -> tuple[DocumentNode, ...]:
+    """Split titled NEC markers merged into one PDF text block.
+
+    Ordinary numbered enumerations remain inside their original source-backed
+    node. Only marker-plus-title patterns become structural segment candidates.
+    """
+
+    text = node.span.text
+    marker_matches = list(_MARKER_SCAN_RE.finditer(text))
+    candidates: list[tuple[int, str]] = []
+    for index, match in enumerate(marker_matches):
+        segment_end = (
+            marker_matches[index + 1].start()
+            if index + 1 < len(marker_matches)
+            else len(text)
+        )
+        if _title_candidate(text[match.end() : segment_end]) is not None:
+            candidates.append((match.start(), match.group("marker")))
+
+    if not candidates:
+        return (node,)
+    if len(candidates) == 1 and candidates[0][0] == 0:
+        return (node,)
+
+    segments: list[DocumentNode] = []
+    boundaries = [position for position, _ in candidates]
+    if boundaries[0] > 0:
+        boundaries.insert(0, 0)
+    boundaries.append(len(text))
+    candidate_by_position = dict(candidates)
+
+    for index, (relative_start, relative_end) in enumerate(
+        zip(boundaries, boundaries[1:], strict=True)
+    ):
+        absolute_start, absolute_end = _trimmed_bounds(
+            source_text,
+            node.span.start + relative_start,
+            node.span.start + relative_end,
+        )
+        if absolute_start == absolute_end:
+            continue
+        marker = candidate_by_position.get(relative_start)
+        if marker is None:
+            node_type = node.node_type
+            label = node.label
+            attributes = dict(node.attributes)
+        else:
+            node_type = (
+                DocumentNodeType.SUBSECTION
+                if _marker_kind(marker) == "upper"
+                else DocumentNodeType.LIST_ITEM
+            )
+            label = f"({marker})"
+            attributes = {
+                **dict(node.attributes),
+                "layout_role": node_type.value,
+                "source_block_locator": node.locator,
+            }
+        attributes["segment_index"] = str(index)
+        segments.append(
+            make_document_node(
+                source_artifact=source_artifact,
+                node_type=node_type,
+                locator=f"{node.locator}/segment:{index:02d}",
+                span=SourceSpan(
+                    absolute_start,
+                    absolute_end,
+                    source_text[absolute_start:absolute_end],
+                ),
+                label=label,
+                attributes=attributes,
+            )
+        )
+    return tuple(segments)
+
+
+def _segment_nodes(
+    nodes: Sequence[DocumentNode],
+    *,
+    source_text: str,
+    source_artifact: DocumentSourceArtifact,
+) -> tuple[DocumentNode, ...]:
+    segmented: list[DocumentNode] = []
+    for node in nodes:
+        segmented.extend(
+            _segment_node(
+                node,
+                source_text=source_text,
+                source_artifact=source_artifact,
+            )
+        )
+    return tuple(segmented)
 
 
 @dataclass(slots=True)
@@ -182,6 +380,7 @@ class _DraftNode:
     label: str | None
     children: list["_DraftNode"] = field(default_factory=list)
     marker_kind: str | None = None
+    marker_value: str | None = None
     nec_locator: str | None = None
 
     def freeze(
@@ -197,16 +396,15 @@ class _DraftNode:
         end = max(
             [self.original.span.end, *(child.span.end for child in frozen_children)]
         )
-        span = SourceSpan(
-            self.original.span.start,
-            end,
-            source_text[self.original.span.start : end],
-        )
         return make_document_node(
             source_artifact=source_artifact,
             node_type=self.original.node_type,
             locator=self.locator,
-            span=span,
+            span=SourceSpan(
+                self.original.span.start,
+                end,
+                source_text[self.original.span.start:end],
+            ),
             label=self.label,
             attributes=self.attributes,
             children=frozen_children,
@@ -232,6 +430,7 @@ def _diagnostic(code: str, message: str, node: DocumentNode) -> Diagnostic:
 
 
 def _marker_parent(
+    marker: str,
     marker_kind: str,
     section: _DraftNode,
     open_markers: list[_DraftNode],
@@ -243,21 +442,29 @@ def _marker_parent(
     if not open_markers:
         return section, [], True
 
-    top = open_markers[-1]
-    if marker_kind == "numeric":
-        if top.marker_kind in {"upper", "lower"}:
-            return top, open_markers, False
-        if top.marker_kind == "numeric":
-            parent = open_markers[-2] if len(open_markers) >= 2 else section
-            return parent, open_markers[:-1], False
-    elif marker_kind == "lower":
-        if top.marker_kind in {"upper", "numeric"}:
-            return top, open_markers, False
-        if top.marker_kind == "lower":
-            parent = open_markers[-2] if len(open_markers) >= 2 else section
-            return parent, open_markers[:-1], False
+    current_ordinal = _marker_ordinal(marker)
+    same_kind_index: int | None = None
+    for index in range(len(open_markers) - 1, -1, -1):
+        if open_markers[index].marker_kind == marker_kind:
+            same_kind_index = index
+            break
 
-    return top, open_markers, True
+    if same_kind_index is not None and current_ordinal is not None:
+        previous = open_markers[same_kind_index]
+        previous_ordinal = (
+            _marker_ordinal(previous.marker_value)
+            if previous.marker_value is not None
+            else None
+        )
+        if previous_ordinal is not None and current_ordinal == previous_ordinal + 1:
+            parent = (
+                open_markers[same_kind_index - 1]
+                if same_kind_index > 0
+                else section
+            )
+            return parent, open_markers[:same_kind_index], False
+
+    return open_markers[-1], open_markers, False
 
 
 def build_nec_hierarchy(
@@ -290,7 +497,12 @@ def build_nec_hierarchy(
         else:
             roots.append(draft)
 
-    for node in nodes:
+    segmented_nodes = _segment_nodes(
+        nodes,
+        source_text=source_text,
+        source_artifact=source_artifact,
+    )
+    for node in segmented_nodes:
         part = _part_identity(node)
         if part is not None:
             number, title = part
@@ -376,7 +588,7 @@ def build_nec_hierarchy(
                 diagnostics.append(
                     _diagnostic(
                         "orphan-nec-marker",
-                        f"Marker ({marker}) has no open NEC section.",
+                        f"Titled marker ({marker}) has no open NEC section.",
                         node,
                     )
                 )
@@ -385,6 +597,7 @@ def build_nec_hierarchy(
 
             kind = _marker_kind(marker)
             parent, retained, ambiguous = _marker_parent(
+                marker,
                 kind,
                 current_section,
                 open_markers,
@@ -431,6 +644,7 @@ def build_nec_hierarchy(
                 attributes=attributes,
                 label=node.label,
                 marker_kind=kind,
+                marker_value=marker,
                 nec_locator=locator,
             )
             parent.children.append(draft)
@@ -485,25 +699,14 @@ def flatten_nec_hierarchy(nodes: Sequence[DocumentNode]) -> tuple[HierarchyRecor
             if locator is not None:
                 locator = canonical_nec_locator(locator)
                 title = attributes.get("nec_title", "")
-                depth = 0 if structural_parent is None else (
-                    next(
-                        (
-                            record.depth + 1
-                            for record in reversed(records)
-                            if record.locator == structural_parent
-                        ),
-                        nec_locator_depth(structural_parent) + 1,
-                    )
-                )
-                if structural_parent is None:
-                    depth = nec_locator_depth(locator)
+                parent = structural_parent or locator.split(".", 1)[0]
                 records.append(
                     HierarchyRecord(
                         locator=locator,
                         title=title,
-                        parent=structural_parent or locator.split(".", 1)[0],
+                        parent=parent,
                         order=len(records),
-                        depth=depth,
+                        depth=nec_locator_depth(locator),
                     )
                 )
                 next_parent = locator
