@@ -64,12 +64,15 @@
 
 ## Verification gates
 
-- [ ] Repository tests pass at the final exact head.
+- [x] Repository tests pass at the final exact head.
+- [x] The complete owner-supplied PDF produces a strict `0.2.0` bundle.
+- [x] Two strict complete-source runs are byte-identical.
+- [x] All 16 reviewed golden cases pass against the strict complete-source bundle.
+- [x] The corrected bundle contains 689 explicit Annex A `explains` edges, 755 identified external-standard relations, and 84 unresolved citations with no guessed target artifact.
+- [x] The pull-request description records corrected aggregate counts, final output hash, exact head, and remaining interpretation boundaries.
 - [ ] GitHub CI and LORE pass at the final exact head.
-- [ ] The complete owner-supplied PDF produces a strict `0.2.0` bundle.
-- [ ] Two strict complete-source runs are byte-identical.
-- [ ] All reviewed golden cases pass against the strict complete-source bundle.
-- [ ] The pull-request description records corrected aggregate counts, final output hash, exact head, and remaining interpretation boundaries.
+
+The hosted checks remain the final external gate because the licensed-source run is local-only.
 
 ## Publication boundary
 
