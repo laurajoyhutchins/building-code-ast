@@ -21,6 +21,7 @@ from ..document_model import (
 )
 from ..document_validation import validate_document_ast
 from ..model import Diagnostic, DiagnosticSeverity, SourceSpan
+from .nec_hierarchy import build_nec_hierarchy
 from .pdf_layout import PdfBlock, PdfLayoutDocument, normalize_block_text, order_content_blocks
 
 
@@ -382,6 +383,14 @@ def build_article_seed(
                 )
             )
 
+    hierarchy = build_nec_hierarchy(
+        article_number=article_range.number,
+        source_text=source_text,
+        source_artifact=artifact,
+        nodes=block_nodes,
+    )
+    diagnostics.extend(hierarchy.diagnostics)
+
     full_span = SourceSpan(0, len(source_text), source_text)
     article_node = make_document_node(
         source_artifact=artifact,
@@ -390,7 +399,7 @@ def build_article_seed(
         span=full_span,
         label=f"Article {article_range.number} - {article_range.title}",
         attributes={"article_number": article_range.number},
-        children=block_nodes,
+        children=hierarchy.nodes,
     )
     root = make_document_node(
         source_artifact=artifact,
