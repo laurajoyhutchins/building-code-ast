@@ -1,4 +1,4 @@
-"""NEC-specific definition and semantic review helpers."""
+"""NEC-specific definition, structural-style, and semantic review helpers."""
 
 from .model import (
     DEFINITION_INDEX_VERSION,
@@ -28,11 +28,24 @@ from .model import (
 )
 from .definitions import build_definition_index
 from .sections import build_section_review, derive_language_profile
+from .style_manual import (
+    NEC_STYLE_PROFILE_VERSION,
+    DefinitionPlacement,
+    MarkerInterpretation,
+    MarkerRole,
+    NecStyleProfile,
+    ParallelNumberingPolicy,
+    ThirdLevelTitlePolicy,
+    informational_note_identity,
+    interpret_parenthetical_marker,
+    style_profile_for_edition,
+)
 from .validation import validate_definition_index, validate_section_review
 
 __all__ = [
     "DEFINITION_INDEX_VERSION",
     "LANGUAGE_PROFILE_VERSION",
+    "NEC_STYLE_PROFILE_VERSION",
     "SECTION_REVIEW_VERSION",
     "build_definition_index",
     "build_section_review",
@@ -43,21 +56,30 @@ __all__ = [
     "DefinitionFragment",
     "DefinitionFragmentKind",
     "DefinitionIndex",
+    "DefinitionPlacement",
     "DefinitionQualifier",
     "DefinitionQualifierKind",
     "LanguageCategory",
     "LanguageEvidence",
+    "MarkerInterpretation",
+    "MarkerRole",
     "NecLanguageProfile",
+    "NecStyleProfile",
+    "ParallelNumberingPolicy",
     "ReviewedClause",
     "ReviewedException",
     "ReviewedModality",
     "ReviewedNote",
     "SectionReview",
     "SourceNodeProjection",
+    "ThirdLevelTitlePolicy",
     "definition_entry_id",
+    "informational_note_identity",
+    "interpret_parenthetical_marker",
     "reviewed_clause_id",
     "reviewed_exception_id",
     "reviewed_note_id",
+    "style_profile_for_edition",
     "validate_definition_index",
     "validate_section_review",
 ]
