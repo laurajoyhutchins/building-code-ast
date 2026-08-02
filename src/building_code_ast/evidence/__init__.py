@@ -38,6 +38,11 @@ from .errata import (
     TargetKind,
     erratum_record_from_dict,
 )
+from .icc_development import (
+    IccActionStage,
+    IccCommitteeActionPdfAdapter,
+    IccProposalMonographPdfAdapter,
+)
 from .io import source_register_from_dict
 from .model import (
     ACCESS_SCOPE_VALUES,
@@ -81,8 +86,11 @@ __all__ = [
     "EvidenceAdapter",
     "EvidenceDiagnostic",
     "EvidenceRole",
+    "IccActionStage",
+    "IccCommitteeActionPdfAdapter",
     "IccDevelopmentTextAdapter",
     "IccErrataPdfAdapter",
+    "IccProposalMonographPdfAdapter",
     "JurisdictionalAmendmentPatch",
     "NormalizedWashingtonWacHtmlAdapter",
     "PublicationIdentity",
