@@ -1,0 +1,121 @@
+{
+  "all_repeat_runs_match": true,
+  "generated_at": "2026-08-02T18:06:12.318149+00:00",
+  "schema_version": "0.1.0",
+  "source_text_included": false,
+  "sources": {
+    "icc_committee_action": {
+      "byte_count": 2338868,
+      "media_type": "application/pdf",
+      "sha256": "6292e1a466ad6250e71ba168e2fe93524eb7495e6286ba20bfa9eecd0562a09f",
+      "url": "https://www.iccsafe.org/wp-content/uploads/GROUP-A-2024-REPORT-OF-THE-COMMITTEE-ACTION-HEARING-CAH-1.pdf"
+    },
+    "icc_errata": {
+      "byte_count": 169985,
+      "media_type": "application/pdf",
+      "sha256": "844b7dd918c07f46fcd5ea564ac7015a4d32d56e0ac8c6ffba393133461775d2",
+      "url": "https://www.iccsafe.org/wp-content/uploads/errata_central/2020-ICC-500-Errata-10-12-23.pdf"
+    },
+    "icc_proposal_monograph": {
+      "byte_count": 1850943,
+      "media_type": "application/pdf",
+      "sha256": "abd40d48ca1a819ab7846ff61f448b8dbe8cf5a4da89004c4048b77ebb8f24f3",
+      "url": "https://www.iccsafe.org/wp-content/uploads/IBC-General-2024.pdf"
+    },
+    "washington_wac_0403": {
+      "byte_count": 110278,
+      "media_type": "text/html",
+      "sha256": "8b6d8fa1effa862ce1145dfb1c5eca8d46665b2b3405fc81958ad74b1f91a743",
+      "url": "https://app.leg.wa.gov/WAC/default.aspx?cite=51-50-0403"
+    }
+  },
+  "validated_at": "2026-08-02T17:55:00+00:00",
+  "validations": {
+    "icc_committee_action": {
+      "adapter_id": "icc-committee-action-report-pdf",
+      "adapter_version": "0.1.0",
+      "diagnostic_codes": {
+        "unresolved-development-proposal-locators": 837,
+        "unsupported-multipart-development-proposal": 258
+      },
+      "diagnostic_count": 1095,
+      "projection_sha256": "1eeeb078aa3ca71f245e2befa16aab44ed8717dfa2427903ca607b58e955aec9",
+      "record_count": 24,
+      "repeat_run_match": true,
+      "unsupported_region_count": 1095
+    },
+    "icc_development_lineage": {
+      "action_count": 24,
+      "lineage_projection_sha256": "f8dde22321fa2b19f5e2f5d580d0fc9742ef03762f76437b9a2e4330e61bb803",
+      "proposal_count": 24,
+      "proposal_ids_with_actions": 24
+    },
+    "icc_errata": {
+      "adapter_id": "icc-errata-pdf",
+      "adapter_version": "0.3.0",
+      "diagnostic_codes": {},
+      "diagnostic_count": 0,
+      "projection_sha256": "201ba3217ccb4599c949514efe89807fae2ff53cf15796fe81fcf24e5e09a95c",
+      "record_count": 4,
+      "repeat_run_match": true,
+      "unsupported_region_count": 0
+    },
+    "icc_proposal_monograph": {
+      "adapter_id": "icc-proposal-monograph-pdf",
+      "adapter_version": "0.1.0",
+      "diagnostic_codes": {
+        "incomplete-official-development-proposal": 2,
+        "unsupported-multipart-development-proposal": 34
+      },
+      "diagnostic_count": 36,
+      "projection_sha256": "a5e023ace1837df789db422aaf79fed7c66eba67d546c9ab7457ac8e581abc84",
+      "record_count": 24,
+      "repeat_run_match": true,
+      "unsupported_region_count": 36
+    },
+    "washington_wac_direct": {
+      "adapter_id": "washington-wac-html",
+      "adapter_version": "0.4.0",
+      "diagnostic_codes": {},
+      "diagnostic_count": 0,
+      "effective_dates_by_locator": {
+        "403.4.8.3": "2024-03-16",
+        "403.5.4": "2024-03-15"
+      },
+      "projection_sha256": "881b3f6cfc284270ce1505a96360323c37562fabea94a6d8bbd3ff95304cf635",
+      "record_count": 2,
+      "repeat_run_match": true,
+      "unsupported_region_count": 0
+    },
+    "washington_wac_normalized": {
+      "aggregate_projection_sha256": "55435a0899c90a3829d04ccc0f9904760947c1c1356ba4e8e823bd3cfb00edc6",
+      "derivative_count": 2,
+      "validations": [
+        {
+          "adapter_id": "washington-wac-normalized-html",
+          "adapter_version": "0.2.0",
+          "derivative_sha256": "f4787ce01415112641f72cd878a8bfa49d218980bce5a610f16dc74f5ba5b4d7",
+          "diagnostic_codes": {},
+          "diagnostic_count": 0,
+          "projection_sha256": "29b0987180ce5bd39795d94a0fece76c1db78d722f370322dfb9b74edb3a34a2",
+          "record_count": 1,
+          "repeat_run_match": true,
+          "unsupported_region_count": 0,
+          "upstream_source_sha256": "8b6d8fa1effa862ce1145dfb1c5eca8d46665b2b3405fc81958ad74b1f91a743"
+        },
+        {
+          "adapter_id": "washington-wac-normalized-html",
+          "adapter_version": "0.2.0",
+          "derivative_sha256": "4c38acebd6be5c04d76457a2469af8c6b341c2394c6c2ecb80856afe0fd06c18",
+          "diagnostic_codes": {},
+          "diagnostic_count": 0,
+          "projection_sha256": "02060ef2f32dfc73a2b8fe3fd3c3dbab7a2b645540557d57f1b03a4859f9213d",
+          "record_count": 1,
+          "repeat_run_match": true,
+          "unsupported_region_count": 0,
+          "upstream_source_sha256": "8b6d8fa1effa862ce1145dfb1c5eca8d46665b2b3405fc81958ad74b1f91a743"
+        }
+      ]
+    }
+  }
+}
