@@ -43,6 +43,7 @@ Current reference material:
 - [`reference/source-evidence.md`](reference/source-evidence.md): publication-state identity, source registration, rights handling, and guarded evidence-adapter execution;
 - [`reference/icc-errata.md`](reference/icc-errata.md): printing-sensitive erratum records, bounded ICC PDF extraction, and unsupported-directive handling;
 - [`reference/icc-development-lineage.md`](reference/icc-development-lineage.md): proposal and action records, lineage validation, controlling-action rules, and non-normative process boundaries;
+- [`reference/washington-wac-amendments.md`](reference/washington-wac-amendments.md): effective jurisdictional patches, conflict rules, bounded WAC HTML extraction, and the Building Code Map boundary;
 - [`reference/nec-definition-index.md`](reference/nec-definition-index.md): structured Article 100 definition fields and provenance invariants;
 - [`reference/nec-section-review.md`](reference/nec-section-review.md): selected-section review, modal-language policy, and definition-link boundaries;
 - [`reference/nec-style-manual-profile.md`](reference/nec-style-manual-profile.md): edition-aware editorial rules used as parser priors and validation context;
