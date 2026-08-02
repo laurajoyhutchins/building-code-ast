@@ -148,6 +148,10 @@ class SourceEvidenceTests(unittest.TestCase):
         with self.assertRaisesRegex(ValueError, "duplicate source_id"):
             SourceRegister(entries=(_entry(), _entry()))
 
+    def test_source_register_requires_an_immutable_entry_tuple(self) -> None:
+        with self.assertRaisesRegex(ValueError, "tuple"):
+            SourceRegister(entries=[_entry()])  # type: ignore[arg-type]
+
     def test_restricted_sources_require_a_rights_note(self) -> None:
         with self.assertRaisesRegex(ValueError, "rights_note"):
             _entry(
