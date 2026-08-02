@@ -146,9 +146,10 @@ class SourceMapEntry:
     source_line_ids: tuple[str, ...] = ()
     confidence: float = 0.75
     evidence: tuple[str, ...] = ()
+    table: TableCandidate | None = None
 
     def to_dict(self) -> dict[str, Any]:
-        return {
+        payload: dict[str, Any] = {
             "normalized_span": {
                 "start": self.normalized_start,
                 "end": self.normalized_end,
@@ -159,6 +160,50 @@ class SourceMapEntry:
             "confidence": self.confidence,
             "evidence": list(self.evidence),
         }
+        if self.table is not None:
+            rows: list[dict[str, Any]] = []
+            for row in self.table.rows:
+                row_start = min((cell.local_start for cell in row.cells), default=0)
+                row_end = max((cell.local_end for cell in row.cells), default=row_start)
+                rows.append(
+                    {
+                        "page_number": row.page_number,
+                        "bbox": [round(value, 3) for value in row.bbox],
+                        "normalized_span": {
+                            "start": self.normalized_start + row_start,
+                            "end": self.normalized_start + row_end,
+                            "text": self.normalized_text[row_start:row_end],
+                        },
+                        "source_line_ids": list(row.source_line_ids),
+                        "fragments": [
+                            fragment.to_dict() for fragment in row.fragments
+                        ],
+                        "confidence": row.confidence,
+                        "evidence": list(row.evidence),
+                        "cells": [
+                            {
+                                "normalized_span": {
+                                    "start": self.normalized_start
+                                    + cell.local_start,
+                                    "end": self.normalized_start + cell.local_end,
+                                    "text": cell.text,
+                                },
+                                "fragments": [
+                                    fragment.to_dict()
+                                    for fragment in cell.fragments
+                                ],
+                            }
+                            for cell in row.cells
+                        ],
+                    }
+                )
+            payload["table_layout"] = {
+                "page_number": self.table.page_number,
+                "confidence": self.table.confidence,
+                "evidence": list(self.table.evidence),
+                "rows": rows,
+            }
+        return payload
 
 
 @dataclass(frozen=True, slots=True)

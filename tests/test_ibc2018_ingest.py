@@ -19,6 +19,12 @@ from building_code_ast.ingest.ibc2018 import (
     parse_chapter_numbers,
     reconstruct_glyph_line,
 )
+from building_code_ast.ingest.layout_analysis import BodyFontProfile, visual_line_id
+from building_code_ast.ingest.table_geometry import (
+    TableCandidate,
+    TableCellCandidate,
+    TableRowCandidate,
+)
 
 
 class GlyphTests(unittest.TestCase):
@@ -52,6 +58,25 @@ class GlyphTests(unittest.TestCase):
         self.assertEqual(len(merged), 1)
         self.assertEqual(merged[0].text, "operators and")
         self.assertEqual(len(merged[0].fragments), 2)
+
+    def test_does_not_merge_opposite_columns_when_right_sorts_first(self) -> None:
+        right = VisualLine(
+            1,
+            (120.0, 10.0, 190.0, 20.0),
+            "right column",
+            (SourceFragment(1, (120.0, 10.0, 190.0, 20.0), 2, "right column"),),
+        )
+        left = VisualLine(
+            1,
+            (10.0, 10.1, 80.0, 20.1),
+            "left column",
+            (SourceFragment(1, (10.0, 10.1, 80.0, 20.1), 1, "left column"),),
+        )
+
+        merged = merge_visual_fragments((left, right), page_width=200.0)
+
+        self.assertEqual(len(merged), 2)
+        self.assertEqual({line.text for line in merged}, {"left column", "right column"})
 
 
 class BlockTests(unittest.TestCase):
@@ -131,6 +156,90 @@ class BlockTests(unittest.TestCase):
     def test_unsupported_chapter_fails_closed(self) -> None:
         with self.assertRaisesRegex(ValueError, "supports 1, 2, 3"):
             parse_chapter_numbers(("4",))
+
+    def test_font_heading_evidence_projects_as_heading(self) -> None:
+        chapter_line = self._line(1, 70, "CHAPTER 1")
+        heading_fragment = SourceFragment(
+            1,
+            (10.0, 100.0, 190.0, 114.0),
+            100,
+            "General requirements",
+            14.0,
+            "SyntheticHeading",
+        )
+        heading_line = VisualLine(
+            1,
+            heading_fragment.bbox,
+            heading_fragment.raw_text,
+            (heading_fragment,),
+            font_size=14.0,
+            font_name="SyntheticHeading",
+        )
+        blocks = coalesce_visual_lines(
+            (chapter_line, heading_line),
+            chapter_number="1",
+            body_font=BodyFontProfile(10.0, 11.5, 0.9, ("body_font:10.0",)),
+        )
+        chapter = ChapterLayout(ChapterSpec("1", "Scope", 1, 1), blocks)
+        seed = build_chapter_seed(
+            IbcLayoutDocument("synthetic.pdf", 1, (chapter,)),
+            "1",
+            source_sha256="b" * 64,
+            source_size=100,
+        )
+
+        nodes = seed.to_dict()["document_ast"]["root"]["children"][0]["children"]
+        self.assertEqual(nodes[1]["type"], "heading")
+
+    def test_serialized_table_cells_retain_pdf_fragments(self) -> None:
+        heading_fragment = SourceFragment(72, (10.0, 10.0, 100.0, 20.0), 1, "TABLE 1")
+        first = SourceFragment(72, (10.0, 30.0, 40.0, 40.0), 2, "A")
+        second = SourceFragment(72, (60.0, 30.0, 90.0, 40.0), 3, "B")
+        row_line_id = visual_line_id(72, (first, second))
+        table = TableCandidate(
+            page_number=72,
+            rows=(
+                TableRowCandidate(
+                    page_number=72,
+                    source_line_ids=(row_line_id,),
+                    cells=(
+                        TableCellCandidate("A", (first,), 8, 9),
+                        TableCellCandidate("B", (second,), 10, 11),
+                    ),
+                    bbox=(10.0, 30.0, 90.0, 40.0),
+                    cell_starts=(10.0, 60.0),
+                    fragments=(first, second),
+                    font_size=10.0,
+                    confidence=0.95,
+                    evidence=("vector_rule_grid",),
+                ),
+            ),
+            normalized_text="TABLE 1\nA\tB",
+            confidence=0.95,
+            evidence=("vector_rule_grid",),
+        )
+        block = LogicalBlock(
+            text=table.normalized_text,
+            fragments=(heading_fragment, first, second),
+            table_like=True,
+            source_line_ids=(visual_line_id(72, (heading_fragment,)), row_line_id),
+            confidence=0.95,
+            evidence=table.evidence,
+            table=table,
+        )
+        chapter = ChapterLayout(ChapterSpec("3", "Occupancy", 72, 72), (block,))
+        seed = build_chapter_seed(
+            IbcLayoutDocument("synthetic.pdf", 100, (chapter,)),
+            "3",
+            source_sha256="c" * 64,
+            source_size=100,
+        )
+
+        table_layout = seed.to_dict()["source_map"][0]["table_layout"]
+        first_cell = table_layout["rows"][0]["cells"][0]
+        self.assertEqual(first_cell["normalized_span"]["text"], "A")
+        self.assertEqual(first_cell["fragments"][0]["raw_text"], "A")
+        self.assertEqual(table_layout["rows"][0]["source_line_ids"], [row_line_id])
 
 
 def _load_cli_module():

@@ -41,7 +41,11 @@ def coalesce_visual_lines(
     def flush() -> None:
         nonlocal current_lines, current_text, current_table
         if current_text and current_lines:
-            confidence, evidence = _block_evidence(current_lines, body_font)
+            confidence, evidence = _block_evidence(
+                current_lines,
+                body_font,
+                chapter_number,
+            )
             blocks.append(
                 LogicalBlock(
                     text=_normalize_visual_text(current_text),

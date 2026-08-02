@@ -382,10 +382,35 @@ def order_page_lines(page: CleanedPage, profile: PageOrderProfile) -> tuple[Visu
     full_width = [line for line in page.retained if _is_full_width(line, page.width)]
     left = [line for line in page.retained if line not in full_width and line.bbox[0] < split]
     right = [line for line in page.retained if line not in full_width and line.bbox[0] >= split]
-    assigned = {line.line_id for line in full_width + left + right}
-    ambiguous = [line for line in page.retained if line.line_id not in assigned]
-    body = left + right
-    earliest_body = min((line.bbox[1] for line in body), default=math.inf)
-    opening = [line for line in full_width if line.bbox[1] < earliest_body]
-    trailing = [line for line in full_width if line not in opening] + ambiguous
-    return tuple(_top_sort(opening) + _top_sort(left) + _top_sort(right) + _top_sort(trailing))
+
+    def center_y(line: VisualLine) -> float:
+        return (line.bbox[1] + line.bbox[3]) / 2.0
+
+    ordered: list[VisualLine] = []
+    remaining_left = set(line.line_id for line in left)
+    remaining_right = set(line.line_id for line in right)
+    for separator in _top_sort(full_width):
+        boundary = center_y(separator)
+        left_band = [
+            line
+            for line in left
+            if line.line_id in remaining_left and center_y(line) < boundary
+        ]
+        right_band = [
+            line
+            for line in right
+            if line.line_id in remaining_right and center_y(line) < boundary
+        ]
+        ordered.extend(_top_sort(left_band))
+        ordered.extend(_top_sort(right_band))
+        remaining_left.difference_update(line.line_id for line in left_band)
+        remaining_right.difference_update(line.line_id for line in right_band)
+        ordered.append(separator)
+
+    ordered.extend(
+        _top_sort([line for line in left if line.line_id in remaining_left])
+    )
+    ordered.extend(
+        _top_sort([line for line in right if line.line_id in remaining_right])
+    )
+    return tuple(ordered)

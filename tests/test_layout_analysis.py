@@ -172,6 +172,36 @@ class LayoutAnalysisTests(unittest.TestCase):
         self.assertIs(profile.mode, ReadingOrderMode.TWO_COLUMN)
         self.assertEqual(order_page_lines(page, profile)[0].text, "CHAPTER TITLE")
 
+    def test_full_width_separator_splits_two_column_bands(self) -> None:
+        page = CleanedPage(
+            page_number=1,
+            width=600.0,
+            height=300.0,
+            retained=(
+                make_line(1, 50.0, 40.0, 190.0, "left above"),
+                make_line(1, 360.0, 40.0, 540.0, "right above"),
+                make_line(1, 30.0, 100.0, 570.0, "FULL WIDTH HEADING"),
+                make_line(1, 50.0, 150.0, 190.0, "left below"),
+                make_line(1, 360.0, 150.0, 540.0, "right below"),
+            ),
+            removed=(),
+        )
+
+        profile = infer_page_order(page)
+        ordered = order_page_lines(page, profile)
+
+        self.assertIs(profile.mode, ReadingOrderMode.TWO_COLUMN)
+        self.assertEqual(
+            [line.text for line in ordered],
+            [
+                "left above",
+                "right above",
+                "FULL WIDTH HEADING",
+                "left below",
+                "right below",
+            ],
+        )
+
 
 if __name__ == "__main__":
     unittest.main()

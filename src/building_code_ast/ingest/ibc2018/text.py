@@ -124,35 +124,70 @@ def merge_visual_fragments(
     """Merge adjacent same-baseline fragments without crossing large gaps."""
 
     del page_width
-    ordered = sorted(lines, key=lambda line: (line.bbox[1], line.bbox[0], line.line_id))
+    material = sorted(
+        lines,
+        key=lambda line: (
+            line.page_number,
+            (line.bbox[1] + line.bbox[3]) / 2.0,
+            line.bbox[0],
+            line.line_id,
+        ),
+    )
+    baseline_groups: list[list[VisualLine]] = []
+    for line in material:
+        group = next(
+            (
+                candidate
+                for candidate in reversed(baseline_groups)
+                if candidate[0].page_number == line.page_number
+                and _same_baseline(candidate[0], line)
+            ),
+            None,
+        )
+        if group is None:
+            baseline_groups.append([line])
+        else:
+            group.append(line)
+
     merged: list[VisualLine] = []
-    for line in ordered:
-        if merged:
-            previous = merged[-1]
-            gap = line.bbox[0] - previous.bbox[2]
-            if (
-                previous.page_number == line.page_number
-                and _same_baseline(previous, line)
-                and gap < 8.0
-            ):
-                separator = " " if gap > 1.0 else ""
-                fragments = previous.fragments + line.fragments
-                merged[-1] = VisualLine(
-                    page_number=line.page_number,
-                    bbox=(
-                        min(previous.bbox[0], line.bbox[0]),
-                        min(previous.bbox[1], line.bbox[1]),
-                        max(previous.bbox[2], line.bbox[2]),
-                        max(previous.bbox[3], line.bbox[3]),
-                    ),
-                    text=_normalize_visual_text(previous.text + separator + line.text),
-                    fragments=fragments,
-                    font_size=max(previous.font_size, line.font_size),
-                    font_name=previous.font_name or line.font_name,
+    for group in baseline_groups:
+        row: list[VisualLine] = []
+        for line in sorted(group, key=lambda item: (item.bbox[0], item.line_id)):
+            if row:
+                previous = row[-1]
+                gap = line.bbox[0] - previous.bbox[2]
+                overlap_limit = max(
+                    1.5,
+                    min(
+                        previous.font_size or previous.bbox[3] - previous.bbox[1],
+                        line.font_size or line.bbox[3] - line.bbox[1],
+                    )
+                    * 0.20,
                 )
-                continue
-        merged.append(line)
-    return tuple(merged)
+                if -overlap_limit <= gap < 8.0:
+                    separator = " " if gap > 1.0 else ""
+                    fragments = previous.fragments + line.fragments
+                    row[-1] = VisualLine(
+                        page_number=line.page_number,
+                        bbox=(
+                            min(previous.bbox[0], line.bbox[0]),
+                            min(previous.bbox[1], line.bbox[1]),
+                            max(previous.bbox[2], line.bbox[2]),
+                            max(previous.bbox[3], line.bbox[3]),
+                        ),
+                        text=_normalize_visual_text(
+                            previous.text + separator + line.text
+                        ),
+                        fragments=fragments,
+                        font_size=max(previous.font_size, line.font_size),
+                        font_name=previous.font_name or line.font_name,
+                    )
+                    continue
+            row.append(line)
+        merged.extend(row)
+    return tuple(
+        sorted(merged, key=lambda line: (line.bbox[1], line.bbox[0], line.line_id))
+    )
 
 
 def order_page_lines(
@@ -341,6 +376,7 @@ def _trim_opening_commentary(lines: Sequence[VisualLine]) -> tuple[VisualLine, .
 def _block_evidence(
     lines: Sequence[VisualLine],
     body_font: BodyFontProfile | None,
+    chapter_number: str,
 ) -> tuple[float, tuple[str, ...]]:
     first = lines[0]
     evidence: list[str] = []
@@ -357,7 +393,7 @@ def _block_evidence(
     elif _PROVISION_RE.match(first.text):
         evidence.append("numbered_provision")
         confidence = 0.94
-    elif _is_definition_start(first.text, "2"):
+    elif _is_definition_start(first.text, chapter_number):
         evidence.append("definition_pattern")
         confidence = 0.92
     elif _line_is_heading(first, body_font):

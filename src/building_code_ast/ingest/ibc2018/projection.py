@@ -33,6 +33,7 @@ def _build_text_and_map(
                 source_line_ids=block.source_line_ids,
                 confidence=block.confidence,
                 evidence=block.evidence,
+                table=block.table,
             )
         )
     return "".join(chunks), tuple(entries)
@@ -44,6 +45,7 @@ def _classify_block(
     chapter_number: str,
     table_like: bool,
     has_table: bool,
+    evidence: tuple[str, ...],
 ) -> tuple[DocumentNodeType, str | None, dict[str, str], str | None]:
     if has_table:
         return (
@@ -86,6 +88,8 @@ def _classify_block(
         return DocumentNodeType.LIST_ITEM, text.split(" ", 1)[0], {}, None
     if _is_heading(text):
         return DocumentNodeType.HEADING, text[:180], {}, None
+    if "font_heading" in evidence:
+        return DocumentNodeType.HEADING, text[:180], {"kind": "font_heading"}, None
     return DocumentNodeType.PARAGRAPH, None, {}, None
 
 
@@ -167,6 +171,7 @@ def build_chapter_seed(
             chapter_number=chapter.spec.number,
             table_like=block.table_like,
             has_table=block.table is not None,
+            evidence=block.evidence,
         )
         span = SourceSpan(entry.normalized_start, entry.normalized_end, entry.normalized_text)
         locator = f"chapter:{chapter.spec.number}/block:{index:05d}"
