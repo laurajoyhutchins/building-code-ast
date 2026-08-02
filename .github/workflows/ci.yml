@@ -12,6 +12,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
         with:
+          ref: ${{ github.event.pull_request.head.sha }}
           fetch-depth: 0
       - uses: actions/setup-python@v5
         with:
@@ -86,11 +87,13 @@ jobs:
         run: python -m compileall -q src tests
       - name: Commit and push verified parser
         shell: bash
+        env:
+          EXPECTED_HEAD: ${{ github.event.pull_request.head.sha }}
         run: |
           set -euo pipefail
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git add -A
           git commit -m "fix: align IBC fragments with source geometry"
-          git push --force-with-lease=refs/heads/agent/ibc-layout-analysis:${GITHUB_SHA} origin HEAD:refs/heads/agent/ibc-layout-analysis
+          git push --force-with-lease=refs/heads/agent/ibc-layout-analysis:${EXPECTED_HEAD} origin HEAD:refs/heads/agent/ibc-layout-analysis
           git rev-parse HEAD
