@@ -96,13 +96,33 @@ python scripts/ingest_nec_2017.py /path/to/nec-2017.pdf \
 
 The default slice produces Articles 90, 100, and 110. Generated files may reproduce protected source expression and must remain private and outside public Git. The repository contains only the ingestion code, synthetic tests, and source-policy documentation. See [`docs/how-to/ingest-nec-2017.md`](docs/how-to/ingest-nec-2017.md).
 
+## Repository knowledge
+
+Repository intent, component boundaries, decisions, constraints, and maintenance procedures are maintained with [LORE](https://github.com/laurajoyhutchins/LORE).
+
+The durable knowledge layer consists of:
+
+- accepted semantic records under `.lore/records/`;
+- transaction receipts under `.lore/transactions/`;
+- deterministic extracted facts under `.lore/extracted/`;
+- the shipped maintenance skill under `skills/maintain-repository-documentation/`;
+- generated, non-authoritative projections under `docs/generated/`.
+
+Start with the [repository card](docs/generated/repository-card.md), [architecture](docs/generated/architecture.md), [component catalog](docs/generated/component-catalog.md), [current decisions](docs/generated/current-decisions.md), and [maintainer guide](docs/generated/maintainer-guide.md).
+
+Do not edit accepted records, transaction receipts, extracted facts, or generated projections directly. Documentation changes are proposed through the shipped LORE skill as one validated `lore-proposal/v1` artifact and accepted through LORE's transaction engine.
+
 ## Repository layout
 
 - `src/building_code_ast/`: document and provision AST models, strict input handling, parsing, validation, and local ingestion adapters
-- `schemas/`: versioned JSON Schema projections of the public AST contracts
+- `schemas/`: versioned JSON Schema projections of the public AST contracts and LORE trust-root schemas
 - `fixtures/`: synthetic source and expected-output fixtures
 - `tests/`: parser, provenance, malformed-input, and regression tests
 - `scripts/ingest_nec_2017.py`: local-only coordinate-aware NEC 2017 ingestion CLI
+- `.lore/records/`: append-only accepted semantic knowledge
+- `.lore/transactions/`: accepted LORE transaction receipts
+- `skills/maintain-repository-documentation/`: the shipped provider-neutral LORE maintenance skill
+- `docs/generated/`: deterministic projections from accepted LORE records
 - `docs/README.md`: Diátaxis documentation map and authoring guidance
 - `docs/architecture.md`: representation boundaries and staged compiler model
 - `docs/compatibility.md`: public AST version compatibility notes
@@ -125,14 +145,22 @@ Jurisdiction resolution does not imply that code text may be redistributed, and 
 
 ## Verification
 
-Run:
+Run the Python verification lanes:
 
 ```bash
 python -m unittest discover -s tests -v
 python -m compileall -q src tests
 ```
 
-CI executes both commands on Python 3.12.
+The read-only LORE workflow pins an exact upstream LORE revision and verifies:
+
+```text
+lore extract --check
+lore validate
+lore project --check
+```
+
+CI executes the Python and LORE verification lanes independently.
 
 ## Data and publication boundary
 
