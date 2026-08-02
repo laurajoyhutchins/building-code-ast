@@ -61,8 +61,8 @@ class NestedSemanticCompatibilityTests(unittest.TestCase):
             [clause.span.text for clause in review.clauses],
             [
                 "The equipment shall be identified.",
-                "First Topic. The enclosure shall be secured.",
-                "First Item. The label shall be visible.",
+                "The enclosure shall be secured.",
+                "The label shall be visible.",
             ],
         )
         self.assertEqual(
