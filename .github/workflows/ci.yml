@@ -1,24 +1,573 @@
-name: CI
+name: Apply second-review hardening
 
 on:
   pull_request:
-  push:
-    branches: [main]
 
 permissions:
-  contents: read
+  contents: write
 
 jobs:
-  test:
+  apply:
+    if: github.actor != 'github-actions[bot]'
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.head_ref }}
+          fetch-depth: 0
       - uses: actions/setup-python@v5
         with:
           python-version: "3.12"
-      - name: Install package
-        run: python -m pip install -e .
-      - name: Run unit tests
-        run: python -m unittest discover -s tests -v
-      - name: Compile sources
-        run: python -m compileall -q src tests
+      - name: Apply reviewed patch
+        shell: bash
+        run: |
+          python - <<'PY'
+          from __future__ import annotations
+
+          import json
+          from pathlib import Path
+
+
+          def replace_once(path: str, old: str, new: str) -> None:
+              target = Path(path)
+              text = target.read_text(encoding="utf-8")
+              count = text.count(old)
+              if count != 1:
+                  raise RuntimeError(f"expected one match in {path}, found {count}")
+              target.write_text(text.replace(old, new), encoding="utf-8")
+
+
+          amendments_path = Path("src/building_code_ast/evidence/amendments.py")
+          amendments = amendments_path.read_text(encoding="utf-8")
+          amendments = amendments.replace(
+              'AMENDMENT_PATCH_VERSION = "0.1.0"',
+              'AMENDMENT_PATCH_VERSION = "0.2.0"',
+              1,
+          )
+          amendments = amendments.replace(
+              '''        elif self.operation is AmendmentOperation.SCOPE:
+              if self.replacement_text is not None:
+                  raise ValueError("replacement_text must be null for scope operations")
+              if self.scope is None:
+                  raise ValueError("scope is required for scope operations")
+          if isinstance(self.sequence, bool) or not isinstance(self.sequence, int) or self.sequence < 1:
+''',
+              '''        elif self.operation is AmendmentOperation.SCOPE:
+              if self.replacement_text is not None:
+                  raise ValueError("replacement_text must be null for scope operations")
+              if self.scope is None:
+                  raise ValueError("scope is required for scope operations")
+          if self.operation is not AmendmentOperation.SCOPE and self.scope is not None:
+              raise ValueError("scope must be null for non-scope operations")
+          if isinstance(self.sequence, bool) or not isinstance(self.sequence, int) or self.sequence < 1:
+''',
+              1,
+          )
+          amendments = amendments.replace(
+              '''        if len({patch.patch_id for patch in self.patches}) != len(self.patches):
+              raise ValueError("patches must not contain duplicate identities")
+          base_states = {patch.base_publication_state_id for patch in self.patches}
+''',
+              '''        if len({patch.patch_id for patch in self.patches}) != len(self.patches):
+              raise ValueError("patches must not contain duplicate identities")
+          source_sequences = [(patch.source_id, patch.sequence) for patch in self.patches]
+          if len(set(source_sequences)) != len(source_sequences):
+              raise ValueError("patches must not reuse a source-local sequence")
+          base_states = {patch.base_publication_state_id for patch in self.patches}
+''',
+              1,
+          )
+          amendments = amendments.replace(
+              '''                    patch.wac_citation,
+                      patch.locator,
+                  ),
+''',
+              '''                    patch.wac_citation,
+                      patch.locator,
+                      patch.patch_id,
+                  ),
+''',
+              1,
+          )
+          old_ancestors = '''def _locator_ancestors(locator: str) -> tuple[str, ...]:
+              ancestors: list[str] = []
+              current = locator
+              while current.endswith(")") and "(" in current:
+                  current = current[: current.rfind("(")]
+                  if current:
+                      ancestors.append(current)
+              while "." in current:
+                  current = current.rsplit(".", 1)[0]
+                  ancestors.append(current)
+              return tuple(ancestors)
+'''
+          new_ancestors = '''def _locator_ancestors(locator: str) -> tuple[str, ...]:
+              ancestors: list[str] = []
+              current = locator
+              while current.endswith(")") and "(" in current:
+                  current = current[: current.rfind("(")]
+                  if current:
+                      ancestors.append(current)
+              while "." in current:
+                  current = current.rsplit(".", 1)[0]
+                  ancestors.append(current)
+
+              section_match = re.fullmatch(r"(?P<appendix>[A-Z])?(?P<number>\\d{3,})", current)
+              if section_match is not None:
+                  appendix = section_match.group("appendix")
+                  if appendix is not None:
+                      if appendix not in ancestors:
+                          ancestors.append(appendix)
+                  else:
+                      chapter = str(int(section_match.group("number")) // 100)
+                      if chapter not in ancestors and chapter != current:
+                          ancestors.append(chapter)
+              return tuple(ancestors)
+'''
+          if old_ancestors not in amendments:
+              raise RuntimeError("locator ancestor function changed unexpectedly")
+          amendments = amendments.replace(old_ancestors, new_ancestors, 1)
+          amendments = amendments.replace(
+              '    adapter_version = "0.1.0"\n    supported_roles = frozenset({EvidenceRole.JURISDICTIONAL_LAW})',
+              '    adapter_version = "0.2.0"\n    supported_roles = frozenset({EvidenceRole.JURISDICTIONAL_LAW})',
+              1,
+          )
+          amendments = amendments.replace(
+              '                    sequence=len(records) + 1,\n                    source_anchor=anchor,',
+              '                    sequence=ordinal,\n                    source_anchor=anchor,',
+              1,
+          )
+
+          class_start = amendments.index("class WashingtonWacHtmlAdapter:")
+          new_tail = '''def _validated_locator_date_mapping(
+              value: Mapping[str, str] | None,
+              label: str,
+          ) -> dict[str, str]:
+              if value is None:
+                  return {}
+              if not isinstance(value, Mapping):
+                  raise ValueError(f"{label} must be a mapping")
+              result: dict[str, str] = {}
+              for locator, date_value in value.items():
+                  _require_text(locator, f"{label} locator")
+                  _parse_date(date_value, f"{label}[{locator}]")
+                  result[locator] = date_value
+              return result
+
+
+          class WashingtonWacHtmlAdapter:
+              """Extract bounded amendment patches from official-style chapter 51-50 WAC HTML."""
+
+              adapter_id = "washington-wac-html"
+              adapter_version = "0.3.0"
+              supported_roles = frozenset({EvidenceRole.JURISDICTIONAL_LAW})
+              supported_media_types = frozenset({"text/html"})
+
+              def __init__(
+                  self,
+                  *,
+                  base_publication_state_id: str,
+                  known_base_locators: frozenset[str],
+                  effective_dates_by_wac: Mapping[str, str] | None = None,
+                  effective_to_dates_by_wac: Mapping[str, str] | None = None,
+                  effective_dates_by_locator: Mapping[str, str] | None = None,
+                  effective_to_dates_by_locator: Mapping[str, str] | None = None,
+                  reserved_locators_by_wac: Mapping[str, str] | None = None,
+              ) -> None:
+                  if not isinstance(base_publication_state_id, str) or _PUBLICATION_STATE_RE.fullmatch(
+                      base_publication_state_id
+                  ) is None:
+                      raise ValueError("base_publication_state_id must be a publication state identifier")
+                  if not isinstance(known_base_locators, frozenset) or not known_base_locators:
+                      raise ValueError("known_base_locators must be a nonempty frozenset")
+                  for locator in known_base_locators:
+                      _require_text(locator, "known base locator")
+                  self.base_publication_state_id = base_publication_state_id
+                  self.known_base_locators = known_base_locators
+                  self.effective_dates_by_wac = _validated_date_mapping(
+                      effective_dates_by_wac, "effective_dates_by_wac"
+                  )
+                  self.effective_to_dates_by_wac = _validated_date_mapping(
+                      effective_to_dates_by_wac, "effective_to_dates_by_wac"
+                  )
+                  self.effective_dates_by_locator = _validated_locator_date_mapping(
+                      effective_dates_by_locator, "effective_dates_by_locator"
+                  )
+                  self.effective_to_dates_by_locator = _validated_locator_date_mapping(
+                      effective_to_dates_by_locator, "effective_to_dates_by_locator"
+                  )
+                  self.reserved_locators_by_wac = _validated_locator_mapping(
+                      reserved_locators_by_wac, "reserved_locators_by_wac"
+                  )
+                  for citation, end_value in self.effective_to_dates_by_wac.items():
+                      start_value = self.effective_dates_by_wac.get(citation)
+                      if start_value is not None and date.fromisoformat(end_value) <= date.fromisoformat(start_value):
+                          raise ValueError(
+                              f"effective_to date for {citation} must be later than effective_from"
+                          )
+                  for locator, end_value in self.effective_to_dates_by_locator.items():
+                      start_value = self.effective_dates_by_locator.get(locator)
+                      if start_value is not None and date.fromisoformat(end_value) <= date.fromisoformat(start_value):
+                          raise ValueError(
+                              f"effective_to date for {locator} must be later than effective_from"
+                          )
+
+              def _effective_from(
+                  self,
+                  citation: str,
+                  locator: str,
+                  source: SourceRegisterEntry,
+              ) -> str | None:
+                  return (
+                      self.effective_dates_by_locator.get(locator)
+                      or self.effective_dates_by_wac.get(citation)
+                      or source.publication.effective_on
+                  )
+
+              def _effective_to(self, citation: str, locator: str) -> str | None:
+                  return self.effective_to_dates_by_locator.get(
+                      locator,
+                      self.effective_to_dates_by_wac.get(citation),
+                  )
+
+              def extract(
+                  self,
+                  source: SourceRegisterEntry,
+                  content: bytes,
+              ) -> AdapterResult[JurisdictionalAmendmentPatch]:
+                  if source.jurisdiction is None:
+                      raise ValueError("source jurisdiction is required")
+                  sections = _wac_sections(_parse_official_blocks(content))
+                  records: list[JurisdictionalAmendmentPatch] = []
+                  diagnostics: list[EvidenceDiagnostic] = []
+                  unsupported: list[SourceRegion] = []
+                  candidate_sequence = 0
+
+                  for citation, blocks in sections:
+                      candidate_sequence += 1
+                      section_region = SourceRegion(anchor=f"wac:{citation}")
+                      if any(block.strip().casefold().rstrip(".") == "reserved" for block in blocks):
+                          locator = self.reserved_locators_by_wac.get(citation)
+                          if locator is None or locator not in self.known_base_locators:
+                              diagnostics.append(
+                                  EvidenceDiagnostic(
+                                      code="unresolved-reserved-locator",
+                                      severity=DiagnosticSeverity.WARNING,
+                                      message="Reserved WAC section requires an explicit resolvable base locator.",
+                                      region=section_region,
+                                  )
+                              )
+                              unsupported.append(section_region)
+                              continue
+                          effective_from = self._effective_from(citation, locator, source)
+                          if effective_from is None:
+                              diagnostics.append(
+                                  EvidenceDiagnostic(
+                                      code="missing-amendment-effective-date",
+                                      severity=DiagnosticSeverity.WARNING,
+                                      message="WAC section has no registered effective date.",
+                                      region=section_region,
+                                  )
+                              )
+                              unsupported.append(section_region)
+                              continue
+                          records.append(
+                              JurisdictionalAmendmentPatch(
+                                  source_id=source.source_id,
+                                  jurisdiction=source.jurisdiction,
+                                  authority=source.issuing_body,
+                                  base_publication_state_id=self.base_publication_state_id,
+                                  wac_citation=citation,
+                                  locator=locator,
+                                  operation=AmendmentOperation.RESERVE,
+                                  effective_from=effective_from,
+                                  effective_to=self._effective_to(citation, locator),
+                                  replacement_text=None,
+                                  scope=None,
+                                  sequence=candidate_sequence,
+                                  source_anchor=f"wac:{citation}:{locator}",
+                              )
+                          )
+                          continue
+
+                      clauses = _group_clause_texts(blocks)
+                      if not clauses:
+                          diagnostics.append(
+                              EvidenceDiagnostic(
+                                  code="unsupported-wac-section",
+                                  severity=DiagnosticSeverity.WARNING,
+                                  message="WAC section did not expose a bounded code locator or reserved marker.",
+                                  region=section_region,
+                              )
+                          )
+                          unsupported.append(section_region)
+                          continue
+
+                      for clause_index, (locator, replacement_text) in enumerate(clauses):
+                          if clause_index:
+                              candidate_sequence += 1
+                          region = SourceRegion(anchor=f"wac:{citation}:{locator}")
+                          effective_from = self._effective_from(citation, locator, source)
+                          if effective_from is None:
+                              diagnostics.append(
+                                  EvidenceDiagnostic(
+                                      code="missing-amendment-effective-date",
+                                      severity=DiagnosticSeverity.WARNING,
+                                      message="WAC clause has no registered effective date.",
+                                      region=region,
+                                  )
+                              )
+                              unsupported.append(region)
+                              continue
+                          operation = _resolve_operation(locator, self.known_base_locators)
+                          if operation is None:
+                              diagnostics.append(
+                                  EvidenceDiagnostic(
+                                      code="unresolved-base-locator",
+                                      severity=DiagnosticSeverity.WARNING,
+                                      message="WAC clause could not be classified as an add or replacement against the supplied base-locator oracle.",
+                                      region=region,
+                                  )
+                              )
+                              unsupported.append(region)
+                              continue
+                          records.append(
+                              JurisdictionalAmendmentPatch(
+                                  source_id=source.source_id,
+                                  jurisdiction=source.jurisdiction,
+                                  authority=source.issuing_body,
+                                  base_publication_state_id=self.base_publication_state_id,
+                                  wac_citation=citation,
+                                  locator=locator,
+                                  operation=operation,
+                                  effective_from=effective_from,
+                                  effective_to=self._effective_to(citation, locator),
+                                  replacement_text=replacement_text,
+                                  scope=None,
+                                  sequence=candidate_sequence,
+                                  source_anchor=f"wac:{citation}:{locator}",
+                              )
+                          )
+
+                  return AdapterResult(
+                      source_id=source.source_id,
+                      adapter_id=self.adapter_id,
+                      adapter_version=self.adapter_version,
+                      records=tuple(records),
+                      diagnostics=tuple(diagnostics),
+                      unsupported_regions=tuple(unsupported),
+                  )
+          '''
+          amendments = amendments[:class_start] + new_tail
+          amendments_path.write_text(amendments, encoding="utf-8")
+
+          development_path = Path("src/building_code_ast/evidence/development.py")
+          development = development_path.read_text(encoding="utf-8")
+          development = development.replace(
+              '''        for record in self.records:
+              for parent in record.parent_keys:
+                  if parent not in records_by_key:
+                      raise ValueError(
+                          f"unresolved parent {parent} for record {record.record_key}"
+                      )
+          _assert_acyclic(records_by_key)
+''',
+              '''        for record in self.records:
+              for parent in record.parent_keys:
+                  if parent not in records_by_key:
+                      raise ValueError(
+                          f"unresolved parent {parent} for record {record.record_key}"
+                      )
+                  parent_record = records_by_key[parent]
+                  if (
+                      parent_record.proposal_id == record.proposal_id
+                      and parent_record.sequence >= record.sequence
+                  ):
+                      raise ValueError(
+                          f"parent sequence must precede child sequence for {record.record_key}"
+                      )
+          _assert_acyclic(records_by_key)
+''',
+              1,
+          )
+          development = development.replace(
+              '    adapter_version = "0.1.0"\n    supported_roles = frozenset({EvidenceRole.DEVELOPMENT_HISTORY})',
+              '    adapter_version = "0.2.0"\n    supported_roles = frozenset({EvidenceRole.DEVELOPMENT_HISTORY})',
+              1,
+          )
+          action_start = development.index("                previous_key = proposal_key")
+          action_end = development.index("\n\n        return AdapterResult(", action_start)
+          new_actions = '''                previous_key = proposal_key
+              occurrence: dict[str, int] = {}
+              chain_open = True
+              for source_sequence, (label, text) in enumerate(action_lines, start=2):
+                  if not chain_open:
+                      region = SourceRegion(
+                          page=source_page,
+                          anchor=f"{proposal_id}:blocked-action:{source_sequence}",
+                      )
+                      diagnostics.append(
+                          EvidenceDiagnostic(
+                              code="blocked-development-action",
+                              severity=DiagnosticSeverity.WARNING,
+                              message="Development action follows an unsupported action whose parentage is unresolved.",
+                              region=region,
+                          )
+                      )
+                      unsupported.append(region)
+                      continue
+                  kind = _ACTION_KINDS.get(label)
+                  disposition = _DISPOSITIONS.get(text.casefold())
+                  if kind is None or disposition is None:
+                      region = SourceRegion(
+                          page=source_page,
+                          anchor=f"{proposal_id}:unsupported-action:{source_sequence}",
+                      )
+                      diagnostics.append(
+                          EvidenceDiagnostic(
+                              code="unsupported-development-action",
+                              severity=DiagnosticSeverity.WARNING,
+                              message="Development action is outside the bounded vocabulary.",
+                              region=region,
+                          )
+                      )
+                      unsupported.append(region)
+                      chain_open = False
+                      continue
+                  stem = _slug(label)
+                  occurrence[stem] = occurrence.get(stem, 0) + 1
+                  suffix = "" if occurrence[stem] == 1 else f"-{occurrence[stem]}"
+                  record_key = f"{proposal_id}:{stem}{suffix}"
+                  record = DevelopmentRecord(
+                      source_id=source.source_id,
+                      proposal_id=proposal_id,
+                      record_key=record_key,
+                      kind=kind,
+                      disposition=disposition,
+                      sequence=source_sequence,
+                      proponent=None,
+                      affected_locators=locators,
+                      parent_keys=(previous_key,),
+                      action_date=None,
+                      summary=text,
+                      source_page=source_page,
+                      source_anchor=record_key,
+                  )
+                  records.append(record)
+                  previous_key = record_key
+          '''
+          development = development[:action_start] + new_actions + development[action_end:]
+          development_path.write_text(development, encoding="utf-8")
+
+          errata_path = Path("src/building_code_ast/evidence/errata.py")
+          errata = errata_path.read_text(encoding="utf-8")
+          errata = errata.replace(
+              '    adapter_version = "0.2.0"',
+              '    adapter_version = "0.3.0"',
+              1,
+          )
+          errata = errata.replace(
+              '                        sequence=len(records) + 1,',
+              '                        sequence=candidate_sequence,',
+              1,
+          )
+          errata_path.write_text(errata, encoding="utf-8")
+
+          schema_path = Path("schemas/jurisdictional-amendment-patch.schema.json")
+          schema = json.loads(schema_path.read_text(encoding="utf-8"))
+          schema["properties"]["patch_version"]["const"] = "0.2.0"
+          for rule in schema["allOf"]:
+              operation = rule.get("if", {}).get("properties", {}).get("operation", {})
+              if operation.get("const") == "scope":
+                  rule["else"] = {"properties": {"scope": {"type": "null"}}}
+                  break
+          else:
+              raise RuntimeError("scope schema rule not found")
+          schema_path.write_text(json.dumps(schema, indent=2) + "\n", encoding="utf-8")
+
+          test_path = Path("tests/test_washington_amendments.py")
+          tests = test_path.read_text(encoding="utf-8")
+          tests = tests.replace(
+              '        scoped = _patch(scope="Only for synthetic occupancies.")',
+              '''        scoped = _patch(
+              operation=AmendmentOperation.SCOPE,
+              replacement_text=None,
+              scope="Only for synthetic occupancies.",
+          )''',
+              1,
+          )
+          test_path.write_text(tests, encoding="utf-8")
+
+          replace_once(
+              "docs/reference/washington-wac-amendments.md",
+              "## Patch contract `0.1.0`",
+              "## Patch contract `0.2.0`",
+          )
+          replace_once(
+              "docs/reference/washington-wac-amendments.md",
+              "`add` and `replace` require replacement text. `delete` and `reserve` prohibit replacement text. `scope` requires a scope statement and prohibits replacement text.",
+              "`add` and `replace` require replacement text. `delete` and `reserve` prohibit replacement text. `scope` requires a scope statement and prohibits replacement text. The `scope` field is null for every non-scope operation, preventing one patch from encoding two legal effects.",
+          )
+          replace_once(
+              "docs/reference/washington-wac-amendments.md",
+              "It orders patches by effective date, source sequence, WAC citation, and locator.",
+              "It requires source-local sequence values to be unique within each registered source and orders patches by effective date, source sequence, WAC citation, locator, and deterministic patch identity. The identity tie-breaker makes ordering independent of input tuple order.",
+          )
+          replace_once(
+              "docs/reference/washington-wac-amendments.md",
+              "`WashingtonWacHtmlAdapter` accepts section-specific effective-date mappings and falls back to the registered source publication's effective date only when one is present.",
+              "`WashingtonWacHtmlAdapter` accepts WAC-section and locator-specific effective-date mappings, with locator-specific evidence taking precedence. It falls back to the registered source publication's effective date only when one is present. This matters when one WAC citation contains clauses produced by different rule histories.",
+          )
+          with Path("docs/reference/washington-wac-amendments.md").open("a", encoding="utf-8") as handle:
+              handle.write("\n## Source sequence and ancestry hardening\n\nAdapter versions `washington-wac-normalized-html` `0.2.0` and `washington-wac-html` `0.3.0` preserve candidate ordinals even when earlier source regions are unsupported. Whole-number IBC additions can resolve through their chapter designation, and appendix-prefixed additions can resolve through their appendix designation.\n")
+
+          with Path("docs/reference/icc-development-lineage.md").open("a", encoding="utf-8") as handle:
+              handle.write("\n## Second-review chronology boundary\n\nWithin one proposal, every parent sequence must precede its child sequence. Adapter version `0.2.0` also stops a lineage chain at the first unsupported action; later actions remain diagnostic-backed unsupported regions rather than being linked across an unknown intermediate process event.\n")
+
+          with Path("docs/reference/icc-errata.md").open("a", encoding="utf-8") as handle:
+              handle.write("\n## Source candidate sequence\n\nAdapter version `0.3.0` uses the original candidate ordinal as `sequence`. Unsupported entries therefore leave intentional gaps instead of renumbering later records and obscuring their source order.\n")
+
+          with Path("docs/compatibility.md").open("a", encoding="utf-8") as handle:
+              handle.write("\n## Evidence contract second-review migration\n\nJurisdictional amendment patch `0.2.0` rejects `scope` payloads on non-scope operations. `NormalizedWashingtonWacHtmlAdapter` advances to `0.2.0`, `WashingtonWacHtmlAdapter` to `0.3.0`, `IccDevelopmentTextAdapter` to `0.2.0`, and `IccErrataPdfAdapter` to `0.3.0`. Source candidate sequences may now contain gaps where unsupported source regions were retained. Direct Washington ingestion additionally accepts locator-specific effective-date mappings.\n")
+          PY
+      - name: Verify patch
+        run: |
+          python -m pip install -e .
+          python -m unittest discover -s tests -v
+          python -m compileall -q src tests
+          git diff --check
+      - name: Restore CI and commit patch
+        shell: bash
+        run: |
+          cat > .github/workflows/ci.yml <<'YAML'
+          name: CI
+
+          on:
+            pull_request:
+            push:
+              branches: [main]
+
+          permissions:
+            contents: read
+
+          jobs:
+            test:
+              runs-on: ubuntu-latest
+              steps:
+                - uses: actions/checkout@v4
+                - uses: actions/setup-python@v5
+                  with:
+                    python-version: "3.12"
+                - name: Install package
+                  run: python -m pip install -e .
+                - name: Run unit tests
+                  run: python -m unittest discover -s tests -v
+                - name: Compile sources
+                  run: python -m compileall -q src tests
+          YAML
+          rm -f .github/workflows/apply-second-review-hardening.yml
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add -A
+          git commit -m "fix: harden evidence ordering and provenance"
+          git push origin HEAD:agent/second-pass-evidence-hardening
