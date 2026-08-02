@@ -7,6 +7,15 @@ from .adapters import (
     SourceRegion,
     run_evidence_adapter,
 )
+from .amendments import (
+    AMENDMENT_OPERATION_VALUES,
+    AMENDMENT_PATCH_VERSION,
+    AmendmentOperation,
+    AmendmentSet,
+    JurisdictionalAmendmentPatch,
+    WashingtonWacHtmlAdapter,
+    amendment_patch_from_dict,
+)
 from .development import (
     DEVELOPMENT_DISPOSITION_VALUES,
     DEVELOPMENT_KIND_VALUES,
@@ -46,6 +55,8 @@ from .model import (
 
 __all__ = [
     "ACCESS_SCOPE_VALUES",
+    "AMENDMENT_OPERATION_VALUES",
+    "AMENDMENT_PATCH_VERSION",
     "DEVELOPMENT_DISPOSITION_VALUES",
     "DEVELOPMENT_KIND_VALUES",
     "DEVELOPMENT_RECORD_VERSION",
@@ -57,6 +68,8 @@ __all__ = [
     "TARGET_KIND_VALUES",
     "AccessScope",
     "AdapterResult",
+    "AmendmentOperation",
+    "AmendmentSet",
     "AstSourceIdentity",
     "DevelopmentDisposition",
     "DevelopmentLineage",
@@ -69,12 +82,15 @@ __all__ = [
     "EvidenceRole",
     "IccDevelopmentTextAdapter",
     "IccErrataPdfAdapter",
+    "JurisdictionalAmendmentPatch",
     "PublicationIdentity",
     "RightsStatus",
     "SourceRegion",
     "SourceRegister",
     "SourceRegisterEntry",
     "TargetKind",
+    "WashingtonWacHtmlAdapter",
+    "amendment_patch_from_dict",
     "development_record_from_dict",
     "erratum_record_from_dict",
     "publication_state_id",

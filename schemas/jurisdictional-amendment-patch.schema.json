@@ -1,0 +1,46 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://example.invalid/building-code-ast/jurisdictional-amendment-patch.schema.json",
+  "title": "Building Code AST Jurisdictional Amendment Patch",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "patch_version",
+    "patch_id",
+    "type",
+    "source_id",
+    "jurisdiction",
+    "authority",
+    "base_publication_state_id",
+    "wac_citation",
+    "locator",
+    "operation",
+    "effective_from",
+    "effective_to",
+    "replacement_text",
+    "scope",
+    "sequence",
+    "source_anchor"
+  ],
+  "properties": {
+    "patch_version": {"const": "0.1.0"},
+    "patch_id": {"type": "string", "pattern": "^amendment:[0-9a-f]{64}$"},
+    "type": {"const": "jurisdictional_amendment_patch"},
+    "source_id": {"type": "string", "minLength": 1},
+    "jurisdiction": {"type": "string", "minLength": 1},
+    "authority": {"type": "string", "minLength": 1},
+    "base_publication_state_id": {
+      "type": "string",
+      "pattern": "^publication:[0-9a-f]{64}$"
+    },
+    "wac_citation": {"type": "string", "pattern": "^51-50-[0-9]+$"},
+    "locator": {"type": "string", "minLength": 1},
+    "operation": {"enum": ["add", "replace", "delete", "reserve", "scope"]},
+    "effective_from": {"type": "string", "format": "date"},
+    "effective_to": {"type": ["string", "null"], "format": "date"},
+    "replacement_text": {"type": ["string", "null"], "minLength": 1},
+    "scope": {"type": ["string", "null"], "minLength": 1},
+    "sequence": {"type": "integer", "minimum": 1},
+    "source_anchor": {"type": "string", "minLength": 1}
+  }
+}
