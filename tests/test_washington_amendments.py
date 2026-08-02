@@ -22,7 +22,7 @@ from building_code_ast.evidence.amendments import (
     AmendmentOperation,
     AmendmentSet,
     JurisdictionalAmendmentPatch,
-    WashingtonWacHtmlAdapter,
+    NormalizedWashingtonWacHtmlAdapter,
     amendment_patch_from_dict,
 )
 
@@ -214,7 +214,7 @@ class WashingtonAmendmentTests(unittest.TestCase):
 </body></html>
 """
         content = html.encode("utf-8")
-        adapter = WashingtonWacHtmlAdapter(
+        adapter = NormalizedWashingtonWacHtmlAdapter(
             base_publication_state_id=publication_state_id(BASE_STATE),
             effective_from="2024-03-15",
             known_base_locators=frozenset({"107.3", "403", "110", "312", "101.4.7"}),
@@ -245,7 +245,7 @@ class WashingtonAmendmentTests(unittest.TestCase):
 </body></html>
 """
         content = html.encode("utf-8")
-        adapter = WashingtonWacHtmlAdapter(
+        adapter = NormalizedWashingtonWacHtmlAdapter(
             base_publication_state_id=publication_state_id(BASE_STATE),
             effective_from="2024-03-15",
             known_base_locators=frozenset({"107.3"}),
