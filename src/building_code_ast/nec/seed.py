@@ -4,6 +4,7 @@ from __future__ import annotations
 
 from collections.abc import Mapping
 from dataclasses import dataclass
+import re
 from typing import Any, Iterable
 
 from ..document_model import DocumentSourceArtifact
@@ -61,6 +62,34 @@ def _span(value: Any, source: str, label: str) -> SourceSpan:
     return span
 
 
+def _semantic_projection_span(
+    full_span: SourceSpan,
+    children: tuple[SeedNode, ...],
+    *,
+    source: str,
+    node_type: str,
+    locator: str,
+) -> SourceSpan:
+    """Return the node's own source block instead of its expanded tree span.
+
+    Publication AST parents intentionally cover descendants. Semantic consumers
+    need the original non-overlapping source blocks, so nested parents stop at
+    the first child's source start. Document and Article wrappers keep their
+    exact full-source spans for validation.
+    """
+
+    preserve_full = node_type == "document" or re.fullmatch(r"article:\d{2,3}", locator)
+    if preserve_full or not children:
+        return full_span
+
+    end = min(child.span.start for child in children)
+    while end > full_span.start and source[end - 1].isspace():
+        end -= 1
+    if end < full_span.start:
+        raise ValueError(f"{locator} has a child before its own source span")
+    return SourceSpan(full_span.start, end, source[full_span.start:end])
+
+
 def _node(value: Any, source: str, label: str) -> SeedNode:
     obj = _mapping(value, label)
     node_type = _string(obj.get("type"), f"{label}.type")
@@ -77,16 +106,24 @@ def _node(value: Any, source: str, label: str) -> SeedNode:
     children_obj = obj.get("children")
     if not isinstance(children_obj, list):
         raise ValueError(f"{label}.children must be an array")
+    children = tuple(
+        _node(child, source, f"{label}.children[{index}]")
+        for index, child in enumerate(children_obj)
+    )
+    full_span = _span(obj.get("span"), source, f"{label}.span")
     return SeedNode(
         node_type=node_type,
         locator=locator,
         label=raw_label,
-        span=_span(obj.get("span"), source, f"{label}.span"),
-        attributes=tuple(attributes),
-        children=tuple(
-            _node(child, source, f"{label}.children[{index}]")
-            for index, child in enumerate(children_obj)
+        span=_semantic_projection_span(
+            full_span,
+            children,
+            source=source,
+            node_type=node_type,
+            locator=locator,
         ),
+        attributes=tuple(attributes),
+        children=children,
     )
 
 
