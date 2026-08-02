@@ -113,7 +113,11 @@ class WashingtonAmendmentTests(unittest.TestCase):
         first = _patch()
         replaced = _patch(operation=AmendmentOperation.REPLACE)
         later = _patch(effective_from="2025-01-01")
-        scoped = _patch(scope="Only for synthetic occupancies.")
+        scoped = _patch(
+            operation=AmendmentOperation.SCOPE,
+            replacement_text=None,
+            scope="Only for synthetic occupancies.",
+        )
 
         self.assertNotEqual(first.patch_id, replaced.patch_id)
         self.assertNotEqual(first.patch_id, later.patch_id)
