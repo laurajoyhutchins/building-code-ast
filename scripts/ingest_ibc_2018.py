@@ -12,11 +12,12 @@ import sys
 from typing import Iterable
 
 from building_code_ast.ingest.ibc2018 import (
+    LAYOUT_ANALYSIS_VERSION,
+    SEED_VERSION,
     build_chapter_seed,
     extract_ibc2018_layout,
     parse_chapter_numbers,
 )
-
 
 DEFAULT_CHAPTERS = ("1", "2", "3")
 
@@ -126,11 +127,12 @@ def write_outputs(
     _write_json(
         manifest_path,
         {
-            "seed_set_version": "0.1.0",
+            "seed_set_version": SEED_VERSION,
+            "layout_analysis_version": LAYOUT_ANALYSIS_VERSION,
             "source_manifest": first_manifest,
             "chapters": records,
             "publication_boundary": "private-local-output",
-            "reconstruction": "positioned-glyph visual-line reconstruction",
+            "reconstruction": "positioned-glyph adaptive layout reconstruction",
         },
     )
     return (manifest_path, *written)
