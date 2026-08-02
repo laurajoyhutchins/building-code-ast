@@ -1,6 +1,6 @@
 # IBC hierarchy parser design
 
-**Status:** Concept approved; awaiting written-spec review
+**Status:** Concept approved; self-reviewed; awaiting owner review
 
 ## Problem
 
@@ -92,6 +92,22 @@ The recognizer should distinguish at least these forms:
 
 Recognition must not promote an arbitrary decimal, dimension, date, standard number, or list marker to a section without structural evidence.
 
+### Neutral AST representation
+
+The first implementation keeps Document AST `0.1.0` unchanged and maps IBC structures onto existing publication-neutral node types:
+
+- Chapter to `chapter`;
+- Part to `heading` with `structural_role=part`;
+- whole-number section heading to `section`;
+- decimal child provision to `subsection` when it has a structural parent, otherwise `section`;
+- numbered or parenthesized enumeration to `list_item`;
+- singular or plural exception heading to `note` with `structural_role=exception` or `exception_group`;
+- numbered exception entry to `list_item` with `structural_role=exception_item`;
+- figure caption or retained figure block to `heading` or `unsupported` with `structural_role=figure`, depending on whether geometry is represented;
+- definition, table, note, footnote, paragraph, and unsupported material to their existing node types.
+
+This mapping is explicit so consumers do not infer exception or figure semantics from node type alone. A future Document AST version may add generic exception or figure node types only after multiple publication adapters demonstrate the need.
+
 ### Canonical locators
 
 Canonical structural locators should be publication-specific but deterministic:
@@ -143,27 +159,29 @@ The normalized chapter text and source-map entries remain unchanged. Hierarchy c
 
 ### Outline reconciliation
 
-A separate, optional outline module may extract the chapter and section sequence from table-of-contents pages or load an independently prepared source-free outline artifact.
+A separate, optional outline module may extract the chapter and section sequence from table-of-contents pages or load an independently prepared outline artifact.
 
-It compares, without mutating parser output:
+The public, source-free comparison shape contains designations, parent designations, depth, and order only. Title comparison is permitted only in private local reports that remain beside the private source artifacts.
+
+The reconciler compares, without mutating parser output:
 
 - expected and inferred designations;
 - duplicate designations;
 - parent designation;
-- normalized title;
 - depth;
 - source order;
-- chapter boundary.
+- chapter boundary;
+- normalized title only when both inputs and the output report are private.
 
-The reconciliation report must contain structural metadata and diagnostics only, not proprietary body prose.
+The outline never repairs, inserts, deletes, or reorders production nodes.
 
-## Document AST compatibility
+## Versioning and compatibility
 
-The public `DocumentNodeType` enum already contains Chapter, Section, Subsection, Paragraph, List Item, Definition Entry, Table, Heading, Note, Footnote, and Unsupported. The initial implementation should use these existing neutral types rather than changing Document AST `0.1.0`.
+The public `DocumentNodeType` enum already contains Chapter, Section, Subsection, Paragraph, List Item, Definition Entry, Table, Heading, Note, Footnote, and Unsupported. The initial implementation uses these existing neutral types and does not change Document AST `0.1.0`.
 
-IBC-specific identity and ownership belong in locators and attributes. A later AST version may add explicit exception or figure node types only if multiple publication adapters demonstrate that the generic distinction is necessary.
+IBC-specific identity and ownership belong in locators and attributes.
 
-ChapterSeed advances independently if its serialized private structure changes. The generic Document AST version does not change unless its public contract changes.
+Because the private serialized ChapterSeed tree changes from flat to hierarchical, the IBC ChapterSeed contract advances from `0.2.0` to `0.3.0`. The extractor version advances with it. Existing `0.2.0` seeds remain readable as historical flat outputs but are not rewritten in place.
 
 Existing consumers that scan flat chapter children should receive a documented preorder traversal helper, matching the compatibility technique used by the NEC hierarchy work. New consumers should traverse the recursive tree directly.
 
@@ -173,10 +191,10 @@ Existing consumers that scan flat chapter children should receive a documented p
 - A subsection whose expected parent is missing attaches to the nearest safe chapter or part owner and receives a missing-parent diagnostic.
 - Duplicate canonical locators are not collapsed or silently renamed.
 - Out-of-order sections remain in source order and receive an order diagnostic.
-- A title mismatch against the outline is reported independently from parent or presence mismatches.
+- A private title mismatch is reported independently from parent or presence mismatches.
 - Ambiguous numbered lists remain list items rather than being promoted to sections.
 - Unsupported table or figure geometry remains retained as unsupported structure.
-- The outline never repairs, inserts, deletes, or reorders production nodes.
+- The outline never mutates production output.
 
 ## Testing
 
@@ -188,14 +206,15 @@ Synthetic tests should cover:
 4. Duplicate and out-of-order designations.
 5. Numbered lists that must not become sections.
 6. Nested enumerations with repeated marker classes.
-7. Singular and plural exception ownership.
+7. Singular and plural exception ownership and neutral type mapping.
 8. Chapter 2 definition continuation ownership.
 9. Table and figure attachment.
 10. Parent-span expansion and exact source round-tripping.
 11. Preorder compatibility for existing consumers.
-12. Outline reconciliation mismatch classes.
+12. Public source-free and private title-aware outline reconciliation mismatch classes.
 13. Preservation and diagnostics for ambiguous or unsupported structures.
 14. Appendix-prefixed designations.
+15. ChapterSeed `0.2.0` historical compatibility and `0.3.0` serialization.
 
 Private production validation should run on Chapters 1 through 3 at the exact source checksum already used by the bounded IBC pipeline. It should verify zero source loss, unique retained block identity, valid Document AST spans, deterministic output, and a source-free hierarchy conformance summary.
 
@@ -208,6 +227,7 @@ The first implementation slice should add:
 - an IBC structural recognizer and hierarchy builder;
 - projection integration;
 - neutral preorder traversal compatibility;
+- ChapterSeed and extractor version advancement to `0.3.0`;
 - synthetic hierarchy tests;
 - optional source-free outline reconciliation contracts and tests;
 - private Chapters 1 through 3 validation tooling and documentation.
