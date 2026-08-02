@@ -2,16 +2,18 @@ from __future__ import annotations
 
 from dataclasses import asdict, dataclass
 from hashlib import sha256
+from html import unescape
 from html.parser import HTMLParser
 import json
 from pathlib import Path
 import re
 from urllib.error import HTTPError, URLError
+from urllib.parse import urljoin
 from urllib.request import Request, urlopen
 
 
 USER_AGENT = (
-    "building-code-ast-official-evidence-validation/0.1 "
+    "building-code-ast-official-evidence-validation/0.2 "
     "(+https://github.com/laurajoyhutchins/building-code-ast)"
 )
 
@@ -63,17 +65,18 @@ def fetch(url: str) -> tuple[FetchResult, bytes]:
     try:
         with urlopen(request, timeout=60) as response:
             content = response.read()
-            media_type = response.headers.get_content_type()
-            result = FetchResult(
-                url=url,
-                final_url=response.geturl(),
-                status=response.status,
-                media_type=media_type,
-                byte_count=len(content),
-                sha256=sha256(content).hexdigest(),
-                error=None,
+            return (
+                FetchResult(
+                    url=url,
+                    final_url=response.geturl(),
+                    status=response.status,
+                    media_type=response.headers.get_content_type(),
+                    byte_count=len(content),
+                    sha256=sha256(content).hexdigest(),
+                    error=None,
+                ),
+                content,
             )
-            return result, content
     except HTTPError as exc:
         content = exc.read()
         return (
@@ -103,16 +106,45 @@ def fetch(url: str) -> tuple[FetchResult, bytes]:
         )
 
 
-def filtered_links(content: bytes, patterns: tuple[str, ...]) -> list[dict[str, str]]:
+def extract_links(content: bytes, base_url: str) -> list[dict[str, str]]:
     text = content.decode("utf-8", errors="replace")
     parser = LinkParser()
     parser.feed(text)
-    matches: list[dict[str, str]] = []
+    found: dict[str, str] = {}
     for label, href in parser.links:
-        haystack = f"{label} {href}".casefold()
-        if any(pattern.casefold() in haystack for pattern in patterns):
-            matches.append({"label": label[:160], "href": href})
-    return matches
+        absolute = urljoin(base_url, unescape(href))
+        found.setdefault(absolute, label[:160])
+
+    raw_candidates = re.findall(
+        r"(?:https?:\\?/\\?/[^\"'<>\s]+|/wp-content/uploads/[^\"'<>\s]+)",
+        text,
+        flags=re.IGNORECASE,
+    )
+    for candidate in raw_candidates:
+        normalized = unescape(candidate).replace("\\/", "/")
+        absolute = urljoin(base_url, normalized)
+        found.setdefault(absolute, "")
+    return [
+        {"label": label, "href": href}
+        for href, label in sorted(found.items())
+    ]
+
+
+def select_links(
+    links: list[dict[str, str]],
+    *,
+    terms: tuple[str, ...],
+    pdf_only: bool = False,
+) -> list[dict[str, str]]:
+    selected: list[dict[str, str]] = []
+    for link in links:
+        haystack = f"{link['label']} {link['href']}".casefold()
+        if pdf_only and ".pdf" not in haystack:
+            continue
+        if terms and not any(term.casefold() in haystack for term in terms):
+            continue
+        selected.append(link)
+    return selected[:100]
 
 
 def main() -> None:
@@ -136,25 +168,37 @@ def main() -> None:
 
     fetched: dict[str, dict[str, object]] = {}
     bodies: dict[str, bytes] = {}
+    links: dict[str, list[dict[str, str]]] = {}
     for name, url in targets.items():
         result, content = fetch(url)
         fetched[name] = asdict(result)
         bodies[name] = content
+        links[name] = extract_links(content, url)
 
     discovery = {
-        "schema_version": "0.1.0",
+        "schema_version": "0.2.0",
         "sources": fetched,
-        "icc_content_update_links": filtered_links(
-            bodies["icc_content_updates"],
-            ("2021 international building code", "2021 ibc", "ibc errata"),
+        "link_counts": {name: len(values) for name, values in links.items()},
+        "icc_content_update_ibc_links": select_links(
+            links["icc_content_updates"],
+            terms=("ibc", "international-building-code", "international_building_code"),
         ),
-        "icc_development_links": filtered_links(
-            bodies["icc_group_a"],
-            (
-                "ibc general 2024",
-                "complete code change monograph",
-                "report of the committee action hearing",
+        "icc_content_update_pdf_links": select_links(
+            links["icc_content_updates"], terms=(), pdf_only=True
+        ),
+        "icc_development_selected_links": select_links(
+            links["icc_group_a"],
+            terms=(
+                "ibc-general",
+                "ibc_general",
+                "complete-code-change",
+                "complete_code_change",
+                "rocah",
+                "committee-action-hearing",
             ),
+        ),
+        "icc_development_pdf_links": select_links(
+            links["icc_group_a"], terms=(), pdf_only=True
         ),
         "wac_chapter_markers": {
             "wac_heading_count": len(
@@ -165,9 +209,9 @@ def main() -> None:
             ),
         },
         "wac_0403_markers": {
-            "iso_date_count": len(
+            "slash_date_count": len(
                 re.findall(
-                    rb"20[0-9]{2}-[0-9]{2}-[0-9]{2}",
+                    rb"[0-9]{1,2}/[0-9]{1,2}/20[0-9]{2}",
                     bodies["washington_wac_0403"],
                 )
             ),
