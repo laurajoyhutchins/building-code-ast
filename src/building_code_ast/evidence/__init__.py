@@ -1,5 +1,6 @@
 """Public source-evidence contracts."""
 
+from . import amendments as _amendments
 from .adapters import (
     AdapterResult,
     EvidenceAdapter,
@@ -60,6 +61,7 @@ from .washington_official import (
 )
 
 IccCommitteeActionPdfAdapter = IccCommitteeActionReportPdfAdapter
+_amendments.WashingtonWacHtmlAdapter = WashingtonWacHtmlAdapter
 
 __all__ = [
     "ACCESS_SCOPE_VALUES",
