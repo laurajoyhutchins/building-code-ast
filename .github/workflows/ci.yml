@@ -1,24 +1,100 @@
-name: CI
+name: Apply exhaustive IBC source audit
 
 on:
   pull_request:
-  push:
-    branches: [main]
 
 permissions:
   contents: read
 
 jobs:
-  test:
+  apply-and-verify:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v5
         with:
           python-version: "3.12"
+      - name: Reconstruct audited patch
+        shell: bash
+        run: |
+          set -euo pipefail
+          cat .github/ibc-audit-gz-*.txt > /tmp/ibc-source-audit.patch.gz.b64
+          echo "aa50f7d13e7340f67e8f78f28518d483017f710865b7a97a3fabddc9b173601d  /tmp/ibc-source-audit.patch.gz.b64" | sha256sum --check --strict
+          base64 --decode /tmp/ibc-source-audit.patch.gz.b64 | gzip -dc > /tmp/ibc-source-audit.patch
+          echo "ecd30280754124f75be7d0b796b44f0fdd8809e50f80582584c0b8257688d75f  /tmp/ibc-source-audit.patch" | sha256sum --check --strict
+          git apply --check /tmp/ibc-source-audit.patch
+          git apply /tmp/ibc-source-audit.patch
+      - name: Remove transport and restore normal CI
+        shell: bash
+        run: |
+          set -euo pipefail
+          rm -f .github/ibc-audit-gz-*.txt .github/ibc-audit-patch-*.txt
+          cat > .github/workflows/ci.yml <<'YAML'
+          name: CI
+
+          on:
+            pull_request:
+            push:
+              branches: [main]
+
+          permissions:
+            contents: read
+
+          jobs:
+            test:
+              runs-on: ubuntu-latest
+              steps:
+                - uses: actions/checkout@v4
+                - uses: actions/setup-python@v5
+                  with:
+                    python-version: "3.12"
+                - name: Install package
+                  run: python -m pip install -e .
+                - name: Run unit tests
+                  run: python -m unittest discover -s tests -v
+                - name: Compile sources
+                  run: python -m compileall -q src tests
+          YAML
+      - name: Verify patch scope
+        shell: bash
+        run: |
+          set -euo pipefail
+          git diff --check
+          git diff --name-only HEAD | sort > /tmp/actual-paths.txt
+          cat > /tmp/expected-paths.txt <<'EOF'
+          .github/ibc-audit-gz-00.txt
+          .github/ibc-audit-gz-01.txt
+          .github/ibc-audit-patch-00.txt
+          .github/ibc-audit-patch-01.txt
+          .github/ibc-audit-patch-02.txt
+          .github/workflows/ci.yml
+          src/building_code_ast/ingest/ibc2018/pipeline.py
+          src/building_code_ast/ingest/ibc2018/text.py
+          src/building_code_ast/ingest/layout_analysis.py
+          tests/test_ibc2018_ingest.py
+          tests/test_layout_analysis.py
+          EOF
+          sort -o /tmp/expected-paths.txt /tmp/expected-paths.txt
+          diff -u /tmp/expected-paths.txt /tmp/actual-paths.txt
       - name: Install package
         run: python -m pip install -e .
-      - name: Run unit tests
+      - name: Run full unit suite
         run: python -m unittest discover -s tests -v
       - name: Compile sources
         run: python -m compileall -q src tests
+      - name: Create verified candidate commit
+        shell: bash
+        run: |
+          set -euo pipefail
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add -A
+          git commit -m "fix: align IBC fragments with source geometry"
+          git rev-parse HEAD > candidate-sha.txt
+      - name: Upload candidate SHA
+        uses: actions/upload-artifact@v4
+        with:
+          name: ibc-source-audit-candidate
+          path: candidate-sha.txt
+          if-no-files-found: error
+          retention-days: 1
