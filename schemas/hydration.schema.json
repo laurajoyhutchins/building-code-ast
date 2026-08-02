@@ -1,0 +1,11 @@
+{
+  "$id": "hydration",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": true,
+  "properties": {
+    "schema_version": {
+      "const": 1
+    }
+  },
+  "type": "object"
+}

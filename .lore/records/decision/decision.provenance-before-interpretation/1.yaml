@@ -1,0 +1,42 @@
+disclosure:
+  audiences:
+    - maintainers
+    - contributors
+    - integrators
+  tags:
+    - decision
+    - provenance
+    - safety
+  weight: 100
+evidence:
+  - path: docs/architecture.md
+    revision: 0353060b97818baa92d1864a9ccf52a611d32029
+  - path: src/building_code_ast/document_validation.py
+    revision: 0353060b97818baa92d1864a9ccf52a611d32029
+  - path: src/building_code_ast/validation.py
+    revision: 0353060b97818baa92d1864a9ccf52a611d32029
+id: decision.provenance-before-interpretation
+kind: decision
+payload:
+  consequences:
+    - Derived nodes carry exact evidence spans.
+    - Unsupported language remains visible through diagnostics.
+    - Model-assisted extensions must satisfy the same contracts and may not bypass deterministic validation.
+  decision: Treat provenance and uncertainty as first-class contract data rather than incidental parser metadata.
+  rationale: Regulatory language is high-consequence and often ambiguous; downstream review must be able to reconstruct exactly what text supported each structure.
+provenance:
+  producer: GPT-5.6 Thinking
+  source: proposal
+  transaction: tx-fde02b038c41159837c3c058
+revision: 1
+schema_version: 1
+scope:
+  components:
+    - component.document-structure
+    - component.provision-parser
+    - component.validation
+  repository: building-code-ast
+status: active
+summary: Exact source identity, original text, spans, deterministic identities, and diagnostics are mandatory before semantic claims are trusted.
+supersedes: null
+title: Preserve provenance before interpretation

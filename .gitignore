@@ -15,3 +15,5 @@ htmlcov/
 .idea/
 local-sources/
 generated-private/
+.lore/context/
+.lore/proposals/*.generated.yaml

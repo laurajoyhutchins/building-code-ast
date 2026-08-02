@@ -1,0 +1,10 @@
+extractor: repository-metadata
+repository:
+  id: building-code-ast
+  languages:
+    - Markdown
+    - Python
+  name: Building Code AST
+  package_manager: python
+schema_version: 1
+scripts: {}

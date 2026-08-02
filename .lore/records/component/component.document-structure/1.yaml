@@ -1,0 +1,49 @@
+disclosure:
+  audiences:
+    - maintainers
+    - contributors
+    - integrators
+  tags:
+    - component
+    - document-ast
+    - provenance
+  weight: 90
+evidence:
+  - path: src/building_code_ast/document_model.py
+    revision: 0353060b97818baa92d1864a9ccf52a611d32029
+  - path: src/building_code_ast/document_io.py
+    revision: 0353060b97818baa92d1864a9ccf52a611d32029
+  - path: src/building_code_ast/document_validation.py
+    revision: 0353060b97818baa92d1864a9ccf52a611d32029
+  - path: docs/reference/document-ast.md
+    revision: 0353060b97818baa92d1864a9ccf52a611d32029
+id: component.document-structure
+kind: component
+payload:
+  depends_on: []
+  feeds:
+    - Provision parser
+    - Future cross-reference and definition graph
+  paths:
+    - src/building_code_ast/document_model.py
+    - src/building_code_ast/document_io.py
+    - src/building_code_ast/document_validation.py
+  responsibilities:
+    - Represent document, chapter, section, subsection, paragraph, list, definition, table, heading, note, footnote, and unsupported nodes.
+    - Derive stable node identity from source artifact, edition, node type, and structural locator.
+    - Preserve exact source spans and recursively validate containment, uniqueness, and identity.
+  status: active
+provenance:
+  producer: GPT-5.6 Thinking
+  source: proposal
+  transaction: tx-fde02b038c41159837c3c058
+revision: 1
+schema_version: 1
+scope:
+  components:
+    - component.document-structure
+  repository: building-code-ast
+status: active
+summary: Represents publication structure, deterministic node identity, and exact source provenance before semantic interpretation.
+supersedes: null
+title: Document structure AST

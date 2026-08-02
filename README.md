@@ -98,16 +98,16 @@ The default slice produces Articles 90, 100, and 110. Generated files may reprod
 
 ## NEC hierarchy inference and validation
 
-NEC ingestion now infers a real publication tree instead of leaving every PDF block directly beneath the Article. It recognizes Parts, Sections, uppercase subdivisions, numeric subdivisions, lowercase subdivisions, and repeated deeper marker levels; assigns canonical locators such as `110.26(A)(1)`; nests notes, exceptions, prose, and unsupported structures beneath the deepest open owner; and preserves ambiguity as diagnostics.
+NEC ingestion infers a publication tree instead of leaving every PDF block directly beneath the Article. It recognizes Parts, Sections, uppercase subdivisions, numeric subdivisions, lowercase subdivisions, and repeated deeper marker levels; assigns canonical locators such as `110.26(A)(1)`; nests notes, exceptions, prose, and unsupported structures beneath the deepest open owner; and preserves ambiguity as diagnostics.
 
-Laura's independently prepared NEC 2017 clause hierarchy in the junk-drawer repository serves as a local parser-development oracle. It is not copied into generated output and is not required at runtime. Compare private ArticleSeeds with that reference using:
+An independently prepared NEC 2017 clause hierarchy may serve as a local parser-development oracle. It is not copied into generated output and is not required at runtime. Compare private ArticleSeeds with that reference using:
 
 ```bash
 PYTHONPATH=src python scripts/check_nec_2017_hierarchy.py \
   --article-seed generated-private/nec-2017/article-90.json \
   --article-seed generated-private/nec-2017/article-100.json \
   --article-seed generated-private/nec-2017/article-110.json \
-  --oracle /path/to/junk-drawer/nec/csv/nec-2017-clauses.csv \
+  --oracle /path/to/nec-2017-clauses.csv \
   --report generated-private/nec-2017/hierarchy-conformance.json \
   --strict
 ```
@@ -141,10 +141,26 @@ PYTHONPATH=src python scripts/build_nec_2020_expected_changelog.py \
 
 The model supports source manifests, exact and sibling-range NEC reference resolution, procedural precedence through Standards Council actions, TIAs, and errata, positive and negative expectations, observed changes, and reconciliation diagnostics. The CLI rejects source-bearing fields and never guesses unresolved references. See [`docs/how-to/build-nec-2020-expected-changelog.md`](docs/how-to/build-nec-2020-expected-changelog.md) and [`docs/reference/nec-change-history.md`](docs/reference/nec-change-history.md).
 
+## Repository knowledge
+
+Repository intent, component boundaries, decisions, constraints, and maintenance procedures are maintained with [LORE](https://github.com/laurajoyhutchins/LORE).
+
+The durable knowledge layer consists of:
+
+- accepted semantic records under `.lore/records/`;
+- transaction receipts under `.lore/transactions/`;
+- deterministic extracted facts under `.lore/extracted/`;
+- the shipped maintenance skill under `skills/maintain-repository-documentation/`;
+- generated, non-authoritative projections under `docs/generated/`.
+
+Start with the [repository card](docs/generated/repository-card.md), [architecture](docs/generated/architecture.md), [component catalog](docs/generated/component-catalog.md), [current decisions](docs/generated/current-decisions.md), and [maintainer guide](docs/generated/maintainer-guide.md).
+
+Do not edit accepted records, transaction receipts, extracted facts, or generated projections directly. Documentation changes are proposed through the shipped LORE skill as one validated `lore-proposal/v1` artifact and accepted through LORE's transaction engine.
+
 ## Repository layout
 
 - `src/building_code_ast/`: document and provision AST models, strict input handling, parsing, validation, and local ingestion adapters
-- `schemas/`: versioned JSON Schema projections of the public AST contracts
+- `schemas/`: versioned JSON Schema projections of the public AST contracts and LORE trust-root schemas
 - `fixtures/`: synthetic source and expected-output fixtures
 - `tests/`: parser, provenance, malformed-input, and regression tests
 - `scripts/ingest_nec_2017.py`: local-only coordinate-aware NEC 2017 ingestion CLI
@@ -155,6 +171,10 @@ The model supports source manifests, exact and sibling-range NEC reference resol
 - `docs/reference/nec-definition-index.md`: structured Article 100 definition contract
 - `docs/reference/nec-section-review.md`: selected-section review and Section 90.5 language policy contract
 - `docs/reference/nec-change-history.md`: development evidence, expected changes, observed changes, and reconciliation contract
+- `.lore/records/`: append-only accepted semantic knowledge
+- `.lore/transactions/`: accepted LORE transaction receipts
+- `skills/maintain-repository-documentation/`: the shipped provider-neutral LORE maintenance skill
+- `docs/generated/`: deterministic projections from accepted LORE records
 - `docs/README.md`: Diátaxis documentation map and authoring guidance
 - `docs/architecture.md`: representation boundaries and staged compiler model
 - `docs/compatibility.md`: public AST version compatibility notes
@@ -177,14 +197,22 @@ Jurisdiction resolution does not imply that code text may be redistributed, and 
 
 ## Verification
 
-Run:
+Run the Python verification lanes:
 
 ```bash
 python -m unittest discover -s tests -v
 python -m compileall -q src tests
 ```
 
-CI executes both commands on Python 3.12.
+The read-only LORE workflow pins an exact upstream LORE revision and verifies:
+
+```text
+lore extract --check
+lore validate
+lore project --check
+```
+
+CI executes the Python and LORE verification lanes independently.
 
 ## Data and publication boundary
 

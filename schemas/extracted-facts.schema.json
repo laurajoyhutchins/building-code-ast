@@ -1,0 +1,103 @@
+{
+  "$id": "extracted-facts",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "oneOf": [
+    {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["schema_version", "extractor", "repository", "scripts"],
+      "properties": {
+        "schema_version": { "const": 1 },
+        "extractor": { "const": "repository-metadata" },
+        "repository": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["id", "name", "package_manager", "languages"],
+          "properties": {
+            "id": { "type": "string", "minLength": 1 },
+            "name": { "type": "string", "minLength": 1 },
+            "package_manager": { "type": "string", "minLength": 1 },
+            "languages": {
+              "type": "array",
+              "items": { "type": "string", "minLength": 1 },
+              "uniqueItems": true
+            }
+          }
+        },
+        "scripts": {
+          "type": "object",
+          "additionalProperties": { "type": "string" }
+        }
+      }
+    },
+    {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["schema_version", "extractor", "components"],
+      "properties": {
+        "schema_version": { "const": 1 },
+        "extractor": { "const": "typescript-modules" },
+        "components": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": ["path", "exports"],
+            "properties": {
+              "path": { "type": "string", "minLength": 1 },
+              "exports": {
+                "type": "array",
+                "items": { "type": "string" },
+                "uniqueItems": true
+              }
+            }
+          }
+        }
+      }
+    },
+    {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["schema_version", "extractor", "relationships"],
+      "properties": {
+        "schema_version": { "const": 1 },
+        "extractor": { "const": "typescript-imports" },
+        "relationships": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": ["from", "to", "type"],
+            "properties": {
+              "from": { "type": "string", "minLength": 1 },
+              "to": { "type": "string", "minLength": 1 },
+              "type": { "const": "imports" }
+            }
+          }
+        }
+      }
+    },
+    {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["schema_version", "extractor", "tests"],
+      "properties": {
+        "schema_version": { "const": 1 },
+        "extractor": { "const": "vitest-tests" },
+        "tests": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": ["file", "name", "kind"],
+            "properties": {
+              "file": { "type": "string", "minLength": 1 },
+              "name": { "type": "string", "minLength": 1 },
+              "kind": { "enum": ["describe", "it", "test"] }
+            }
+          }
+        }
+      }
+    }
+  ]
+}
