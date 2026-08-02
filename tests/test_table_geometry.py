@@ -6,6 +6,7 @@ from building_code_ast.ingest.layout_analysis import (
     CleanedPage,
     PageOrderProfile,
     ReadingOrderMode,
+    RuleSegment,
     SourceFragment,
     VisualLine,
     visual_line_id,
@@ -13,6 +14,7 @@ from building_code_ast.ingest.layout_analysis import (
 from building_code_ast.ingest.table_geometry import (
     TableCellCandidate,
     TableRowCandidate,
+    detect_ruled_tables,
     detect_table_rows,
     group_table_candidates,
 )
@@ -152,6 +154,32 @@ class TableGeometryTests(unittest.TestCase):
 
     def test_one_row_does_not_form_a_table(self) -> None:
         self.assertEqual(group_table_candidates((synthetic_row(1, 100.0, ("A", "B")),)), ())
+
+    def test_vector_rules_form_exact_base_grid(self) -> None:
+        parts = (
+            fragment(1, 20.0, 20.0, 40.0, "A", block=1),
+            fragment(1, 70.0, 20.0, 90.0, "B", block=2),
+            fragment(1, 20.0, 70.0, 40.0, "C", block=3),
+            fragment(1, 70.0, 70.0, 90.0, "D", block=4),
+        )
+        lines = tuple(line_for_fragments(1, (part,)) for part in parts)
+        rules = (
+            RuleSegment(1, 10.0, 10.0, 110.0, 10.0),
+            RuleSegment(1, 10.0, 60.0, 110.0, 60.0),
+            RuleSegment(1, 10.0, 110.0, 110.0, 110.0),
+            RuleSegment(1, 10.0, 10.0, 10.0, 110.0),
+            RuleSegment(1, 60.0, 10.0, 60.0, 110.0),
+            RuleSegment(1, 110.0, 10.0, 110.0, 110.0),
+        )
+        page = CleanedPage(1, 120.0, 120.0, lines, (), rules)
+
+        tables = detect_ruled_tables(page)
+
+        self.assertEqual(len(tables), 1)
+        self.assertEqual(tables[0].normalized_text, "A\tB\nC\tD")
+        self.assertIn("vector_rule_grid", tables[0].evidence)
+        self.assertEqual(len(tables[0].rows), 2)
+        self.assertTrue(all(len(row.cells) == 2 for row in tables[0].rows))
 
 
 if __name__ == "__main__":
