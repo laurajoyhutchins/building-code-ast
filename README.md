@@ -98,7 +98,7 @@ The default slice produces Articles 90, 100, and 110. Generated files may reprod
 
 ## Local IBC 2018 ingestion
 
-The IBC adapter converts a bounded set of chapters from a user-supplied 2018 IBC PDF into validated ChapterSeed files with positioned PDF fragments. The verified source has no usable outline and exposes individual glyphs rather than ordinary text lines, so this adapter reconstructs visual lines and fails closed outside known page ranges.
+The IBC adapter converts Chapters 1 through 3 from a user-supplied 2018 IBC PDF into validated ChapterSeed files with positioned PDF fragments and private layout-analysis evidence. The supported source has no usable outline and exposes individual glyphs rather than ordinary text lines, so the adapter reconstructs visual lines, removes recurring page furniture, estimates body-font evidence, infers page-local reading order, and fails closed outside verified page ranges.
 
 ```bash
 python -m pip install -e '.[ibc-pdf]'
@@ -106,7 +106,7 @@ python scripts/ingest_ibc_2018.py /path/to/icc-2018.pdf \
   --output-dir generated-private/ibc-2018
 ```
 
-The first slice produces Chapters 1, 2, and 3. Publisher user-note commentary is excluded from the code seed. Complex table layouts are retained with diagnostics rather than guessed into cells. Generated files may reproduce protected source expression and must remain private and outside public Git. See [`docs/how-to/ingest-ibc-2018.md`](docs/how-to/ingest-ibc-2018.md).
+Publisher user-note commentary is excluded with explicit removal reasons. Announced ruled tables are reconstructed from vector boundaries into deterministic base-grid rows and cells; ambiguous layouts remain visible with diagnostics rather than being guessed. Every retained visual line and fragment is validated for exact consumption and span round-tripping. Generated files may reproduce protected source expression and must remain private and outside public Git. See [`docs/how-to/ingest-ibc-2018.md`](docs/how-to/ingest-ibc-2018.md).
 
 ## Repository layout
 
@@ -142,7 +142,7 @@ Run:
 
 ```bash
 python -m unittest discover -s tests -v
-python -m compileall -q src tests
+python -m compileall -q src scripts tests
 ```
 
 CI executes both commands on Python 3.12.
