@@ -64,6 +64,7 @@ def _source() -> SourceRegisterEntry:
 
 def _record(
     *,
+    proposal_id: str = "G1-24",
     record_key: str = "G1-24:proposal",
     kind: DevelopmentRecordKind = DevelopmentRecordKind.PROPOSAL,
     disposition: DevelopmentDisposition = DevelopmentDisposition.SUBMITTED,
@@ -73,7 +74,7 @@ def _record(
 ) -> DevelopmentRecord:
     return DevelopmentRecord(
         source_id="icc:ibc:2024:group-a-development",
-        proposal_id="G1-24",
+        proposal_id=proposal_id,
         record_key=record_key,
         kind=kind,
         disposition=disposition,
@@ -200,6 +201,7 @@ class IccDevelopmentTests(unittest.TestCase):
             parent_keys=(proposal.record_key,),
         )
         replacement = _record(
+            proposal_id="G2-24",
             record_key="G2-24:proposal",
             kind=DevelopmentRecordKind.PROPOSAL,
             disposition=DevelopmentDisposition.SUPERSEDED,
