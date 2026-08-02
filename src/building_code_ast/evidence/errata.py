@@ -17,13 +17,30 @@ from .model import EvidenceRole, SourceRegisterEntry
 
 ERRATA_RECORD_VERSION = "0.1.0"
 _PUBLICATION_STATE_RE = re.compile(r"^publication:[0-9a-f]{64}$")
-_PAGE_HEADER_RE = re.compile(r"^Page\s+(?P<page>[^,]+),\s*(?P<body>.+)$", re.IGNORECASE)
-_DIRECTIVE_RE = re.compile(
-    r"(?P<target>.+?)\s+(?P<directive>"
-    r"(?:now reads|now read|is corrected to read|are corrected to read|"
-    r"is revised to read|are revised to read|is deleted|are deleted|"
-    r"is added|are added|have been added|has been added).*)$",
+_PAGE_HEADER_RE = re.compile(
+    r"^Page\s+(?P<page>.+?)[,.]\s+(?P<body>.+)$",
     re.IGNORECASE,
+)
+_SECTION_TARGET_RE = re.compile(
+    r"^Section\s+(?P<locator>(?:\[[A-Z]+\]\s+)?[A-Z]?\d+(?:\.\d+)*)",
+    re.IGNORECASE,
+)
+_DIRECTIVE_MARKERS = (
+    " has been relocated ",
+    " has been renumbered ",
+    " has been deleted",
+    " have been added",
+    " has been added",
+    " are corrected to read",
+    " is corrected to read",
+    " are revised to read",
+    " is revised to read",
+    " are deleted",
+    " is deleted",
+    " are added",
+    " is added",
+    " now reads",
+    " now read",
 )
 
 
@@ -118,6 +135,8 @@ class ErratumRecord:
         _optional_text(self.replacement_text, "replacement_text")
         if self.operation in {ErratumOperation.INSERT, ErratumOperation.REPLACE} and self.replacement_text is None:
             raise ValueError("replacement_text is required for insert and replace operations")
+        if self.operation is ErratumOperation.DELETE and self.replacement_text is not None:
+            raise ValueError("replacement_text must be null for delete operations")
         if isinstance(self.source_page, bool) or not isinstance(self.source_page, int) or self.source_page < 1:
             raise ValueError("source_page must be a positive integer")
         _require_text(self.source_anchor, "source_anchor")
@@ -239,28 +258,51 @@ def _split_target_and_directive(body: str) -> tuple[str, str] | None:
         target, directive = body.split(":", 1)
         if target.strip() and directive.strip():
             return target.strip(), directive.strip()
-    match = _DIRECTIVE_RE.fullmatch(body.strip())
-    if match is None:
+
+    section_match = _SECTION_TARGET_RE.match(body.strip())
+    if section_match is not None:
+        target = section_match.group(0).strip()
+        directive = body.strip()[section_match.end() :].strip()
+        if directive:
+            return target, directive
+
+    lowered = body.casefold()
+    matches = [
+        (lowered.find(marker), marker)
+        for marker in _DIRECTIVE_MARKERS
+        if lowered.find(marker) >= 0
+    ]
+    if not matches:
         return None
-    return match.group("target").strip(), match.group("directive").strip()
+    index, _ = min(matches, key=lambda item: item[0])
+    target = body[:index].strip()
+    directive = body[index:].strip()
+    if not target or not directive:
+        return None
+    return target, directive
 
 
 def _operation(directive: str) -> ErratumOperation | None:
     lowered = directive.casefold()
-    if "added" in lowered:
-        return ErratumOperation.INSERT
     if "deleted" in lowered or "delete" in lowered:
         return ErratumOperation.DELETE
-    if "read" in lowered or "revised" in lowered or "corrected" in lowered:
+    if "added" in lowered:
+        return ErratumOperation.INSERT
+    if any(
+        marker in lowered
+        for marker in ("read", "revised", "corrected", "renumbered", "relocated")
+    ):
         return ErratumOperation.REPLACE
     return None
 
 
 def _target(target: str) -> tuple[TargetKind, str]:
     normalized = target.strip()
+    section_match = _SECTION_TARGET_RE.match(normalized)
+    if section_match is not None:
+        return TargetKind.SECTION, section_match.group("locator").strip()
     lowered = normalized.casefold()
     prefixes = (
-        ("section ", TargetKind.SECTION),
         ("table ", TargetKind.TABLE),
         ("figure ", TargetKind.FIGURE),
         ("definition ", TargetKind.DEFINITION),
@@ -281,7 +323,7 @@ class IccErrataPdfAdapter:
     """Extract a bounded family of ICC-style ``Page ..., target: directive`` entries."""
 
     adapter_id = "icc-errata-pdf"
-    adapter_version = "0.1.0"
+    adapter_version = "0.2.0"
     supported_roles = frozenset({EvidenceRole.OFFICIAL_CORRECTION})
     supported_media_types = frozenset({"application/pdf"})
 
@@ -373,18 +415,20 @@ class IccErrataPdfAdapter:
                     unsupported.append(region)
                     continue
                 target_kind, target_locator = _target(target_text)
-                replacement_text = "\n".join(body_lines).strip() or None
-                if operation in {ErratumOperation.INSERT, ErratumOperation.REPLACE} and replacement_text is None:
-                    diagnostics.append(
-                        EvidenceDiagnostic(
-                            code="missing-erratum-replacement",
-                            severity=DiagnosticSeverity.WARNING,
-                            message="Erratum requires replacement text but none was extracted.",
-                            region=region,
+                replacement_text = None
+                if operation in {ErratumOperation.INSERT, ErratumOperation.REPLACE}:
+                    replacement_text = "\n".join(body_lines).strip() or None
+                    if replacement_text is None:
+                        diagnostics.append(
+                            EvidenceDiagnostic(
+                                code="missing-erratum-replacement",
+                                severity=DiagnosticSeverity.WARNING,
+                                message="Erratum requires replacement text but none was extracted.",
+                                region=region,
+                            )
                         )
-                    )
-                    unsupported.append(region)
-                    continue
+                        unsupported.append(region)
+                        continue
                 records.append(
                     ErratumRecord(
                         source_id=source.source_id,
