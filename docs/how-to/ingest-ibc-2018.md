@@ -73,6 +73,14 @@ The extractor:
 
 Confidence values and evidence identifiers are review aids. They are not probabilities, code interpretations, or legal reliability claims. Table reconstruction is structural only and does not infer semantic row spans, column spans, units, applicability, or regulatory meaning.
 
+## Exhaustive source audit
+
+A parser change is not cleared by structural counts alone. For the bounded source, the private audit should enumerate every retained and excluded fragment and match it back to the source by physical page, PDF block number, bounding box, and glyph content. It should also verify one-time line consumption, column order, table-cell partitioning, serialized row and cell provenance, source-map spans, and nested Document AST spans.
+
+For independent extraction checks, compare the parser's compact glyph sequence with both PyMuPDF word extraction and Poppler word boxes. Any disagreement supported by both independent readings requires review. Deliberate character normalization, such as mapping a known private-use glyph to its displayed mathematical symbol, must be counted explicitly rather than hidden as a match.
+
+The parser uses geometry-aware character spacing, baseline-connected superscript and subscript attachment, and source-derived word-boundary and line-hyphenation evidence. These rules remain conservative: they use evidence present in the selected source slice and do not import a general dictionary or silently rewrite unsupported ambiguities.
+
 ## Known limitations
 
 The adapter supports Chapters 1 through 3 only. It does not infer arbitrary chapter boundaries, interpret revision markings, resolve definitions or references, or convert provisions into semantic rules. Ruled tables are projected onto the finest stable boundary grid; merged visual headers remain base-grid cells rather than inferred semantic spans. Ambiguous non-ruled table layouts remain visible with diagnostics instead of being guessed.
