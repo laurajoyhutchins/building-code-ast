@@ -32,7 +32,7 @@ The closed JSON projection is [`schemas/jurisdictional-amendment-patch.schema.js
 
 `add` and `replace` require replacement text. `delete` and `reserve` prohibit replacement text. `scope` requires a scope statement and prohibits replacement text.
 
-The model does not infer an operation from general explanatory prose. Unknown directives remain source-located diagnostics and unsupported regions.
+Operation evidence differs by acquisition path. Direct official-page ingestion classifies a located clause as `replace` when the exact locator exists in the identified base AST, or `add` when an ancestor exists but the exact locator does not. It never guesses when neither condition holds. Explicit `delete`, `reserve`, and `scope` directives are available through the normalized acquisition contract described below.
 
 ## Effective intervals
 
@@ -43,7 +43,7 @@ Patch intervals are half-open:
 - it is inactive on `effective_to` itself;
 - a null `effective_to` means the patch has no recorded end date.
 
-This supports non-overlapping revisions where a later patch begins exactly when an earlier patch ends.
+Chapter-level metadata is not assumed to prove one universal date for every WAC section. `WashingtonWacHtmlAdapter` accepts section-specific effective-date mappings and falls back to the registered source publication's effective date only when one is present.
 
 ## Amendment-set validation
 
@@ -53,11 +53,22 @@ Overlapping records with the same legal effect are permitted as reaffirmations o
 
 `active_for(locator, date)` returns the ordered patches active for one base locator on one date. It does not apply those patches to an AST or decide how multiple provisions interact semantically.
 
-## Bounded Washington HTML adapter
+## Direct official-style HTML adapter
 
-`WashingtonWacHtmlAdapter` consumes a registered UTF-8 `text/html` source with evidence role `jurisdictional_law`. It must be invoked through `run_evidence_adapter`, so source role, media type, and exact-byte SHA-256 are verified before parsing.
+`WashingtonWacHtmlAdapter` consumes registered UTF-8 `text/html` with evidence role `jurisdictional_law`. It must be invoked through `run_evidence_adapter`, so role, media type, and exact-byte SHA-256 are verified before parsing.
 
-The public adapter recognizes bounded section blocks shaped like:
+The adapter segments official-style pages by chapter 51-50 WAC citation headings, ignores statutory-history blocks, and extracts code clauses beginning with explicit locators. It requires:
+
+- the exact base publication state;
+- a nonempty base-locator oracle;
+- section-specific effective dates when the source register does not provide one;
+- an explicit WAC-to-locator mapping for reserved sections.
+
+The adapter emits only `add`, `replace`, and `reserve` operations because those classifications can be bounded from official-style clause presentation plus the base AST oracle. Missing dates, unresolved locators, unrecognized sections, and unmapped reserved sections become diagnostics and unsupported regions.
+
+## Normalized directive adapter
+
+`NormalizedWashingtonWacHtmlAdapter` consumes project-normalized section blocks containing explicit directives such as:
 
 ```html
 <section>
@@ -67,13 +78,13 @@ The public adapter recognizes bounded section blocks shaped like:
 </section>
 ```
 
-It recognizes explicit added, replaced, deleted, reserved, and scoped directives. An optional base-locator oracle rejects amendments whose target cannot be resolved in the identified base AST.
+This grammar supports `add`, `replace`, `delete`, `reserve`, and `scope`. It is appropriate only after an acquisition step has preserved the original registered artifact and produced explicit, reviewable operation evidence. Its name prevents normalized fixtures from being mistaken for the official website's native structure.
 
-The official Washington site does not necessarily use this simplified public-fixture markup at every endpoint. A production acquisition layer may normalize official HTML into these bounded section blocks, but it must preserve the registered source digest and source anchors.
+For `add`, a missing exact locator is expected; the operation resolves when an ancestor exists in the base-locator oracle. Other operations require the exact base locator.
 
 ## Official-source boundary
 
-Chapter 51-50 WAC identifies the adopted IBC edition and enumerates state amendments and reserved sections as individual WAC provisions. Public repository fixtures use invented text. Official HTML, PDFs, insert pages, and any extracted protected code expression remain governed by the source register and corpus policy.
+Chapter 51-50 WAC identifies the adopted IBC edition and enumerates state amendments and reserved sections as individual WAC provisions. Public repository fixtures use invented text shaped like the relevant presentation. Official HTML, PDFs, insert pages, and any extracted protected code expression remain governed by the source register and corpus policy.
 
 ## Relationship to Building Code Map
 
@@ -89,5 +100,5 @@ This layer does not:
 - infer local amendments outside chapter 51-50 WAC;
 - decide which Washington code cycle applies to a permit;
 - resolve AHJ boundaries;
-- interpret legal effect beyond the explicit patch operation;
+- infer deletion or scope from unlabeled official prose;
 - apply patches to produce compliance conclusions.
