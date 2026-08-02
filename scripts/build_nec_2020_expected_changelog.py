@@ -30,6 +30,16 @@ from building_code_ast.nec.change_history import (
 
 
 _INPUT_VERSION = "0.1.0"
+_BUNDLE_FIELDS = frozenset(
+    {
+        "bundle_version",
+        "cycle",
+        "known_2017_locators",
+        "sources",
+        "development_records",
+        "observed_changes",
+    }
+)
 _DEVELOPMENT_RECORD_FIELDS = frozenset(
     {
         "record_id",
@@ -72,6 +82,16 @@ _OBSERVED_FIELDS = frozenset(
     }
 )
 _SOURCE_LOCATOR_FIELDS = frozenset({"source_id", "page", "anchor"})
+_RECORD_TYPE_FOR_STAGE = {
+    DevelopmentStage.PUBLIC_INPUT: DevelopmentRecordType.PUBLIC_INPUT,
+    DevelopmentStage.FIRST_REVISION: DevelopmentRecordType.FIRST_REVISION,
+    DevelopmentStage.PUBLIC_COMMENT: DevelopmentRecordType.PUBLIC_COMMENT,
+    DevelopmentStage.SECOND_REVISION: DevelopmentRecordType.SECOND_REVISION,
+    DevelopmentStage.TECHNICAL_MEETING: DevelopmentRecordType.TECHNICAL_MEETING_MOTION,
+    DevelopmentStage.STANDARDS_COUNCIL: DevelopmentRecordType.STANDARDS_COUNCIL_ACTION,
+    DevelopmentStage.TIA: DevelopmentRecordType.TIA,
+    DevelopmentStage.ERRATUM: DevelopmentRecordType.ERRATUM,
+}
 
 
 def _mapping(value: Any, label: str) -> Mapping[str, Any]:
@@ -180,17 +200,25 @@ def _development_record(value: Any, index: int) -> DevelopmentRecord:
     label = f"development_records[{index}]"
     obj = _mapping(value, label)
     _reject_extra_fields(obj, _DEVELOPMENT_RECORD_FIELDS, "development record")
+    record_type = _enum(
+        DevelopmentRecordType,
+        obj.get("record_type"),
+        f"{label}.record_type",
+    )
+    stage = _enum(DevelopmentStage, obj.get("stage"), f"{label}.stage")
+    expected_record_type = _RECORD_TYPE_FOR_STAGE[stage]
+    if record_type != expected_record_type:
+        raise ValueError(
+            f"{label}.record_type {record_type.value!r} does not match stage "
+            f"{stage.value!r}; expected {expected_record_type.value!r}"
+        )
     return DevelopmentRecord(
         record_id=_string(obj.get("record_id"), f"{label}.record_id"),
         change_chain_id=_string(
             obj.get("change_chain_id"), f"{label}.change_chain_id"
         ),
-        record_type=_enum(
-            DevelopmentRecordType,
-            obj.get("record_type"),
-            f"{label}.record_type",
-        ),
-        stage=_enum(DevelopmentStage, obj.get("stage"), f"{label}.stage"),
+        record_type=record_type,
+        stage=stage,
         disposition=_enum(
             DevelopmentDisposition,
             obj.get("disposition"),
@@ -254,6 +282,7 @@ def build_dataset(value: Mapping[str, Any]) -> dict[str, Any]:
     """Validate one private input bundle and return a source-safe projection."""
 
     bundle = _mapping(value, "bundle")
+    _reject_extra_fields(bundle, _BUNDLE_FIELDS, "bundle")
     version = _string(bundle.get("bundle_version"), "bundle.bundle_version")
     if version != _INPUT_VERSION:
         raise ValueError(
@@ -272,6 +301,7 @@ def build_dataset(value: Mapping[str, Any]) -> dict[str, Any]:
         raise ValueError("source manifest IDs must be unique")
     if any(item.cycle != cycle for item in sources):
         raise ValueError("source manifest cycle does not match bundle cycle")
+    sources_by_id = {item.source_id: item for item in sources}
 
     records = tuple(
         _development_record(item, index)
@@ -279,13 +309,33 @@ def build_dataset(value: Mapping[str, Any]) -> dict[str, Any]:
             _sequence(bundle.get("development_records"), "bundle.development_records")
         )
     )
-    known_source_ids = set(source_ids)
+    record_ids = [item.record_id for item in records]
+    if len(record_ids) != len(set(record_ids)):
+        raise ValueError("development record IDs must be unique")
+    known_record_ids = set(record_ids)
     for record in records:
-        if record.source_locator.source_id not in known_source_ids:
+        source = sources_by_id.get(record.source_locator.source_id)
+        if source is None:
             raise ValueError(
                 "development record source locator references unknown source_id: "
                 + record.source_locator.source_id
             )
+        if (
+            record.source_locator.page is not None
+            and source.page_count is not None
+            and record.source_locator.page > source.page_count
+        ):
+            raise ValueError(
+                f"development record {record.record_id} source page "
+                f"{record.source_locator.page} exceeds manifest page_count "
+                f"{source.page_count}"
+            )
+        for related_record_id in record.related_record_ids:
+            if related_record_id not in known_record_ids:
+                raise ValueError(
+                    f"development record {record.record_id} references unknown "
+                    f"related record_id: {related_record_id}"
+                )
 
     observed = tuple(
         _observed_change(item, index)
