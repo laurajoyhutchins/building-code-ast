@@ -4,7 +4,7 @@ from __future__ import annotations
 
 from collections.abc import Mapping
 from dataclasses import dataclass
-from typing import Any
+from typing import Any, Iterable
 
 from ..document_model import DocumentSourceArtifact
 from ..model import SourceSpan
@@ -90,6 +90,12 @@ def _node(value: Any, source: str, label: str) -> SeedNode:
     )
 
 
+def _preorder(nodes: Iterable[SeedNode]) -> Iterable[SeedNode]:
+    for node in nodes:
+        yield node
+        yield from _preorder(node.children)
+
+
 def article_seed_view(
     value: Mapping[str, Any],
     *,
@@ -142,5 +148,5 @@ def article_seed_view(
         article_number=article_number,
         article_title=article_title,
         article_locator=article_node.locator,
-        nodes=article_node.children,
+        nodes=tuple(_preorder(article_node.children)),
     )
