@@ -155,7 +155,7 @@ class EvidenceReviewRegressionTests(unittest.TestCase):
         self.assertEqual(result.diagnostics, ())
 
     def test_official_wac_html_extracts_add_replace_and_reserved_sections(self) -> None:
-        html = b"""
+        html = """
 <html><body>
 <h3><a>PDF</a> WAC 51-50-0107</h3>
 <h3>Section 107—Construction documents.</h3>
@@ -172,7 +172,7 @@ class EvidenceReviewRegressionTests(unittest.TestCase):
 <h3>Reserved.</h3>
 <p>[Statutory Authority: synthetic history.]</p>
 </body></html>
-"""
+""".encode("utf-8")
         adapter = WashingtonWacHtmlAdapter(
             base_publication_state_id=publication_state_id(BASE_STATE),
             known_base_locators=frozenset({"107.2", "403.4.8.3", "110"}),
