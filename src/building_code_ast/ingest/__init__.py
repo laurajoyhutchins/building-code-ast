@@ -13,6 +13,20 @@ from .nec2017 import (
     discover_article_ranges,
     select_article_blocks,
 )
+from .nec_hierarchy import (
+    HIERARCHY_VERSION,
+    HierarchyBuildResult,
+    HierarchyConformanceReport,
+    HierarchyMismatch,
+    HierarchyRecord,
+    build_nec_hierarchy,
+    canonical_nec_locator,
+    compare_hierarchy,
+    flatten_nec_hierarchy,
+    load_clause_oracle,
+    nec_locator_depth,
+    nec_parent_locator,
+)
 from .pdf_layout import (
     PdfBlock,
     PdfLayoutDocument,
@@ -24,8 +38,13 @@ from .pdf_layout import (
 )
 
 __all__ = [
+    "HIERARCHY_VERSION",
     "ArticleRange",
     "ArticleSeed",
+    "HierarchyBuildResult",
+    "HierarchyConformanceReport",
+    "HierarchyMismatch",
+    "HierarchyRecord",
     "PdfBlock",
     "PdfLayoutDocument",
     "PdfOutlineItem",
@@ -33,8 +52,15 @@ __all__ = [
     "SourceManifest",
     "SourceMapEntry",
     "build_article_seed",
+    "build_nec_hierarchy",
+    "canonical_nec_locator",
+    "compare_hierarchy",
     "discover_article_ranges",
     "extract_pdf_layout",
+    "flatten_nec_hierarchy",
+    "load_clause_oracle",
+    "nec_locator_depth",
+    "nec_parent_locator",
     "normalize_block_text",
     "order_content_blocks",
     "select_article_blocks",
