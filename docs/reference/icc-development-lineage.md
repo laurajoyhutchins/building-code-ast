@@ -39,7 +39,7 @@ Multiple final-action records with different dispositions are invalid. The model
 
 Rejected, withdrawn, and superseded records remain first-class evidence. They are not discarded merely because they did not become issued language.
 
-## Bounded adapter
+## Normalized combined adapter
 
 `IccDevelopmentTextAdapter` version `0.2.0` consumes a registered `application/pdf` source with evidence role `development_history`. It is invoked through `run_evidence_adapter`, so source role, media type, and exact-byte SHA-256 are checked before extraction.
 
@@ -49,6 +49,23 @@ The bounded grammar recognizes proposal blocks beginning with an ICC-style propo
 
 Action sequence values preserve their source ordinals. At the first unsupported action, the adapter closes that proposal's extractable parent chain. Later actions remain diagnostic-backed unsupported regions instead of being linked across an unknown intermediate process event.
 
+This grammar is appropriate for a reviewed normalized artifact that intentionally combines stages. It is not the direct adapter for ICC's separately published monographs and result reports.
+
+## Official proposal and action adapters
+
+ICC publishes proposal monographs and committee-action results as separate official artifacts. Direct official extraction therefore uses two adapters:
+
+- `IccProposalMonographPdfAdapter` version `0.1.0` extracts single-part proposal roots, affected locators, and proponents from proposal monographs;
+- `IccCommitteeActionReportPdfAdapter` version `0.1.0` extracts proposal-bounded committee actions from result reports.
+
+The action adapter requires an explicit `affected_locators_by_proposal` mapping derived from the registered proposal artifact. It does not infer affected provisions from an action report that does not restate them.
+
+`IccActionStage` supplies the action kind, semantic key suffix, parent key suffix, process sequence, and optional action date. This allows the same bounded report parser to represent a named process stage without flattening all ICC stages into one grammar.
+
+Multipart proposal headings such as `Part I` and `Part II` remain unsupported until the lineage contract gains a part-aware identity. They become source-located diagnostics rather than being collapsed into one proposal.
+
+The August 2, 2026 official-corpus validation linked 24 single-part IBC General proposal roots to 24 CAH1 actions. The source-free receipt is in [`docs/validation/official-evidence-2026-08-02.json`](../validation/official-evidence-2026-08-02.json).
+
 ## Relationship to ICC's process
 
 ICC's 2024–2026 development cycle publishes proposed-change monographs, Committee Action Hearing materials and results, public-comment materials, and final-action results as distinct artifacts. The lineage model keeps these stages separate and links them through explicit record keys rather than flattening the process into one final label.
@@ -57,4 +74,4 @@ ICC's 2024–2026 development cycle publishes proposed-change monographs, Commit
 
 Development history may form an expectation oracle for later edition comparison. It is not proof that a particular printing contains the expected language. Issued normative text must be independently observed and compared.
 
-Public Git contains only project-authored contracts and synthetic fixtures. Official monographs and result documents remain registered external artifacts subject to the corpus policy.
+Public Git contains only project-authored contracts, source-free receipts, and synthetic fixtures. Official monographs and result documents remain registered external artifacts subject to the corpus policy.
