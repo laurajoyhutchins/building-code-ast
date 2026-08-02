@@ -47,6 +47,12 @@ The provision parser recognizes a bounded family of synthetic code-style provisi
 
 The parser preserves the exact original input, including leading and trailing whitespace. All offsets address that unmodified string. Unsupported language remains visible in the output instead of being silently guessed.
 
+### Source evidence register `0.1.0`
+
+The publication-neutral evidence layer registers exact source artifacts without storing their prose. It distinguishes normative text, official corrections, development history, jurisdictional law, guidance, interpretations, commentary, and secondary analysis; records printing and correction state; and binds every artifact to a lowercase SHA-256.
+
+Future source-family adapters run through a guarded boundary that checks evidence role, media type, and exact source bytes before extraction. The scaffold does not yet parse IBC errata, development monographs, or jurisdictional amendments. See [`docs/reference/source-evidence.md`](docs/reference/source-evidence.md).
+
 ## Provision example
 
 Input:
@@ -147,13 +153,16 @@ Do not edit accepted records, transaction receipts, extracted facts, or generate
 ## Repository layout
 
 - `src/building_code_ast/`: document and provision AST models, strict input handling, parsing, validation, and local ingestion adapters
+- `src/building_code_ast/evidence/`: publication-neutral source registration and guarded adapter contracts
 - `schemas/`: versioned JSON Schema projections of the public AST contracts and LORE trust-root schemas
+- `schemas/source-register.schema.json`: closed source-register `0.1.0` projection
 - `fixtures/`: synthetic source and expected-output fixtures
 - `tests/`: parser, provenance, malformed-input, and regression tests
 - `scripts/ingest_nec_2017.py`: local-only coordinate-aware NEC 2017 ingestion CLI
 - `scripts/check_nec_2017_hierarchy.py`: source-free local hierarchy conformance reporter
 - `scripts/build_nec_2017_semantics.py`: private Article 100 definition and selected-section review generator
 - `schemas/nec-*.schema.json`: versioned NEC definition, section-review, and language-profile contracts
+- `docs/reference/source-evidence.md`: source identity, publication state, rights, and adapter execution reference
 - `docs/reference/nec-definition-index.md`: structured Article 100 definition contract
 - `docs/reference/nec-section-review.md`: selected-section review and Section 90.5 language policy contract
 - `.lore/records/`: append-only accepted semantic knowledge
