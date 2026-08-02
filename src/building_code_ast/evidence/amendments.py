@@ -235,6 +235,20 @@ def _intervals_overlap(
     )
 
 
+def _same_effect(
+    first: JurisdictionalAmendmentPatch,
+    second: JurisdictionalAmendmentPatch,
+) -> bool:
+    return (
+        first.operation is second.operation
+        and first.replacement_text == second.replacement_text
+        and first.scope == second.scope
+        and first.authority == second.authority
+        and first.jurisdiction == second.jurisdiction
+        and first.base_publication_state_id == second.base_publication_state_id
+    )
+
+
 @dataclass(frozen=True, slots=True)
 class AmendmentSet:
     patches: tuple[JurisdictionalAmendmentPatch, ...]
@@ -255,6 +269,8 @@ class AmendmentSet:
         for index, first in enumerate(self.patches):
             for second in self.patches[index + 1 :]:
                 if first.locator != second.locator or not _intervals_overlap(first, second):
+                    continue
+                if _same_effect(first, second):
                     continue
                 if {first.operation, second.operation} == {
                     AmendmentOperation.SCOPE,
