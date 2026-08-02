@@ -16,10 +16,10 @@ Public Git contains the contract, parser, schema, and synthetic fixtures. Offici
 - correction-set identity and printing applicability;
 - target kind, target locator, and printed page label;
 - bounded operation: `insert`, `replace`, or `delete`;
-- the correction instruction and optional replacement text;
+- the correction instruction and operation-appropriate replacement text;
 - source PDF page and source anchor.
 
-The closed JSON projection is [`schemas/icc-errata-record.schema.json`](../../schemas/icc-errata-record.schema.json). Runtime deserialization recomputes the record identity, rejects unknown fields, and requires immutable printing scope.
+The closed JSON projection is [`schemas/icc-errata-record.schema.json`](../../schemas/icc-errata-record.schema.json). Runtime deserialization recomputes the record identity, rejects unknown fields, requires immutable printing scope, requires replacement text for insert and replace, and prohibits replacement text for delete.
 
 ## Adapter boundary
 
@@ -35,17 +35,20 @@ Tests inject synthetic page text and therefore keep the base runtime dependency-
 
 ## Bounded syntax
 
-The adapter recognizes entries beginning with a source line shaped like:
+ICC correction lists are not completely uniform. The adapter recognizes page-labeled entries using either a comma or period after the printed page label:
 
 ```text
 Page <printed-page>, <target>: <directive>
+Page <printed-page>. <target> <directive>
 ```
 
-It also accepts ICC-style referenced-standard entries where the target and directive are separated by a recognized directive phrase rather than a colon.
+A colon is optional when a recognized target and directive phrase can be separated without ambiguity. The bounded directive vocabulary includes added, deleted, corrected, revised, renumbered, relocated, and now-reads forms. Renumbering and relocation are represented as replacements because the record preserves the complete instruction rather than reducing the change to a bare text substitution.
 
-Recognized target classes are sections, tables, figures, definitions, referenced standards, and explicit `other` targets. Recognized directives map only to insert, replace, and delete operations.
+Section targets are reduced to the explicit section locator before instruction prose is interpreted. Other recognized target classes are tables, figures, definitions, referenced standards, and explicit `other` targets.
 
-An entry with an unknown directive, malformed header, or missing replacement body is not guessed. It becomes a source-located warning and an unsupported region.
+Each page-labeled header starts a new candidate entry even when its directive is unsupported. This prevents an unfamiliar correction from being absorbed into the preceding entry's replacement text.
+
+An entry with an unknown directive, malformed header, or missing required replacement body is not guessed. It becomes a source-located warning and an unsupported region.
 
 ## Printing semantics
 
@@ -59,7 +62,7 @@ A nominal edition alone is insufficient. Two corrections with different printing
 
 ## Official-source validation
 
-The bounded syntax was checked against ICC's official Digital Codes page titled **Editorial Changes – Second Printing** for the 2021 IBC. That page exposes page-labeled definition, section, referenced-standard, and appendix corrections and directs users to ICC Errata Central for complete history.
+The bounded syntax was checked against ICC's official Digital Codes page titled **Editorial Changes – Second Printing** for the 2021 IBC. That page includes comma-form and period-form page headers, page-labeled definition and section corrections, deletions, renumbering, referenced-standard changes, and appendix corrections. It also directs users to ICC Errata Central for complete history.
 
 The repository does not reproduce that page's correction prose. Durable private validation should register the exact official PDF or archived official artifact, retain its digest, run the adapter locally, and record source-free counts and diagnostics.
 
