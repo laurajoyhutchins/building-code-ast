@@ -27,7 +27,8 @@ Current material:
 - [`CONTRIBUTING.md`](../CONTRIBUTING.md) contains contribution and verification procedures;
 - [`how-to/ingest-nec-2017.md`](how-to/ingest-nec-2017.md) explains how to generate private ArticleSeed files from a locally supplied NEC 2017 PDF;
 - [`how-to/validate-nec-hierarchy.md`](how-to/validate-nec-hierarchy.md) explains how to compare inferred hierarchy with the locally supplied NEC 2017 clause oracle without making it a runtime dependency;
-- [`how-to/build-nec-semantic-seed.md`](how-to/build-nec-semantic-seed.md) explains how to generate the private Article 100 definition index and selected Article 90/110 section reviews.
+- [`how-to/build-nec-semantic-seed.md`](how-to/build-nec-semantic-seed.md) explains how to generate the private Article 100 definition index and selected Article 90/110 section reviews;
+- [`how-to/build-nec-2020-expected-changelog.md`](how-to/build-nec-2020-expected-changelog.md) explains how to normalize private NFPA development records, build expected changes, and reconcile them with an independent edition diff.
 
 Future how-to guides should remain in `docs/how-to/` and preserve the repository's source-publication boundary.
 
@@ -42,7 +43,7 @@ Current reference material:
 - [`reference/document-ast.md`](reference/document-ast.md): document AST fields, identity algorithm, and validation invariants;
 - [`reference/nec-definition-index.md`](reference/nec-definition-index.md): structured Article 100 definition fields and provenance invariants;
 - [`reference/nec-section-review.md`](reference/nec-section-review.md): selected-section review, modal-language policy, and definition-link boundaries;
-- [`reference/nec-style-manual-profile.md`](reference/nec-style-manual-profile.md): edition-aware editorial rules used as parser priors and validation context;
+- [`reference/nec-change-history.md`](reference/nec-change-history.md): source manifests, development evidence, expected and observed changes, precedence, and reconciliation outcomes;
 - [`reference/legal-source-publication.md`](reference/legal-source-publication.md): legal authorities and operational publication boundaries.
 
 Reference pages should state what the system, format, or policy is. Extended rationale belongs in explanation pages.

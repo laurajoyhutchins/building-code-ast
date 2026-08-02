@@ -128,6 +128,19 @@ PYTHONPATH=src python scripts/build_nec_2017_semantics.py \
 
 The output preserves exact source spans, separates clauses, exceptions, and informational notes, records references and conservative semantic tags, and links lexical Article 100 definition evidence. It is not a compliance determination. Generated semantic files reproduce NEC text and must remain private. See [`docs/how-to/build-nec-semantic-seed.md`](docs/how-to/build-nec-semantic-seed.md).
 
+## NEC 2017-to-2020 expected changelog
+
+A separate source-safe pipeline normalizes NFPA development records into expected changes and later reconciles them with an independently generated 2017-to-2020 AST diff. The issued 2020 NEC remains the controlling text; development history supplies process evidence and parser expectations.
+
+```bash
+PYTHONPATH=src python scripts/build_nec_2020_expected_changelog.py \
+  --input generated-private/nec-2020/development-input.json \
+  --output generated-private/nec-2020/expected-changelog.json \
+  --strict
+```
+
+The model supports source manifests, exact and sibling-range NEC reference resolution, procedural precedence through Standards Council actions, TIAs, and errata, positive and negative expectations, observed changes, and reconciliation diagnostics. The CLI rejects source-bearing fields and never guesses unresolved references. See [`docs/how-to/build-nec-2020-expected-changelog.md`](docs/how-to/build-nec-2020-expected-changelog.md) and [`docs/reference/nec-change-history.md`](docs/reference/nec-change-history.md).
+
 ## Repository layout
 
 - `src/building_code_ast/`: document and provision AST models, strict input handling, parsing, validation, and local ingestion adapters
@@ -137,9 +150,11 @@ The output preserves exact source spans, separates clauses, exceptions, and info
 - `scripts/ingest_nec_2017.py`: local-only coordinate-aware NEC 2017 ingestion CLI
 - `scripts/check_nec_2017_hierarchy.py`: source-free local hierarchy conformance reporter
 - `scripts/build_nec_2017_semantics.py`: private Article 100 definition and selected-section review generator
-- `schemas/nec-*.schema.json`: versioned NEC definition, section-review, and language-profile contracts
+- `scripts/build_nec_2020_expected_changelog.py`: private development-record expectation and reconciliation generator
+- `schemas/nec-*.schema.json`: versioned NEC semantic and change-history contracts
 - `docs/reference/nec-definition-index.md`: structured Article 100 definition contract
 - `docs/reference/nec-section-review.md`: selected-section review and Section 90.5 language policy contract
+- `docs/reference/nec-change-history.md`: development evidence, expected changes, observed changes, and reconciliation contract
 - `docs/README.md`: Diátaxis documentation map and authoring guidance
 - `docs/architecture.md`: representation boundaries and staged compiler model
 - `docs/compatibility.md`: public AST version compatibility notes
