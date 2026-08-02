@@ -23,7 +23,7 @@ The closed JSON projection is [`schemas/icc-errata-record.schema.json`](../../sc
 
 ## Adapter boundary
 
-`IccErrataPdfAdapter` accepts a registered `application/pdf` source with evidence role `official_correction`. It must be invoked through `run_evidence_adapter`, so source-role, media-type, and exact-byte SHA-256 checks occur before PDF parsing.
+`IccErrataPdfAdapter` version `0.3.0` accepts a registered `application/pdf` source with evidence role `official_correction`. It must be invoked through `run_evidence_adapter`, so source-role, media-type, and exact-byte SHA-256 checks occur before PDF parsing.
 
 The default page extractor uses PyMuPDF from the optional `evidence-pdf` dependency group:
 
@@ -47,6 +47,8 @@ A colon is optional when a recognized target and directive phrase can be separat
 Section targets are reduced to the explicit section locator before instruction prose is interpreted. Other recognized target classes are tables, figures, definitions, referenced standards, and explicit `other` targets.
 
 Each page-labeled header starts a new candidate entry even when its directive is unsupported. This prevents an unfamiliar correction from being absorbed into the preceding entry's replacement text.
+
+The emitted `sequence` is that original candidate ordinal. Unsupported entries therefore leave intentional gaps rather than renumbering later records and obscuring source order. `source_anchor` uses the same ordinal.
 
 An entry with an unknown directive, malformed header, or missing required replacement body is not guessed. It becomes a source-located warning and an unsupported region.
 

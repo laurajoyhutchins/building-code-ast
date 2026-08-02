@@ -23,7 +23,7 @@
     "source_anchor"
   ],
   "properties": {
-    "patch_version": {"const": "0.1.0"},
+    "patch_version": {"const": "0.2.0"},
     "patch_id": {"type": "string", "pattern": "^amendment:[0-9a-f]{64}$"},
     "type": {"const": "jurisdictional_amendment_patch"},
     "source_id": {"type": "string", "minLength": 1},
@@ -54,7 +54,8 @@
     },
     {
       "if": {"properties": {"operation": {"const": "scope"}}},
-      "then": {"properties": {"scope": {"type": "string", "minLength": 1}}}
+      "then": {"properties": {"scope": {"type": "string", "minLength": 1}}},
+      "else": {"properties": {"scope": {"type": "null"}}}
     }
   ]
 }

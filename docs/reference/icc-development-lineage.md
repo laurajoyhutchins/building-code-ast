@@ -23,6 +23,8 @@ The closed JSON projection is [`schemas/icc-development-record.schema.json`](../
 
 Each proposal identifier must contain exactly one proposal record at sequence 1. Every non-proposal record must have a parent and must be connected through its ancestors to that proposal record. The complete parent graph must be acyclic. These rules prevent a set of individually valid records from masquerading as a valid process chain while containing cycles, detached actions, or no proposal origin.
 
+Within one proposal, every parent sequence must precede its child sequence. Cycle detection runs first so a cyclic graph retains its most fundamental diagnostic instead of being reported only as a chronology error.
+
 A proposal record may retain a cross-proposal parent to represent supersession or derivation, but that relationship cannot create a cycle.
 
 The controlling record is selected by process stage, then sequence:
@@ -39,11 +41,13 @@ Rejected, withdrawn, and superseded records remain first-class evidence. They ar
 
 ## Bounded adapter
 
-`IccDevelopmentTextAdapter` consumes a registered `application/pdf` source with evidence role `development_history`. It is invoked through `run_evidence_adapter`, so source role, media type, and exact-byte SHA-256 are checked before extraction.
+`IccDevelopmentTextAdapter` version `0.2.0` consumes a registered `application/pdf` source with evidence role `development_history`. It is invoked through `run_evidence_adapter`, so source role, media type, and exact-byte SHA-256 are checked before extraction.
 
 The default extractor uses the optional `evidence-pdf` PyMuPDF group. Tests inject synthetic page text.
 
-The bounded grammar recognizes proposal blocks beginning with an ICC-style proposal identifier and labeled fields for proponent, affected locators, proposal summary, public comment, committee action, hearing or assembly action, and final action. Unknown dispositions remain source-located diagnostics and unsupported regions.
+The bounded grammar recognizes proposal blocks beginning with an ICC-style proposal identifier and labeled fields for proponent, affected locators, proposal summary, public comment, committee action, hearing or assembly action, and final action.
+
+Action sequence values preserve their source ordinals. At the first unsupported action, the adapter closes that proposal's extractable parent chain. Later actions remain diagnostic-backed unsupported regions instead of being linked across an unknown intermediate process event.
 
 ## Relationship to ICC's process
 

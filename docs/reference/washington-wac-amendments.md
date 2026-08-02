@@ -12,7 +12,7 @@ identified IBC publication state
   -> reviewable jurisdictional overlay
 ```
 
-## Patch contract `0.1.0`
+## Patch contract `0.2.0`
 
 `JurisdictionalAmendmentPatch` preserves:
 
@@ -30,7 +30,7 @@ The closed JSON projection is [`schemas/jurisdictional-amendment-patch.schema.js
 
 ## Operation rules
 
-`add` and `replace` require replacement text. `delete` and `reserve` prohibit replacement text. `scope` requires a scope statement and prohibits replacement text.
+`add` and `replace` require replacement text. `delete` and `reserve` prohibit replacement text. `scope` requires a scope statement and prohibits replacement text. The `scope` field is null for every non-scope operation, so one record cannot encode two legal effects.
 
 Operation evidence differs by acquisition path. Direct official-page ingestion classifies a located clause as `replace` when the exact locator exists in the identified base AST, or `add` when an ancestor exists but the exact locator does not. It never guesses when neither condition holds. Explicit `delete`, `reserve`, and `scope` directives are available through the normalized acquisition contract described below.
 
@@ -43,11 +43,13 @@ Patch intervals are half-open:
 - it is inactive on `effective_to` itself;
 - a null `effective_to` means the patch has no recorded end date.
 
-Chapter-level metadata is not assumed to prove one universal date for every WAC section. `WashingtonWacHtmlAdapter` accepts section-specific effective-date mappings and falls back to the registered source publication's effective date only when one is present.
+Chapter-level metadata is not assumed to prove one universal date. `WashingtonWacHtmlAdapter` accepts WAC-section and locator-specific effective-date mappings, with locator-specific evidence taking precedence. It falls back to the registered source publication's effective date only when one is present. This supports one WAC citation containing clauses from different rule histories.
 
 ## Amendment-set validation
 
-`AmendmentSet` requires every patch to share one jurisdiction and one base publication state. It orders patches by effective date, source sequence, WAC citation, and locator.
+`AmendmentSet` requires every patch to share one jurisdiction and one base publication state. Source-local sequence values must be unique within each registered source.
+
+Patches are ordered by effective date, source sequence, WAC citation, locator, and deterministic patch identity. The identity tie-breaker makes the result independent of input tuple order.
 
 Overlapping records with the same legal effect are permitted as reaffirmations or duplicate-source evidence. Overlapping scope records may coexist with an add or replacement affecting the same locator. Other overlapping incompatible effects fail closed.
 
@@ -55,20 +57,22 @@ Overlapping records with the same legal effect are permitted as reaffirmations o
 
 ## Direct official-style HTML adapter
 
-`WashingtonWacHtmlAdapter` consumes registered UTF-8 `text/html` with evidence role `jurisdictional_law`. It must be invoked through `run_evidence_adapter`, so role, media type, and exact-byte SHA-256 are verified before parsing.
+`WashingtonWacHtmlAdapter` version `0.3.0` consumes registered UTF-8 `text/html` with evidence role `jurisdictional_law`. It must be invoked through `run_evidence_adapter`, so role, media type, and exact-byte SHA-256 are verified before parsing.
 
 The adapter segments official-style pages by chapter 51-50 WAC citation headings, ignores statutory-history blocks, and extracts code clauses beginning with explicit locators. It requires:
 
 - the exact base publication state;
 - a nonempty base-locator oracle;
-- section-specific effective dates when the source register does not provide one;
+- WAC-section or locator-specific effective dates when the source register does not provide one;
 - an explicit WAC-to-locator mapping for reserved sections.
 
 The adapter emits only `add`, `replace`, and `reserve` operations because those classifications can be bounded from official-style clause presentation plus the base AST oracle. Missing dates, unresolved locators, unrecognized sections, and unmapped reserved sections become diagnostics and unsupported regions.
 
+Candidate ordinals are preserved even when an earlier source section or clause is unsupported. Gaps are intentional source provenance, not missing output.
+
 ## Normalized directive adapter
 
-`NormalizedWashingtonWacHtmlAdapter` consumes project-normalized section blocks containing explicit directives such as:
+`NormalizedWashingtonWacHtmlAdapter` version `0.2.0` consumes project-normalized section blocks containing explicit directives such as:
 
 ```html
 <section>
@@ -80,7 +84,9 @@ The adapter emits only `add`, `replace`, and `reserve` operations because those 
 
 This grammar supports `add`, `replace`, `delete`, `reserve`, and `scope`. It is appropriate only after an acquisition step has preserved the original registered artifact and produced explicit, reviewable operation evidence. Its name prevents normalized fixtures from being mistaken for the official website's native structure.
 
-For `add`, a missing exact locator is expected; the operation resolves when an ancestor exists in the base-locator oracle. Other operations require the exact base locator.
+For `add`, a missing exact locator is expected. Decimal additions resolve through an existing parent locator. Whole-number IBC sections can resolve through their chapter designation, and appendix-prefixed sections can resolve through their appendix designation. Other operations require the exact base locator.
+
+Normalized output also preserves the original section ordinal when unsupported candidates are skipped.
 
 ## Official-source boundary
 

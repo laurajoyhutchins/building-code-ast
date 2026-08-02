@@ -279,6 +279,16 @@ class DevelopmentLineage:
                         f"unresolved parent {parent} for record {record.record_key}"
                     )
         _assert_acyclic(records_by_key)
+        for record in self.records:
+            for parent in record.parent_keys:
+                parent_record = records_by_key[parent]
+                if (
+                    parent_record.proposal_id == record.proposal_id
+                    and parent_record.sequence >= record.sequence
+                ):
+                    raise ValueError(
+                        f"parent sequence must precede child sequence for {record.record_key}"
+                    )
 
         by_proposal: dict[str, list[DevelopmentRecord]] = {}
         for record in self.records:
@@ -383,7 +393,7 @@ class IccDevelopmentTextAdapter:
     """Extract a bounded proposal/action grammar from registered ICC PDF text."""
 
     adapter_id = "icc-development-text"
-    adapter_version = "0.1.0"
+    adapter_version = "0.2.0"
     supported_roles = frozenset({EvidenceRole.DEVELOPMENT_HISTORY})
     supported_media_types = frozenset({"application/pdf"})
 
@@ -474,15 +484,33 @@ class IccDevelopmentTextAdapter:
                 )
                 records.append(proposal)
                 previous_key = proposal_key
-                sequence = 2
                 occurrence: dict[str, int] = {}
-                for label, text in action_lines:
+                chain_open = True
+                for source_sequence, (label, text) in enumerate(action_lines, start=2):
+                    if not chain_open:
+                        region = SourceRegion(
+                            page=source_page,
+                            anchor=f"{proposal_id}:blocked-action:{source_sequence}",
+                        )
+                        diagnostics.append(
+                            EvidenceDiagnostic(
+                                code="blocked-development-action",
+                                severity=DiagnosticSeverity.WARNING,
+                                message=(
+                                    "Development action follows an unsupported action whose "
+                                    "parentage is unresolved."
+                                ),
+                                region=region,
+                            )
+                        )
+                        unsupported.append(region)
+                        continue
                     kind = _ACTION_KINDS.get(label)
                     disposition = _DISPOSITIONS.get(text.casefold())
                     if kind is None or disposition is None:
                         region = SourceRegion(
                             page=source_page,
-                            anchor=f"{proposal_id}:unsupported-action:{sequence}",
+                            anchor=f"{proposal_id}:unsupported-action:{source_sequence}",
                         )
                         diagnostics.append(
                             EvidenceDiagnostic(
@@ -493,6 +521,7 @@ class IccDevelopmentTextAdapter:
                             )
                         )
                         unsupported.append(region)
+                        chain_open = False
                         continue
                     stem = _slug(label)
                     occurrence[stem] = occurrence.get(stem, 0) + 1
@@ -504,7 +533,7 @@ class IccDevelopmentTextAdapter:
                         record_key=record_key,
                         kind=kind,
                         disposition=disposition,
-                        sequence=sequence,
+                        sequence=source_sequence,
                         proponent=None,
                         affected_locators=locators,
                         parent_keys=(previous_key,),
@@ -515,7 +544,6 @@ class IccDevelopmentTextAdapter:
                     )
                     records.append(record)
                     previous_key = record_key
-                    sequence += 1
 
         return AdapterResult(
             source_id=source.source_id,
