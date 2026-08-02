@@ -145,6 +145,44 @@ class ExpectedChangelogCliTests(unittest.TestCase):
         with self.assertRaisesRegex(ValueError, "unknown source_id"):
             cli.build_dataset(bundle)
 
+    def test_source_locator_page_must_fit_manifest_page_count(self) -> None:
+        cli = _load_cli_module()
+        bundle = _bundle()
+        records = bundle["development_records"]
+        assert isinstance(records, list)
+        record = records[0]
+        assert isinstance(record, dict)
+        locator = record["source_locator"]
+        assert isinstance(locator, dict)
+        locator["page"] = 4
+
+        with self.assertRaisesRegex(ValueError, "exceeds manifest page_count"):
+            cli.build_dataset(bundle)
+
+    def test_related_record_ids_must_reference_known_records(self) -> None:
+        cli = _load_cli_module()
+        bundle = _bundle()
+        records = bundle["development_records"]
+        assert isinstance(records, list)
+        record = records[0]
+        assert isinstance(record, dict)
+        record["related_record_ids"] = ["missing-record"]
+
+        with self.assertRaisesRegex(ValueError, "unknown related record_id"):
+            cli.build_dataset(bundle)
+
+    def test_record_type_must_match_development_stage(self) -> None:
+        cli = _load_cli_module()
+        bundle = _bundle()
+        records = bundle["development_records"]
+        assert isinstance(records, list)
+        record = records[0]
+        assert isinstance(record, dict)
+        record["record_type"] = "public_input"
+
+        with self.assertRaisesRegex(ValueError, "does not match stage"):
+            cli.build_dataset(bundle)
+
     def test_forbidden_source_bearing_fields_fail_closed(self) -> None:
         cli = _load_cli_module()
         bundle = _bundle()
@@ -155,6 +193,14 @@ class ExpectedChangelogCliTests(unittest.TestCase):
         record["proposal_text"] = "Protected source expression must not enter output."
 
         with self.assertRaisesRegex(ValueError, "unsupported development record field"):
+            cli.build_dataset(bundle)
+
+    def test_forbidden_top_level_fields_fail_closed(self) -> None:
+        cli = _load_cli_module()
+        bundle = _bundle()
+        bundle["source_text"] = "Protected source expression must not enter output."
+
+        with self.assertRaisesRegex(ValueError, "unsupported bundle field"):
             cli.build_dataset(bundle)
 
 
