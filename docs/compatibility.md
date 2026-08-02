@@ -42,11 +42,11 @@ Serialized `0.1.0` patches whose non-scope operation carries a non-null `scope` 
 
 ## Washington evidence adapter migration
 
-Post-merge review split two different acquisition contracts that had previously shared the name `WashingtonWacHtmlAdapter`. The second review strengthens both contracts and preserves source-candidate ordinals.
+Post-merge review split two different acquisition contracts that had previously shared the name `WashingtonWacHtmlAdapter`. Later official-corpus validation strengthened direct ingestion against the Washington state site's live HTML layout.
 
-### Direct official-style ingestion
+### Direct official ingestion
 
-`WashingtonWacHtmlAdapter` version `0.3.0` identifies the direct, bounded official-style adapter. Construction requires:
+`WashingtonWacHtmlAdapter` version `0.4.0` identifies the public direct adapter. Construction requires:
 
 - `base_publication_state_id`;
 - a nonempty `known_base_locators` frozenset;
@@ -56,7 +56,9 @@ Post-merge review split two different acquisition contracts that had previously 
 
 Locator-specific dates override WAC-section dates, which override a source-level publication effective date. It emits only operations that can be classified from citation-led, locator-bearing WAC presentation plus the base-locator oracle: `add`, `replace`, and explicitly mapped `reserve`.
 
-Output `sequence` values preserve source candidate ordinals. Gaps may appear where an earlier WAC section or clause was retained as an unsupported region.
+Version `0.4.0` adds scoped extraction of leaf `span` blocks inside `div.section-page`, matching the live Washington site while excluding navigation and breadcrumb text. Paragraph- and list-shaped fixtures remain supported. Output sequence values preserve source candidate ordinals.
+
+Consumers importing the direct adapter from the public package namespace receive `WashingtonOfficialWacHtmlAdapter` under the established `WashingtonWacHtmlAdapter` name.
 
 ### Project-normalized directive ingestion
 
@@ -75,20 +77,33 @@ This adapter consumes project-normalized directives such as `Section 107.3 is ad
 
 Version `0.2.0` preserves the original normalized section ordinal in output. It also allows whole-number added IBC sections to resolve through their chapter designation and appendix-prefixed sections to resolve through their appendix designation.
 
-There is no silent compatibility shim. The old class name implied direct official WAC ingestion while its grammar required normalized project-authored markup. Failing at construction is preferable to silently running the wrong acquisition contract.
+There is no silent compatibility shim between direct official HTML and normalized project-authored directives. Failing at construction is preferable to silently running the wrong acquisition contract.
 
-## ICC development adapter version 0.2.0
+## ICC development adapters
 
-`IccDevelopmentTextAdapter` version `0.2.0` preserves source action ordinals and closes an extractable proposal chain at the first unsupported action. Later actions remain diagnostic-backed unsupported regions instead of being linked across an unknown intermediate action.
+`IccDevelopmentTextAdapter` version `0.2.0` remains the reviewed combined-artifact grammar. It preserves source action ordinals and closes an extractable proposal chain at the first unsupported action. Later actions remain diagnostic-backed unsupported regions instead of being linked across an unknown intermediate action.
 
-`DevelopmentLineage` also requires every same-proposal parent sequence to precede its child sequence. Existing records with backward parentage must be corrected from the source process record; they are not automatically reordered.
+Direct official ICC artifacts use separate version `0.1.0` adapters:
+
+- `IccProposalMonographPdfAdapter` for single-part proposal roots;
+- `IccCommitteeActionReportPdfAdapter` for proposal-bounded committee-action reports.
+
+`IccCommitteeActionPdfAdapter` is a public compatibility alias for `IccCommitteeActionReportPdfAdapter`.
+
+The action adapter requires an affected-locator mapping derived from the registered proposal artifact. Multipart proposal headings fail closed until a part-aware lineage identity is introduced.
+
+`DevelopmentLineage` requires every same-proposal parent sequence to precede its child sequence. Existing records with backward parentage must be corrected from the source process record; they are not automatically reordered.
 
 The serialized development-record contract remains `0.1.0` because its shape is unchanged.
 
 ## ICC errata adapter version 0.3.0
 
-`IccErrataPdfAdapter` version `0.3.0` uses each source candidate's ordinal as the emitted record `sequence`. Unsupported candidates therefore leave intentional gaps rather than causing later records to be renumbered.
+`IccErrataPdfAdapter` version `0.3.0` uses each source candidate's ordinal as the emitted record sequence. Unsupported candidates therefore leave intentional gaps rather than causing later records to be renumbered.
 
 Version `0.2.0` previously expanded the bounded grammar to official comma-form and period-form page headers and recognized deletion, renumbering, and relocation directives. Version `0.3.0` retains that grammar and changes only candidate-sequence provenance.
 
 The serialized erratum-record contract remains `0.1.0`; the record shape is unchanged.
+
+## Official-corpus validation
+
+The August 2, 2026 source-free validation receipt is [`docs/validation/official-evidence-2026-08-02.json`](validation/official-evidence-2026-08-02.json). It records exact source digests, adapter versions, bounded record and diagnostic counts, deterministic projection digests, and repeat-run results without embedding source text.
