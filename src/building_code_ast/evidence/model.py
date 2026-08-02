@@ -220,6 +220,8 @@ class SourceRegister:
     register_version: str = field(default=SOURCE_REGISTER_VERSION, init=False)
 
     def __post_init__(self) -> None:
+        if not isinstance(self.entries, tuple):
+            raise ValueError("entries must be an immutable tuple")
         if not self.entries:
             raise ValueError("entries must not be empty")
         seen: set[str] = set()
