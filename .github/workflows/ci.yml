@@ -1,16 +1,18 @@
-name: Apply exhaustive IBC source audit
+name: Publish exhaustive IBC source audit
 
 on:
   pull_request:
 
 permissions:
-  contents: read
+  contents: write
 
 jobs:
-  apply-and-verify:
+  apply-verify-and-push:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
       - uses: actions/setup-python@v5
         with:
           python-version: "3.12"
@@ -82,7 +84,7 @@ jobs:
         run: python -m unittest discover -s tests -v
       - name: Compile sources
         run: python -m compileall -q src tests
-      - name: Create verified candidate commit
+      - name: Commit and push verified parser
         shell: bash
         run: |
           set -euo pipefail
@@ -90,11 +92,5 @@ jobs:
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git add -A
           git commit -m "fix: align IBC fragments with source geometry"
-          git rev-parse HEAD > candidate-sha.txt
-      - name: Upload candidate SHA
-        uses: actions/upload-artifact@v4
-        with:
-          name: ibc-source-audit-candidate
-          path: candidate-sha.txt
-          if-no-files-found: error
-          retention-days: 1
+          git push --force-with-lease=refs/heads/agent/ibc-layout-analysis:${GITHUB_SHA} origin HEAD:refs/heads/agent/ibc-layout-analysis
+          git rev-parse HEAD
