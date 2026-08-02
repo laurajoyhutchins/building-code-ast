@@ -14,7 +14,6 @@ from .amendments import (
     AmendmentSet,
     JurisdictionalAmendmentPatch,
     NormalizedWashingtonWacHtmlAdapter,
-    WashingtonWacHtmlAdapter,
     amendment_patch_from_dict,
 )
 from .development import (
@@ -38,13 +37,8 @@ from .errata import (
     TargetKind,
     erratum_record_from_dict,
 )
-from .icc_action_report import (
-    IccCommitteeActionReportPdfAdapter,
-)
-from .icc_development import (
-    IccActionStage,
-    IccProposalMonographPdfAdapter,
-)
+from .icc_action_report import IccCommitteeActionReportPdfAdapter
+from .icc_development import IccActionStage, IccProposalMonographPdfAdapter
 from .io import source_register_from_dict
 from .model import (
     ACCESS_SCOPE_VALUES,
@@ -59,6 +53,10 @@ from .model import (
     SourceRegister,
     SourceRegisterEntry,
     publication_state_id,
+)
+from .washington_official import (
+    WashingtonOfficialWacHtmlAdapter,
+    WashingtonWacHtmlAdapter,
 )
 
 IccCommitteeActionPdfAdapter = IccCommitteeActionReportPdfAdapter
@@ -104,6 +102,7 @@ __all__ = [
     "SourceRegister",
     "SourceRegisterEntry",
     "TargetKind",
+    "WashingtonOfficialWacHtmlAdapter",
     "WashingtonWacHtmlAdapter",
     "amendment_patch_from_dict",
     "development_record_from_dict",
