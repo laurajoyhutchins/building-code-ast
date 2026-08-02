@@ -19,7 +19,20 @@ from building_code_ast.ingest.ibc2018 import (
     parse_chapter_numbers,
     reconstruct_glyph_line,
 )
-from building_code_ast.ingest.layout_analysis import BodyFontProfile, visual_line_id
+from building_code_ast.ingest.layout_analysis import (
+    BodyFontProfile,
+    CleanedPage,
+    PageLines,
+    RuleSegment,
+    visual_line_id,
+)
+from building_code_ast.ingest.ibc2018.pipeline import _announced_ruled_tables
+from building_code_ast.ingest.ibc2018.text import (
+    _join_text,
+    _normalize_visual_text,
+    build_hyphenation_lexicon,
+    repair_source_spacing,
+)
 from building_code_ast.ingest.table_geometry import (
     TableCandidate,
     TableCellCandidate,
@@ -59,6 +72,92 @@ class GlyphTests(unittest.TestCase):
         self.assertEqual(merged[0].text, "operators and")
         self.assertEqual(len(merged[0].fragments), 2)
 
+    def test_numeric_glyphs_use_geometry_aware_spacing(self) -> None:
+        def chars(text: str, gaps: list[float]) -> list[dict[str, object]]:
+            x = 0.0
+            result: list[dict[str, object]] = []
+            for index, character in enumerate(text):
+                result.append({"c": character, "bbox": (x, 0.0, x + 4.0, 10.0)})
+                if index < len(gaps):
+                    x += 4.0 + gaps[index]
+            return result
+
+        self.assertEqual(
+            reconstruct_glyph_line(chars("SECTION110", [0.3] * 6 + [3.0, 1.75, 1.75])),
+            "SECTION 110",
+        )
+        self.assertEqual(
+            reconstruct_glyph_line(chars("1000ml", [1.1, 0.3, 0.2, 3.2, 0.3])),
+            "1000 ml",
+        )
+        self.assertEqual(
+            reconstruct_glyph_line(chars("18925L", [1.0, 3.6, 0.4, 0.2, 3.2])),
+            "18 925 L",
+        )
+        self.assertEqual(
+            reconstruct_glyph_line(chars("owner’s", [0.3, 0.3, 0.3, 0.3, 0.3, 1.2, 0.3])),
+            "owner’s",
+        )
+        self.assertEqual(_normalize_visual_text("owner’ s authorized"), "owner’s authorized")
+        self.assertEqual(_normalize_visual_text("units’ water"), "units’ water")
+        self.assertEqual(
+            reconstruct_glyph_line(chars("(1)", [0.4, 1.1])),
+            "(1)",
+        )
+        self.assertEqual(
+            reconstruct_glyph_line(chars("1-percent", [1.3] + [0.3] * 7)),
+            "1-percent",
+        )
+        self.assertEqual(
+            reconstruct_glyph_line(chars("V1-30", [0.3, 1.3, 0.3, 0.3])),
+            "V1-30",
+        )
+
+    def test_narrow_j_does_not_split_the_following_letter(self) -> None:
+        chars = [
+            {"c": "j", "bbox": (0.0, 0.0, 2.0, 10.0)},
+            {"c": "u", "bbox": (2.95, 0.0, 7.5, 10.0)},
+            {"c": "r", "bbox": (7.7, 0.0, 11.0, 10.0)},
+        ]
+
+        self.assertEqual(reconstruct_glyph_line(chars), "jur")
+        business = [
+            {"c": "B", "bbox": (0.0, 0.0, 6.0, 10.0)},
+            {"c": "u", "bbox": (6.95, 0.0, 11.5, 10.0)},
+            {"c": "s", "bbox": (11.7, 0.0, 15.2, 10.0)},
+        ]
+        self.assertEqual(reconstruct_glyph_line(business), "Bus")
+
+
+    def test_superscript_fragment_attaches_to_its_visual_row(self) -> None:
+        base = VisualLine(
+            1,
+            (10.0, 10.0, 18.0, 20.0),
+            "5",
+            (SourceFragment(1, (10.0, 10.0, 18.0, 20.0), 1, "5", 10.0),),
+            font_size=10.0,
+        )
+        superscript = VisualLine(
+            1,
+            (18.5, 8.0, 22.0, 15.0),
+            "2",
+            (SourceFragment(1, (18.5, 8.0, 22.0, 15.0), 2, "2", 7.0),),
+            font_size=7.0,
+        )
+        suffix = VisualLine(
+            1,
+            (22.5, 10.0, 32.0, 20.0),
+            " ft",
+            (SourceFragment(1, (22.5, 10.0, 32.0, 20.0), 3, " ft", 10.0),),
+            font_size=10.0,
+        )
+
+        merged = merge_visual_fragments((superscript, suffix, base), page_width=200.0)
+
+        self.assertEqual(len(merged), 1)
+        self.assertEqual(merged[0].text, "52 ft")
+        self.assertEqual([fragment.block_number for fragment in merged[0].fragments], [1, 2, 3])
+
     def test_does_not_merge_opposite_columns_when_right_sorts_first(self) -> None:
         right = VisualLine(
             1,
@@ -77,6 +176,64 @@ class GlyphTests(unittest.TestCase):
 
         self.assertEqual(len(merged), 2)
         self.assertEqual({line.text for line in merged}, {"left column", "right column"})
+
+
+class SourceSpacingTests(unittest.TestCase):
+    def _line(self, text: str, block: int) -> VisualLine:
+        fragment = SourceFragment(1, (10.0, block * 12.0, 190.0, block * 12.0 + 10.0), block, text)
+        return VisualLine(1, fragment.bbox, text, (fragment,))
+
+    def test_repairs_repeated_missing_boundaries_from_source_evidence(self) -> None:
+        lines = (
+            self._line("means ofegress", 1),
+            self._line("path ofegress", 2),
+            self._line("means of egress", 3),
+            self._line("portion of egress", 4),
+            self._line("route of egress", 5),
+            self._line("width of egress", 6),
+            self._line("insufficient evidence", 7),
+            self._line("in sufficient detail", 8),
+            self._line("in sufficient quantity", 9),
+        )
+        page = PageLines(1, 200.0, 300.0, lines)
+
+        repaired = repair_source_spacing((page,))[0]
+
+        self.assertEqual(repaired.lines[0].text, "means of egress")
+        self.assertEqual(repaired.lines[0].fragments[0].raw_text, "means of egress")
+        self.assertEqual(repaired.lines[6].text, "insufficient evidence")
+        self.assertNotEqual(repaired.lines[0].line_id, lines[0].line_id)
+
+
+
+class HyphenationTests(unittest.TestCase):
+    def _line(self, text: str, y: float) -> VisualLine:
+        fragment = SourceFragment(1, (10.0, y, 190.0, y + 10.0), int(y), text)
+        return VisualLine(1, fragment.bbox, text, (fragment,))
+
+    def test_uses_intact_source_words_and_compounds(self) -> None:
+        lexicon = build_hyphenation_lexicon(
+            (
+                self._line("replacement", 10.0),
+                self._line("cross-sectional", 20.0),
+                self._line("Manual wet.", 30.0),
+            )
+        )
+
+        self.assertEqual(_join_text("replace-", "ment", lexicon), "replacement")
+        self.assertEqual(
+            _join_text("cross-", "sectional", lexicon),
+            "cross-sectional",
+        )
+        self.assertEqual(_join_text("Manual-", "wet system", lexicon), "Manual wet system")
+
+    def test_preserves_reviewed_and_chained_compounds(self) -> None:
+        lexicon = build_hyphenation_lexicon(())
+
+        self.assertEqual(_join_text("double-", "pivoted", lexicon), "double-pivoted")
+        self.assertEqual(_join_text("out-to-", "out", lexicon), "out-to-out")
+        self.assertEqual(_join_text("fixed-", "in-place", lexicon), "fixed-in-place")
+
 
 
 class BlockTests(unittest.TestCase):
@@ -153,6 +310,22 @@ class BlockTests(unittest.TestCase):
                 entry.normalized_text,
             )
 
+    def test_split_definition_heading_remains_one_definition_block(self) -> None:
+        lines = (
+            self._line(1, 70, "CHAPTER 2"),
+            self._line(1, 80, "SECTION 202"),
+            self._line(1, 90, "[BS] CONVENTIONAL LIGHT-FRAME CONSTRUC-"),
+            self._line(1, 100, "TION. Construction formed by repetitive framing."),
+        )
+
+        blocks = coalesce_visual_lines(lines, chapter_number="2")
+
+        self.assertEqual(len(blocks), 3)
+        self.assertEqual(
+            blocks[-1].text,
+            "[BS] CONVENTIONAL LIGHT-FRAME CONSTRUCTION. Construction formed by repetitive framing.",
+        )
+
     def test_unsupported_chapter_fails_closed(self) -> None:
         with self.assertRaisesRegex(ValueError, "supports 1, 2, 3"):
             parse_chapter_numbers(("4",))
@@ -190,6 +363,41 @@ class BlockTests(unittest.TestCase):
 
         nodes = seed.to_dict()["document_ast"]["root"]["children"][0]["children"]
         self.assertEqual(nodes[1]["type"], "heading")
+
+
+    def test_committee_prefixed_table_label_announces_ruled_grid(self) -> None:
+        def table_line(text: str, x0: float, y0: float, x1: float, block: int) -> VisualLine:
+            fragment = SourceFragment(72, (x0, y0, x1, y0 + 8.0), block, text, 8.0)
+            return VisualLine(72, fragment.bbox, text, (fragment,), font_size=8.0)
+
+        page = CleanedPage(
+            page_number=72,
+            width=120.0,
+            height=140.0,
+            retained=(
+                table_line("[F] TABLE 307.1", 10.0, 2.0, 110.0, 1),
+                table_line("A", 20.0, 25.0, 40.0, 2),
+                table_line("B", 70.0, 25.0, 90.0, 3),
+                table_line("C", 20.0, 75.0, 40.0, 4),
+                table_line("D", 70.0, 75.0, 90.0, 5),
+            ),
+            removed=(),
+            rules=(
+                RuleSegment(72, 10.0, 10.0, 110.0, 10.0),
+                RuleSegment(72, 10.0, 60.0, 110.0, 60.0),
+                RuleSegment(72, 10.0, 110.0, 110.0, 110.0),
+                RuleSegment(72, 10.0, 10.0, 10.0, 110.0),
+                RuleSegment(72, 60.0, 10.0, 60.0, 110.0),
+                RuleSegment(72, 110.0, 10.0, 110.0, 110.0),
+            ),
+        )
+
+        records = _announced_ruled_tables(page)
+
+        self.assertEqual(len(records), 1)
+        table, heading = records[0]
+        self.assertEqual(heading.text, "[F] TABLE 307.1")
+        self.assertEqual(table.normalized_text, "[F] TABLE 307.1\nA\tB\nC\tD")
 
     def test_serialized_table_cells_retain_pdf_fragments(self) -> None:
         heading_fragment = SourceFragment(72, (10.0, 10.0, 100.0, 20.0), 1, "TABLE 1")

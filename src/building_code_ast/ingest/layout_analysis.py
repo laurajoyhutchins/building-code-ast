@@ -181,6 +181,7 @@ def visual_line_id(page_number: int, fragments: Sequence[SourceFragment]) -> str
 def structural_margin_key(text: str) -> str:
     normalized = re.sub(r"\d+", "#", text.casefold())
     normalized = re.sub(r"[^a-z#]+", " ", normalized)
+    normalized = re.sub(r"(?:#\s*)+", "# ", normalized)
     return re.sub(r"\s+", " ", normalized).strip()
 
 
@@ -237,6 +238,8 @@ def clean_recurring_margins(
     *,
     top_fraction: float = 0.10,
     bottom_fraction: float = 0.10,
+    fixed_top_fraction: float = 0.08,
+    fixed_bottom_fraction: float = 0.055,
 ) -> tuple[CleanedPage, ...]:
     cleaned: list[CleanedPage] = []
     for page in pages:
@@ -248,9 +251,22 @@ def clean_recurring_margins(
                 removed.append(RemovedLine(line, "recurring_header"))
             elif key and _is_bottom(line, page.height, bottom_fraction) and key in margins.footer_keys:
                 removed.append(RemovedLine(line, "recurring_footer"))
+            elif page.height > 0.0 and line.bbox[3] <= page.height * fixed_top_fraction:
+                removed.append(RemovedLine(line, "fixed_header"))
+            elif page.height > 0.0 and line.bbox[1] >= page.height * (1.0 - fixed_bottom_fraction):
+                removed.append(RemovedLine(line, "fixed_footer"))
             else:
                 retained.append(line)
-        cleaned.append(CleanedPage(page.page_number, page.width, page.height, tuple(retained), tuple(removed), page.rules))
+        cleaned.append(
+            CleanedPage(
+                page.page_number,
+                page.width,
+                page.height,
+                tuple(retained),
+                tuple(removed),
+                page.rules,
+            )
+        )
     return tuple(cleaned)
 
 
@@ -289,6 +305,29 @@ def _positive_start_gaps(lines: Sequence[VisualLine]) -> list[float]:
     return [right - left for left, right in zip(starts, starts[1:]) if right > left]
 
 
+def _rule_y_regions(page: CleanedPage) -> tuple[tuple[float, float], ...]:
+    horizontal = [
+        rule
+        for rule in page.rules
+        if rule.horizontal and abs(rule.x1 - rule.x0) >= max(40.0, page.width * 0.20)
+    ]
+    if len(horizontal) < 3:
+        return ()
+    ys = sorted({round((rule.y0 + rule.y1) / 2.0, 2) for rule in horizontal})
+    groups: list[list[float]] = []
+    for y in ys:
+        if not groups or y - groups[-1][-1] > 45.0:
+            groups.append([y])
+        else:
+            groups[-1].append(y)
+    return tuple((group[0], group[-1]) for group in groups if len(group) >= 3)
+
+
+def _inside_rule_region(line: VisualLine, regions: Sequence[tuple[float, float]]) -> bool:
+    center = (line.bbox[1] + line.bbox[3]) / 2.0
+    return any(top - 3.0 <= center <= bottom + 3.0 for top, bottom in regions)
+
+
 def infer_page_order(page: CleanedPage) -> PageOrderProfile:
     """Infer a conservative page-local reading-order mode."""
 
@@ -297,7 +336,13 @@ def infer_page_order(page: CleanedPage) -> PageOrderProfile:
         for line in page.retained
         if line.text.strip() and _line_width(line) > 0.0
     ]
-    sample = [line for line in geometric if not _is_full_width(line, page.width)]
+    rule_regions = _rule_y_regions(page)
+    sample = [
+        line
+        for line in geometric
+        if not _is_full_width(line, page.width)
+        and not _inside_rule_region(line, rule_regions)
+    ]
     fallback = PageOrderProfile(
         page_number=page.page_number,
         mode=ReadingOrderMode.TOP_TO_BOTTOM,
@@ -308,49 +353,47 @@ def infer_page_order(page: CleanedPage) -> PageOrderProfile:
     if len(sample) < 4 or page.width <= 0.0:
         return fallback
 
-    starts = sorted({round(line.bbox[0], 3) for line in sample})
-    if len(starts) < 2:
+    center = page.width / 2.0
+    left = [line for line in sample if (line.bbox[0] + line.bbox[2]) / 2.0 < center]
+    right = [line for line in sample if (line.bbox[0] + line.bbox[2]) / 2.0 >= center]
+    if len(left) < 2 or len(right) < 2:
         return fallback
 
-    candidates: list[tuple[float, float, list[VisualLine], list[VisualLine], float]] = []
-    for left_start, right_start in zip(starts, starts[1:]):
-        start_gap = right_start - left_start
-        if start_gap < max(60.0, page.width * 0.12):
-            continue
-        split = (left_start + right_start) / 2.0
-        left = [line for line in sample if line.bbox[0] < split]
-        right = [line for line in sample if line.bbox[0] >= split]
-        if len(left) < 2 or len(right) < 2:
-            continue
-
-        left_min = min(line.bbox[1] for line in left)
-        left_max = max(line.bbox[3] for line in left)
-        right_min = min(line.bbox[1] for line in right)
-        right_max = max(line.bbox[3] for line in right)
-        heights = [max(0.1, line.bbox[3] - line.bbox[1]) for line in left + right]
-        vertical_overlap = min(left_max, right_max) - max(left_min, right_min)
-        if vertical_overlap < statistics.median(heights):
-            continue
-
-        left_center = statistics.median(line.bbox[0] for line in left)
-        right_center = statistics.median(line.bbox[0] for line in right)
-        if left_center >= page.width * 0.50 or right_center <= page.width * 0.45:
-            continue
-
-        internal_gaps = _positive_start_gaps(left) + _positive_start_gaps(right)
-        ordinary_gap = statistics.median(internal_gaps) if internal_gaps else 0.0
-        if ordinary_gap > 0.0 and start_gap <= ordinary_gap * 1.5:
-            continue
-
-        balance = min(len(left), len(right)) / max(len(left), len(right))
-        score = start_gap / page.width + balance * 0.15
-        candidates.append((score, split, left, right, start_gap))
-
-    if not candidates:
+    left_min = min(line.bbox[1] for line in left)
+    left_max = max(line.bbox[3] for line in left)
+    right_min = min(line.bbox[1] for line in right)
+    right_max = max(line.bbox[3] for line in right)
+    heights = [max(0.1, line.bbox[3] - line.bbox[1]) for line in left + right]
+    vertical_overlap = min(left_max, right_max) - max(left_min, right_min)
+    if vertical_overlap < statistics.median(heights):
         return fallback
 
-    score, split, left, right, start_gap = max(candidates, key=lambda item: item[0])
-    confidence = round(min(0.95, 0.62 + score), 3)
+    left_anchor = statistics.median(line.bbox[0] for line in left)
+    right_anchor = statistics.median(line.bbox[0] for line in right)
+    if left_anchor >= page.width * 0.45 or right_anchor <= page.width * 0.48:
+        return fallback
+
+    left_widths = [_line_width(line) for line in left]
+    right_widths = [_line_width(line) for line in right]
+    left_width = statistics.quantiles(
+        left_widths, n=4, method="inclusive"
+    )[2] if len(left_widths) >= 4 else max(left_widths)
+    right_width = statistics.quantiles(
+        right_widths, n=4, method="inclusive"
+    )[2] if len(right_widths) >= 4 else max(right_widths)
+    if min(left_width, right_width) < page.width * 0.12:
+        return fallback
+
+    left_edges = sorted(line.bbox[2] for line in left)
+    right_edges = sorted(line.bbox[0] for line in right)
+    left_edge = left_edges[min(len(left_edges) - 1, int(len(left_edges) * 0.90))]
+    right_edge = right_edges[max(0, int(len(right_edges) * 0.10))]
+    split = (left_edge + right_edge) / 2.0 if left_edge < right_edge else center
+    split = max(page.width * 0.45, min(page.width * 0.55, split))
+
+    balance = min(len(left), len(right)) / max(len(left), len(right))
+    separation = max(0.0, right_anchor - left_anchor) / page.width
+    confidence = round(min(0.95, 0.62 + separation * 0.35 + balance * 0.12), 3)
     rounded_split = round(split, 3)
     return PageOrderProfile(
         page_number=page.page_number,
@@ -361,7 +404,8 @@ def infer_page_order(page: CleanedPage) -> PageOrderProfile:
             "two_column",
             f"left_lines:{len(left)}",
             f"right_lines:{len(right)}",
-            f"start_gap:{start_gap:.1f}",
+            f"left_anchor:{left_anchor:.1f}",
+            f"right_anchor:{right_anchor:.1f}",
             f"split_x:{rounded_split:.1f}",
         ),
     )
@@ -379,38 +423,42 @@ def order_page_lines(page: CleanedPage, profile: PageOrderProfile) -> tuple[Visu
     if profile.split_x is None:
         raise ValueError("two-column page profile requires split_x")
     split = profile.split_x
-    full_width = [line for line in page.retained if _is_full_width(line, page.width)]
-    left = [line for line in page.retained if line not in full_width and line.bbox[0] < split]
-    right = [line for line in page.retained if line not in full_width and line.bbox[0] >= split]
+    rule_regions = _rule_y_regions(page)
+    rule_lines = [line for line in page.retained if _inside_rule_region(line, rule_regions)]
+    full_width = [
+        line
+        for line in page.retained
+        if line not in rule_lines and _is_full_width(line, page.width)
+    ]
+    ordinary = [line for line in page.retained if line not in rule_lines and line not in full_width]
+    left = [line for line in ordinary if line.bbox[0] < split]
+    right = [line for line in ordinary if line.bbox[0] >= split]
 
     def center_y(line: VisualLine) -> float:
         return (line.bbox[1] + line.bbox[3]) / 2.0
 
+    events: list[tuple[float, float, tuple[VisualLine, ...]]] = [
+        (top, bottom, tuple(line for line in rule_lines if top - 3.0 <= center_y(line) <= bottom + 3.0))
+        for top, bottom in rule_regions
+    ]
+    events.extend((center_y(line), center_y(line), (line,)) for line in full_width)
+    events.sort(key=lambda item: (item[0], item[1]))
+
     ordered: list[VisualLine] = []
-    remaining_left = set(line.line_id for line in left)
-    remaining_right = set(line.line_id for line in right)
-    for separator in _top_sort(full_width):
-        boundary = center_y(separator)
-        left_band = [
-            line
-            for line in left
-            if line.line_id in remaining_left and center_y(line) < boundary
-        ]
-        right_band = [
-            line
-            for line in right
-            if line.line_id in remaining_right and center_y(line) < boundary
-        ]
+    remaining_left = {line.line_id for line in left}
+    remaining_right = {line.line_id for line in right}
+    emitted_event_lines: set[str] = set()
+    for top, _bottom, event_lines in events:
+        left_band = [line for line in left if line.line_id in remaining_left and center_y(line) < top]
+        right_band = [line for line in right if line.line_id in remaining_right and center_y(line) < top]
         ordered.extend(_top_sort(left_band))
         ordered.extend(_top_sort(right_band))
         remaining_left.difference_update(line.line_id for line in left_band)
         remaining_right.difference_update(line.line_id for line in right_band)
-        ordered.append(separator)
+        fresh = [line for line in event_lines if line.line_id not in emitted_event_lines]
+        ordered.extend(_top_sort(fresh))
+        emitted_event_lines.update(line.line_id for line in fresh)
 
-    ordered.extend(
-        _top_sort([line for line in left if line.line_id in remaining_left])
-    )
-    ordered.extend(
-        _top_sort([line for line in right if line.line_id in remaining_right])
-    )
+    ordered.extend(_top_sort([line for line in left if line.line_id in remaining_left]))
+    ordered.extend(_top_sort([line for line in right if line.line_id in remaining_right]))
     return tuple(ordered)

@@ -4,6 +4,7 @@ from __future__ import annotations
 
 from dataclasses import replace
 from pathlib import Path
+import re
 from typing import Any, Iterable, Sequence
 
 from .models import CHAPTER_SPECS, ChapterLayout, ChapterLayoutAnalysis, IbcLayoutDocument, LogicalBlock
@@ -11,11 +12,14 @@ from .text import (
     _block_evidence,
     _extract_page_lines,
     _join_text,
+    HyphenationLexicon,
+    build_hyphenation_lexicon,
     _normalize_visual_text,
     _opening_commentary_indexes,
     _starts_new_block,
     _trim_opening_commentary,
     parse_chapter_numbers,
+    repair_source_spacing,
 )
 from ..layout_analysis import BodyFontProfile, CleanedPage, RemovedLine, VisualLine, clean_recurring_margins, detect_recurring_margins, estimate_body_font, infer_page_order, order_page_lines as order_analyzed_page_lines
 from ..layout_validation import validate_layout_projection
@@ -28,10 +32,12 @@ def coalesce_visual_lines(
     chapter_number: str,
     body_font: BodyFontProfile | None = None,
     trim_commentary: bool = True,
+    hyphenation_lexicon: HyphenationLexicon | None = None,
 ) -> tuple[LogicalBlock, ...]:
     """Coalesce visual lines into source-mapped structural blocks."""
 
     retained = _trim_opening_commentary(lines) if trim_commentary else tuple(lines)
+    lexicon = hyphenation_lexicon or build_hyphenation_lexicon(retained)
     blocks: list[LogicalBlock] = []
     current_lines: list[VisualLine] = []
     current_text = ""
@@ -65,8 +71,13 @@ def coalesce_visual_lines(
     for line in retained:
         text = line.text
         starts = _starts_new_block(line, chapter_number, body_font)
+        if current_text and current_text.endswith(("-", "‐")) and text[:1].isalpha():
+            current_text = _join_text(current_text, text, lexicon)
+            current_lines.append(line)
+            previous_line = line
+            continue
         if current_text and current_table and not starts:
-            current_text = _join_text(current_text, text)
+            current_text = _join_text(current_text, text, lexicon)
             current_lines.append(line)
             previous_line = line
             continue
@@ -92,7 +103,7 @@ def coalesce_visual_lines(
             current_text = text
             current_lines = [line]
         elif current_text:
-            current_text = _join_text(current_text, text)
+            current_text = _join_text(current_text, text, lexicon)
             current_lines.append(line)
         else:
             current_text = text
@@ -175,7 +186,11 @@ def _announced_ruled_tables(
     page: CleanedPage,
 ) -> tuple[tuple[TableCandidate, VisualLine], ...]:
     labels = sorted(
-        (line for line in page.retained if line.text.startswith("TABLE ")),
+        (
+            line
+            for line in page.retained
+            if re.match(r"^(?:\[[A-Z]{1,3}\]\s+)?TABLE\s+\d", line.text)
+        ),
         key=lambda line: (line.bbox[1], line.bbox[0]),
     )
     if not labels:
@@ -205,6 +220,7 @@ def _table_blocks_in_order(
     *,
     chapter_number: str,
     body_font: BodyFontProfile,
+    hyphenation_lexicon: HyphenationLexicon,
 ) -> tuple[LogicalBlock, ...]:
     table_by_line: dict[str, tuple[TableCandidate, VisualLine]] = {}
     for table, heading in tables:
@@ -225,6 +241,7 @@ def _table_blocks_in_order(
                     chapter_number=chapter_number,
                     body_font=body_font,
                     trim_commentary=False,
+                    hyphenation_lexicon=hyphenation_lexicon,
                 )
             )
             ordinary = []
@@ -292,6 +309,7 @@ def extract_ibc2018_layout(
                 _extract_page_lines(document[page_number - 1], page_number)
                 for page_number in range(spec.start_page, spec.end_page + 1)
             )
+            raw_pages = repair_source_spacing(raw_pages)
             margins = detect_recurring_margins(raw_pages)
             cleaned = clean_recurring_margins(raw_pages, margins)
             body_font = estimate_body_font(cleaned)
@@ -308,11 +326,13 @@ def extract_ibc2018_layout(
                 for page in cleaned
                 for record in _announced_ruled_tables(page)
             )
+            hyphenation_lexicon = build_hyphenation_lexicon(ordered)
             blocks = _table_blocks_in_order(
                 ordered,
                 tables,
                 chapter_number=number,
                 body_font=body_font,
+                hyphenation_lexicon=hyphenation_lexicon,
             )
             analysis = ChapterLayoutAnalysis(
                 body_font=body_font,

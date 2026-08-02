@@ -79,6 +79,30 @@ class LayoutAnalysisTests(unittest.TestCase):
         self.assertIn("2018 IBC 1", [item.text for item in cleaned[0].retained])
         self.assertEqual(cleaned[0].removed[0].reason, "recurring_header")
 
+    def test_fixed_safety_bands_remove_symbol_only_footer(self) -> None:
+        page = PageLines(
+            page_number=1,
+            width=200.0,
+            height=300.0,
+            lines=(
+                make_line(1, 10.0, 10.0, 190.0, "RUNNING HEADER"),
+                make_line(1, 10.0, 150.0, 190.0, "Body text."),
+                make_line(1, 95.0, 286.0, 105.0, "®"),
+            ),
+        )
+        cleaned = clean_recurring_margins((page,), detect_recurring_margins((page,)))
+        self.assertEqual([line.text for line in cleaned[0].retained], ["Body text."])
+        self.assertEqual(
+            [item.reason for item in cleaned[0].removed],
+            ["fixed_header", "fixed_footer"],
+        )
+
+    def test_margin_key_collapses_split_numeric_runs(self) -> None:
+        self.assertEqual(
+            structural_margin_key("2 201 8 INTERNATIONAL BUILDING CODE"),
+            structural_margin_key("12 2018 INTERNATIONAL BUILDING CODE"),
+        )
+
     def test_body_font_estimate_resists_short_oversized_headings(self) -> None:
         page = CleanedPage(
             page_number=1,
@@ -138,6 +162,42 @@ class LayoutAnalysisTests(unittest.TestCase):
             [item.text for item in ordered],
             ["left top", "left bottom", "right top", "right bottom"],
         )
+
+    def test_detects_columns_despite_many_indented_starts(self) -> None:
+        retained = []
+        for index, x0 in enumerate((50.0, 65.0, 80.0, 145.0, 175.0, 50.0)):
+            retained.append(make_line(1, x0, 40.0 + index * 20.0, 285.0, f"left {index}"))
+        for index, x0 in enumerate((326.0, 338.0, 350.0, 410.0, 326.0, 360.0)):
+            retained.append(make_line(1, x0, 44.0 + index * 20.0, 570.0, f"right {index}"))
+        page = CleanedPage(1, 612.0, 792.0, tuple(retained), ())
+
+        profile = infer_page_order(page)
+        ordered = order_page_lines(page, profile)
+
+        self.assertIs(profile.mode, ReadingOrderMode.TWO_COLUMN)
+        self.assertGreater(profile.split_x or 0.0, 285.0)
+        self.assertLess(profile.split_x or 612.0, 326.0)
+        self.assertTrue(all(line.text.startswith("left") for line in ordered[:6]))
+        self.assertTrue(all(line.text.startswith("right") for line in ordered[6:]))
+
+    def test_detects_list_heavy_two_column_page(self) -> None:
+        retained = []
+        for index in range(24):
+            width = 55.0 if index < 18 else 180.0
+            retained.append(
+                make_line(1, 50.0, 30.0 + index * 9.0, 50.0 + width, f"left item {index}")
+            )
+        for index in range(12):
+            retained.append(
+                make_line(1, 320.0, 34.0 + index * 16.0, 560.0, f"right paragraph {index}")
+            )
+        page = CleanedPage(1, 612.0, 792.0, tuple(retained), ())
+
+        profile = infer_page_order(page)
+
+        self.assertIs(profile.mode, ReadingOrderMode.TWO_COLUMN)
+        self.assertGreater(profile.split_x or 0.0, 230.0)
+        self.assertLess(profile.split_x or 612.0, 340.0)
 
     def test_rejects_false_split_without_vertical_overlap(self) -> None:
         page = CleanedPage(
