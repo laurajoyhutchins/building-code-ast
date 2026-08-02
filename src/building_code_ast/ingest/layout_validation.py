@@ -74,9 +74,14 @@ def validate_table_candidate(table: TableCandidate) -> None:
             foreign = [fragment for fragment in cell.fragments if fragment not in row_fragments]
             if foreign:
                 raise ValueError("table cell fragment is outside its parent row")
-            if not 0 <= cell.local_start <= cell.local_end <= len(table.normalized_text):
-                raise ValueError("table cell span is outside normalized table text")
-            if table.normalized_text[cell.local_start : cell.local_end] != cell.text:
+            valid_bounds = (
+                0 <= cell.local_start <= cell.local_end <= len(table.normalized_text)
+            )
+            if (
+                not valid_bounds
+                or table.normalized_text[cell.local_start : cell.local_end]
+                != cell.text
+            ):
                 raise ValueError("table cell span does not round-trip")
 
 
