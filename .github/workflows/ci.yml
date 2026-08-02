@@ -23,18 +23,20 @@ jobs:
       - name: Compile sources
         run: python -m compileall -q src tests
 
-  official-evidence-probe:
+  official-evidence-validation:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v5
         with:
           python-version: "3.12"
-      - name: Probe official evidence delivery formats
-        run: python tools/official_evidence_probe.py
+      - name: Install PDF validation dependencies
+        run: python -m pip install -e '.[evidence-pdf]'
+      - name: Validate registered official evidence
+        run: python tools/validate_official_evidence.py
       - uses: actions/upload-artifact@v4
         with:
-          name: official-evidence-discovery
-          path: official-evidence-discovery.json
+          name: official-evidence-validation
+          path: official-evidence-validation.json
           if-no-files-found: error
           retention-days: 1
