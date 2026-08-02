@@ -134,6 +134,24 @@ class LayoutValidationTests(unittest.TestCase):
         with self.assertRaisesRegex(ValueError, "does not round-trip"):
             validate_table_candidate(table)
 
+    def test_table_cells_must_partition_row_fragments(self) -> None:
+        first = source_fragment(1, "A", block=1)
+        second = source_fragment(1, "B", block=2)
+        row = TableRowCandidate(
+            page_number=1,
+            source_line_ids=("line:a",),
+            cells=(TableCellCandidate("A", (first,), 0, 1),),
+            bbox=(10.0, 10.0, 40.0, 20.0),
+            cell_starts=(10.0,),
+            fragments=(first, second),
+            font_size=10.0,
+            confidence=0.7,
+            evidence=("geometry_cells",),
+        )
+        table = TableCandidate(1, (row,), "A", 0.7, ("rows:1",))
+        with self.assertRaisesRegex(ValueError, "partition"):
+            validate_table_candidate(table)
+
 
 if __name__ == "__main__":
     unittest.main()
