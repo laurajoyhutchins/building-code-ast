@@ -126,7 +126,8 @@ class HierarchyConformanceCliTests(unittest.TestCase):
             seed_path.write_text(json.dumps(_synthetic_seed()), encoding="utf-8")
             oracle_path.write_text(
                 "clause_id,clause_title,parent\n"
-                "110.1,Different Title,110\n",
+                "110.1,Different Title,110\n"
+                "110.1(B),Missing Clause,110.1\n",
                 encoding="utf-8",
             )
 
