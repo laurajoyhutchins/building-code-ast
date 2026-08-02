@@ -310,7 +310,7 @@ def _segment_node(
     candidate_by_position = dict(candidates)
 
     for index, (relative_start, relative_end) in enumerate(
-        zip(boundaries, boundaries[1:], strict=True)
+        zip(boundaries[:-1], boundaries[1:], strict=True)
     ):
         absolute_start, absolute_end = _trimmed_bounds(
             source_text,
