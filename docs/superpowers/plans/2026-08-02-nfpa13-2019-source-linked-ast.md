@@ -1,116 +1,76 @@
 # NFPA 13 (2019) Source-Linked AST Implementation Plan
 
-> **For agentic workers:** REQUIRED SUB-SKILL: Use superpowers:subagent-driven-development (recommended) or superpowers:executing-plans to implement this plan task-by-task. Steps use checkbox (`- [x]`) syntax for tracking.
+**Goal:** Build and verify a deterministic local-only NFPA 13 (2019) compiler that emits a source-linked Document AST, target-domain-aware relationship graph, bounded lexical annotations, diagnostics, overlays, and a strict versioned bundle without publishing licensed source text.
 
-**Goal:** Build and verify a deterministic local-only NFPA 13 (2019) compiler that emits a source-linked document AST, reference graph, semantic annotations, diagnostics, overlays, and validation report.
+**Architecture:** Keep the hierarchy extractor and PDF-layout engine as bounded low-level stages. Finalize their output through the repository’s existing Document AST contract and the NFPA-specific `nfpa13-ast-bundle/0.2.0` reader, schema, and producer manifest.
 
-**Architecture:** Keep the existing hierarchy extractor as the structural authority. Add one focused AST module for source stream, span construction, block parsing, references, semantics, validation, and serialization, plus a thin CLI. The public repository stores no licensed text or generated full-document output.
+**Tech stack:** Python 3.12, standard library, optional PyMuPDF for local source processing, dependency-free `unittest` tests.
 
-**Tech Stack:** Python 3.12, standard library, optional PyMuPDF for local extraction, dependency-free `unittest` synthetic tests.
+## Global constraints
 
-## Global Constraints
-
-- Preserve exact local source text and character spans; never silently normalize semantic evidence.
+- Preserve exact local source text and character spans.
 - Do not commit the source PDF, clause bodies, table contents, figures, overlays, or generated bulk AST.
-- Keep document structure separate from semantic interpretation.
-- Use deterministic node identity from artifact ID, edition ID, node type, and locator.
-- Fail closed on structural or provenance inconsistencies.
-- Emit diagnostics for unsupported or ambiguous language and layout.
+- Keep publication structure separate from lexical and later reviewed semantic projections.
+- Fail closed on source identity, provenance, deterministic identity, contract, or target-domain inconsistencies.
+- Represent unsupported and unresolved cases explicitly rather than guessing.
 
----
+## Completed extraction foundation
 
-### Task 1: Source stream and structural ranges
+- [x] Extract page-, column-, font-, and bounding-box-aware source lines.
+- [x] Build and validate the numbered NFPA 13 hierarchy.
+- [x] Compute ancestry-aware structural ranges, including sparse Annex A material.
+- [x] Parse paragraphs, nested lists, definitions, notes, exceptions, tables, figures, and unsupported objects.
+- [x] Preserve exact evidence spans and source ownership.
+- [x] Emit deterministic serialization, diagnostics, overlays, and low-level validation.
+- [x] Run the original full-source extraction twice with byte-identical raw output.
 
-**Files:**
-- Create: `tools/extract_nfpa13_2019_ast.py`
-- Test: `tests/test_nfpa13_2019_ast.py`
+## Review remediation
 
-**Interfaces:**
-- Consumes: `extract_nfpa13_2019_hierarchy.extract(Path) -> dict[str, Any]`
-- Produces: `build_source_stream(doc, first_page, last_page) -> SourceStream`; `compute_structural_ranges(hierarchy, stream) -> dict[str, StructuralRange]`
+### 1. Annex A relationship semantics
 
-- [x] Write failing tests for two-column reading order, excluded headers/footers/revision markers, canonical offsets, and hierarchy-subtree structural range termination.
-- [x] Run the focused tests and confirm expected failures due to missing interfaces.
-- [x] Implement immutable source-line and structural-range dataclasses plus deterministic source-stream construction.
-- [x] Run focused and existing hierarchy tests.
-- [x] Commit the source-stream slice.
+- [x] Emit `explains` only for explicit Annex A clauses.
+- [x] Keep synthesized Annex A ancestors structural only.
+- [x] Enforce one unique `explains` edge per explicit correspondence node.
+- [x] Add reviewed cases for an implicit ancestor and an explicit explanatory clause.
 
-### Task 2: Direct-text ownership and block syntax
+### 2. Strict bundle contract
 
-**Files:**
-- Modify: `tools/extract_nfpa13_2019_ast.py`
-- Modify: `tests/test_nfpa13_2019_ast.py`
+- [x] Add `nfpa13-ast-bundle/0.2.0` JSON Schema.
+- [x] Add a strict reader with exact-key rejection.
+- [x] Round-trip the nested `document_ast` through the existing `document_ast_from_dict` reader.
+- [x] Add derived-statistics and source-evidence validation.
+- [x] Export the bundle API from `building_code_ast`.
 
-**Interfaces:**
-- Consumes: `SourceStream`, structural ranges
-- Produces: `build_document_tree(...) -> dict[str, Any]`; `parse_direct_blocks(...) -> list[dict[str, Any]]`
+### 3. Reference target domains
 
-- [x] Write failing tests for direct interval subtraction, paragraphs, nested numeric/alphabetic/Roman lists, attached list markers, notes, exceptions, definitions, and figure captions.
-- [x] Run focused tests and confirm failures identify the missing parser behavior.
-- [x] Implement direct-text interval ownership and deterministic block locators.
-- [x] Implement block classification and nesting without semantic interpretation.
-- [x] Run focused and full synthetic tests.
-- [x] Commit the block-AST slice.
+- [x] Add `target_artifact_id` and `target_domain` to every relationship.
+- [x] Preserve unresolved citations as `unspecified_document` without guessing NFPA 13 ownership.
+- [x] Recognize NFPA, ASTM, ASME, AWWA, ANSI, ANSI/UL, IEEE, ISO, and UL publication families.
+- [x] Add synthetic and full-source reviewed expectations for external publication families.
 
-### Task 3: Tables, references, and semantic annotations
+### 4. Reviewed accuracy gate
 
-**Files:**
-- Modify: `tools/extract_nfpa13_2019_ast.py`
-- Modify: `tests/test_nfpa13_2019_ast.py`
+- [x] Add a non-reconstructive reviewed-case registry and schema.
+- [x] Cover normative structure, annex structure, definitions, artifact filtering, table geometry, references, and external standards.
+- [x] Add a local verifier that applies the reviewed expectations to the text-bearing bundle.
+- [x] Keep lexical annotations explicitly `unreviewed` unless separately promoted.
 
-**Interfaces:**
-- Produces: `extract_tables(...)`; `extract_relations(...)`; `classify_semantics(...)`
+### 5. Producer provenance
 
-- [x] Write failing tests for accepted captioned tables, rejected geometry-only detections, Annex A relations, internal clause/table/figure references, unresolved references, and all bounded semantic classes.
-- [x] Run focused tests and confirm expected failures.
-- [x] Implement conservative table extraction and source-backed table nodes.
-- [x] Implement exact-evidence reference relations and deterministic Annex A `explains` edges.
-- [x] Implement bounded semantic annotations with no compliance inference.
-- [x] Run focused and full synthetic tests.
-- [x] Commit the graph and semantic slice.
+- [x] Add exact repository commit, engine and wrapper SHA-256, Python version, PyMuPDF version, source hash, and normalized options.
+- [x] Require a full 40-character producer commit.
+- [x] Remove generic semantic `confidence`; record method, parser revision, and review status instead.
+- [x] Keep timestamps out of generated bundles so identical inputs and producer metadata serialize identically.
 
-### Task 4: Validation, deterministic serialization, overlays, and CLI
+## Verification gates
 
-**Files:**
-- Modify: `tools/extract_nfpa13_2019_ast.py`
-- Modify: `tests/test_nfpa13_2019_ast.py`
-- Create: `docs/reference/nfpa13-local-ast-extractor.md`
+- [ ] Repository tests pass at the final exact head.
+- [ ] GitHub CI and LORE pass at the final exact head.
+- [ ] The complete owner-supplied PDF produces a strict `0.2.0` bundle.
+- [ ] Two strict complete-source runs are byte-identical.
+- [ ] All reviewed golden cases pass against the strict complete-source bundle.
+- [ ] The pull-request description records corrected aggregate counts, final output hash, exact head, and remaining interpretation boundaries.
 
-**Interfaces:**
-- Produces: `validate_bundle(bundle) -> dict[str, Any]`; `write_overlay_pages(...)`; command-line entry point
+## Publication boundary
 
-- [x] Write failing tests for invalid span containment, duplicate locators, broken references, leaf coverage gaps/overlap, revision-marker leakage, and deterministic JSON bytes.
-- [x] Run focused tests and confirm each invariant can fail independently.
-- [x] Implement validation and deterministic serialization.
-- [x] Implement optional overlay rendering and Markdown report output.
-- [x] Implement CLI arguments for PDF, hierarchy input/output, expected SHA-256, overlays, and report path.
-- [x] Document local usage and the publication boundary.
-- [x] Run all synthetic tests and compile checks.
-- [x] Commit the validation and CLI slice.
-
-### Task 5: Complete-source verification and publication
-
-**Files:**
-- Local only: generated AST bundle, report, overlays, deterministic comparison files
-- Modify: pull request description
-
-**Interfaces:**
-- Consumes: owner-supplied `/mnt/data/nfpa-2019.pdf`
-- Produces: local validated bundle and aggregate statistics; updated draft PR
-
-- [x] Run the hierarchy extractor and AST extractor against the complete PDF with the expected source hash.
-- [x] Run a second extraction and compare SHA-256 hashes for deterministic equality.
-- [x] Inspect representative overlays for Chapters 1, 20, 21, Annex A, Annex C, and Annex F.
-- [x] Run the complete unit-test and compile verification lanes fresh.
-- [x] Review the diff against the design and corpus boundary.
-- [x] Publish commits to `agent/nfpa13-2019-clause-hierarchy` and update draft PR #20 with exact verification evidence.
-
-## Completion evidence
-
-- Complete source range processed: PDF pages 21-513.
-- Source SHA-256 matched the expected owner-supplied artifact.
-- Full validation passed with no duplicate locators or IDs, invalid spans, missing anchors, unresolved claimed targets, uncovered source characters, multiply owned source characters, or revision-marker leaks.
-- Two complete extractions were byte-identical at AST SHA-256 `b7aa0e569b29811e93f9ff0fd06cc86dd9607ba6d69e2f0490f095ac0e1186f1`.
-- Representative overlays were inspected for Chapters 1, 20, and 21 and Annexes A, C, and F; source-owned regions exclude running headers and footers.
-- The final bundle contains 39,566 document nodes, 223 accepted tables, 3,423 relations, 15,755 semantic annotations, and 569 evidence-linked diagnostics.
-- Generated source text, table contents, overlays, and the full AST remain local-only.
+Only project-authored code, tests, schemas, non-reconstructive reviewed expectations, documentation, and aggregate validation statistics belong in the public repository. The PDF, canonical source stream, full generated bundle, table contents, figure contents, and overlays remain local artifacts.
