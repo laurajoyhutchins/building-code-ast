@@ -20,10 +20,21 @@ from .model import EvidenceRole, SourceRegisterEntry
 AMENDMENT_PATCH_VERSION = "0.1.0"
 _PUBLICATION_STATE_RE = re.compile(r"^publication:[0-9a-f]{64}$")
 _WAC_RE = re.compile(r"^51-50-[0-9]+$")
-_DIRECTIVE_RE = re.compile(
+_NORMALIZED_DIRECTIVE_RE = re.compile(
     r"^Section\s+(?P<locator>\S+)\s+(?P<directive>"
     r"is added|is replaced|is deleted|is reserved|applies only as follows)\.$",
     re.IGNORECASE,
+)
+_WAC_CITATION_RE = re.compile(r"(?:PDF\s*)?(?:WAC\s*)?(51-50-[0-9]+)", re.IGNORECASE)
+_CLAUSE_RE = re.compile(
+    r"^(?:\[[A-Z]+\]\s*)?"
+    r"(?P<locator>[A-Z]?\d{3,}(?:\.\d+)*(?:\([A-Za-z0-9]+\))*)"
+    r"(?:\.|\s)\s*(?P<body>.+)$"
+)
+_HISTORY_PREFIXES = (
+    "[statutory authority:",
+    "notes of wac",
+    "reviser's note:",
 )
 
 
@@ -272,15 +283,10 @@ class AmendmentSet:
                     continue
                 if _same_effect(first, second):
                     continue
-                if {first.operation, second.operation} == {
-                    AmendmentOperation.SCOPE,
-                    AmendmentOperation.REPLACE,
-                }:
-                    continue
-                if {first.operation, second.operation} == {
-                    AmendmentOperation.SCOPE,
-                    AmendmentOperation.ADD,
-                }:
+                if {first.operation, second.operation} in (
+                    {AmendmentOperation.SCOPE, AmendmentOperation.REPLACE},
+                    {AmendmentOperation.SCOPE, AmendmentOperation.ADD},
+                ):
                     continue
                 raise ValueError(
                     f"overlapping amendment conflict for locator {first.locator}"
@@ -313,7 +319,33 @@ class AmendmentSet:
         )
 
 
-class _WacSectionParser(HTMLParser):
+def _locator_ancestors(locator: str) -> tuple[str, ...]:
+    ancestors: list[str] = []
+    current = locator
+    while current.endswith(")") and "(" in current:
+        current = current[: current.rfind("(")]
+        if current:
+            ancestors.append(current)
+    while "." in current:
+        current = current.rsplit(".", 1)[0]
+        ancestors.append(current)
+    return tuple(ancestors)
+
+
+def _resolve_operation(
+    locator: str,
+    known_base_locators: frozenset[str] | None,
+) -> AmendmentOperation | None:
+    if known_base_locators is None:
+        return None
+    if locator in known_base_locators:
+        return AmendmentOperation.REPLACE
+    if any(parent in known_base_locators for parent in _locator_ancestors(locator)):
+        return AmendmentOperation.ADD
+    return None
+
+
+class _NormalizedWacSectionParser(HTMLParser):
     def __init__(self) -> None:
         super().__init__(convert_charrefs=True)
         self.sections: list[tuple[str, tuple[str, ...]]] = []
@@ -352,18 +384,18 @@ class _WacSectionParser(HTMLParser):
             self._in_section = False
 
 
-def _parse_wac_sections(content: bytes) -> tuple[tuple[str, tuple[str, ...]], ...]:
+def _parse_normalized_sections(content: bytes) -> tuple[tuple[str, tuple[str, ...]], ...]:
     try:
         text = content.decode("utf-8")
     except UnicodeDecodeError as exc:
         raise ValueError("Washington WAC HTML must be UTF-8") from exc
-    parser = _WacSectionParser()
+    parser = _NormalizedWacSectionParser()
     parser.feed(text)
     parser.close()
     return tuple(parser.sections)
 
 
-_OPERATION_BY_DIRECTIVE = {
+_NORMALIZED_OPERATION_BY_DIRECTIVE = {
     "is added": AmendmentOperation.ADD,
     "is replaced": AmendmentOperation.REPLACE,
     "is deleted": AmendmentOperation.DELETE,
@@ -372,10 +404,10 @@ _OPERATION_BY_DIRECTIVE = {
 }
 
 
-class WashingtonWacHtmlAdapter:
-    """Extract a bounded family of chapter 51-50 WAC amendment directives."""
+class NormalizedWashingtonWacHtmlAdapter:
+    """Extract explicit amendment directives from project-normalized WAC HTML."""
 
-    adapter_id = "washington-wac-html"
+    adapter_id = "washington-wac-normalized-html"
     adapter_version = "0.1.0"
     supported_roles = frozenset({EvidenceRole.JURISDICTIONAL_LAW})
     supported_media_types = frozenset({"text/html"})
@@ -413,14 +445,14 @@ class WashingtonWacHtmlAdapter:
     ) -> AdapterResult[JurisdictionalAmendmentPatch]:
         if source.jurisdiction is None:
             raise ValueError("source jurisdiction is required")
-        sections = _parse_wac_sections(content)
+        sections = _parse_normalized_sections(content)
         records: list[JurisdictionalAmendmentPatch] = []
         diagnostics: list[EvidenceDiagnostic] = []
         unsupported: list[SourceRegion] = []
 
         for ordinal, (heading, paragraphs) in enumerate(sections, start=1):
             citation_match = re.search(r"WAC\s+(51-50-[0-9]+)", heading, re.IGNORECASE)
-            anchor = f"wac-section:{ordinal}"
+            anchor = f"normalized-wac-section:{ordinal}"
             region = SourceRegion(anchor=anchor)
             if citation_match is None or not paragraphs:
                 diagnostics.append(
@@ -434,7 +466,7 @@ class WashingtonWacHtmlAdapter:
                 unsupported.append(region)
                 continue
             wac_citation = citation_match.group(1)
-            directive_match = _DIRECTIVE_RE.fullmatch(paragraphs[0])
+            directive_match = _NORMALIZED_DIRECTIVE_RE.fullmatch(paragraphs[0])
             if directive_match is None:
                 diagnostics.append(
                     EvidenceDiagnostic(
@@ -448,18 +480,25 @@ class WashingtonWacHtmlAdapter:
                 continue
             locator = directive_match.group("locator").rstrip(".")
             directive = directive_match.group("directive").casefold()
-            operation = _OPERATION_BY_DIRECTIVE[directive]
-            if self.known_base_locators is not None and locator not in self.known_base_locators:
-                diagnostics.append(
-                    EvidenceDiagnostic(
-                        code="unresolved-base-locator",
-                        severity=DiagnosticSeverity.WARNING,
-                        message="Amendment locator was not present in the supplied base-locator oracle.",
-                        region=region,
+            operation = _NORMALIZED_OPERATION_BY_DIRECTIVE[directive]
+            if self.known_base_locators is not None:
+                locator_resolves = locator in self.known_base_locators
+                if operation is AmendmentOperation.ADD:
+                    locator_resolves = locator_resolves or any(
+                        parent in self.known_base_locators
+                        for parent in _locator_ancestors(locator)
                     )
-                )
-                unsupported.append(region)
-                continue
+                if not locator_resolves:
+                    diagnostics.append(
+                        EvidenceDiagnostic(
+                            code="unresolved-base-locator",
+                            severity=DiagnosticSeverity.WARNING,
+                            message="Amendment locator did not resolve against the supplied base-locator oracle.",
+                            region=region,
+                        )
+                    )
+                    unsupported.append(region)
+                    continue
             body = "\n".join(paragraphs[1:]).strip() or None
             replacement_text = (
                 body
@@ -499,6 +538,284 @@ class WashingtonWacHtmlAdapter:
                     source_anchor=anchor,
                 )
             )
+
+        return AdapterResult(
+            source_id=source.source_id,
+            adapter_id=self.adapter_id,
+            adapter_version=self.adapter_version,
+            records=tuple(records),
+            diagnostics=tuple(diagnostics),
+            unsupported_regions=tuple(unsupported),
+        )
+
+
+class _OfficialWacBlockParser(HTMLParser):
+    _BLOCK_TAGS = {"h1", "h2", "h3", "h4", "h5", "h6", "p", "li"}
+
+    def __init__(self) -> None:
+        super().__init__(convert_charrefs=True)
+        self.blocks: list[str] = []
+        self._capture_tag: str | None = None
+        self._buffer: list[str] = []
+
+    def handle_starttag(self, tag: str, attrs: list[tuple[str, str | None]]) -> None:
+        if self._capture_tag is None and tag in self._BLOCK_TAGS:
+            self._capture_tag = tag
+            self._buffer = []
+        elif self._capture_tag is not None and tag == "br":
+            self._buffer.append(" ")
+
+    def handle_data(self, data: str) -> None:
+        if self._capture_tag is not None:
+            self._buffer.append(data)
+
+    def handle_endtag(self, tag: str) -> None:
+        if self._capture_tag == tag:
+            text = " ".join("".join(self._buffer).split())
+            if text:
+                self.blocks.append(text)
+            self._capture_tag = None
+            self._buffer = []
+
+
+def _parse_official_blocks(content: bytes) -> tuple[str, ...]:
+    try:
+        text = content.decode("utf-8")
+    except UnicodeDecodeError as exc:
+        raise ValueError("Washington WAC HTML must be UTF-8") from exc
+    parser = _OfficialWacBlockParser()
+    parser.feed(text)
+    parser.close()
+    return tuple(parser.blocks)
+
+
+def _wac_sections(blocks: tuple[str, ...]) -> tuple[tuple[str, tuple[str, ...]], ...]:
+    sections: list[tuple[str, tuple[str, ...]]] = []
+    citation: str | None = None
+    body: list[str] = []
+    for block in blocks:
+        match = _WAC_CITATION_RE.search(block)
+        if match is not None:
+            if citation is not None:
+                sections.append((citation, tuple(body)))
+            citation = match.group(1)
+            body = []
+        elif citation is not None:
+            body.append(block)
+    if citation is not None:
+        sections.append((citation, tuple(body)))
+    return tuple(sections)
+
+
+def _is_history_block(text: str) -> bool:
+    lowered = text.casefold().lstrip()
+    return any(lowered.startswith(prefix) for prefix in _HISTORY_PREFIXES)
+
+
+def _group_clause_texts(blocks: tuple[str, ...]) -> tuple[tuple[str, str], ...]:
+    groups: list[tuple[str, list[str]]] = []
+    current_locator: str | None = None
+    current_lines: list[str] = []
+    for block in blocks:
+        if _is_history_block(block):
+            break
+        if block.casefold().startswith("section "):
+            continue
+        match = _CLAUSE_RE.fullmatch(block)
+        if match is not None:
+            if current_locator is not None:
+                groups.append((current_locator, current_lines))
+            current_locator = match.group("locator")
+            current_lines = [block]
+        elif current_locator is not None:
+            current_lines.append(block)
+    if current_locator is not None:
+        groups.append((current_locator, current_lines))
+    return tuple((locator, "\n".join(lines)) for locator, lines in groups)
+
+
+def _validated_date_mapping(
+    value: Mapping[str, str] | None,
+    label: str,
+) -> dict[str, str]:
+    if value is None:
+        return {}
+    if not isinstance(value, Mapping):
+        raise ValueError(f"{label} must be a mapping")
+    result: dict[str, str] = {}
+    for citation, date_value in value.items():
+        if not isinstance(citation, str) or _WAC_RE.fullmatch(citation) is None:
+            raise ValueError(f"{label} keys must be chapter 51-50 WAC citations")
+        _parse_date(date_value, f"{label}[{citation}]")
+        result[citation] = date_value
+    return result
+
+
+def _validated_locator_mapping(
+    value: Mapping[str, str] | None,
+    label: str,
+) -> dict[str, str]:
+    if value is None:
+        return {}
+    if not isinstance(value, Mapping):
+        raise ValueError(f"{label} must be a mapping")
+    result: dict[str, str] = {}
+    for citation, locator in value.items():
+        if not isinstance(citation, str) or _WAC_RE.fullmatch(citation) is None:
+            raise ValueError(f"{label} keys must be chapter 51-50 WAC citations")
+        _require_text(locator, f"{label}[{citation}]")
+        result[citation] = locator
+    return result
+
+
+class WashingtonWacHtmlAdapter:
+    """Extract bounded amendment patches from official-style chapter 51-50 WAC HTML."""
+
+    adapter_id = "washington-wac-html"
+    adapter_version = "0.2.0"
+    supported_roles = frozenset({EvidenceRole.JURISDICTIONAL_LAW})
+    supported_media_types = frozenset({"text/html"})
+
+    def __init__(
+        self,
+        *,
+        base_publication_state_id: str,
+        known_base_locators: frozenset[str],
+        effective_dates_by_wac: Mapping[str, str] | None = None,
+        effective_to_dates_by_wac: Mapping[str, str] | None = None,
+        reserved_locators_by_wac: Mapping[str, str] | None = None,
+    ) -> None:
+        if not isinstance(base_publication_state_id, str) or _PUBLICATION_STATE_RE.fullmatch(
+            base_publication_state_id
+        ) is None:
+            raise ValueError("base_publication_state_id must be a publication state identifier")
+        if not isinstance(known_base_locators, frozenset) or not known_base_locators:
+            raise ValueError("known_base_locators must be a nonempty frozenset")
+        for locator in known_base_locators:
+            _require_text(locator, "known base locator")
+        self.base_publication_state_id = base_publication_state_id
+        self.known_base_locators = known_base_locators
+        self.effective_dates_by_wac = _validated_date_mapping(
+            effective_dates_by_wac, "effective_dates_by_wac"
+        )
+        self.effective_to_dates_by_wac = _validated_date_mapping(
+            effective_to_dates_by_wac, "effective_to_dates_by_wac"
+        )
+        self.reserved_locators_by_wac = _validated_locator_mapping(
+            reserved_locators_by_wac, "reserved_locators_by_wac"
+        )
+        for citation, end_value in self.effective_to_dates_by_wac.items():
+            start_value = self.effective_dates_by_wac.get(citation)
+            if start_value is not None and date.fromisoformat(end_value) <= date.fromisoformat(start_value):
+                raise ValueError(
+                    f"effective_to date for {citation} must be later than effective_from"
+                )
+
+    def _effective_from(self, citation: str, source: SourceRegisterEntry) -> str | None:
+        return self.effective_dates_by_wac.get(citation) or source.publication.effective_on
+
+    def extract(
+        self,
+        source: SourceRegisterEntry,
+        content: bytes,
+    ) -> AdapterResult[JurisdictionalAmendmentPatch]:
+        if source.jurisdiction is None:
+            raise ValueError("source jurisdiction is required")
+        sections = _wac_sections(_parse_official_blocks(content))
+        records: list[JurisdictionalAmendmentPatch] = []
+        diagnostics: list[EvidenceDiagnostic] = []
+        unsupported: list[SourceRegion] = []
+
+        for citation, blocks in sections:
+            section_region = SourceRegion(anchor=f"wac:{citation}")
+            effective_from = self._effective_from(citation, source)
+            if effective_from is None:
+                diagnostics.append(
+                    EvidenceDiagnostic(
+                        code="missing-amendment-effective-date",
+                        severity=DiagnosticSeverity.WARNING,
+                        message="WAC section has no registered effective date.",
+                        region=section_region,
+                    )
+                )
+                unsupported.append(section_region)
+                continue
+            effective_to = self.effective_to_dates_by_wac.get(citation)
+            if any(block.strip().casefold().rstrip(".") == "reserved" for block in blocks):
+                locator = self.reserved_locators_by_wac.get(citation)
+                if locator is None or locator not in self.known_base_locators:
+                    diagnostics.append(
+                        EvidenceDiagnostic(
+                            code="unresolved-reserved-locator",
+                            severity=DiagnosticSeverity.WARNING,
+                            message="Reserved WAC section requires an explicit resolvable base locator.",
+                            region=section_region,
+                        )
+                    )
+                    unsupported.append(section_region)
+                    continue
+                records.append(
+                    JurisdictionalAmendmentPatch(
+                        source_id=source.source_id,
+                        jurisdiction=source.jurisdiction,
+                        authority=source.issuing_body,
+                        base_publication_state_id=self.base_publication_state_id,
+                        wac_citation=citation,
+                        locator=locator,
+                        operation=AmendmentOperation.RESERVE,
+                        effective_from=effective_from,
+                        effective_to=effective_to,
+                        replacement_text=None,
+                        scope=None,
+                        sequence=len(records) + 1,
+                        source_anchor=f"wac:{citation}:{locator}",
+                    )
+                )
+                continue
+
+            clauses = _group_clause_texts(blocks)
+            if not clauses:
+                diagnostics.append(
+                    EvidenceDiagnostic(
+                        code="unsupported-wac-section",
+                        severity=DiagnosticSeverity.WARNING,
+                        message="WAC section did not expose a bounded code locator or reserved marker.",
+                        region=section_region,
+                    )
+                )
+                unsupported.append(section_region)
+                continue
+            for locator, replacement_text in clauses:
+                region = SourceRegion(anchor=f"wac:{citation}:{locator}")
+                operation = _resolve_operation(locator, self.known_base_locators)
+                if operation is None:
+                    diagnostics.append(
+                        EvidenceDiagnostic(
+                            code="unresolved-base-locator",
+                            severity=DiagnosticSeverity.WARNING,
+                            message="WAC clause could not be classified as an add or replacement against the supplied base-locator oracle.",
+                            region=region,
+                        )
+                    )
+                    unsupported.append(region)
+                    continue
+                records.append(
+                    JurisdictionalAmendmentPatch(
+                        source_id=source.source_id,
+                        jurisdiction=source.jurisdiction,
+                        authority=source.issuing_body,
+                        base_publication_state_id=self.base_publication_state_id,
+                        wac_citation=citation,
+                        locator=locator,
+                        operation=operation,
+                        effective_from=effective_from,
+                        effective_to=effective_to,
+                        replacement_text=replacement_text,
+                        scope=None,
+                        sequence=len(records) + 1,
+                        source_anchor=f"wac:{citation}:{locator}",
+                    )
+                )
 
         return AdapterResult(
             source_id=source.source_id,
