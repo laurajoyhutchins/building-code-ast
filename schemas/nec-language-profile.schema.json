@@ -1,0 +1,118 @@
+{
+  "$defs": {
+    "languageEvidence": {
+      "additionalProperties": false,
+      "properties": {
+        "category": {
+          "enum": [
+            "mandatory",
+            "permissive",
+            "explanatory",
+            "nonmandatory"
+          ]
+        },
+        "phrase": {
+          "minLength": 1,
+          "type": "string"
+        },
+        "span": {
+          "$ref": "#/$defs/sourceSpan"
+        }
+      },
+      "required": [
+        "category",
+        "phrase",
+        "span"
+      ],
+      "type": "object"
+    },
+    "sourceSpan": {
+      "additionalProperties": false,
+      "properties": {
+        "end": {
+          "minimum": 0,
+          "type": "integer"
+        },
+        "start": {
+          "minimum": 0,
+          "type": "integer"
+        },
+        "text": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "start",
+        "end",
+        "text"
+      ],
+      "type": "object"
+    }
+  },
+  "$id": "https://github.com/laurajoyhutchins/building-code-ast/schemas/nec-language-profile.schema.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "properties": {
+    "evidence": {
+      "items": {
+        "$ref": "#/$defs/languageEvidence"
+      },
+      "minItems": 1,
+      "type": "array"
+    },
+    "explanatory_markers": {
+      "items": {
+        "minLength": 1,
+        "type": "string"
+      },
+      "type": "array",
+      "uniqueItems": true
+    },
+    "mandatory_phrases": {
+      "items": {
+        "minLength": 1,
+        "type": "string"
+      },
+      "type": "array",
+      "uniqueItems": true
+    },
+    "nonmandatory_markers": {
+      "items": {
+        "minLength": 1,
+        "type": "string"
+      },
+      "type": "array",
+      "uniqueItems": true
+    },
+    "permissive_phrases": {
+      "items": {
+        "minLength": 1,
+        "type": "string"
+      },
+      "type": "array",
+      "uniqueItems": true
+    },
+    "profile_version": {
+      "const": "0.1.0"
+    },
+    "source_locator": {
+      "minLength": 1,
+      "type": "string"
+    },
+    "type": {
+      "const": "nec_language_profile"
+    }
+  },
+  "required": [
+    "profile_version",
+    "type",
+    "source_locator",
+    "mandatory_phrases",
+    "permissive_phrases",
+    "explanatory_markers",
+    "nonmandatory_markers",
+    "evidence"
+  ],
+  "title": "NEC Language Profile",
+  "type": "object"
+}

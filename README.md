@@ -84,6 +84,50 @@ building-code-ast parse "Doors shall not be obstructed."
 
 The runtime package has no third-party dependencies. CLI calls default provision source identity and locator to `inline`; durable ingestion should provide stable identifiers tied to a source artifact, edition, and location.
 
+## Local NEC 2017 ingestion
+
+The optional local ingestion adapter can convert selected articles from a user-supplied 2017 NEC PDF into validated document AST seeds with block-level PDF coordinates. PyMuPDF is isolated in the `nec-pdf` optional dependency group; the base runtime remains dependency-free.
+
+```bash
+python -m pip install -e '.[nec-pdf]'
+python scripts/ingest_nec_2017.py /path/to/nec-2017.pdf \
+  --output-dir generated-private/nec-2017
+```
+
+The default slice produces Articles 90, 100, and 110. Generated files may reproduce protected source expression and must remain private and outside public Git. The repository contains only the ingestion code, synthetic tests, and source-policy documentation. See [`docs/how-to/ingest-nec-2017.md`](docs/how-to/ingest-nec-2017.md).
+
+## NEC hierarchy inference and validation
+
+NEC ingestion infers a publication tree instead of leaving every PDF block directly beneath the Article. It recognizes Parts, Sections, uppercase subdivisions, numeric subdivisions, lowercase subdivisions, and repeated deeper marker levels; assigns canonical locators such as `110.26(A)(1)`; nests notes, exceptions, prose, and unsupported structures beneath the deepest open owner; and preserves ambiguity as diagnostics.
+
+An independently prepared NEC 2017 clause hierarchy may serve as a local parser-development oracle. It is not copied into generated output and is not required at runtime. Compare private ArticleSeeds with that reference using:
+
+```bash
+PYTHONPATH=src python scripts/check_nec_2017_hierarchy.py \
+  --article-seed generated-private/nec-2017/article-90.json \
+  --article-seed generated-private/nec-2017/article-100.json \
+  --article-seed generated-private/nec-2017/article-110.json \
+  --oracle /path/to/nec-2017-clauses.csv \
+  --report generated-private/nec-2017/hierarchy-conformance.json \
+  --strict
+```
+
+The conformance report contains structural metadata and mismatch diagnostics only. It does not copy NEC prose, PDF coordinates, or source hashes. See [`docs/how-to/validate-nec-hierarchy.md`](docs/how-to/validate-nec-hierarchy.md).
+
+## Private NEC definition and section semantics
+
+The next local stage converts those private ArticleSeed files into a structured Article 100 definition index, an evidence-backed Section 90.5 language profile, and clause-level reviews of Sections 110.2, 110.3, 110.14, 110.16, and 110.26. This NEC-specific review layer is independently versioned from the generic Provision AST.
+
+```bash
+PYTHONPATH=src python scripts/build_nec_2017_semantics.py \
+  --article-90 generated-private/nec-2017/article-90.json \
+  --article-100 generated-private/nec-2017/article-100.json \
+  --article-110 generated-private/nec-2017/article-110.json \
+  --output-dir generated-private/nec-2017-semantics
+```
+
+The output preserves exact source spans, separates clauses, exceptions, and informational notes, records references and conservative semantic tags, and links lexical Article 100 definition evidence. It is not a compliance determination. Generated semantic files reproduce NEC text and must remain private. See [`docs/how-to/build-nec-semantic-seed.md`](docs/how-to/build-nec-semantic-seed.md).
+
 ## Repository knowledge
 
 Repository intent, component boundaries, decisions, constraints, and maintenance procedures are maintained with [LORE](https://github.com/laurajoyhutchins/LORE).
@@ -102,10 +146,16 @@ Do not edit accepted records, transaction receipts, extracted facts, or generate
 
 ## Repository layout
 
-- `src/building_code_ast/`: document and provision AST models, strict input handling, parsing, and validation
+- `src/building_code_ast/`: document and provision AST models, strict input handling, parsing, validation, and local ingestion adapters
 - `schemas/`: versioned JSON Schema projections of the public AST contracts and LORE trust-root schemas
 - `fixtures/`: synthetic source and expected-output fixtures
 - `tests/`: parser, provenance, malformed-input, and regression tests
+- `scripts/ingest_nec_2017.py`: local-only coordinate-aware NEC 2017 ingestion CLI
+- `scripts/check_nec_2017_hierarchy.py`: source-free local hierarchy conformance reporter
+- `scripts/build_nec_2017_semantics.py`: private Article 100 definition and selected-section review generator
+- `schemas/nec-*.schema.json`: versioned NEC definition, section-review, and language-profile contracts
+- `docs/reference/nec-definition-index.md`: structured Article 100 definition contract
+- `docs/reference/nec-section-review.md`: selected-section review and Section 90.5 language policy contract
 - `.lore/records/`: append-only accepted semantic knowledge
 - `.lore/transactions/`: accepted LORE transaction receipts
 - `skills/maintain-repository-documentation/`: the shipped provider-neutral LORE maintenance skill
