@@ -160,8 +160,8 @@ class HierarchyBuilderTests(unittest.TestCase):
                 (DocumentNodeType.SUBSECTION, "(A)", "(A) Alpha. Synthetic."),
                 (DocumentNodeType.LIST_ITEM, "(1)", "(1) One. Synthetic."),
                 (DocumentNodeType.LIST_ITEM, "(a)", "(a) Detail. Synthetic."),
-                (DocumentNodeType.LIST_ITEM, "(1)", "(1) Deep item. Synthetic."),
-                (DocumentNodeType.LIST_ITEM, "(2)", "(2) Deep sibling. Synthetic."),
+                (DocumentNodeType.LIST_ITEM, "(1)", "(1) Deep Item. Synthetic."),
+                (DocumentNodeType.LIST_ITEM, "(2)", "(2) Deep Sibling. Synthetic."),
             ]
         )
 
