@@ -55,20 +55,24 @@ Overlapping records with the same legal effect are permitted as reaffirmations o
 
 `active_for(locator, date)` returns the ordered patches active for one base locator on one date. It does not apply those patches to an AST or decide how multiple provisions interact semantically.
 
-## Direct official-style HTML adapter
+## Direct official HTML adapter
 
-`WashingtonWacHtmlAdapter` version `0.3.0` consumes registered UTF-8 `text/html` with evidence role `jurisdictional_law`. It must be invoked through `run_evidence_adapter`, so role, media type, and exact-byte SHA-256 are verified before parsing.
+`WashingtonWacHtmlAdapter` version `0.4.0` consumes registered UTF-8 `text/html` with evidence role `jurisdictional_law`. It must be invoked through `run_evidence_adapter`, so role, media type, and exact-byte SHA-256 are verified before parsing.
 
-The adapter segments official-style pages by chapter 51-50 WAC citation headings, ignores statutory-history blocks, and extracts code clauses beginning with explicit locators. It requires:
+The current Washington state site renders operative provision blocks as leaf `span` elements inside `div.section-page`. The adapter captures citation headings plus only those scoped section-body spans. Locator-like text in breadcrumbs, navigation, titles, and other page chrome is ignored.
+
+The adapter retains support for paragraph- and list-shaped official fixtures. It segments pages by chapter 51-50 WAC citation headings, stops clause grouping at statutory-history blocks, and extracts code clauses beginning with explicit locators. It requires:
 
 - the exact base publication state;
 - a nonempty base-locator oracle;
 - WAC-section or locator-specific effective dates when the source register does not provide one;
 - an explicit WAC-to-locator mapping for reserved sections.
 
-The adapter emits only `add`, `replace`, and `reserve` operations because those classifications can be bounded from official-style clause presentation plus the base AST oracle. Missing dates, unresolved locators, unrecognized sections, and unmapped reserved sections become diagnostics and unsupported regions.
+The adapter emits only `add`, `replace`, and `reserve` operations because those classifications can be bounded from official clause presentation plus the base AST oracle. Missing dates, unresolved locators, unrecognized sections, and unmapped reserved sections become diagnostics and unsupported regions.
 
 Candidate ordinals are preserved even when an earlier source section or clause is unsupported. Gaps are intentional source provenance, not missing output.
+
+The August 2, 2026 official-corpus validation extracted both reviewed clauses from WAC 51-50-0403 and preserved their distinct effective dates: `403.4.8.3` on March 16, 2024, and `403.5.4` on March 15, 2024. The source-free receipt is in [`docs/validation/official-evidence-2026-08-02.json`](../validation/official-evidence-2026-08-02.json).
 
 ## Normalized directive adapter
 
@@ -86,7 +90,7 @@ This grammar supports `add`, `replace`, `delete`, `reserve`, and `scope`. It is 
 
 For `add`, a missing exact locator is expected. Decimal additions resolve through an existing parent locator. Whole-number IBC sections can resolve through their chapter designation, and appendix-prefixed sections can resolve through their appendix designation. Other operations require the exact base locator.
 
-Normalized output also preserves the original section ordinal when unsupported candidates are skipped.
+Normalized output also preserves the original section ordinal when unsupported candidates are skipped. The official-corpus validation replayed two normalized derivatives linked to the exact upstream WAC digest and confirmed deterministic projections.
 
 ## Official-source boundary
 
