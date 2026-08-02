@@ -14,6 +14,9 @@ from building_code_ast.evidence import (
     publication_state_id,
     run_evidence_adapter,
 )
+from building_code_ast.evidence.amendments import (
+    WashingtonWacHtmlAdapter as ModuleWashingtonWacHtmlAdapter,
+)
 
 
 BASE_STATE = PublicationIdentity(
@@ -50,6 +53,10 @@ def _source(content: bytes) -> SourceRegisterEntry:
 
 
 class WashingtonOfficialHtmlTests(unittest.TestCase):
+    def test_public_and_module_import_paths_resolve_to_same_adapter(self) -> None:
+        self.assertIs(ModuleWashingtonWacHtmlAdapter, WashingtonWacHtmlAdapter)
+        self.assertEqual(WashingtonWacHtmlAdapter.adapter_version, "0.4.0")
+
     def test_adapter_reads_leaf_spans_inside_official_section_page(self) -> None:
         html = """
 <html><body>
