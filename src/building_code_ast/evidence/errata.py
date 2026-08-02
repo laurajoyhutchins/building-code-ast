@@ -323,7 +323,7 @@ class IccErrataPdfAdapter:
     """Extract a bounded family of ICC-style ``Page ..., target: directive`` entries."""
 
     adapter_id = "icc-errata-pdf"
-    adapter_version = "0.2.0"
+    adapter_version = "0.3.0"
     supported_roles = frozenset({EvidenceRole.OFFICIAL_CORRECTION})
     supported_media_types = frozenset({"application/pdf"})
 
@@ -432,7 +432,7 @@ class IccErrataPdfAdapter:
                 records.append(
                     ErratumRecord(
                         source_id=source.source_id,
-                        sequence=len(records) + 1,
+                        sequence=candidate_sequence,
                         base_publication_state_id=self.base_publication_state_id,
                         correction_set=correction_set,
                         applies_to_printings=self.applies_to_printings,
