@@ -96,6 +96,24 @@ python scripts/ingest_nec_2017.py /path/to/nec-2017.pdf \
 
 The default slice produces Articles 90, 100, and 110. Generated files may reproduce protected source expression and must remain private and outside public Git. The repository contains only the ingestion code, synthetic tests, and source-policy documentation. See [`docs/how-to/ingest-nec-2017.md`](docs/how-to/ingest-nec-2017.md).
 
+## NEC hierarchy inference and validation
+
+NEC ingestion now infers a real publication tree instead of leaving every PDF block directly beneath the Article. It recognizes Parts, Sections, uppercase subdivisions, numeric subdivisions, lowercase subdivisions, and repeated deeper marker levels; assigns canonical locators such as `110.26(A)(1)`; nests notes, exceptions, prose, and unsupported structures beneath the deepest open owner; and preserves ambiguity as diagnostics.
+
+Laura's independently prepared NEC 2017 clause hierarchy in the junk-drawer repository serves as a local parser-development oracle. It is not copied into generated output and is not required at runtime. Compare private ArticleSeeds with that reference using:
+
+```bash
+PYTHONPATH=src python scripts/check_nec_2017_hierarchy.py \
+  --article-seed generated-private/nec-2017/article-90.json \
+  --article-seed generated-private/nec-2017/article-100.json \
+  --article-seed generated-private/nec-2017/article-110.json \
+  --oracle /path/to/junk-drawer/nec/csv/nec-2017-clauses.csv \
+  --report generated-private/nec-2017/hierarchy-conformance.json \
+  --strict
+```
+
+The conformance report contains structural metadata and mismatch diagnostics only. It does not copy NEC prose, PDF coordinates, or source hashes. See [`docs/how-to/validate-nec-hierarchy.md`](docs/how-to/validate-nec-hierarchy.md).
+
 ## Private NEC definition and section semantics
 
 The next local stage converts those private ArticleSeed files into a structured Article 100 definition index, an evidence-backed Section 90.5 language profile, and clause-level reviews of Sections 110.2, 110.3, 110.14, 110.16, and 110.26. This NEC-specific review layer is independently versioned from the generic Provision AST.
@@ -117,6 +135,7 @@ The output preserves exact source spans, separates clauses, exceptions, and info
 - `fixtures/`: synthetic source and expected-output fixtures
 - `tests/`: parser, provenance, malformed-input, and regression tests
 - `scripts/ingest_nec_2017.py`: local-only coordinate-aware NEC 2017 ingestion CLI
+- `scripts/check_nec_2017_hierarchy.py`: source-free local hierarchy conformance reporter
 - `scripts/build_nec_2017_semantics.py`: private Article 100 definition and selected-section review generator
 - `schemas/nec-*.schema.json`: versioned NEC definition, section-review, and language-profile contracts
 - `docs/reference/nec-definition-index.md`: structured Article 100 definition contract
