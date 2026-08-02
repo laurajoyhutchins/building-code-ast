@@ -1,0 +1,39 @@
+name: Export exact IBC source snapshot
+
+on:
+  pull_request:
+    branches:
+      - agent/ibc-layout-analysis
+
+permissions:
+  contents: read
+
+jobs:
+  export:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out repository history
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Archive immutable parser source
+        shell: bash
+        run: |
+          set -euo pipefail
+          git archive \
+            --format=tar.gz \
+            --output=building-code-ast-c953e523.tar.gz \
+            c953e523069dbc810a91ad8fddbd7f99b7b932dc
+          sha256sum building-code-ast-c953e523.tar.gz > building-code-ast-c953e523.sha256
+          test "$(wc -c < building-code-ast-c953e523.tar.gz)" -gt 0
+
+      - name: Upload exact source artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: building-code-ast-c953e523
+          path: |
+            building-code-ast-c953e523.tar.gz
+            building-code-ast-c953e523.sha256
+          if-no-files-found: error
+          retention-days: 1
