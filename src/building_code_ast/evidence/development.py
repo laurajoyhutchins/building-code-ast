@@ -278,6 +278,9 @@ class DevelopmentLineage:
                     raise ValueError(
                         f"unresolved parent {parent} for record {record.record_key}"
                     )
+        _assert_acyclic(records_by_key)
+        for record in self.records:
+            for parent in record.parent_keys:
                 parent_record = records_by_key[parent]
                 if (
                     parent_record.proposal_id == record.proposal_id
@@ -286,7 +289,6 @@ class DevelopmentLineage:
                     raise ValueError(
                         f"parent sequence must precede child sequence for {record.record_key}"
                     )
-        _assert_acyclic(records_by_key)
 
         by_proposal: dict[str, list[DevelopmentRecord]] = {}
         for record in self.records:
