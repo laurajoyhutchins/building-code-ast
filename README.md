@@ -134,6 +134,10 @@ PYTHONPATH=src python scripts/build_nec_2017_semantics.py \
 
 The output preserves exact source spans, separates clauses, exceptions, and informational notes, records references and conservative semantic tags, and links lexical Article 100 definition evidence. It is not a compliance determination. Generated semantic files reproduce NEC text and must remain private. See [`docs/how-to/build-nec-semantic-seed.md`](docs/how-to/build-nec-semantic-seed.md).
 
+## Decision archaeology
+
+The repository's causal parser and architecture history is recorded in the [Deciduous archaeology overview](docs/archaeology/README.md). The graph distinguishes current main support, branch-only experiments, rejected approaches, and unresolved evidence without changing parser or schema behavior.
+
 ## Repository knowledge
 
 Repository intent, component boundaries, decisions, constraints, and maintenance procedures are maintained with [LORE](https://github.com/laurajoyhutchins/LORE).

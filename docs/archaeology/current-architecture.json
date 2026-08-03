@@ -1,0 +1,842 @@
+{
+  "base_commit": "c8df331cbf6bf5b286acebb0f1e520f40d0fbb17",
+  "edges": [
+    {
+      "edge_type": "leads_to",
+      "from": "decision.amendments-as-patches",
+      "rationale": "",
+      "to": "decision.compliance-downstream"
+    },
+    {
+      "edge_type": "enables",
+      "from": "decision.compiler-not-search",
+      "rationale": "A staged compiler required a source-structure representation before semantics.",
+      "to": "decision.document-ast-separate"
+    },
+    {
+      "edge_type": "leads_to",
+      "from": "decision.compiler-not-search",
+      "rationale": "",
+      "to": "outcome.source-structure-layer"
+    },
+    {
+      "edge_type": "leads_to",
+      "from": "decision.compliance-downstream",
+      "rationale": "",
+      "to": "outcome.bounded-source-layer"
+    },
+    {
+      "edge_type": "leads_to",
+      "from": "decision.coordinate-aware-source-map",
+      "rationale": "",
+      "to": "decision.fail-closed-layout"
+    },
+    {
+      "edge_type": "leads_to",
+      "from": "decision.cross-references-as-relationships",
+      "rationale": "",
+      "to": "outcome.selected-nec-semantic-reviews"
+    },
+    {
+      "edge_type": "leads_to",
+      "from": "decision.deciduous-causal-layer",
+      "rationale": "",
+      "to": "obs.current-main-support"
+    },
+    {
+      "edge_type": "leads_to",
+      "from": "decision.derived-not-authoritative",
+      "rationale": "",
+      "to": "outcome.source-safe-public-repo"
+    },
+    {
+      "edge_type": "requires",
+      "from": "decision.document-ast-separate",
+      "rationale": "The tree contract requires exact source spans and locations.",
+      "to": "decision.coordinate-aware-source-map"
+    },
+    {
+      "edge_type": "leads_to",
+      "from": "decision.document-ast-separate",
+      "rationale": "",
+      "to": "decision.stable-structural-identities"
+    },
+    {
+      "edge_type": "leads_to",
+      "from": "decision.edition-specific-rules-allowed",
+      "rationale": "",
+      "to": "outcome.layered-parser-architecture"
+    },
+    {
+      "edge_type": "leads_to",
+      "from": "decision.equipment-lineage-owns-listings",
+      "rationale": "",
+      "to": "decision.amendments-as-patches"
+    },
+    {
+      "edge_type": "leads_to",
+      "from": "decision.family-grammar-boundary",
+      "rationale": "",
+      "to": "decision.edition-specific-rules-allowed"
+    },
+    {
+      "edge_type": "leads_to",
+      "from": "decision.first-class-special-structures",
+      "rationale": "",
+      "to": "decision.cross-references-as-relationships"
+    },
+    {
+      "edge_type": "leads_to",
+      "from": "decision.fragment-by-fragment-review",
+      "rationale": "",
+      "to": "decision.hierarchy-invariants"
+    },
+    {
+      "edge_type": "leads_to",
+      "from": "decision.hierarchy-invariants",
+      "rationale": "",
+      "to": "decision.tables-figures-references-checks"
+    },
+    {
+      "edge_type": "leads_to",
+      "from": "decision.local-private-nec-source",
+      "rationale": "",
+      "to": "decision.selected-nec-articles"
+    },
+    {
+      "edge_type": "leads_to",
+      "from": "decision.map-owns-jurisdiction",
+      "rationale": "",
+      "to": "decision.equipment-lineage-owns-listings"
+    },
+    {
+      "edge_type": "leads_to",
+      "from": "decision.nec-oracle-reference-only",
+      "rationale": "",
+      "to": "decision.nec-style-manual-prior"
+    },
+    {
+      "edge_type": "leads_to",
+      "from": "decision.nec-specific-grammar",
+      "rationale": "",
+      "to": "decision.nec-oracle-reference-only"
+    },
+    {
+      "edge_type": "enables",
+      "from": "decision.nec-specific-grammar",
+      "rationale": "Stable clause ownership enabled semantic review.",
+      "to": "goal.model-clause-context"
+    },
+    {
+      "edge_type": "enables",
+      "from": "decision.nec-style-manual-prior",
+      "rationale": "Style profiles demonstrated legitimate edition-specific parsing.",
+      "to": "decision.edition-specific-rules-allowed"
+    },
+    {
+      "edge_type": "leads_to",
+      "from": "decision.parser-transformation-review",
+      "rationale": "",
+      "to": "decision.source-register-rights"
+    },
+    {
+      "edge_type": "leads_to",
+      "from": "decision.shared-neutral-primitives",
+      "rationale": "",
+      "to": "decision.family-grammar-boundary"
+    },
+    {
+      "edge_type": "leads_to",
+      "from": "decision.source-edition-location",
+      "rationale": "",
+      "to": "decision.parser-transformation-review"
+    },
+    {
+      "edge_type": "leads_to",
+      "from": "decision.source-register-rights",
+      "rationale": "",
+      "to": "decision.derived-not-authoritative"
+    },
+    {
+      "edge_type": "leads_to",
+      "from": "decision.stable-structural-identities",
+      "rationale": "",
+      "to": "outcome.shared-document-primitives"
+    },
+    {
+      "edge_type": "enables",
+      "from": "decision.synthetic-regression-fixtures",
+      "rationale": "Support claims must follow reproducible tests and current tree state.",
+      "to": "decision.claims-follow-tree-and-tests"
+    },
+    {
+      "edge_type": "leads_to",
+      "from": "decision.tables-figures-references-checks",
+      "rationale": "",
+      "to": "decision.synthetic-regression-fixtures"
+    },
+    {
+      "edge_type": "enables",
+      "from": "decision.use-lore-shipped-skill",
+      "rationale": "LORE maintains accepted current knowledge while Deciduous records causal evolution.",
+      "to": "decision.deciduous-causal-layer"
+    },
+    {
+      "edge_type": "leads_to",
+      "from": "decision.use-lore-shipped-skill",
+      "rationale": "",
+      "to": "decision.deciduous-causal-layer"
+    },
+    {
+      "edge_type": "leads_to",
+      "from": "goal.downstream-boundaries",
+      "rationale": "",
+      "to": "decision.map-owns-jurisdiction"
+    },
+    {
+      "edge_type": "leads_to",
+      "from": "goal.provenance-trust",
+      "rationale": "",
+      "to": "decision.source-edition-location"
+    },
+    {
+      "edge_type": "leads_to",
+      "from": "goal.validate-structure",
+      "rationale": "",
+      "to": "decision.fragment-by-fragment-review"
+    },
+    {
+      "edge_type": "leads_to",
+      "from": "obs.branch-bound-support",
+      "rationale": "",
+      "to": "outcome.current-contract"
+    },
+    {
+      "edge_type": "leads_to",
+      "from": "obs.current-main-support",
+      "rationale": "",
+      "to": "obs.branch-bound-support"
+    },
+    {
+      "edge_type": "enables",
+      "from": "outcome.layered-parser-architecture",
+      "rationale": "Shared contracts and family grammars define the current durable model.",
+      "to": "outcome.current-contract"
+    },
+    {
+      "edge_type": "leads_to",
+      "from": "outcome.nec-selected-fragments-validated",
+      "rationale": "Flat selected fragments exposed the need for printed hierarchy.",
+      "to": "goal.nec-printed-hierarchy"
+    },
+    {
+      "edge_type": "leads_to",
+      "from": "outcome.source-safe-public-repo",
+      "rationale": "",
+      "to": "decision.preserve-uncertainty"
+    },
+    {
+      "edge_type": "leads_to",
+      "from": "outcome.source-structure-layer",
+      "rationale": "",
+      "to": "decision.no-legal-authority-claim"
+    }
+  ],
+  "nodes": [
+    {
+      "arc": "downstream",
+      "confidence": "high",
+      "lifecycle_status": "active",
+      "node_type": "decision",
+      "repository_owner": "laurajoyhutchins/building-code-ast",
+      "semantic_id": "decision.amendments-as-patches",
+      "source_state": "accepted",
+      "support_scope": "Washington evidence adapter",
+      "title": "Model jurisdictional amendments as source-backed patches against an identified base publication state"
+    },
+    {
+      "arc": "validation",
+      "confidence": "high",
+      "lifecycle_status": "active",
+      "node_type": "decision",
+      "repository_owner": "laurajoyhutchins/building-code-ast",
+      "semantic_id": "decision.claims-follow-tree-and-tests",
+      "source_state": "accepted",
+      "support_scope": "archaeology rule",
+      "title": "Reconcile PR claims against merge state, current tree, tests, and generated outputs"
+    },
+    {
+      "arc": "concept",
+      "confidence": "high",
+      "lifecycle_status": "active",
+      "node_type": "decision",
+      "repository_owner": "laurajoyhutchins/building-code-ast",
+      "semantic_id": "decision.compiler-not-search",
+      "source_state": "accepted",
+      "support_scope": "current architecture",
+      "title": "Build a staged compiler rather than a search index"
+    },
+    {
+      "arc": "downstream",
+      "confidence": "high",
+      "lifecycle_status": "active",
+      "node_type": "decision",
+      "repository_owner": "laurajoyhutchins/building-code-ast",
+      "semantic_id": "decision.compliance-downstream",
+      "source_state": "accepted",
+      "support_scope": "current non-goal",
+      "title": "Keep compliance and engineering reasoning out of the source-structure repository"
+    },
+    {
+      "arc": "pdf-layout",
+      "confidence": "high",
+      "lifecycle_status": "active",
+      "node_type": "decision",
+      "repository_owner": "laurajoyhutchins/building-code-ast",
+      "semantic_id": "decision.coordinate-aware-source-map",
+      "source_state": "accepted",
+      "support_scope": "NEC main; IBC branch",
+      "title": "Preserve page, geometry, extraction span, and exclusion evidence"
+    },
+    {
+      "arc": "clause-semantics",
+      "confidence": "high",
+      "lifecycle_status": "active",
+      "node_type": "decision",
+      "repository_owner": "laurajoyhutchins/building-code-ast",
+      "semantic_id": "decision.cross-references-as-relationships",
+      "source_state": "accepted",
+      "support_scope": "NEC main; NFPA 13 branch",
+      "title": "Preserve references as evidence-backed relationships rather than copied text"
+    },
+    {
+      "arc": "governance-current",
+      "confidence": "high",
+      "lifecycle_status": "active",
+      "node_type": "decision",
+      "repository_owner": "laurajoyhutchins/building-code-ast",
+      "semantic_id": "decision.deciduous-causal-layer",
+      "source_state": "accepted",
+      "support_scope": "this archaeology backfill",
+      "title": "Add Deciduous as a non-authoritative causal archaeology layer"
+    },
+    {
+      "arc": "provenance",
+      "confidence": "high",
+      "lifecycle_status": "active",
+      "node_type": "decision",
+      "repository_owner": "laurajoyhutchins/building-code-ast",
+      "semantic_id": "decision.derived-not-authoritative",
+      "source_state": "accepted",
+      "support_scope": "current authority boundary",
+      "title": "Label ASTs, expected changelogs, and projections as derived evidence"
+    },
+    {
+      "arc": "schema",
+      "confidence": "high",
+      "lifecycle_status": "active",
+      "node_type": "decision",
+      "repository_owner": "laurajoyhutchins/building-code-ast",
+      "semantic_id": "decision.document-ast-separate",
+      "source_state": "accepted",
+      "support_scope": "document-ast 0.1.0",
+      "title": "Create an independently versioned Document AST"
+    },
+    {
+      "arc": "parser-families",
+      "confidence": "high",
+      "lifecycle_status": "active",
+      "node_type": "decision",
+      "repository_owner": "laurajoyhutchins/building-code-ast",
+      "semantic_id": "decision.edition-specific-rules-allowed",
+      "source_state": "accepted",
+      "support_scope": "current parser policy",
+      "title": "Permit edition-specific profiles when evidence shows layout or editorial change"
+    },
+    {
+      "arc": "downstream",
+      "confidence": "high",
+      "lifecycle_status": "active",
+      "node_type": "decision",
+      "repository_owner": "laurajoyhutchins/electrical-equipment-lineage",
+      "semantic_id": "decision.equipment-lineage-owns-listings",
+      "source_state": "accepted",
+      "support_scope": "external current architecture",
+      "title": "Electrical Equipment Lineage owns manufacturer, product, UL, and replacement evidence"
+    },
+    {
+      "arc": "pdf-layout",
+      "confidence": "high",
+      "lifecycle_status": "active",
+      "node_type": "decision",
+      "repository_owner": "laurajoyhutchins/building-code-ast",
+      "semantic_id": "decision.fail-closed-layout",
+      "source_state": "accepted",
+      "support_scope": "current parser policy",
+      "title": "Keep ambiguous or unsupported layout as diagnostics instead of discarding it"
+    },
+    {
+      "arc": "parser-families",
+      "confidence": "high",
+      "lifecycle_status": "active",
+      "node_type": "decision",
+      "repository_owner": "laurajoyhutchins/building-code-ast",
+      "semantic_id": "decision.family-grammar-boundary",
+      "source_state": "accepted",
+      "support_scope": "current architecture; branch implementations vary",
+      "title": "Keep NEC, IBC, ICC evidence, and NFPA grammars separately versioned"
+    },
+    {
+      "arc": "clause-semantics",
+      "confidence": "high",
+      "lifecycle_status": "active",
+      "node_type": "decision",
+      "repository_owner": "laurajoyhutchins/building-code-ast",
+      "semantic_id": "decision.first-class-special-structures",
+      "source_state": "accepted",
+      "support_scope": "document and NEC semantic layers",
+      "title": "Represent definitions, lists, notes, tables, footnotes, and unsupported regions explicitly"
+    },
+    {
+      "arc": "validation",
+      "confidence": "high",
+      "lifecycle_status": "active",
+      "node_type": "decision",
+      "repository_owner": "laurajoyhutchins/building-code-ast",
+      "semantic_id": "decision.fragment-by-fragment-review",
+      "source_state": "accepted",
+      "support_scope": "selected-source validation",
+      "title": "Compare extracted fragments against source locations and known-good references"
+    },
+    {
+      "arc": "validation",
+      "confidence": "high",
+      "lifecycle_status": "active",
+      "node_type": "decision",
+      "repository_owner": "laurajoyhutchins/building-code-ast",
+      "semantic_id": "decision.hierarchy-invariants",
+      "source_state": "accepted",
+      "support_scope": "current validators",
+      "title": "Enforce identity, span, containment, uniqueness, ordering, and parent-child invariants"
+    },
+    {
+      "arc": "nec-edition-comparison",
+      "confidence": "high",
+      "lifecycle_status": "active",
+      "node_type": "decision",
+      "repository_owner": "laurajoyhutchins/building-code-ast",
+      "semantic_id": "decision.issued-edition-controls",
+      "source_state": "accepted",
+      "support_scope": "general authority boundary",
+      "title": "Treat independently observed issued editions as controlling text evidence"
+    },
+    {
+      "arc": "nec-ingestion",
+      "confidence": "high",
+      "lifecycle_status": "active",
+      "node_type": "decision",
+      "repository_owner": "laurajoyhutchins/building-code-ast",
+      "semantic_id": "decision.local-private-nec-source",
+      "source_state": "accepted",
+      "support_scope": "publication boundary",
+      "title": "Keep NEC source artifacts and text-bearing outputs local"
+    },
+    {
+      "arc": "downstream",
+      "confidence": "high",
+      "lifecycle_status": "active",
+      "node_type": "decision",
+      "repository_owner": "laurajoyhutchins/building-code-map",
+      "semantic_id": "decision.map-owns-jurisdiction",
+      "source_state": "accepted",
+      "support_scope": "external current architecture",
+      "title": "Building Code Map owns location, authority, adoption, amendment applicability, and permit-context resolution"
+    },
+    {
+      "arc": "nec-hierarchy",
+      "confidence": "high",
+      "lifecycle_status": "active",
+      "node_type": "decision",
+      "repository_owner": "laurajoyhutchins/building-code-ast",
+      "semantic_id": "decision.nec-oracle-reference-only",
+      "source_state": "accepted",
+      "support_scope": "development oracle",
+      "title": "Use the prior junk-drawer NEC hierarchy as a conformance oracle, not a dependency"
+    },
+    {
+      "arc": "nec-hierarchy",
+      "confidence": "high",
+      "lifecycle_status": "active",
+      "node_type": "decision",
+      "repository_owner": "laurajoyhutchins/building-code-ast",
+      "semantic_id": "decision.nec-specific-grammar",
+      "source_state": "accepted",
+      "support_scope": "2017 NEC selected articles",
+      "title": "Use NEC-specific hierarchy rules with contextual evidence"
+    },
+    {
+      "arc": "nec-hierarchy",
+      "confidence": "high",
+      "lifecycle_status": "active",
+      "node_type": "decision",
+      "repository_owner": "laurajoyhutchins/building-code-ast",
+      "semantic_id": "decision.nec-style-manual-prior",
+      "source_state": "accepted",
+      "support_scope": "2017 profile plus 2020/2023 priors",
+      "title": "Use edition-aware NEC Style Manual profiles as parser priors and validation context"
+    },
+    {
+      "arc": "concept",
+      "confidence": "high",
+      "lifecycle_status": "active",
+      "node_type": "decision",
+      "repository_owner": "laurajoyhutchins/building-code-ast",
+      "semantic_id": "decision.no-legal-authority-claim",
+      "source_state": "accepted",
+      "support_scope": "governance boundary",
+      "title": "Separate technical representation from legal authority"
+    },
+    {
+      "arc": "provenance",
+      "confidence": "high",
+      "lifecycle_status": "active",
+      "node_type": "decision",
+      "repository_owner": "laurajoyhutchins/building-code-ast",
+      "semantic_id": "decision.parser-transformation-review",
+      "source_state": "accepted",
+      "support_scope": "evidence adapters; NFPA branch richer",
+      "title": "Record parser version, transformation history, diagnostics, and review state where contracts support them"
+    },
+    {
+      "arc": "provenance",
+      "confidence": "high",
+      "lifecycle_status": "active",
+      "node_type": "decision",
+      "repository_owner": "laurajoyhutchins/building-code-ast",
+      "semantic_id": "decision.preserve-uncertainty",
+      "source_state": "accepted",
+      "support_scope": "current parser policy",
+      "title": "Preserve malformed, ambiguous, or unsupported content instead of dropping it"
+    },
+    {
+      "arc": "nec-ingestion",
+      "confidence": "high",
+      "lifecycle_status": "edition-specific",
+      "node_type": "decision",
+      "repository_owner": "laurajoyhutchins/building-code-ast",
+      "semantic_id": "decision.selected-nec-articles",
+      "source_state": "accepted",
+      "support_scope": "2017 NEC selected articles",
+      "title": "Validate Articles 90, 100, and 110 before claiming broader coverage"
+    },
+    {
+      "arc": "parser-families",
+      "confidence": "high",
+      "lifecycle_status": "active",
+      "node_type": "decision",
+      "repository_owner": "laurajoyhutchins/building-code-ast",
+      "semantic_id": "decision.shared-neutral-primitives",
+      "source_state": "accepted",
+      "support_scope": "current shared contracts",
+      "title": "Share source identity, spans, diagnostics, tables, and generic node contracts"
+    },
+    {
+      "arc": "provenance",
+      "confidence": "high",
+      "lifecycle_status": "active",
+      "node_type": "decision",
+      "repository_owner": "laurajoyhutchins/building-code-ast",
+      "semantic_id": "decision.source-edition-location",
+      "source_state": "accepted",
+      "support_scope": "current contracts",
+      "title": "Record source artifact, edition, page or region, printed locator, and exact extraction span"
+    },
+    {
+      "arc": "provenance",
+      "confidence": "high",
+      "lifecycle_status": "active",
+      "node_type": "decision",
+      "repository_owner": "laurajoyhutchins/building-code-ast",
+      "semantic_id": "decision.source-register-rights",
+      "source_state": "accepted",
+      "support_scope": "source-register 0.1.0",
+      "title": "Separate evidence role, access scope, and rights status"
+    },
+    {
+      "arc": "schema",
+      "confidence": "high",
+      "lifecycle_status": "active",
+      "node_type": "decision",
+      "repository_owner": "laurajoyhutchins/building-code-ast",
+      "semantic_id": "decision.stable-structural-identities",
+      "source_state": "accepted",
+      "support_scope": "document-ast 0.1.0",
+      "title": "Derive node identity from artifact, edition, node type, and structural locator"
+    },
+    {
+      "arc": "validation",
+      "confidence": "high",
+      "lifecycle_status": "active",
+      "node_type": "decision",
+      "repository_owner": "laurajoyhutchins/building-code-ast",
+      "semantic_id": "decision.synthetic-regression-fixtures",
+      "source_state": "accepted",
+      "support_scope": "current test strategy",
+      "title": "Use public synthetic fixtures and private source replay together"
+    },
+    {
+      "arc": "validation",
+      "confidence": "high",
+      "lifecycle_status": "active",
+      "node_type": "decision",
+      "repository_owner": "laurajoyhutchins/building-code-ast",
+      "semantic_id": "decision.tables-figures-references-checks",
+      "source_state": "accepted",
+      "support_scope": "document AST plus branch-specific checks",
+      "title": "Validate table partitions, figure support claims, and cross-reference resolution separately"
+    },
+    {
+      "arc": "ul-related-sources",
+      "confidence": "high",
+      "lifecycle_status": "active",
+      "node_type": "decision",
+      "repository_owner": "laurajoyhutchins/electrical-equipment-lineage",
+      "semantic_id": "decision.ul-external-ownership",
+      "source_state": "accepted",
+      "support_scope": "external current architecture",
+      "title": "Keep UL White Book compilation and certification lineage in Electrical Equipment Lineage"
+    },
+    {
+      "arc": "governance-current",
+      "confidence": "high",
+      "lifecycle_status": "active",
+      "node_type": "decision",
+      "repository_owner": "laurajoyhutchins/building-code-ast",
+      "semantic_id": "decision.use-lore-shipped-skill",
+      "source_state": "accepted",
+      "support_scope": "current governance",
+      "title": "Adopt LORE itself and its shipped maintenance skill"
+    },
+    {
+      "arc": "downstream",
+      "confidence": "high",
+      "lifecycle_status": "active",
+      "node_type": "goal",
+      "repository_owner": "laurajoyhutchins/building-code-ast",
+      "semantic_id": "goal.downstream-boundaries",
+      "source_state": "accepted",
+      "support_scope": "current architecture",
+      "title": "Keep source structure reusable without absorbing jurisdiction, product lineage, or compliance logic"
+    },
+    {
+      "arc": "concept",
+      "confidence": "high",
+      "lifecycle_status": "active",
+      "node_type": "goal",
+      "repository_owner": "laurajoyhutchins/building-code-ast",
+      "semantic_id": "goal.machine-legible-code",
+      "source_state": "accepted",
+      "support_scope": "repository purpose",
+      "title": "Create a deterministic machine-legible building-code representation"
+    },
+    {
+      "arc": "clause-semantics",
+      "confidence": "high",
+      "lifecycle_status": "active",
+      "node_type": "goal",
+      "repository_owner": "laurajoyhutchins/building-code-ast",
+      "semantic_id": "goal.model-clause-context",
+      "source_state": "accepted",
+      "support_scope": "selected NEC semantic reviews",
+      "title": "Preserve clause context before deriving normative meaning"
+    },
+    {
+      "arc": "nec-hierarchy",
+      "confidence": "high",
+      "lifecycle_status": "active",
+      "node_type": "goal",
+      "repository_owner": "laurajoyhutchins/building-code-ast",
+      "semantic_id": "goal.nec-printed-hierarchy",
+      "source_state": "accepted",
+      "support_scope": "selected NEC articles",
+      "title": "Reconstruct NEC articles, parts, sections, subdivisions, lists, notes, and exceptions"
+    },
+    {
+      "arc": "provenance",
+      "confidence": "high",
+      "lifecycle_status": "active",
+      "node_type": "goal",
+      "repository_owner": "laurajoyhutchins/building-code-ast",
+      "semantic_id": "goal.provenance-trust",
+      "source_state": "accepted",
+      "support_scope": "current trust model",
+      "title": "Make every derived structure auditable without confusing it with authoritative source text"
+    },
+    {
+      "arc": "pdf-layout",
+      "confidence": "high",
+      "lifecycle_status": "active",
+      "node_type": "goal",
+      "repository_owner": "laurajoyhutchins/building-code-ast",
+      "semantic_id": "goal.recover-printed-structure",
+      "source_state": "accepted",
+      "support_scope": "shared layout machinery plus branch experiments",
+      "title": "Recover printed structure from imperfect PDF evidence"
+    },
+    {
+      "arc": "governance-current",
+      "confidence": "high",
+      "lifecycle_status": "active",
+      "node_type": "goal",
+      "repository_owner": "laurajoyhutchins/building-code-ast",
+      "semantic_id": "goal.reproducible-repository-knowledge",
+      "source_state": "accepted",
+      "support_scope": "current governance",
+      "title": "Make architecture decisions, parser limits, and verification evidence maintainable"
+    },
+    {
+      "arc": "parser-families",
+      "confidence": "high",
+      "lifecycle_status": "active",
+      "node_type": "goal",
+      "repository_owner": "laurajoyhutchins/building-code-ast",
+      "semantic_id": "goal.share-without-universalizing",
+      "source_state": "accepted",
+      "support_scope": "current architecture principle",
+      "title": "Share parser machinery without pretending all code families use one grammar"
+    },
+    {
+      "arc": "schema",
+      "confidence": "high",
+      "lifecycle_status": "active",
+      "node_type": "goal",
+      "repository_owner": "laurajoyhutchins/building-code-ast",
+      "semantic_id": "goal.structure-before-semantics",
+      "source_state": "accepted",
+      "support_scope": "current architecture",
+      "title": "Represent publication structure before interpreting rule meaning"
+    },
+    {
+      "arc": "validation",
+      "confidence": "high",
+      "lifecycle_status": "active",
+      "node_type": "goal",
+      "repository_owner": "laurajoyhutchins/building-code-ast",
+      "semantic_id": "goal.validate-structure",
+      "source_state": "accepted",
+      "support_scope": "current methodology",
+      "title": "Validate parser claims against source evidence and invariants"
+    },
+    {
+      "arc": "governance-current",
+      "confidence": "high",
+      "lifecycle_status": "active",
+      "node_type": "observation",
+      "repository_owner": "laurajoyhutchins/building-code-ast",
+      "semantic_id": "obs.branch-bound-support",
+      "source_state": "accepted",
+      "support_scope": "current limit register",
+      "title": "IBC 2018, NFPA 13 2019, NEC 2020 expected changes, and Provision AST 0.3 remain branch-bound"
+    },
+    {
+      "arc": "governance-current",
+      "confidence": "high",
+      "lifecycle_status": "active",
+      "node_type": "observation",
+      "repository_owner": "laurajoyhutchins/building-code-ast",
+      "semantic_id": "obs.current-main-support",
+      "source_state": "accepted",
+      "support_scope": "current main",
+      "title": "Current main supports shared AST contracts, selected NEC 2017 workflows, and publication evidence adapters"
+    },
+    {
+      "arc": "downstream",
+      "confidence": "high",
+      "lifecycle_status": "active",
+      "node_type": "outcome",
+      "repository_owner": "laurajoyhutchins/building-code-ast",
+      "semantic_id": "outcome.bounded-source-layer",
+      "source_state": "accepted",
+      "support_scope": "current repository contract",
+      "title": "Building Code AST remains a bounded compiler and evidence substrate"
+    },
+    {
+      "arc": "governance-current",
+      "confidence": "high",
+      "lifecycle_status": "active",
+      "node_type": "outcome",
+      "repository_owner": "laurajoyhutchins/building-code-ast",
+      "semantic_id": "outcome.current-contract",
+      "source_state": "accepted",
+      "support_scope": "current repository contract",
+      "title": "The durable contract is provenance-first, family-specific, fail-closed, and explicitly bounded"
+    },
+    {
+      "arc": "parser-families",
+      "confidence": "high",
+      "lifecycle_status": "active",
+      "node_type": "outcome",
+      "repository_owner": "laurajoyhutchins/building-code-ast",
+      "semantic_id": "outcome.layered-parser-architecture",
+      "source_state": "accepted",
+      "support_scope": "current architecture",
+      "title": "The architecture became neutral at contracts and specific at grammars"
+    },
+    {
+      "arc": "nec-ingestion",
+      "confidence": "high",
+      "lifecycle_status": "active",
+      "node_type": "outcome",
+      "repository_owner": "laurajoyhutchins/building-code-ast",
+      "semantic_id": "outcome.nec-selected-fragments-validated",
+      "source_state": "accepted",
+      "support_scope": "2017 NEC Articles 90, 100, 110",
+      "title": "NEC 2017 support is real but intentionally bounded"
+    },
+    {
+      "arc": "clause-semantics",
+      "confidence": "high",
+      "lifecycle_status": "active",
+      "node_type": "outcome",
+      "repository_owner": "laurajoyhutchins/building-code-ast",
+      "semantic_id": "outcome.selected-nec-semantic-reviews",
+      "source_state": "accepted",
+      "support_scope": "selected NEC sections",
+      "title": "Selected NEC clauses gained reviewable semantic projections"
+    },
+    {
+      "arc": "schema",
+      "confidence": "high",
+      "lifecycle_status": "active",
+      "node_type": "outcome",
+      "repository_owner": "laurajoyhutchins/building-code-ast",
+      "semantic_id": "outcome.shared-document-primitives",
+      "source_state": "accepted",
+      "support_scope": "document-ast 0.1.0",
+      "title": "Shared document primitives became the neutral contract"
+    },
+    {
+      "arc": "provenance",
+      "confidence": "high",
+      "lifecycle_status": "active",
+      "node_type": "outcome",
+      "repository_owner": "laurajoyhutchins/building-code-ast",
+      "semantic_id": "outcome.source-safe-public-repo",
+      "source_state": "accepted",
+      "support_scope": "current publication boundary",
+      "title": "The repository publishes contracts and synthetic evidence while text-bearing outputs stay private"
+    },
+    {
+      "arc": "concept",
+      "confidence": "high",
+      "lifecycle_status": "active",
+      "node_type": "outcome",
+      "repository_owner": "laurajoyhutchins/building-code-ast",
+      "semantic_id": "outcome.source-structure-layer",
+      "source_state": "accepted",
+      "support_scope": "current architecture",
+      "title": "Building Code AST became a source-structure and evidence layer"
+    }
+  ],
+  "schema": "building-code-ast-current-architecture-v1"
+}
