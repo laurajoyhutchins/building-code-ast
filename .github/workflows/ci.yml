@@ -17,8 +17,14 @@ jobs:
         with:
           python-version: "3.12"
       - name: Install package
-        run: python -m pip install -e .
+        run: python -m pip install -e '.[validation]'
       - name: Run unit tests
         run: python -m unittest discover -s tests -v
+      - name: Validate source-safe IBC corpus
+        run: python tools/validate_ibc_2018_corpus.py corpora/ibc-2018
+      - name: Validate IBC JSON Schemas
+        run: python tools/validate_ibc_2018_schemas.py corpora/ibc-2018 schemas
       - name: Compile sources
-        run: python -m compileall -q src tests
+        run: python -m compileall -q src scripts tools tests
+      - name: Build wheel
+        run: python -m pip wheel . --no-deps --no-build-isolation -w dist
