@@ -36,4 +36,4 @@ jobs:
             building-code-ast-c953e523.tar.gz
             building-code-ast-c953e523.sha256
           if-no-files-found: error
-          retention-days: 1
+          retention-days: 3
