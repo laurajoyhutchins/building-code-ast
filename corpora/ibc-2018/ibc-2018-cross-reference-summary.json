@@ -1,0 +1,257 @@
+{
+  "appendix_target_reference_count": 49,
+  "circular_section_reference_pairs": [
+    [
+      "1406.10",
+      "1406.11"
+    ],
+    [
+      "1704.5",
+      "2207.5"
+    ],
+    [
+      "2207.1",
+      "2207.2"
+    ],
+    [
+      "3006.2",
+      "3006.3"
+    ],
+    [
+      "406.2",
+      "406.7"
+    ],
+    [
+      "406.4",
+      "406.5"
+    ],
+    [
+      "406.4",
+      "406.6"
+    ],
+    [
+      "420.8",
+      "904.13"
+    ]
+  ],
+  "highly_connected_targets": [
+    {
+      "incoming_reference_count": 154,
+      "target": "903.3"
+    },
+    {
+      "incoming_reference_count": 51,
+      "target": "16"
+    },
+    {
+      "incoming_reference_count": 42,
+      "target": "903.2"
+    },
+    {
+      "incoming_reference_count": 37,
+      "target": "907.2"
+    },
+    {
+      "incoming_reference_count": 34,
+      "target": "716.2"
+    },
+    {
+      "incoming_reference_count": 33,
+      "target": "907.5"
+    },
+    {
+      "incoming_reference_count": 30,
+      "target": "1010.1"
+    },
+    {
+      "incoming_reference_count": 27,
+      "target": "1810.3"
+    },
+    {
+      "incoming_reference_count": 25,
+      "target": "601"
+    },
+    {
+      "incoming_reference_count": 24,
+      "target": "2308.6"
+    },
+    {
+      "incoming_reference_count": 24,
+      "target": "705.8"
+    },
+    {
+      "incoming_reference_count": 23,
+      "target": "803.1"
+    },
+    {
+      "incoming_reference_count": 22,
+      "target": "10"
+    },
+    {
+      "incoming_reference_count": 22,
+      "target": "11"
+    },
+    {
+      "incoming_reference_count": 19,
+      "target": "14"
+    },
+    {
+      "incoming_reference_count": 19,
+      "target": "8"
+    },
+    {
+      "incoming_reference_count": 18,
+      "target": "1609.5"
+    },
+    {
+      "incoming_reference_count": 17,
+      "target": "1507.1"
+    },
+    {
+      "incoming_reference_count": 17,
+      "target": "1807.1"
+    },
+    {
+      "incoming_reference_count": 17,
+      "target": "2304.11"
+    },
+    {
+      "incoming_reference_count": 17,
+      "target": "307.1(1)"
+    },
+    {
+      "incoming_reference_count": 17,
+      "target": "415.11"
+    },
+    {
+      "incoming_reference_count": 17,
+      "target": "7"
+    },
+    {
+      "incoming_reference_count": 16,
+      "target": "406.5"
+    },
+    {
+      "incoming_reference_count": 15,
+      "target": "1107.7"
+    },
+    {
+      "incoming_reference_count": 15,
+      "target": "1607.1"
+    },
+    {
+      "incoming_reference_count": 15,
+      "target": "602"
+    },
+    {
+      "incoming_reference_count": 14,
+      "target": "1612.3"
+    },
+    {
+      "incoming_reference_count": 14,
+      "target": "21"
+    },
+    {
+      "incoming_reference_count": 14,
+      "target": "9"
+    },
+    {
+      "incoming_reference_count": 13,
+      "target": "1"
+    },
+    {
+      "incoming_reference_count": 13,
+      "target": "2303.2"
+    },
+    {
+      "incoming_reference_count": 13,
+      "target": "5"
+    },
+    {
+      "incoming_reference_count": 12,
+      "target": "1108.2"
+    },
+    {
+      "incoming_reference_count": 12,
+      "target": "1607.11"
+    },
+    {
+      "incoming_reference_count": 12,
+      "target": "1609.3"
+    },
+    {
+      "incoming_reference_count": 12,
+      "target": "1613.2"
+    },
+    {
+      "incoming_reference_count": 12,
+      "target": "1704.2"
+    },
+    {
+      "incoming_reference_count": 12,
+      "target": "26"
+    },
+    {
+      "incoming_reference_count": 12,
+      "target": "712.1"
+    },
+    {
+      "incoming_reference_count": 11,
+      "target": "15"
+    },
+    {
+      "incoming_reference_count": 11,
+      "target": "1803.5"
+    },
+    {
+      "incoming_reference_count": 11,
+      "target": "2"
+    },
+    {
+      "incoming_reference_count": 11,
+      "target": "406.2"
+    },
+    {
+      "incoming_reference_count": 11,
+      "target": "503.1"
+    },
+    {
+      "incoming_reference_count": 11,
+      "target": "714.5"
+    },
+    {
+      "incoming_reference_count": 10,
+      "target": "19"
+    },
+    {
+      "incoming_reference_count": 10,
+      "target": "23"
+    },
+    {
+      "incoming_reference_count": 10,
+      "target": "4"
+    },
+    {
+      "incoming_reference_count": 10,
+      "target": "403.2"
+    }
+  ],
+  "reconciliation": {
+    "changed_record_count": 4615,
+    "known_section_target_count": 2904,
+    "policy": "exact known targets and digit-only section-heading prefixes only"
+  },
+  "resolution_counts": {
+    "ambiguous": 93,
+    "nonexistent": 424,
+    "resolved": 3844,
+    "unresolved": 254
+  },
+  "resolution_reason_counts": {
+    "preserved_contextual_ambiguity": 93,
+    "preserved_resolved_target": 2784,
+    "section_heading_prefix": 1060,
+    "section_target_not_indexed": 254,
+    "target_not_in_inventory": 424
+  }
+}

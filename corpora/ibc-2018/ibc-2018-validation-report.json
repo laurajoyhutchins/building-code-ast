@@ -1,0 +1,25 @@
+{
+  "actual_counts": {
+    "attachments": 2702,
+    "chapter35_rows": 555,
+    "cross_references": 4615,
+    "definitions": 678,
+    "detections": 441,
+    "diagrams": 2,
+    "equations": 90,
+    "exceptions": 769,
+    "external_citations": 1458,
+    "external_families": 555,
+    "figures": 56,
+    "incidental_layouts": 12,
+    "semantic_pilot": 27,
+    "tables": 215
+  },
+  "count_projection_sha256": "66acf8ca98f398fd809b0691cc51358139ba20d9cf1f941e5e75a7a03b83ffa8",
+  "discrepancies": [],
+  "discrepancy_count": 0,
+  "record_type": "ibc_2018_corpus_validation",
+  "schema_version": "0.1.0",
+  "source_sha256": "c8f0b75522707a39daf5202edee25d7fdce6c177c382f828a6dc1dfd5cc0b18d",
+  "valid": true
+}

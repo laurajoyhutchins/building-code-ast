@@ -1,0 +1,19 @@
+{
+  "disposition_counts": {
+    "candidate_tabular_or_background_geometry": 247,
+    "candidate_vector_region_unclassified": 322,
+    "rejected_captioned_figure_region": 72,
+    "rejected_outside_normative_and_appendix_pages": 64
+  },
+  "interpretation_state": "unreviewed",
+  "page_count_with_regions": 413,
+  "record_count": 705,
+  "record_type": "ibc_2018_vector_region_summary",
+  "review_state_counts": {
+    "disputed": 569,
+    "rejected": 136
+  },
+  "schema_version": "0.1.0",
+  "source_safe": true,
+  "source_sha256": "c8f0b75522707a39daf5202edee25d7fdce6c177c382f828a6dc1dfd5cc0b18d"
+}

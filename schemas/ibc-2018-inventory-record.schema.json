@@ -1,0 +1,115 @@
+{
+  "$defs": {
+    "sourceAnchor": {
+      "properties": {
+        "appendix": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "bbox": {
+          "items": {
+            "type": "number"
+          },
+          "maxItems": 4,
+          "minItems": 4,
+          "type": "array"
+        },
+        "chapter": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "line_id": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "observed_text_sha256": {
+          "pattern": "^[0-9a-f]{64}$",
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "pdf_page": {
+          "maximum": 761,
+          "minimum": 1,
+          "type": "integer"
+        },
+        "printed_page": {
+          "type": [
+            "string",
+            "null"
+          ]
+        }
+      },
+      "required": [
+        "pdf_page",
+        "printed_page",
+        "chapter",
+        "appendix",
+        "bbox",
+        "line_id",
+        "observed_text_sha256"
+      ],
+      "type": "object"
+    }
+  },
+  "$id": "https://example.invalid/building-code-ast/ibc-2018-inventory-record.schema.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "properties": {
+    "anchors": {
+      "items": {
+        "$ref": "#/$defs/sourceAnchor"
+      },
+      "type": "array"
+    },
+    "id": {
+      "pattern": "^ibc2018:[a-z0-9-]+:[0-9a-f]{24}$",
+      "type": "string"
+    },
+    "record_type": {
+      "enum": [
+        "table",
+        "figure",
+        "incidental_layout",
+        "uncaptioned_technical_graphic_candidate",
+        "equation",
+        "definition",
+        "exception_block",
+        "chapter35_referenced_standard_entry",
+        "external_document_family",
+        "external_citation_occurrence",
+        "internal_cross_reference",
+        "semantic_pilot_record",
+        "detected_structure",
+        "attachment_relationship",
+        "vector_graphic_region_detection"
+      ]
+    },
+    "review_state": {
+      "enum": [
+        "provisional",
+        "verified",
+        "corrected",
+        "superseded",
+        "disputed",
+        "rejected"
+      ]
+    },
+    "source_anchor": {
+      "$ref": "#/$defs/sourceAnchor"
+    }
+  },
+  "required": [
+    "id",
+    "record_type",
+    "review_state"
+  ],
+  "title": "IBC 2018 Structural Inventory Record",
+  "type": "object"
+}

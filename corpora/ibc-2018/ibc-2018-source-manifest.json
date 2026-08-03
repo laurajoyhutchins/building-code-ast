@@ -1,0 +1,173 @@
+{
+  "access_restrictions": {
+    "copyright_owner": "International Code Council, Inc.",
+    "copyright_year": 2017,
+    "pdf_permissions": {
+      "algorithm": "AES-128 Standard V4 R4",
+      "annotate": true,
+      "copy": false,
+      "encrypted": true,
+      "modify": true,
+      "print": true
+    },
+    "public_repository_policy": "PDF, page images, substantial text, and reconstructive extracts remain local/private and uncommitted.",
+    "redistribution": "restricted"
+  },
+  "acquisition_provenance": {
+    "artifact_custody": {
+      "derived_reconstructive_evidence": "private_local_uncommitted",
+      "public_derivatives": "source_safe_only",
+      "raw_source_location": "private_local_uncommitted",
+      "replacement_policy": "new source artifact record required"
+    },
+    "official_copy_comparison": {
+      "future_comparison_policy": "Preserve this exact processed artifact and register any comparison copy as a separate source artifact.",
+      "reason": "No independently obtained official byte-identical copy was available in the execution environment.",
+      "status": "not_performed"
+    },
+    "private_connector_identifier_retained": false,
+    "retrieved_for_local_analysis": true,
+    "source": "user-connected private file storage",
+    "source_observation": "The supplied bytes contain recurring EDUFIRE.IR / Telegram EDUFIRE_IR marks not identified as ICC publication furniture.",
+    "substitution": null
+  },
+  "code_family": "IBC",
+  "date_of_first_publication": "2017-08-31",
+  "edition": "2018",
+  "file_size_bytes": 32608171,
+  "first_printing": "August 2017",
+  "identity_assurance": {
+    "exact_bytes": "verified",
+    "official_copy_equivalence": "unverified",
+    "publication_identity_from_artifact": "verified",
+    "source_copy_markings": "observed_and_not_treated_as_official_furniture"
+  },
+  "ingestion_timestamp": "2026-08-03T20:00:00Z",
+  "parser": {
+    "corpus_builder_version": "ibc-2018-corpus-builder/0.1.0",
+    "evidence_layer": "derived page-line evidence; semantic promotion requires review",
+    "positioned_source_backend": "Poppler pdftotext -bbox-layout",
+    "source_audit_backend": "PyMuPDF geometry-aware IBC layout branch"
+  },
+  "pdf_metadata": {
+    "author": "",
+    "creation_date": "2017-11-20T21:48:22+05:00",
+    "creator": "VeryDOC PS to PDF Converter Command Line, Build: Aug  7 2016",
+    "format": "PDF 1.7",
+    "keywords": "",
+    "modification_date": "2020-09-05T14:39:04+04:30",
+    "optimized": false,
+    "outline_entry_count": 0,
+    "page_size_points": [
+      612,
+      792
+    ],
+    "producer": "VeryDOC PS to PDF Converter Command Line (http://www.verydoc.com)",
+    "subject": "",
+    "tagged": false,
+    "title": "",
+    "xmp_toolkit": "NitroPro"
+  },
+  "pdf_page_count": 761,
+  "printed_page_mapping": {
+    "arabic": {
+      "formula": "printed_page = pdf_page - 27",
+      "pdf_pages": [
+        28,
+        759
+      ]
+    },
+    "front_matter": {
+      "pdf_pages": [
+        4,
+        27
+      ],
+      "printed_pages": [
+        "iii",
+        "xxvi"
+      ]
+    },
+    "unprinted": [
+      1,
+      2,
+      3,
+      760,
+      761
+    ]
+  },
+  "publication_sections": [
+    {
+      "kind": "cover_and_copyright",
+      "pdf_pages": [
+        1,
+        3
+      ],
+      "printed_pages": [
+        null,
+        null
+      ]
+    },
+    {
+      "kind": "front_matter",
+      "pdf_pages": [
+        4,
+        27
+      ],
+      "printed_pages": [
+        "iii",
+        "xxvi"
+      ]
+    },
+    {
+      "kind": "chapters",
+      "pdf_pages": [
+        28,
+        669
+      ],
+      "printed_pages": [
+        "1",
+        "642"
+      ]
+    },
+    {
+      "kind": "appendices",
+      "pdf_pages": [
+        670,
+        713
+      ],
+      "printed_pages": [
+        "643",
+        "686"
+      ]
+    },
+    {
+      "kind": "subject_index",
+      "pdf_pages": [
+        714,
+        759
+      ],
+      "printed_pages": [
+        "687",
+        "732"
+      ]
+    },
+    {
+      "kind": "trailing_blank_pages",
+      "pdf_pages": [
+        760,
+        761
+      ],
+      "printed_pages": [
+        null,
+        null
+      ]
+    }
+  ],
+  "publication_title": "2018 International Building Code",
+  "publisher": "International Code Council, Inc.",
+  "record_type": "source_artifact",
+  "schema_version": "0.1.0",
+  "sha256": "c8f0b75522707a39daf5202edee25d7fdce6c177c382f828a6dc1dfd5cc0b18d",
+  "source_filename": "icc-2018.pdf",
+  "verification_state": "verified"
+}

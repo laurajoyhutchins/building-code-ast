@@ -25,6 +25,8 @@ Current material:
 
 - the root [`README.md`](../README.md) contains the initial installation and CLI quick start;
 - [`CONTRIBUTING.md`](../CONTRIBUTING.md) contains contribution and verification procedures;
+- [`how-to/ingest-ibc-2018.md`](how-to/ingest-ibc-2018.md) explains private chapter-level IBC ingestion;
+- [`how-to/build-ibc-2018-corpus.md`](how-to/build-ibc-2018-corpus.md) explains how to regenerate and validate the source-safe whole-document IBC corpus;
 - [`how-to/ingest-nec-2017.md`](how-to/ingest-nec-2017.md) explains how to generate private ArticleSeed files from a locally supplied NEC 2017 PDF;
 - [`how-to/validate-nec-hierarchy.md`](how-to/validate-nec-hierarchy.md) explains how to compare inferred hierarchy with the locally supplied NEC 2017 clause oracle without making it a runtime dependency;
 - [`how-to/build-nec-semantic-seed.md`](how-to/build-nec-semantic-seed.md) explains how to generate the private Article 100 definition index and selected Article 90/110 section reviews.
@@ -41,6 +43,7 @@ Current reference material:
 - [`corpus-policy.md`](corpus-policy.md): source inclusion and redistribution rules;
 - [`reference/document-ast.md`](reference/document-ast.md): document AST fields, identity algorithm, and validation invariants;
 - [`reference/source-evidence.md`](reference/source-evidence.md): publication-state identity, source registration, rights handling, and guarded evidence-adapter execution;
+- [`reference/ibc-2018-corpus-contract.md`](reference/ibc-2018-corpus-contract.md): exact source identity, five-layer evidence model, counting policies, inventory contracts, correction workflow, and edition-extension rules;
 - [`reference/icc-errata.md`](reference/icc-errata.md): printing-sensitive erratum records, bounded ICC PDF extraction, and unsupported-directive handling;
 - [`reference/icc-development-lineage.md`](reference/icc-development-lineage.md): proposal and action records, lineage validation, controlling-action rules, and non-normative process boundaries;
 - [`reference/washington-wac-amendments.md`](reference/washington-wac-amendments.md): effective jurisdictional patches, conflict rules, bounded WAC HTML extraction, and the Building Code Map boundary;

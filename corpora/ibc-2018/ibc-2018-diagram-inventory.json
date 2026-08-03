@@ -1,0 +1,74 @@
+[
+  {
+    "accessibility_description_status": "missing",
+    "appendix": null,
+    "caption": null,
+    "chapter": "23",
+    "dimensions": [],
+    "extraction_confidence": 0.7,
+    "id": "ibc2018:diagram:3e2f09476944957369bacbe3",
+    "image_dimensions": [
+      1063,
+      276
+    ],
+    "interpretation_confidence": 0.0,
+    "labels": [],
+    "published_identifier": null,
+    "record_type": "uncaptioned_technical_graphic_candidate",
+    "referenced_sections": [],
+    "related_tables": [],
+    "review_state": "provisional",
+    "semantic_category": "unknown",
+    "source_anchor": {
+      "appendix": null,
+      "bbox": [
+        39.7,
+        443.25,
+        549.82,
+        575.61
+      ],
+      "chapter": "23",
+      "line_id": null,
+      "observed_text_sha256": "f90c7bd6b6a471e64d3cdbc1d9ddd1b49089483bed14f2b744fb80ae31f0e3ac",
+      "pdf_page": 531,
+      "printed_page": "504"
+    },
+    "subfigure_structure": "unreviewed"
+  },
+  {
+    "accessibility_description_status": "missing",
+    "appendix": null,
+    "caption": null,
+    "chapter": "23",
+    "dimensions": [],
+    "extraction_confidence": 0.7,
+    "id": "ibc2018:diagram:90cd66ee4db4b3d90c954411",
+    "image_dimensions": [
+      1280,
+      955
+    ],
+    "interpretation_confidence": 0.0,
+    "labels": [],
+    "published_identifier": null,
+    "record_type": "uncaptioned_technical_graphic_candidate",
+    "referenced_sections": [],
+    "related_tables": [],
+    "review_state": "provisional",
+    "semantic_category": "unknown",
+    "source_anchor": {
+      "appendix": null,
+      "bbox": [
+        43.4,
+        141.95,
+        547.64,
+        518.39
+      ],
+      "chapter": "23",
+      "line_id": null,
+      "observed_text_sha256": "29963c4ee4694a61fb0950ad3c1e2e34d06fc1c81b46fb16f5c13836ab6939e1",
+      "pdf_page": 533,
+      "printed_page": "506"
+    },
+    "subfigure_structure": "unreviewed"
+  }
+]

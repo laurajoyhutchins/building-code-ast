@@ -1,0 +1,48 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://example.invalid/building-code-ast/ibc-2018-corpus-manifest.schema.json",
+  "title": "IBC 2018 Structural Corpus Manifest",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version", "record_type", "corpus_id", "source_sha256",
+    "counting_policy_version", "parser_version", "generated_at",
+    "expected_artifact_counts", "incidental_layout_counts",
+    "verification_state", "known_limitations", "inventory_files",
+    "correction_history", "caption_occurrence_counts", "reference_crosscheck_file"
+  ],
+  "properties": {
+    "schema_version": {"const": "0.1.0"},
+    "record_type": {"const": "corpus_manifest"},
+    "corpus_id": {"const": "icc:ibc:2018:structural-inventory"},
+    "source_sha256": {"const": "c8f0b75522707a39daf5202edee25d7fdce6c177c382f828a6dc1dfd5cc0b18d"},
+    "counting_policy_version": {"type": "string"},
+    "parser_version": {"type": "string"},
+    "generated_at": {"type": "string"},
+    "expected_artifact_counts": {
+      "type": "object",
+      "additionalProperties": {
+        "type": "object",
+        "required": ["value", "status"],
+        "properties": {
+          "value": {"type": "integer", "minimum": 0},
+          "status": {"enum": ["provisional", "verified", "corrected", "superseded", "disputed", "rejected"]}
+        }
+      }
+    },
+    "incidental_layout_counts": {
+      "type": "object",
+      "required": ["broad", "strict"],
+      "properties": {
+        "broad": {"type": "integer", "minimum": 0},
+        "strict": {"type": "integer", "minimum": 0}
+      }
+    },
+    "verification_state": {"enum": ["provisional", "verified", "corrected", "superseded", "disputed", "rejected"]},
+    "known_limitations": {"type": "array", "items": {"type": "string"}},
+    "inventory_files": {"type": "array", "items": {"type": "string"}},
+    "correction_history": {"type": "array", "items": {"type": "object"}},
+    "caption_occurrence_counts": {"type": "object"},
+    "reference_crosscheck_file": {"type": "string"}
+  }
+}
