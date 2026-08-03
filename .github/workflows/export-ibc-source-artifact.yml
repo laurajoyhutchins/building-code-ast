@@ -1,4 +1,4 @@
-name: Export exact IBC source snapshot
+name: Export exact IBC source snapshots
 
 on:
   pull_request:
@@ -17,23 +17,32 @@ jobs:
         with:
           fetch-depth: 0
 
-      - name: Archive immutable parser source
+      - name: Archive immutable repository snapshots
         shell: bash
         run: |
           set -euo pipefail
           git archive \
             --format=tar.gz \
-            --output=building-code-ast-c953e523.tar.gz \
-            c953e523069dbc810a91ad8fddbd7f99b7b932dc
-          sha256sum building-code-ast-c953e523.tar.gz > building-code-ast-c953e523.sha256
-          test "$(wc -c < building-code-ast-c953e523.tar.gz)" -gt 0
+            --output=building-code-ast-main-c8df331.tar.gz \
+            c8df331cbf6bf5b286acebb0f1e520f40d0fbb17
+          git archive \
+            --format=tar.gz \
+            --output=building-code-ast-ibc-layout-270410a.tar.gz \
+            270410a1e3fa6217887d74167f28702ad46f9967
+          sha256sum \
+            building-code-ast-main-c8df331.tar.gz \
+            building-code-ast-ibc-layout-270410a.tar.gz \
+            > building-code-ast-source-snapshots.sha256
+          test "$(wc -c < building-code-ast-main-c8df331.tar.gz)" -gt 0
+          test "$(wc -c < building-code-ast-ibc-layout-270410a.tar.gz)" -gt 0
 
-      - name: Upload exact source artifact
+      - name: Upload exact source artifacts
         uses: actions/upload-artifact@v4
         with:
-          name: building-code-ast-c953e523
+          name: building-code-ast-source-snapshots
           path: |
-            building-code-ast-c953e523.tar.gz
-            building-code-ast-c953e523.sha256
+            building-code-ast-main-c8df331.tar.gz
+            building-code-ast-ibc-layout-270410a.tar.gz
+            building-code-ast-source-snapshots.sha256
           if-no-files-found: error
           retention-days: 3
