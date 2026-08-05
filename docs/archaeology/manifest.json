@@ -1,5 +1,5 @@
 {
-  "base_commit": "c8df331cbf6bf5b286acebb0f1e520f40d0fbb17",
+  "base_commit": "e0e3aef4320ec20ce8508378f611f43336b24e4d",
   "canonical_source": {
     "apply_in_lexicographic_order": [
       ".deciduous/patches/building-code-ast-archaeology-001.json",
@@ -11,30 +11,32 @@
       ".deciduous/patches/building-code-ast-archaeology-007.json",
       ".deciduous/patches/building-code-ast-archaeology-008.json",
       ".deciduous/patches/building-code-ast-archaeology-009.json",
-      ".deciduous/patches/building-code-ast-archaeology-010.json"
+      ".deciduous/patches/building-code-ast-archaeology-010.json",
+      ".deciduous/patches/building-code-ast-archaeology-011.json"
     ],
     "format": "ordered-deciduous-patch-set-v1",
-    "patch_set_sha256": "cee73492e0f1d96c7e681389690938642573103dd0a55219b2e99dcb397625fe"
+    "patch_set_sha256": "60aff4b0fcf5c11a2a8b82c048dc22d4f2360d1bb36e34adb5ac1f07a73fa975"
   },
   "deciduous_upstream": "notactuallytreyanastasio/deciduous@1bb5a1595011943973716f316d65cd03944feadd",
-  "edge_count": 112,
+  "edge_count": 120,
   "generated_at": "2026-08-03T14:30:00Z",
-  "node_count": 99,
+  "node_count": 107,
   "schema": "building-code-ast-archaeology-manifest-v1",
   "sha256": {
-    ".deciduous/exports/building-code-ast-archaeology.json": "506dc57da6fca0f843818e9c0367cd536d79d95215850f6a4cdf7ffa536982ca",
-    ".deciduous/patches/building-code-ast-archaeology-001.json": "5dda96574a6d460e723a0d561a71e13394a763b457be2b2601172a146ee51ee3",
-    ".deciduous/patches/building-code-ast-archaeology-002.json": "62e2a10a4babccb3f9402ef6ee2b19cd6116a962e2f0f66a1134ff03e68a38d6",
-    ".deciduous/patches/building-code-ast-archaeology-003.json": "f7b923a5155ac89bccf042521512cebb1313e04723cff8e0ba297781f3b43a0f",
-    ".deciduous/patches/building-code-ast-archaeology-004.json": "a4df03538ac1aa569febe4b84560906153e7c052b388e46d7975a3635cb18183",
-    ".deciduous/patches/building-code-ast-archaeology-005.json": "414f20e54ce0adf908c3c676eb053f43c5c2fc7f4705ded2a73916533013c992",
-    ".deciduous/patches/building-code-ast-archaeology-006.json": "8344cb48ee2ef85b5799bc0f4aa2fa8e605bc5ae1ec05d91939a36a29f832d88",
-    ".deciduous/patches/building-code-ast-archaeology-007.json": "4a859c9d94823dc65c4237abfff3dafb58d81fb2fa14d6f776833854174166a4",
-    ".deciduous/patches/building-code-ast-archaeology-008.json": "f5e8486b694ba93827dabe3fd87d28707d6e6f4ce3e7eb4c8a9e25582769ec62",
-    ".deciduous/patches/building-code-ast-archaeology-009.json": "d443bb5b74cb511e6ddaf5b2ac7074ed9973a8cfd181b701565428ca026cabc2",
-    ".deciduous/patches/building-code-ast-archaeology-010.json": "ea033581eace6aa6d83874ac34b367a6ccea7c23ad8c36192af0eafdf1875775",
-    "docs/archaeology/current-architecture.json": "ff830b6b2829e3d03765af9710d8bdd6d0a4bc774f71022f2e80cdbe0a90977d",
-    "docs/archaeology/graph.dot": "869b91102355d6b3bee3cd4b015808c78213c738c6d23d193ff309cc1e0a6b1c",
-    "docs/archaeology/status-summary.json": "2a1fb46499d75e797c9bd82eaee8e3d366527a1be09b9294f4da21e8aa2f3530"
+    ".deciduous/exports/building-code-ast-archaeology.json": "cc739372edb7ccbc5c6b9541730aaf29b09bd7ee3c36784beae65bc4365a79d6",
+    ".deciduous/patches/building-code-ast-archaeology-001.json": "f209881cd4c013909840af7d49b903f76f70c628311c78d184792c22440df8e4",
+    ".deciduous/patches/building-code-ast-archaeology-002.json": "4cc27e3490dd1352e90827a67d66508ab2d4ec0c7ac104619054e8cbe4b50495",
+    ".deciduous/patches/building-code-ast-archaeology-003.json": "90570cf8e541fcf94bd56e4afb4257389e89ea711a47b0e6d2ead3a5ae7254fe",
+    ".deciduous/patches/building-code-ast-archaeology-004.json": "36049b7c19dc8d4f65847e2c0e9070024c2b4da7d1d6896c176a7a646fed7211",
+    ".deciduous/patches/building-code-ast-archaeology-005.json": "0dd8685808d30584c5d37c756969b404bbe4b4645ad0b02674288ee3cbd19ddb",
+    ".deciduous/patches/building-code-ast-archaeology-006.json": "bb2a630825f894c83e019c6ac5ac5640ab577f6cc5ad2ba1a7fd2d8765900bf5",
+    ".deciduous/patches/building-code-ast-archaeology-007.json": "a864ca88b9271200eb0baceb7a42552558dfbb2de28d4da6dd2dcc16189a8f15",
+    ".deciduous/patches/building-code-ast-archaeology-008.json": "304e0c18bd7fdf0e41d743136af5162d7f7a64bd34fb69dd38a67710334c0a0d",
+    ".deciduous/patches/building-code-ast-archaeology-009.json": "2e836400ee3228b72df02d0822ea2389083ee3160b5cc6bdb5ff09eaee1385c4",
+    ".deciduous/patches/building-code-ast-archaeology-010.json": "be7184138562013c12916639d5a49c337f7777dc1df5ec3520fc5860fc6deec7",
+    ".deciduous/patches/building-code-ast-archaeology-011.json": "b7b9c80256a0c03e095104ce6f41949617fef0bc4a026ffaf48ba6deffb3ea7d",
+    "docs/archaeology/current-architecture.json": "893af1b1fb88913d7c6eff5f725a61079342b10dfcb464c4f711f4041ba59d95",
+    "docs/archaeology/graph.dot": "15533f31351178b0ca8f1d3651d980485464e06589ae1c0a4a9554c6319ad4e1",
+    "docs/archaeology/status-summary.json": "17e29c4650277c526e4f17d3974bfce69a96644c3b576df939b6055d2e32909d"
   }
 }

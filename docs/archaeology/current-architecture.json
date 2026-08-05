@@ -1,5 +1,5 @@
 {
-  "base_commit": "c8df331cbf6bf5b286acebb0f1e520f40d0fbb17",
+  "base_commit": "e0e3aef4320ec20ce8508378f611f43336b24e4d",
   "edges": [
     {
       "edge_type": "leads_to",
@@ -56,6 +56,12 @@
       "to": "decision.coordinate-aware-source-map"
     },
     {
+      "edge_type": "enables",
+      "from": "decision.document-ast-separate",
+      "rationale": "Separating publication structure from semantic interpretation made the code's own hierarchy available as the stable coordinate layer.",
+      "to": "decision.section-address-primary"
+    },
+    {
       "edge_type": "leads_to",
       "from": "decision.document-ast-separate",
       "rationale": "",
@@ -98,6 +104,12 @@
       "to": "decision.tables-figures-references-checks"
     },
     {
+      "edge_type": "requires",
+      "from": "decision.issued-edition-controls",
+      "rationale": "Independent issued editions must be compared by structural address and explicit renumbering relationships rather than page movement.",
+      "to": "decision.section-address-primary"
+    },
+    {
       "edge_type": "leads_to",
       "from": "decision.local-private-nec-source",
       "rationale": "",
@@ -138,6 +150,18 @@
       "from": "decision.parser-transformation-review",
       "rationale": "",
       "to": "decision.source-register-rights"
+    },
+    {
+      "edge_type": "enables",
+      "from": "decision.section-address-primary",
+      "rationale": "Section-first addressing became current architecture when the consolidated IBC corpus merged.",
+      "to": "outcome.ibc2018-corpus-merged-pr33"
+    },
+    {
+      "edge_type": "leads_to",
+      "from": "decision.section-address-primary",
+      "rationale": "Once structural addresses are primary, page coordinates remain useful only as source-artifact provenance.",
+      "to": "outcome.pages-provenance-only"
     },
     {
       "edge_type": "leads_to",
@@ -219,6 +243,12 @@
     },
     {
       "edge_type": "enables",
+      "from": "outcome.ibc2018-corpus-merged-pr33",
+      "rationale": "The current corpus and validation baseline allowed the NFPA 13 support to be transplanted without importing stale branch history.",
+      "to": "outcome.nfpa13-support-merged-pr34"
+    },
+    {
+      "edge_type": "enables",
       "from": "outcome.layered-parser-architecture",
       "rationale": "Shared contracts and family grammars define the current durable model.",
       "to": "outcome.current-contract"
@@ -228,6 +258,18 @@
       "from": "outcome.nec-selected-fragments-validated",
       "rationale": "Flat selected fragments exposed the need for printed hierarchy.",
       "to": "goal.nec-printed-hierarchy"
+    },
+    {
+      "edge_type": "enables",
+      "from": "outcome.nec2020-framework-merged-pr35",
+      "rationale": "The final reconstruction integrated the Provision AST 0.3 contract over all preceding corpus frameworks.",
+      "to": "outcome.provision-ast-0.3-merged-pr37"
+    },
+    {
+      "edge_type": "enables",
+      "from": "outcome.nfpa13-support-merged-pr34",
+      "rationale": "The clean merge train established a current-main base for the NEC expected-change framework.",
+      "to": "outcome.nec2020-framework-merged-pr35"
     },
     {
       "edge_type": "leads_to",
@@ -519,6 +561,17 @@
       "title": "Preserve malformed, ambiguous, or unsupported content instead of dropping it"
     },
     {
+      "arc": "schema",
+      "confidence": "high",
+      "lifecycle_status": "completed",
+      "node_type": "decision",
+      "repository_owner": "laurajoyhutchins/building-code-ast",
+      "semantic_id": "decision.section-address-primary",
+      "source_state": "accepted",
+      "support_scope": "merged through PR #33 at 7004e6ea333bd21eb7f4eb6989fe84de6651249d",
+      "title": "Make published code addresses the primary identity and navigation surface"
+    },
+    {
       "arc": "nec-ingestion",
       "confidence": "high",
       "lifecycle_status": "edition-specific",
@@ -772,6 +825,17 @@
       "title": "The durable contract is provenance-first, family-specific, fail-closed, and explicitly bounded"
     },
     {
+      "arc": "ibc",
+      "confidence": "high",
+      "lifecycle_status": "completed",
+      "node_type": "outcome",
+      "repository_owner": "laurajoyhutchins/building-code-ast",
+      "semantic_id": "outcome.ibc2018-corpus-merged-pr33",
+      "source_state": "accepted",
+      "support_scope": "merged PR #33 at 7004e6ea333bd21eb7f4eb6989fe84de6651249d",
+      "title": "Merge the source-backed IBC 2018 corpus with section-first navigation"
+    },
+    {
       "arc": "parser-families",
       "confidence": "high",
       "lifecycle_status": "active",
@@ -792,6 +856,50 @@
       "source_state": "accepted",
       "support_scope": "2017 NEC Articles 90, 100, 110",
       "title": "NEC 2017 support is real but intentionally bounded"
+    },
+    {
+      "arc": "nec-edition-comparison",
+      "confidence": "high",
+      "lifecycle_status": "completed",
+      "node_type": "outcome",
+      "repository_owner": "laurajoyhutchins/building-code-ast",
+      "semantic_id": "outcome.nec2020-framework-merged-pr35",
+      "source_state": "accepted",
+      "support_scope": "merged PR #35 at f1a42e341169e62948d964656f302638f7adc83e",
+      "title": "Merge the NEC 2020 expected-change framework without inventing observed text"
+    },
+    {
+      "arc": "nfpa13",
+      "confidence": "high",
+      "lifecycle_status": "completed",
+      "node_type": "outcome",
+      "repository_owner": "laurajoyhutchins/building-code-ast",
+      "semantic_id": "outcome.nfpa13-support-merged-pr34",
+      "source_state": "accepted",
+      "support_scope": "merged PR #34 at 97bf9b35d86148992261ec01edee6269be69b3ce",
+      "title": "Merge verified NFPA 13 support on a clean current-main branch"
+    },
+    {
+      "arc": "provenance",
+      "confidence": "high",
+      "lifecycle_status": "completed",
+      "node_type": "outcome",
+      "repository_owner": "laurajoyhutchins/building-code-ast",
+      "semantic_id": "outcome.pages-provenance-only",
+      "source_state": "accepted",
+      "support_scope": "merged through PR #33 at 7004e6ea333bd21eb7f4eb6989fe84de6651249d",
+      "title": "Retain PDF coordinates only as secondary provenance"
+    },
+    {
+      "arc": "schema",
+      "confidence": "high",
+      "lifecycle_status": "completed",
+      "node_type": "outcome",
+      "repository_owner": "laurajoyhutchins/building-code-ast",
+      "semantic_id": "outcome.provision-ast-0.3-merged-pr37",
+      "source_state": "accepted",
+      "support_scope": "merged PR #37 at e0e3aef4320ec20ce8508378f611f43336b24e4d",
+      "title": "Merge Provision AST 0.3 composable condition expressions"
     },
     {
       "arc": "clause-semantics",
