@@ -17,6 +17,7 @@ _STRUCTURAL_LOCATOR_FIELDS = (
     "code_locator",
     "locator",
     "section_context",
+    "source_section",
     "parent_locator",
     "source_locator",
     "scope_locator",
@@ -70,7 +71,7 @@ def code_address_for_record(
         address["canonical"] = f"{publication}-{edition} {label} {locator}"
         return address
 
-    if record_type == "exception":
+    if record_type in {"exception", "exception_block"}:
         context_locator = _text(record, "parent_locator") or _text(
             record, "section_context"
         )
@@ -95,10 +96,10 @@ def code_address_for_record(
     if record_type == "definition":
         context_locator = _text(record, "scope_locator") or _text(
             record, "section_context"
-        )
+        ) or _text(record, "source_section")
         if context_locator is None:
             return None
-        term = _text(record, "term")
+        term = _text(record, "term") or _text(record, "observed_term")
         address = {
             "publication": publication,
             "edition": edition,
@@ -115,10 +116,14 @@ def code_address_for_record(
         return address
 
     if record_type == "equation":
-        context_locator = _text(record, "section_context") or _section_locator(record)
+        context_locator = _text(record, "section_context") or _text(
+            record, "source_section"
+        ) or _section_locator(record)
         if context_locator is None:
             return None
-        label = _text(record, "equation_label")
+        label = _text(record, "equation_label") or _text(
+            record, "equation_identifier"
+        )
         address = {
             "publication": publication,
             "edition": edition,
@@ -135,7 +140,9 @@ def code_address_for_record(
         return address
 
     if record_type in {"internal_cross_reference", "external_reference"}:
-        context_locator = _text(record, "source_locator")
+        context_locator = _text(record, "source_locator") or _text(
+            record, "source_section"
+        )
     else:
         context_locator = _section_locator(record)
 
