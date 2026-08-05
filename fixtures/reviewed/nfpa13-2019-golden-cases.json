@@ -1,0 +1,135 @@
+{
+  "schema": "nfpa13-reviewed-cases/0.1.0",
+  "source_pdf_sha256": "07c229b70cfdde21c3c67e6918040663c76aec680a0bd8d026392e21e8b81ee5",
+  "reviewed_at": "2026-08-02",
+  "cases": [
+    {
+      "id": "normative-storage-heading",
+      "category": "normative-structure",
+      "locator": "20.15",
+      "assertion": "node_label",
+      "expected": "Column Protection: Rack Storage and Rubber Tire Storage",
+      "basis": "Visual source review of the Chapter 20 heading."
+    },
+    {
+      "id": "normative-list-shape",
+      "category": "normative-structure",
+      "locator": "4.3.6",
+      "assertion": "direct_child_type_counts",
+      "expected": {"paragraph": 1, "list_item": 3},
+      "basis": "Visual source review of the Extra Hazard Group 2 clause and its list structure."
+    },
+    {
+      "id": "revision-marker-filter",
+      "category": "artifact-filtering",
+      "locator": "4.3.6",
+      "assertion": "no_standalone_revision_marker",
+      "expected": true,
+      "basis": "Visual review confirmed the margin revision marker is not clause text."
+    },
+    {
+      "id": "definition-entry",
+      "category": "definition",
+      "locator": "3.3.1",
+      "assertion": "direct_child_type_counts",
+      "expected": {"definition_entry": 1},
+      "basis": "Visual source review of the Chapter 3 definition entry."
+    },
+    {
+      "id": "annex-b-heading",
+      "category": "annex-structure",
+      "locator": "B.2.1.4",
+      "assertion": "node_label",
+      "expected": "Ability to Predict Expected Performance from Calculated Performance",
+      "basis": "Visual source review of Annex B."
+    },
+    {
+      "id": "annex-e-heading",
+      "category": "annex-structure",
+      "locator": "E.7.2",
+      "assertion": "node_label",
+      "expected": "Calculation for Maximum Load Capacity of Concrete Anchors",
+      "basis": "Visual source review of Annex E."
+    },
+    {
+      "id": "annex-f-heading",
+      "category": "annex-structure",
+      "locator": "F.2.7",
+      "assertion": "node_label",
+      "expected": "U.S. Government Publications",
+      "basis": "Visual source review of the split Annex F heading."
+    },
+    {
+      "id": "implicit-annex-container-no-explains",
+      "category": "annex-structure",
+      "locator": "A.10.2",
+      "assertion": "relation_absent",
+      "expected": {"type": "explains", "target_locator": "10.2"},
+      "basis": "A synthesized ancestry container has no explanatory source text of its own."
+    },
+    {
+      "id": "explicit-annex-clause-explains",
+      "category": "annex-structure",
+      "locator": "A.10.2.4.2.1",
+      "assertion": "relation_present",
+      "expected": {"type": "explains", "target_locator": "10.2.4.2.1", "target_domain": "internal"},
+      "basis": "Explicit Annex A clause correspondence reviewed against the source hierarchy."
+    },
+    {
+      "id": "annex-c-hierarchy-reference",
+      "category": "reference",
+      "locator": "C.2",
+      "assertion": "json_attribute_contains",
+      "expected": {"attribute": "hierarchy_references", "value": "20.3"},
+      "basis": "Visual review of Annex C reference text."
+    },
+    {
+      "id": "external-section-domain",
+      "category": "reference",
+      "locator": "26.14.2.5#segment1#list(5)#text",
+      "assertion": "relation_present",
+      "expected": {"type": "references_clause", "target_locator": "300.22", "target_domain": "unspecified_document"},
+      "basis": "The citation does not establish NFPA 13 as the target artifact."
+    },
+    {
+      "id": "conversion-table-shape",
+      "category": "table",
+      "locator": "table:1.6.1.3",
+      "assertion": "table_shape",
+      "expected": {"rows": 12, "first_row_widths": [1, 3, 3]},
+      "basis": "Visual review of the conversion-factor table geometry; no table text is retained here."
+    },
+    {
+      "id": "astm-reference-family",
+      "category": "external-standard",
+      "locator": "document",
+      "assertion": "external_standard_min_count",
+      "expected": {"issuer": "ASTM", "minimum": 1},
+      "basis": "The source contains ASTM publication identifiers that must not be omitted from the reference graph."
+    },
+    {
+      "id": "asme-reference-family",
+      "category": "external-standard",
+      "locator": "document",
+      "assertion": "external_standard_min_count",
+      "expected": {"issuer": "ASME", "minimum": 1},
+      "basis": "The source contains ASME publication identifiers that must not be omitted from the reference graph."
+    },
+    {
+      "id": "awwa-reference-family",
+      "category": "external-standard",
+      "locator": "document",
+      "assertion": "external_standard_min_count",
+      "expected": {"issuer": "AWWA", "minimum": 1},
+      "basis": "The source contains AWWA publication identifiers that must not be omitted from the reference graph."
+    },
+    {
+      "id": "ul-reference-family",
+      "category": "external-standard",
+      "locator": "document",
+      "assertion": "external_standard_min_count",
+      "expected": {"issuer": "UL", "minimum": 1},
+      "basis": "The source contains UL publication identifiers that must not be omitted from the reference graph."
+    }
+  ]
+}

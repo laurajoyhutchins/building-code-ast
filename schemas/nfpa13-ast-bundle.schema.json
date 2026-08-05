@@ -1,0 +1,143 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/laurajoyhutchins/building-code-ast/schemas/nfpa13-ast-bundle.schema.json",
+  "title": "NFPA 13 source-local AST bundle",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema",
+    "producer",
+    "source",
+    "document_ast",
+    "relations",
+    "semantic_annotations",
+    "tables",
+    "source_map",
+    "statistics",
+    "validation"
+  ],
+  "properties": {
+    "schema": {"const": "nfpa13-ast-bundle/0.2.0"},
+    "producer": {"$ref": "#/$defs/producer"},
+    "source": {
+      "type": "object",
+      "required": ["artifact_id", "edition_id", "source_pdf_sha256"],
+      "properties": {
+        "artifact_id": {"const": "nfpa:13"},
+        "edition_id": {"type": "string", "minLength": 1},
+        "source_pdf_sha256": {"$ref": "#/$defs/sha256"}
+      },
+      "additionalProperties": true
+    },
+    "document_ast": {"$ref": "document-ast.schema.json"},
+    "relations": {
+      "type": "array",
+      "items": {"$ref": "#/$defs/relation"}
+    },
+    "semantic_annotations": {
+      "type": "array",
+      "items": {"$ref": "#/$defs/semanticAnnotation"}
+    },
+    "tables": {"type": "array", "items": {"type": "object"}},
+    "source_map": {"type": "array", "items": {"type": "object"}},
+    "statistics": {"type": "object"},
+    "validation": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["passed", "engine", "contract"],
+      "properties": {
+        "passed": {"const": true},
+        "engine": {"type": "object"},
+        "contract": {"type": "object"}
+      }
+    }
+  },
+  "$defs": {
+    "sha256": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{64}$"
+    },
+    "span": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["start", "end", "text"],
+      "properties": {
+        "start": {"type": "integer", "minimum": 0},
+        "end": {"type": "integer", "minimum": 0},
+        "text": {"type": "string"}
+      }
+    },
+    "producer": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "schema",
+        "repository",
+        "commit_sha",
+        "engine_path",
+        "engine_sha256",
+        "wrapper_path",
+        "wrapper_sha256",
+        "python_version",
+        "pymupdf_version",
+        "command_options"
+      ],
+      "properties": {
+        "schema": {"const": "nfpa13-ast-producer/0.1.0"},
+        "repository": {"const": "laurajoyhutchins/building-code-ast"},
+        "commit_sha": {"type": "string", "pattern": "^[0-9a-f]{40}$"},
+        "engine_path": {"const": "tools/extract_nfpa13_2019_ast.py"},
+        "engine_sha256": {"$ref": "#/$defs/sha256"},
+        "wrapper_path": {"const": "tools/build_nfpa13_2019_bundle.py"},
+        "wrapper_sha256": {"$ref": "#/$defs/sha256"},
+        "python_version": {"type": "string", "minLength": 1},
+        "pymupdf_version": {"type": "string", "minLength": 1},
+        "command_options": {"type": "object"}
+      }
+    },
+    "relation": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "type",
+        "source_locator",
+        "target_locator",
+        "target_artifact_id",
+        "target_domain",
+        "resolved",
+        "evidence"
+      ],
+      "properties": {
+        "type": {"type": "string", "minLength": 1},
+        "source_locator": {"type": "string", "minLength": 1},
+        "target_locator": {"type": "string", "minLength": 1},
+        "target_artifact_id": {"type": ["string", "null"]},
+        "target_domain": {
+          "enum": ["internal", "external_standard", "unspecified_document"]
+        },
+        "resolved": {"type": "boolean"},
+        "evidence": {"oneOf": [{"$ref": "#/$defs/span"}, {"type": "null"}]}
+      }
+    },
+    "semanticAnnotation": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "type",
+        "source_locator",
+        "method",
+        "parser_revision",
+        "review_status",
+        "evidence"
+      ],
+      "properties": {
+        "type": {"type": "string", "minLength": 1},
+        "source_locator": {"type": "string", "minLength": 1},
+        "method": {"const": "lexical-deterministic"},
+        "parser_revision": {"$ref": "#/$defs/sha256"},
+        "review_status": {"enum": ["unreviewed", "reviewed", "rejected"]},
+        "evidence": {"$ref": "#/$defs/span"}
+      }
+    }
+  }
+}
