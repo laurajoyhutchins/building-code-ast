@@ -20,7 +20,7 @@ jobs:
         with:
           python-version: '3.12'
       - name: Install package
-        run: python -m pip install -e .
+        run: python -m pip install -e '.[validation]'
       - name: Validate deterministic graph and projections
         run: |
           python scripts/validate_archaeology.py
