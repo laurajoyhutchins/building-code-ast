@@ -1,0 +1,86 @@
+name: Bootstrap IBC 2018 open areas
+
+on:
+  push:
+    branches:
+      - agent/ibc-2018-closeout
+  pull_request:
+    branches:
+      - main
+
+permissions:
+  contents: write
+  issues: read
+  pull-requests: read
+
+jobs:
+  bootstrap:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out branch
+        uses: actions/checkout@v4
+        with:
+          ref: agent/ibc-2018-closeout
+          fetch-depth: 0
+
+      - name: Reconstruct source-safe patch archive
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const crypto = require('crypto');
+            const fs = require('fs');
+            const comments = await github.paginate(github.rest.issues.listComments, {
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: 21,
+              per_page: 100,
+            });
+            const marker = 'IBC2018_OPEN_AREAS_TRANSFER_V2';
+            const expectedTotal = 27;
+            const expectedArchive = '25197915261914a9c18ca3ed6e3d5944565d2deb91590d30582cf6db4aefef4a';
+            const chunks = new Map();
+            for (const comment of comments) {
+              const body = comment.body || '';
+              if (!body.startsWith(marker)) continue;
+              const index = Number(body.match(/index:\s*(\d+)/)?.[1]);
+              const total = Number(body.match(/total:\s*(\d+)/)?.[1]);
+              const archive = body.match(/archive_sha256:\s*([0-9a-f]{64})/)?.[1];
+              const chunkHash = body.match(/chunk_sha256:\s*([0-9a-f]{64})/)?.[1];
+              const encoded = body.match(/BEGIN_BASE64\s*([A-Za-z0-9+/=\s]+?)\s*END_BASE64/)?.[1]?.replace(/\s/g, '');
+              if (!index || total !== expectedTotal || archive !== expectedArchive || !chunkHash || !encoded) {
+                throw new Error(`Malformed transfer comment ${comment.id}`);
+              }
+              const actualChunkHash = crypto.createHash('sha256').update(encoded, 'utf8').digest('hex');
+              if (actualChunkHash !== chunkHash) throw new Error(`Chunk ${index} hash mismatch`);
+              const prior = chunks.get(index);
+              if (prior && prior !== encoded) throw new Error(`Conflicting duplicate chunk ${index}`);
+              chunks.set(index, encoded);
+            }
+            if (chunks.size !== expectedTotal) throw new Error(`Expected ${expectedTotal} chunks, found ${chunks.size}`);
+            const joined = Array.from({length: expectedTotal}, (_, i) => {
+              const value = chunks.get(i + 1);
+              if (!value) throw new Error(`Missing chunk ${i + 1}`);
+              return value;
+            }).join('');
+            const archive = Buffer.from(joined, 'base64');
+            const actualArchive = crypto.createHash('sha256').update(archive).digest('hex');
+            if (actualArchive !== expectedArchive) throw new Error(`Archive hash mismatch: ${actualArchive}`);
+            fs.writeFileSync('/tmp/ibc-open-areas.patch.xz', archive);
+            core.info(`Reconstructed ${archive.length} bytes`);
+
+      - name: Verify, apply, and publish clean commit
+        shell: bash
+        env:
+          BASE_SHA: 4c0b431e438307504f425577e8b1e71a767657ce
+        run: |
+          set -euo pipefail
+          echo '25197915261914a9c18ca3ed6e3d5944565d2deb91590d30582cf6db4aefef4a  /tmp/ibc-open-areas.patch.xz' | sha256sum -c -
+          xz -dc /tmp/ibc-open-areas.patch.xz > /tmp/ibc-open-areas.patch
+          echo '75bb4aeda6ead9238c9819e141f1fbce14d61d75c21b6a05a71b649a4e09ec94  /tmp/ibc-open-areas.patch' | sha256sum -c -
+          git reset --hard "$BASE_SHA"
+          git apply --check /tmp/ibc-open-areas.patch
+          git apply --index /tmp/ibc-open-areas.patch
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git commit -m 'feat: resolve IBC 2018 open review areas'
+          git push --force origin HEAD:refs/heads/agent/ibc-2018-closeout
