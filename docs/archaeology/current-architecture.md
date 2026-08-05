@@ -2,30 +2,28 @@
 
 ## Governing layers
 
-1. **Source and publication evidence.** `SourceRegister` identifies an exact artifact, publication state, evidence role, access scope, rights status, and SHA-256. Evidence adapters verify the registered role, media type, and exact bytes before extraction.
-2. **Layout evidence.** PDF layout records text blocks, page coordinates, outline candidates, and normalized ordering. Coordinates are retained as evidence; they are not assumed to be hierarchy.
-3. **Document AST 0.1.0.** The publication tree uses stable identities, recursive parent-child structure, exact spans, tables, definitions, notes, footnotes, and unsupported nodes without semantic modality fields.
-4. **Family grammar.** NEC hierarchy and selected semantic review are merged. IBC and NFPA 13 grammars remain branch-bound. ICC errata and development adapters are evidence-family parsers, not code-tree parsers.
-5. **Validation.** Deterministic identities, span equality, containment, parent legality, source ordering, diagnostics, regression fixtures, private source replay, and official-corpus cases validate bounded claims.
-6. **Downstream graph and products.** Definitions, exceptions, references, amendments, equipment evidence, and jurisdictional applicability can be resolved into graphs without erasing the source tree.
+1. **Source and publication evidence.** `SourceRegister` identifies exact artifacts, publication states, evidence roles, access scope, rights status, and cryptographic identity. Evidence adapters verify those boundaries before extraction.
+2. **Layout evidence.** PDF blocks, page coordinates, printed-page labels, offsets, and geometry remain reproducibility and debugging evidence. They do not become code identity merely because they are available.
+3. **Document and provision ASTs.** Document AST `0.1.0` preserves publication structure and exact evidence spans. Provision AST `0.3.0` provides nullable recursive condition expressions while rejecting unsupported grouping or mixed connectors without partial semantic output.
+4. **Family-specific grammars and corpora.** Shared contracts coexist with NEC-, IBC-, ICC-evidence-, and NFPA-specific machinery. Published code sections, subsections, tables, figures, exceptions, definitions, and equations are the primary navigation addresses where the source establishes them.
+5. **Validation.** Deterministic identities, span equality, containment, source ordering, diagnostics, regression fixtures, private source replay, reviewed cases, schemas, and corpus validators constrain every claim.
+6. **Downstream resolution.** References, amendments, definitions, equipment evidence, and jurisdictional applicability can be projected into downstream graphs without erasing source ownership or promoting parser guesses into requirements.
 
 ## Current main support
 
-- Document AST `0.1.0` and Provision AST `0.2.0`.
-- Local-only 2017 NEC ingestion for selected Articles 90, 100, and 110.
-- NEC hierarchy inference and independent conformance reporting for the exercised slice.
-- Article 100 definition indexing and selected Section 90.5/110 reviews.
-- Source register and guarded evidence adapter boundary.
-- ICC errata, proposal, action-report, and development-lineage evidence adapters.
-- Washington normalized and official WAC amendment adapters.
+- Document AST `0.1.0` and Provision AST `0.3.0` composable condition expressions.
+- Local-only 2017 NEC ingestion, hierarchy inference, conformance reporting, definition indexing, and selected semantic review.
+- A source-safe NEC 2020 expected-change framework derived from development records, with independent observed-edition reconciliation kept separate.
+- A source-safe 2018 IBC structural corpus with section-first navigation, deterministic corpus and schema validation, inventories, review queues, and explicit unresolved records.
+- Local-only NFPA 13 (2019) hierarchy extraction, strict bundle contracts, reviewed non-reconstructive cases, source-linked relationships, and producer provenance checks.
+- Source register and guarded evidence-adapter boundaries, including ICC development evidence and Washington amendment adapters.
 
-## Not current main support
+## Remaining gates and non-goals
 
-- Provision AST `0.3.0` composable condition expressions in PR #12.
-- 2018 IBC ingestion, layout analysis, hierarchy runtime, figures, appendices, or full-edition coverage in PRs #15, #17, and #18.
-- An observed 2017-to-2020 NEC changelog in PR #19.
-- 2019 NFPA 13 ingestion or hierarchy in PR #20.
-- A universal parser grammar.
-- Complete legal consolidation, jurisdictional applicability, equipment certification, or compliance reasoning.
+- NEC 2020 observed-change reconciliation still requires an authorized issued-edition source artifact. Development records do not establish the controlling text by themselves.
+- NFPA 13 figure and diagram semantics, and semantic table-column interpretation, remain unsupported unless separately reviewed.
+- IBC disputed vector candidates, pilot semantic interpretations, and publisher-copy comparison remain review gates rather than asserted corpus truth.
+- PDF pagination remains secondary provenance because editions, printings, and source files can move the same code section between pages.
+- The repository does not provide a universal parser grammar, complete legal consolidation, jurisdictional applicability, equipment certification, or compliance reasoning.
 
-The machine-readable projection is [`current-architecture.json`](current-architecture.json).
+The machine-readable projection is [`current-architecture.json`](current-architecture.json). The patch set preserves the superseded review branches as historical evidence while recording PRs #33, #34, #35, and #37 as the clean merged integration outcomes.
