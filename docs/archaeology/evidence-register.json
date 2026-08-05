@@ -1,0 +1,145 @@
+{
+  "base_commit": "e0e3aef4320ec20ce8508378f611f43336b24e4d",
+  "external_repositories": {
+    "laurajoyhutchins/LORE": {
+      "ref": "5dba6e9533270384008f837441173f8d8cb6e8eb",
+      "role": "accepted repository knowledge workflow"
+    },
+    "laurajoyhutchins/building-code-map": {
+      "ref": "761ddc49bf6dffa50dc0454a5632f04fa3959594",
+      "role": "jurisdiction and applicability owner"
+    },
+    "laurajoyhutchins/electrical-equipment-lineage": {
+      "ref": "0607179f9ef484605e33b4f108e8f1fde03eabaa",
+      "role": "UL and equipment lineage owner"
+    },
+    "laurajoyhutchins/engineering-agent-team": {
+      "ref": "80a5dd0ecbba269ca73190733eacdf4e52fb893c",
+      "role": "review and graph-convention context"
+    },
+    "laurajoyhutchins/junk-drawer": {
+      "ref": "private local oracle",
+      "role": "NEC hierarchy reference, not dependency"
+    },
+    "laurajoyhutchins/obsidian-pdf-extractor": {
+      "ref": "main",
+      "role": "architecture reference, not dependency"
+    },
+    "notactuallytreyanastasio/deciduous": {
+      "ref": "1bb5a1595011943973716f316d65cd03944feadd",
+      "role": "upstream graph conventions"
+    }
+  },
+  "pull_requests": {
+    "1": {
+      "head_sha": "6a4be1604ef8a85ffea4144e2dff571253fcb39d",
+      "state": "merged"
+    },
+    "10": {
+      "head_sha": "0e6a94cc05c3e2b7ccbe4f8b56b55562d93b912c",
+      "state": "merged"
+    },
+    "11": {
+      "head_sha": "8f2acad81b212340c71015bc657555e7f7d0fdec",
+      "state": "merged"
+    },
+    "12": {
+      "head_sha": "359c0f27fb9b57761718aca38e462fa7f406338c",
+      "state": "open"
+    },
+    "13": {
+      "head_sha": "15873b9ac5e9f1ac049b9c12024551ec4fb9286b",
+      "state": "superseded-by-22"
+    },
+    "14": {
+      "head_sha": "6084da05792fe579014eddd71c4c0c53fc943444",
+      "state": "superseded-by-22"
+    },
+    "15": {
+      "head_sha": "d2659e9e1f9764bddb62e429bb76734289217878",
+      "state": "open-draft"
+    },
+    "16": {
+      "head_sha": "f1bb108e05da46a1cc4aa812a53a549ca0ee04f3",
+      "state": "superseded-by-22"
+    },
+    "17": {
+      "head_sha": "270410a1e3fa6217887d74167f28702ad46f9967",
+      "state": "open-draft"
+    },
+    "18": {
+      "head_sha": "6f0e2a75d5347ae192a0a18b94eb2f0ab874e710",
+      "state": "open-draft-design"
+    },
+    "19": {
+      "head_sha": "ef1603869ff4ed27656891787fe7d2e0fbe5e463",
+      "state": "open-draft"
+    },
+    "20": {
+      "head_sha": "313ec32331961d8aab4c75186339693b3162fa37",
+      "state": "open-draft"
+    },
+    "22": {
+      "head_sha": "c62a9e2f343710156e9fa3066eb71e55675f63cf",
+      "state": "merged"
+    },
+    "23": {
+      "head_sha": "0f39c22d1633053a38fa160a967d2704665a4768",
+      "state": "merged"
+    },
+    "24": {
+      "head_sha": "512a897e2d1251477e119655549b180161dd6a80",
+      "state": "merged"
+    },
+    "25": {
+      "head_sha": "128b13d76e29a0787acbac9366869763727fcb7d",
+      "state": "merged"
+    },
+    "26": {
+      "head_sha": "4c4a03a3ed3742e2ef685ce27665c0e881d3b656",
+      "state": "merged"
+    },
+    "27": {
+      "head_sha": "80e29f9b21cd983dc067f48f2a4f0f9328f7751c",
+      "state": "merged"
+    },
+    "28": {
+      "head_sha": "849e38c8f3f137adebce8d5abdf1238ea785a704",
+      "state": "merged"
+    },
+    "29": {
+      "head_sha": "76ac69aa26dcce7a331dfca9ec1dadfd995ade28",
+      "state": "merged"
+    },
+    "30": {
+      "head_sha": "26ec025920a491ee82adedbd2657a9632543d3bb",
+      "state": "merged"
+    },
+    "33": {
+      "head_sha": "236bdbfdbe8edfd6f5af7530c9d6e7dd8e4ba518",
+      "state": "merged"
+    },
+    "34": {
+      "head_sha": "0fad7f39889f11840c7b23a311180c99ee686fa0",
+      "state": "merged"
+    },
+    "35": {
+      "head_sha": "8e4ba3623cb8546f16f307f91271ddf91f559ab1",
+      "state": "merged"
+    },
+    "37": {
+      "head_sha": "ea1bcd23803340cc600432980d4ceb3c08671c92",
+      "state": "merged"
+    },
+    "7": {
+      "head_sha": "b44c16ebe837132c894a9c62000065ee2337cd15",
+      "state": "merged"
+    },
+    "8": {
+      "head_sha": "d73b20bfa6c9bf216ceb09a1b557ce2c5bf552dd",
+      "state": "merged"
+    }
+  },
+  "repository": "laurajoyhutchins/building-code-ast",
+  "schema": "building-code-ast-archaeology-evidence-v1"
+}
