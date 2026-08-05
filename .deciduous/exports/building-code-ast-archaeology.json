@@ -1176,6 +1176,61 @@
       "to_change_id": "46fc8b7c-c34b-5540-a517-293f77bcbe37",
       "to_node_id": 96,
       "weight": 1.0
+    },
+    {
+      "created_at": "2026-08-03T14:30:00Z",
+      "edge_type": "leads_to",
+      "from_change_id": "8dd36b69-04c0-5f8e-bff6-14f5df650a55",
+      "from_node_id": 3,
+      "id": 108,
+      "rationale": "Durable downstream references exposed the mismatch between code identity and artifact pagination.",
+      "to_change_id": "10835ec8-50db-5fe4-9fc1-d1c9f7498a8c",
+      "to_node_id": 97,
+      "weight": 1.0
+    },
+    {
+      "created_at": "2026-08-03T14:30:00Z",
+      "edge_type": "enables",
+      "from_change_id": "c2a3d5b7-df28-5611-8f88-81bb0c0d2adc",
+      "from_node_id": 10,
+      "id": 109,
+      "rationale": "Separating publication structure from semantic interpretation made the code's own hierarchy available as the stable coordinate layer.",
+      "to_change_id": "cccc92d6-5b76-5989-b19b-c0d8a7b66eba",
+      "to_node_id": 98,
+      "weight": 1.0
+    },
+    {
+      "created_at": "2026-08-03T14:30:00Z",
+      "edge_type": "leads_to",
+      "from_change_id": "10835ec8-50db-5fe4-9fc1-d1c9f7498a8c",
+      "from_node_id": 97,
+      "id": 110,
+      "rationale": "The user-facing and cross-edition coordinate should match how the code is actually cited.",
+      "to_change_id": "cccc92d6-5b76-5989-b19b-c0d8a7b66eba",
+      "to_node_id": 98,
+      "weight": 1.0
+    },
+    {
+      "created_at": "2026-08-03T14:30:00Z",
+      "edge_type": "requires",
+      "from_change_id": "d15946d4-2d27-5858-865f-e4ae7b6e2092",
+      "from_node_id": 41,
+      "id": 111,
+      "rationale": "Independent issued editions must be compared by structural address and explicit renumbering relationships rather than page movement.",
+      "to_change_id": "cccc92d6-5b76-5989-b19b-c0d8a7b66eba",
+      "to_node_id": 98,
+      "weight": 1.0
+    },
+    {
+      "created_at": "2026-08-03T14:30:00Z",
+      "edge_type": "leads_to",
+      "from_change_id": "cccc92d6-5b76-5989-b19b-c0d8a7b66eba",
+      "from_node_id": 98,
+      "id": 112,
+      "rationale": "Once structural addresses are primary, page coordinates remain useful only as source-artifact provenance.",
+      "to_change_id": "9e8a9303-2eeb-5bea-a0f8-89173c645bcb",
+      "to_node_id": 99,
+      "weight": 1.0
     }
   ],
   "nodes": [
@@ -2234,6 +2289,39 @@
       "status": "active",
       "title": "The durable contract is provenance-first, family-specific, fail-closed, and explicitly bounded",
       "updated_at": "2026-08-03T00:00:00Z"
+    },
+    {
+      "change_id": "10835ec8-50db-5fe4-9fc1-d1c9f7498a8c",
+      "created_at": "2026-08-04T00:00:00Z",
+      "description": "PDF pagination varies across editions, printings, and source files, while the publication's own section hierarchy is the durable coordinate engineers use.",
+      "id": 97,
+      "metadata_json": "{\"arc\":\"schema\",\"confidence\":\"high\",\"current_architecture\":false,\"date\":\"2026-08-04\",\"evidence\":[{\"commit\":\"3740ea3435ed7c2092ddb07001325d4b8ce3ba77\",\"kind\":\"commit\",\"repo\":\"laurajoyhutchins/building-code-ast\"},{\"kind\":\"path\",\"path\":\"docs/reference/section-addressing.md\",\"ref\":\"agent/ibc-2018-closeout\",\"repo\":\"laurajoyhutchins/building-code-ast\"}],\"lifecycle_status\":\"completed\",\"repository_owner\":\"laurajoyhutchins/building-code-ast\",\"semantic_id\":\"obs.engineers-navigate-by-code-address\",\"source_state\":\"accepted\",\"support_scope\":\"owner direction and PR #33 evidence\",\"tags\":[\"section-addressing\",\"navigation\",\"edition-comparison\"]}",
+      "node_type": "observation",
+      "status": "completed",
+      "title": "Engineers navigate and cite code by sections and subsections, not PDF pages",
+      "updated_at": "2026-08-04T00:00:00Z"
+    },
+    {
+      "change_id": "cccc92d6-5b76-5989-b19b-c0d8a7b66eba",
+      "created_at": "2026-08-04T00:00:00Z",
+      "description": "Sections, subsections, tables, figures, exceptions, definitions, and equations become canonical navigation coordinates. Page numbers cannot supply fallback structural identities.",
+      "id": 98,
+      "metadata_json": "{\"arc\":\"schema\",\"confidence\":\"high\",\"current_architecture\":false,\"date\":\"2026-08-04\",\"evidence\":[{\"commit\":\"3740ea3435ed7c2092ddb07001325d4b8ce3ba77\",\"kind\":\"commit\",\"repo\":\"laurajoyhutchins/building-code-ast\"},{\"kind\":\"path\",\"path\":\"docs/reference/section-addressing.md\",\"ref\":\"agent/ibc-2018-closeout\",\"repo\":\"laurajoyhutchins/building-code-ast\"}],\"lifecycle_status\":\"branch-only\",\"repository_owner\":\"laurajoyhutchins/building-code-ast\",\"semantic_id\":\"decision.section-address-primary\",\"source_state\":\"accepted\",\"support_scope\":\"implemented and verified on draft PR #33\",\"tags\":[\"section-addressing\",\"navigation\",\"edition-comparison\"]}",
+      "node_type": "decision",
+      "status": "active",
+      "title": "Make published code addresses the primary identity and navigation surface",
+      "updated_at": "2026-08-04T00:00:00Z"
+    },
+    {
+      "change_id": "9e8a9303-2eeb-5bea-a0f8-89173c645bcb",
+      "created_at": "2026-08-04T00:00:00Z",
+      "description": "PDF pages, printed-page labels, offsets, bounding boxes, and raw block locators remain available for source reproduction and parser debugging, while navigation, relationships, ordering, and edition comparison use structural code addresses.",
+      "id": 99,
+      "metadata_json": "{\"arc\":\"provenance\",\"confidence\":\"high\",\"current_architecture\":false,\"date\":\"2026-08-04\",\"evidence\":[{\"commit\":\"3740ea3435ed7c2092ddb07001325d4b8ce3ba77\",\"kind\":\"commit\",\"repo\":\"laurajoyhutchins/building-code-ast\"},{\"kind\":\"path\",\"path\":\"docs/reference/section-addressing.md\",\"ref\":\"agent/ibc-2018-closeout\",\"repo\":\"laurajoyhutchins/building-code-ast\"}],\"lifecycle_status\":\"branch-only\",\"repository_owner\":\"laurajoyhutchins/building-code-ast\",\"semantic_id\":\"outcome.pages-provenance-only\",\"source_state\":\"accepted\",\"support_scope\":\"implemented and verified on draft PR #33\",\"tags\":[\"section-addressing\",\"navigation\",\"edition-comparison\"]}",
+      "node_type": "outcome",
+      "status": "completed",
+      "title": "Retain PDF coordinates only as secondary provenance",
+      "updated_at": "2026-08-04T00:00:00Z"
     }
   ]
 }
