@@ -11,7 +11,7 @@ from enum import StrEnum
 from typing import Any
 
 
-AST_VERSION = "0.2.0"
+AST_VERSION = "0.3.0"
 
 
 class Modality(StrEnum):
@@ -19,6 +19,11 @@ class Modality(StrEnum):
     PROHIBITION = "prohibition"
     PERMISSION = "permission"
     UNKNOWN = "unknown"
+
+
+class LogicalConditionType(StrEnum):
+    ALL_OF = "all_of"
+    ANY_OF = "any_of"
 
 
 class DiagnosticSeverity(StrEnum):
@@ -90,6 +95,23 @@ class ComparisonCondition:
 
 
 @dataclass(frozen=True, slots=True)
+class LogicalCondition:
+    type: LogicalConditionType
+    operands: tuple[ComparisonCondition | LogicalCondition, ...]
+    span: SourceSpan
+
+    def to_dict(self) -> dict[str, Any]:
+        return {
+            "type": self.type.value,
+            "operands": [operand.to_dict() for operand in self.operands],
+            "span": self.span.to_dict(),
+        }
+
+
+ConditionExpression = ComparisonCondition | LogicalCondition
+
+
+@dataclass(frozen=True, slots=True)
 class Action:
     text: str
     normalized_verb: str | None
@@ -123,7 +145,7 @@ class ProvisionAst:
     subject_span: SourceSpan | None
     action: Action
     source_span: SourceSpan
-    conditions: tuple[ComparisonCondition, ...] = ()
+    condition: ConditionExpression | None = None
     exceptions: tuple[SectionReference, ...] = ()
     diagnostics: tuple[Diagnostic, ...] = ()
     ast_version: str = field(default=AST_VERSION, init=False)
@@ -139,7 +161,7 @@ class ProvisionAst:
             "modality_span": self.modality_span.to_dict() if self.modality_span else None,
             "subject": self.subject,
             "subject_span": self.subject_span.to_dict() if self.subject_span else None,
-            "conditions": [condition.to_dict() for condition in self.conditions],
+            "condition": self.condition.to_dict() if self.condition else None,
             "action": self.action.to_dict(),
             "exceptions": [exception.to_dict() for exception in self.exceptions],
             "diagnostics": [diagnostic.to_dict() for diagnostic in self.diagnostics],
