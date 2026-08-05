@@ -10,12 +10,14 @@ import json
 import os
 from pathlib import Path
 import platform
+import subprocess
 import sys
-from typing import Any
+from typing import Any, Callable
 
 REPOSITORY = "laurajoyhutchins/building-code-ast"
 ENGINE_PATH = "tools/extract_nfpa13_2019_ast.py"
 WRAPPER_PATH = "tools/build_nfpa13_2019_bundle.py"
+RunCommand = Callable[..., subprocess.CompletedProcess[str]]
 
 
 def _load_module(path: Path, name: str) -> Any:
@@ -34,6 +36,41 @@ def _sha256(path: Path) -> str:
         for chunk in iter(lambda: source.read(1024 * 1024), b""):
             digest.update(chunk)
     return digest.hexdigest()
+
+
+def verified_producer_commit(
+    root: Path,
+    supplied_commit: str,
+    *,
+    run: RunCommand = subprocess.run,
+) -> str:
+    """Verify the claimed producer commit against a clean checkout.
+
+    Only the producer files that determine bundle behavior are required to be
+    clean. Unrelated local files do not invalidate the generation receipt.
+    """
+
+    head = run(
+        ["git", "rev-parse", "HEAD"],
+        cwd=root,
+        check=True,
+        capture_output=True,
+        text=True,
+    ).stdout.strip()
+    if supplied_commit != head:
+        raise ValueError(
+            f"producer commit {supplied_commit} does not match checkout HEAD {head}"
+        )
+    clean = run(
+        ["git", "diff", "--quiet", "HEAD", "--", ENGINE_PATH, WRAPPER_PATH],
+        cwd=root,
+        check=False,
+        capture_output=True,
+        text=True,
+    )
+    if clean.returncode != 0:
+        raise ValueError("producer files are dirty relative to the recorded checkout HEAD")
+    return head
 
 
 def _pymupdf_version(engine: Any) -> str:
@@ -70,6 +107,11 @@ def main() -> int:
         )
 
     root = Path(__file__).resolve().parents[1]
+    try:
+        producer_commit = verified_producer_commit(root, args.producer_commit)
+    except (subprocess.CalledProcessError, ValueError) as error:
+        parser.error(str(error))
+
     src = root / "src"
     if str(src) not in sys.path:
         sys.path.insert(0, str(src))
@@ -91,7 +133,7 @@ def main() -> int:
     producer = {
         "schema": PRODUCER_SCHEMA,
         "repository": REPOSITORY,
-        "commit_sha": args.producer_commit,
+        "commit_sha": producer_commit,
         "engine_path": ENGINE_PATH,
         "engine_sha256": _sha256(engine_path),
         "wrapper_path": WRAPPER_PATH,
@@ -119,7 +161,7 @@ def main() -> int:
         "",
         f"**Result:** {'PASS' if validation['passed'] else 'FAIL'}",
         f"**Bundle schema:** `{BUNDLE_SCHEMA}`",
-        f"**Producer commit:** `{args.producer_commit}`",
+        f"**Producer commit:** `{producer_commit}`",
         f"**Output SHA-256:** `{sha256_bytes(payload)}`",
         "",
         "## Contract proof",
