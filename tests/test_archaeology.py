@@ -12,22 +12,28 @@ class ArchaeologyTests(unittest.TestCase):
     def test_graph_and_generated_views_validate(self):
         errors,summary=validate(write=False)
         self.assertEqual(errors,[])
-        self.assertEqual(summary['nodes'],99)
-        self.assertEqual(summary['edges'],112)
-        self.assertEqual(summary['patches'],10)
+        self.assertEqual(summary['nodes'],107)
+        self.assertEqual(summary['edges'],120)
+        self.assertEqual(summary['patches'],11)
 
-    def test_current_support_is_qualified(self):
+    def test_current_support_tracks_merged_frameworks_and_remaining_gates(self):
         current=json.loads((ROOT/'docs/archaeology/current-architecture.json').read_text())
         by_id={node['semantic_id']:node for node in current['nodes']}
-        self.assertIn('obs.current-main-support',by_id)
-        self.assertIn('obs.branch-bound-support',by_id)
-        self.assertNotIn('decision.section-address-primary',by_id)
+        for semantic_id in (
+            'decision.section-address-primary',
+            'outcome.pages-provenance-only',
+            'outcome.ibc2018-corpus-merged-pr33',
+            'outcome.nfpa13-support-merged-pr34',
+            'outcome.nec2020-framework-merged-pr35',
+            'outcome.provision-ast-0.3-merged-pr37',
+        ):
+            self.assertIn(semantic_id,by_id)
         export=json.loads((ROOT/'.deciduous/exports/building-code-ast-archaeology.json').read_text())
         nodes={json.loads(node['metadata_json'])['semantic_id']:json.loads(node['metadata_json']) for node in export['nodes']}
-        self.assertEqual(nodes['outcome.ibc-not-current-main']['lifecycle_status'],'branch-only')
-        self.assertEqual(nodes['outcome.nfpa13-draft-not-main']['lifecycle_status'],'branch-only')
-        self.assertEqual(nodes['outcome.nec2020-changelog-not-main']['lifecycle_status'],'branch-only')
-        self.assertEqual(nodes['decision.section-address-primary']['lifecycle_status'],'branch-only')
-        self.assertEqual(nodes['outcome.pages-provenance-only']['lifecycle_status'],'branch-only')
+        self.assertEqual(nodes['decision.section-address-primary']['lifecycle_status'],'completed')
+        self.assertEqual(nodes['outcome.pages-provenance-only']['lifecycle_status'],'completed')
+        self.assertEqual(nodes['outcome.nec2020-framework-merged-pr35']['lifecycle_status'],'completed')
+        self.assertEqual(nodes['obs.nec2020-source-unavailable']['lifecycle_status'],'unresolved')
+        self.assertEqual(nodes['obs.nfpa13-unsupported-visual-semantics']['lifecycle_status'],'unresolved')
 
 if __name__=='__main__': unittest.main()
