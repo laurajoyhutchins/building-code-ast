@@ -1,0 +1,382 @@
+{
+  "copyright_boundary": "No source prose or page image is included. Coordinates, stable IDs, hashes, and reviewer rationales are non-reconstructive.",
+  "disputed": [
+    {
+      "anchor": {
+        "pdf_page_range": [
+          28,
+          713
+        ]
+      },
+      "fixture_id": "disputed-vector-only-uncaptioned-graphics",
+      "kind": "vector_graphic_review",
+      "reason": "Vector ruling and technical drawing paths cannot yet be exhaustively separated without a page-region drawing model; no normalized diagram is invented."
+    }
+  ],
+  "negative": [
+    {
+      "anchor": {
+        "bbox": [
+          40,
+          65,
+          552,
+          740
+        ],
+        "label": "two-column prose",
+        "pdf_page": 82,
+        "region_line_id_digest": "30fb012038bf13d8e4f995cf503422d1c42f79d99ed2f202aa082e50073a1ff5"
+      },
+      "fixture_id": "negative-ordinary-two-column-prose",
+      "kind": "page_columns",
+      "reason": "Page typography alone does not establish row-column semantics."
+    },
+    {
+      "anchor": {
+        "bbox": [
+          40,
+          50,
+          552,
+          740
+        ],
+        "label": "contents",
+        "pdf_page": 20,
+        "region_line_id_digest": "965af5e0eb3cf27b3c52d5e997324361ecd6405184bf829ff0e62dd54727c58b"
+      },
+      "fixture_id": "negative-table-of-contents",
+      "kind": "contents_page",
+      "reason": "Contents-page alignment is navigation furniture, not a code table inventory item."
+    },
+    {
+      "anchor": {
+        "bbox": [
+          40,
+          50,
+          552,
+          740
+        ],
+        "label": "subject index",
+        "pdf_page": 714,
+        "region_line_id_digest": "2b07bf4ede3037566b2a3c0ed2e9fbfd09507173f2b4e52a505231bd0eb1ce7f"
+      },
+      "fixture_id": "negative-subject-index",
+      "kind": "subject_index",
+      "reason": "Index columns are excluded from the code-body structural counts."
+    },
+    {
+      "anchor": {
+        "bbox": [
+          396.958,
+          754.068,
+          552.103,
+          769.524
+        ],
+        "line_id": "poppler-line:10536375f3deaae28e03",
+        "observed_text_sha256": "4e204103ef411d34b52be4377218b697b09ff50fd743f303c0e3537ac582487f",
+        "pdf_page": 75
+      },
+      "fixture_id": "negative-page-header",
+      "kind": "running_header",
+      "reason": "Repeated running titles are publication furniture."
+    },
+    {
+      "anchor": {
+        "bbox": [
+          40.05,
+          754.068,
+          48.642,
+          769.524
+        ],
+        "line_id": "poppler-line:05758d724feecfc8416e",
+        "observed_text_sha256": "98010bd9270f9b100b6214a21754fd33bdc8d41b2bc9f9dd16ff54d3c34ffd71",
+        "pdf_page": 75
+      },
+      "fixture_id": "negative-page-footer",
+      "kind": "page_number",
+      "reason": "Printed page numbers are anchors, not content structures."
+    },
+    {
+      "anchor": {
+        "bbox": [
+          14.4,
+          775.968,
+          96.454,
+          788.568
+        ],
+        "line_id": "poppler-line:e041ec9f54b1a3f6fd64",
+        "observed_text_sha256": "d6d73f9db97574f4f98731b0e4e31510ef8528d619886381acdf372b41c9894e",
+        "pdf_page": 75
+      },
+      "fixture_id": "negative-watermark",
+      "kind": "marginal_annotation",
+      "reason": "Recurring source-copy mark is retained as provenance evidence and excluded from code structures."
+    },
+    {
+      "anchor": {
+        "bbox": [
+          63.95,
+          119.575,
+          216.141,
+          131.918
+        ],
+        "line_id": "poppler-line:6f0b6ce6f2ca578bab0b",
+        "observed_text_sha256": "1f0e8c35e559304db7f99799131a12b701e473ea587c561816093479b8a6bad9",
+        "pdf_page": 213
+      },
+      "fixture_id": "negative-textual-figure-mention",
+      "kind": "text_only_reference",
+      "reason": "A citation to figures is a cross-reference occurrence, not a new figure."
+    },
+    {
+      "anchor": {
+        "bbox": [
+          55,
+          180,
+          285,
+          520
+        ],
+        "label": "enumerated prose",
+        "pdf_page": 30,
+        "region_line_id_digest": "3c4fa351338282353f5deeb94d91c60246880ef49978c684480b782a3a1b1a6f"
+      },
+      "fixture_id": "negative-enumerated-prose",
+      "kind": "enumerated_prose",
+      "reason": "Numbered prose without aligned data relationships is not an incidental table."
+    },
+    {
+      "anchor": {
+        "bbox": [
+          55,
+          80,
+          285,
+          700
+        ],
+        "label": "section-number column",
+        "pdf_page": 28,
+        "region_line_id_digest": "de0bf6144d1e94c05148319b09bbd97e03dbb99788696a8a24df7e4c540f102c"
+      },
+      "fixture_id": "negative-section-number-column",
+      "kind": "section_number_alignment",
+      "reason": "Aligned section locators are hierarchy evidence, not tabular data."
+    }
+  ],
+  "positive": [
+    {
+      "anchor": {
+        "appendix": null,
+        "bbox": [
+          265.75,
+          362.255,
+          324.18,
+          377.711
+        ],
+        "chapter": "3",
+        "line_id": "poppler-line:3d82b4eddf86c507f369",
+        "observed_text_sha256": "7242a50dcecc12e8bbb72f0e048db425c964677cbc217261c555fc6a0f75213e",
+        "pdf_page": 75,
+        "printed_page": "48"
+      },
+      "fixture_id": "positive-formal-ruled-table",
+      "kind": "formal_table",
+      "reason": "Published TABLE caption and ruled row geometry.",
+      "record_id": "ibc2018:table:da87a6998e3f2df190330c8e"
+    },
+    {
+      "anchor": {
+        "appendix": null,
+        "bbox": [
+          60.05,
+          296.417,
+          415.958,
+          307.547
+        ],
+        "chapter": "35",
+        "line_id": "poppler-line:806c2c53670bb1fd876b",
+        "observed_text_sha256": "cc91a99e61af0341313fc651ff2e3258209503d8a5218fec5d38931b6e0474ba",
+        "pdf_page": 640,
+        "printed_page": "613"
+      },
+      "fixture_id": "positive-borderless-aligned-standard-row",
+      "kind": "chapter35_row",
+      "reason": "Borderless aligned Chapter 35 entry with designation, title, and referenced-section columns.",
+      "record_id": "ibc2018:chapter35-row:65616851bd5223a19df9a07e"
+    },
+    {
+      "anchors": [
+        {
+          "appendix": null,
+          "bbox": [
+            265.75,
+            362.255,
+            324.18,
+            377.711
+          ],
+          "chapter": "3",
+          "line_id": "poppler-line:3d82b4eddf86c507f369",
+          "observed_text_sha256": "7242a50dcecc12e8bbb72f0e048db425c964677cbc217261c555fc6a0f75213e",
+          "pdf_page": 75,
+          "printed_page": "48"
+        },
+        {
+          "appendix": null,
+          "bbox": [
+            262.946,
+            70.788,
+            367.428,
+            86.244
+          ],
+          "chapter": "3",
+          "line_id": "poppler-line:48b924bc02278812ae96",
+          "observed_text_sha256": "1f8ffd54c6222066ca9d00a41e22035250da0ba5c99d9aff4ad9905cc33f6493",
+          "pdf_page": 76,
+          "printed_page": "49"
+        }
+      ],
+      "fixture_id": "positive-multipage-continuation",
+      "kind": "table_continuation",
+      "reason": "One logical table has caption occurrences on consecutive pages and a continued marker.",
+      "record_id": "ibc2018:table:da87a6998e3f2df190330c8e"
+    },
+    {
+      "anchor": {
+        "appendix": null,
+        "bbox": [
+          265.75,
+          362.255,
+          324.18,
+          377.711
+        ],
+        "chapter": "3",
+        "line_id": "poppler-line:3d82b4eddf86c507f369",
+        "observed_text_sha256": "7242a50dcecc12e8bbb72f0e048db425c964677cbc217261c555fc6a0f75213e",
+        "pdf_page": 75,
+        "printed_page": "48"
+      },
+      "fixture_id": "positive-merged-header-grid",
+      "kind": "merged_header_table",
+      "reason": "Representative multi-level header geometry retained for semantic review.",
+      "record_id": "ibc2018:table:da87a6998e3f2df190330c8e"
+    },
+    {
+      "anchor": {
+        "appendix": null,
+        "bbox": [
+          279.573,
+          380.96,
+          351.184,
+          396.416
+        ],
+        "chapter": "7",
+        "line_id": "poppler-line:ce3313bc47755772f7fa",
+        "observed_text_sha256": "a11af07e3652a315e8d6c8eef34ee0dfd435ffed626c28fc7fb1b33132633248",
+        "pdf_page": 210,
+        "printed_page": "183"
+      },
+      "fixture_id": "positive-rotated-content-table",
+      "kind": "rotated_text_table",
+      "reason": "Page rotation is zero, but the table contains nonhorizontal glyph directions. Rotation is a content property, not page metadata.",
+      "record_id": "ibc2018:table:f00f5d58d1108304339fb7c1"
+    },
+    {
+      "anchor": {
+        "appendix": "C",
+        "bbox": [
+          288.449,
+          584.522,
+          341.78,
+          603.719
+        ],
+        "chapter": null,
+        "line_id": "poppler-line:784a9a57346f958618f8",
+        "observed_text_sha256": "701b9a68476a595814a2049af04cd9f8ff4b87212c502f227eed1a41c2c9a728",
+        "pdf_page": 674,
+        "printed_page": "647"
+      },
+      "fixture_id": "positive-appendix-table",
+      "kind": "appendix_table",
+      "reason": "Formally captioned appendix table with appendix-prefixed identifier.",
+      "record_id": "ibc2018:table:002e162a23cc6076411903b8"
+    },
+    {
+      "anchor": {
+        "appendix": null,
+        "bbox": [
+          52.049,
+          219.33,
+          123.648,
+          232.528
+        ],
+        "chapter": "5",
+        "line_id": "poppler-line:6331bf7678f02e148865",
+        "observed_text_sha256": "534a9e658c443672e6cd02547a19ec90fa314558aed08297905faefecf8b2399",
+        "pdf_page": 135,
+        "printed_page": "108"
+      },
+      "fixture_id": "positive-displayed-equation",
+      "kind": "equation",
+      "reason": "Displayed symbolic assignment retained separately from normalized mathematics.",
+      "record_id": "ibc2018:equation:eae0f59cf397d3475926b761"
+    },
+    {
+      "anchor": {
+        "appendix": null,
+        "bbox": [
+          270.69,
+          418.396,
+          323.078,
+          433.853
+        ],
+        "chapter": "7",
+        "line_id": "poppler-line:5ed554a9f4e8ad7cff90",
+        "observed_text_sha256": "5db09f8f2066323d1d3ebd39d9d632e7d77b7dc26b5fe8e40790402cc70e73bc",
+        "pdf_page": 155,
+        "printed_page": "128"
+      },
+      "fixture_id": "positive-captioned-figure",
+      "kind": "figure",
+      "reason": "Published FIGURE identifier with attached short caption.",
+      "record_id": "ibc2018:figure:a2c29032fec38df11776dac5"
+    },
+    {
+      "anchor": {
+        "appendix": null,
+        "bbox": [
+          39.7,
+          443.25,
+          549.82,
+          575.61
+        ],
+        "chapter": "23",
+        "line_id": null,
+        "observed_text_sha256": "f90c7bd6b6a471e64d3cdbc1d9ddd1b49089483bed14f2b744fb80ae31f0e3ac",
+        "pdf_page": 531,
+        "printed_page": "504"
+      },
+      "fixture_id": "positive-uncaptioned-raster-diagram",
+      "kind": "diagram",
+      "reason": "Large raster technical-graphic candidate without a nearby formal FIGURE caption.",
+      "record_id": "ibc2018:diagram:3e2f09476944957369bacbe3"
+    },
+    {
+      "anchor": {
+        "appendix": null,
+        "bbox": [
+          72.034,
+          427.152,
+          121.278,
+          444.822
+        ],
+        "chapter": "4",
+        "line_id": "poppler-line:17ec24e047d7b0b7b56f",
+        "observed_text_sha256": "62d9955a550cf7cc88e2b2f7449afb582b94801a3b1a33492bb3f52d5be9cb49",
+        "pdf_page": 82,
+        "printed_page": "55"
+      },
+      "fixture_id": "positive-nested-exception",
+      "kind": "exception",
+      "reason": "Explicit Exceptions marker with numbered children attached to one parent provision.",
+      "record_id": "ibc2018:exception:7934c11e937426759bfdc5fe"
+    }
+  ],
+  "schema_version": "0.1.0",
+  "source_sha256": "c8f0b75522707a39daf5202edee25d7fdce6c177c382f828a6dc1dfd5cc0b18d"
+}

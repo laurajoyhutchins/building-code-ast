@@ -1,0 +1,5346 @@
+[
+  {
+    "applicability_anchors": [],
+    "applicability_text": null,
+    "continuation_anchors": [],
+    "equation_identifier": null,
+    "exceptions": [],
+    "external_references": [],
+    "extraction_confidence": 0.84,
+    "id": "ibc2018:equation:e6fb057354d3a3587f211f7f",
+    "internal_references": [],
+    "nearby_variable_definitions": [],
+    "normalized_expression": null,
+    "normalized_expression_confidence": 0.0,
+    "observed_expression": "Class II: 0.1 < perm ≤ 1.0 perm.",
+    "observed_expression_sha256": "b1adb568745c89ac05a12b3b0e0bad38ec4a925cc24d6de129e78829ea4e8449",
+    "record_type": "equation",
+    "referenced_sections": [],
+    "referenced_tables": [],
+    "review_state": "provisional",
+    "source_anchor": {
+      "appendix": null,
+      "bbox": [
+        52.112,
+        367.697,
+        181.844,
+        385.367
+      ],
+      "chapter": "2",
+      "line_id": "poppler-line:224909f09832d211db5e",
+      "observed_text_sha256": "b1adb568745c89ac05a12b3b0e0bad38ec4a925cc24d6de129e78829ea4e8449",
+      "pdf_page": 69,
+      "printed_page": "42"
+    },
+    "source_section": "406.5.2",
+    "units": [],
+    "variables": [
+      "Class",
+      "II",
+      "perm"
+    ]
+  },
+  {
+    "applicability_anchors": [],
+    "applicability_text": null,
+    "continuation_anchors": [],
+    "equation_identifier": null,
+    "exceptions": [],
+    "external_references": [],
+    "extraction_confidence": 0.84,
+    "id": "ibc2018:equation:bfe5bb577fd85c31a8d51fd2",
+    "internal_references": [],
+    "nearby_variable_definitions": [],
+    "normalized_expression": null,
+    "normalized_expression_confidence": 0.0,
+    "observed_expression": "Class III: 1.0 < perm ≤ 10 perm.",
+    "observed_expression_sha256": "590bc3ca73c2b21a20f423919f43a16ed9c606612b0852a5334fa9913acfe234",
+    "record_type": "equation",
+    "referenced_sections": [],
+    "referenced_tables": [],
+    "review_state": "provisional",
+    "source_anchor": {
+      "appendix": null,
+      "bbox": [
+        52.09,
+        381.742,
+        183.303,
+        399.412
+      ],
+      "chapter": "2",
+      "line_id": "poppler-line:5f83dc6cb8d426cce178",
+      "observed_text_sha256": "590bc3ca73c2b21a20f423919f43a16ed9c606612b0852a5334fa9913acfe234",
+      "pdf_page": 69,
+      "printed_page": "42"
+    },
+    "source_section": "406.5.2",
+    "units": [],
+    "variables": [
+      "Class",
+      "III",
+      "perm"
+    ]
+  },
+  {
+    "applicability_anchors": [],
+    "applicability_text": null,
+    "continuation_anchors": [],
+    "equation_identifier": null,
+    "exceptions": [],
+    "external_references": [],
+    "extraction_confidence": 0.84,
+    "id": "ibc2018:equation:2d33d415508273ca269ddec3",
+    "internal_references": [],
+    "nearby_variable_definitions": [
+      {
+        "appendix": null,
+        "bbox": [
+          63.992,
+          370.556,
+          264.578,
+          383.366
+        ],
+        "chapter": "4",
+        "line_id": "poppler-line:4365a6604fa3842f82d3",
+        "observed_text_sha256": "fde3323f18d95bfa709d0ea0ff67f78c1e16c9b0ecc1ee52f601ed48a8b38531",
+        "pdf_page": 85,
+        "printed_page": "58"
+      },
+      {
+        "appendix": null,
+        "bbox": [
+          63.991,
+          396.12,
+          250.011,
+          408.931
+        ],
+        "chapter": "4",
+        "line_id": "poppler-line:ea715fb3d74987f47f52",
+        "observed_text_sha256": "d027e26bbec8bf8973642eb5ef5a0b5a79d2ed03187737c005d1c9ff68aa23f1",
+        "pdf_page": 85,
+        "printed_page": "58"
+      }
+    ],
+    "normalized_expression": null,
+    "normalized_expression_confidence": 0.0,
+    "observed_expression": "OLF = (0.00007)(GLA) + 25",
+    "observed_expression_sha256": "8d4f542c0b9bb73d23f70f88b8ad6da7a4a14f497164d10f4ea8e950f6566358",
+    "record_type": "equation",
+    "referenced_sections": [],
+    "referenced_tables": [],
+    "review_state": "provisional",
+    "source_anchor": {
+      "appendix": null,
+      "bbox": [
+        63.992,
+        340.454,
+        178.111,
+        353.265
+      ],
+      "chapter": "4",
+      "line_id": "poppler-line:db773652227d881226b0",
+      "observed_text_sha256": "8d4f542c0b9bb73d23f70f88b8ad6da7a4a14f497164d10f4ea8e950f6566358",
+      "pdf_page": 85,
+      "printed_page": "58"
+    },
+    "source_section": "402.8.2.1",
+    "units": [],
+    "variables": [
+      "GLA",
+      "OLF"
+    ]
+  },
+  {
+    "applicability_anchors": [],
+    "applicability_text": null,
+    "continuation_anchors": [],
+    "equation_identifier": null,
+    "exceptions": [],
+    "external_references": [],
+    "extraction_confidence": 0.84,
+    "id": "ibc2018:equation:eae0f59cf397d3475926b761",
+    "internal_references": [],
+    "nearby_variable_definitions": [
+      {
+        "appendix": null,
+        "bbox": [
+          52.131,
+          249.43,
+          191.454,
+          262.628
+        ],
+        "chapter": "5",
+        "line_id": "poppler-line:f0ad733e10f3d7781409",
+        "observed_text_sha256": "fa2630c4b028064a5a13a34273ef8b1179e44e163d66d4488dce56289d41af29",
+        "pdf_page": 135,
+        "printed_page": "108"
+      }
+    ],
+    "normalized_expression": null,
+    "normalized_expression_confidence": 0.0,
+    "observed_expression": "Aa = At + (NS × If)",
+    "observed_expression_sha256": "534a9e658c443672e6cd02547a19ec90fa314558aed08297905faefecf8b2399",
+    "record_type": "equation",
+    "referenced_sections": [],
+    "referenced_tables": [],
+    "review_state": "provisional",
+    "source_anchor": {
+      "appendix": null,
+      "bbox": [
+        52.049,
+        219.33,
+        123.648,
+        232.528
+      ],
+      "chapter": "5",
+      "line_id": "poppler-line:6331bf7678f02e148865",
+      "observed_text_sha256": "534a9e658c443672e6cd02547a19ec90fa314558aed08297905faefecf8b2399",
+      "pdf_page": 135,
+      "printed_page": "108"
+    },
+    "source_section": "506.2.1",
+    "units": [],
+    "variables": [
+      "Aa",
+      "At",
+      "If",
+      "NS"
+    ]
+  },
+  {
+    "applicability_anchors": [],
+    "applicability_text": null,
+    "continuation_anchors": [],
+    "equation_identifier": null,
+    "exceptions": [],
+    "external_references": [],
+    "extraction_confidence": 0.84,
+    "id": "ibc2018:equation:72877c03e044613c8c85d757",
+    "internal_references": [],
+    "nearby_variable_definitions": [
+      {
+        "appendix": null,
+        "bbox": [
+          317.999,
+          292.38,
+          457.352,
+          305.628
+        ],
+        "chapter": "5",
+        "line_id": "poppler-line:b8764a0dd49b7c6d25ff",
+        "observed_text_sha256": "fa2630c4b028064a5a13a34273ef8b1179e44e163d66d4488dce56289d41af29",
+        "pdf_page": 135,
+        "printed_page": "108"
+      },
+      {
+        "appendix": null,
+        "bbox": [
+          318.033,
+          307.38,
+          551.97,
+          320.628
+        ],
+        "chapter": "5",
+        "line_id": "poppler-line:f766b2f7ed5f62d181f2",
+        "observed_text_sha256": "e76411de6ea2f3acd822646c2cee4d691afa196cb2285c9c3a5c61ad65b4f47a",
+        "pdf_page": 135,
+        "printed_page": "108"
+      },
+      {
+        "appendix": null,
+        "bbox": [
+          318.033,
+          344.342,
+          551.856,
+          356.686
+        ],
+        "chapter": "5",
+        "line_id": "poppler-line:9fec054f8798ad572c11",
+        "observed_text_sha256": "faa7598cc6389b6bb5a26d6d17869a039dd5ddfc1e0a380f0d7b6debe289bb31",
+        "pdf_page": 135,
+        "printed_page": "108"
+      },
+      {
+        "appendix": null,
+        "bbox": [
+          318.034,
+          381.33,
+          551.602,
+          394.428
+        ],
+        "chapter": "5",
+        "line_id": "poppler-line:4493393ad876cc2cab35",
+        "observed_text_sha256": "9f699cf9137229cf9544375f0cba5121d76a96bc7880814deae71ddd9622507f",
+        "pdf_page": 135,
+        "printed_page": "108"
+      }
+    ],
+    "normalized_expression": null,
+    "normalized_expression_confidence": 0.0,
+    "observed_expression": "Aa = [At + (NS × If)]",
+    "observed_expression_sha256": "723b3a650ebb1cbb65cf93d278e931ee1388d84377d95b1064d981e0267bf2a2",
+    "record_type": "equation",
+    "referenced_sections": [],
+    "referenced_tables": [],
+    "review_state": "provisional",
+    "source_anchor": {
+      "appendix": null,
+      "bbox": [
+        318.042,
+        262.28,
+        395.932,
+        275.478
+      ],
+      "chapter": "5",
+      "line_id": "poppler-line:95ab7520f539437abef0",
+      "observed_text_sha256": "723b3a650ebb1cbb65cf93d278e931ee1388d84377d95b1064d981e0267bf2a2",
+      "pdf_page": 135,
+      "printed_page": "108"
+    },
+    "source_section": "506.2.4",
+    "units": [],
+    "variables": [
+      "Aa",
+      "At",
+      "If",
+      "NS"
+    ]
+  },
+  {
+    "applicability_anchors": [],
+    "applicability_text": null,
+    "continuation_anchors": [],
+    "equation_identifier": null,
+    "exceptions": [],
+    "external_references": [],
+    "extraction_confidence": 0.84,
+    "id": "ibc2018:equation:24b0af65dd12d551949cb854",
+    "internal_references": [],
+    "nearby_variable_definitions": [
+      {
+        "appendix": null,
+        "bbox": [
+          52.128,
+          580.13,
+          191.453,
+          593.378
+        ],
+        "chapter": "5",
+        "line_id": "poppler-line:1d42d655744467b232e4",
+        "observed_text_sha256": "fa2630c4b028064a5a13a34273ef8b1179e44e163d66d4488dce56289d41af29",
+        "pdf_page": 135,
+        "printed_page": "108"
+      },
+      {
+        "appendix": null,
+        "bbox": [
+          52.135,
+          595.13,
+          286.182,
+          608.228
+        ],
+        "chapter": "5",
+        "line_id": "poppler-line:501a6147acf63b7a98aa",
+        "observed_text_sha256": "e76411de6ea2f3acd822646c2cee4d691afa196cb2285c9c3a5c61ad65b4f47a",
+        "pdf_page": 135,
+        "printed_page": "108"
+      },
+      {
+        "appendix": null,
+        "bbox": [
+          52.08,
+          631.981,
+          285.958,
+          644.325
+        ],
+        "chapter": "5",
+        "line_id": "poppler-line:25cafeb90cd115372a67",
+        "observed_text_sha256": "faa7598cc6389b6bb5a26d6d17869a039dd5ddfc1e0a380f0d7b6debe289bb31",
+        "pdf_page": 135,
+        "printed_page": "108"
+      },
+      {
+        "appendix": null,
+        "bbox": [
+          52.081,
+          668.93,
+          285.704,
+          682.178
+        ],
+        "chapter": "5",
+        "line_id": "poppler-line:fc5ed0e88d21e9b5e26d",
+        "observed_text_sha256": "9f699cf9137229cf9544375f0cba5121d76a96bc7880814deae71ddd9622507f",
+        "pdf_page": 135,
+        "printed_page": "108"
+      },
+      {
+        "appendix": null,
+        "bbox": [
+          52.081,
+          694.98,
+          285.789,
+          708.078
+        ],
+        "chapter": "5",
+        "line_id": "poppler-line:8bd35ef320aa8f7fccc5",
+        "observed_text_sha256": "90dbf00ba977550fed2b12869b1a0248659c9da733050cc0f4ac3ee47b005795",
+        "pdf_page": 135,
+        "printed_page": "108"
+      }
+    ],
+    "normalized_expression": null,
+    "normalized_expression_confidence": 0.0,
+    "observed_expression": "Aa = [At + (NS × If)] × Sa",
+    "observed_expression_sha256": "390822790c4654a908ec111d505e91da029cf7007363393183151dce3696d445",
+    "record_type": "equation",
+    "referenced_sections": [],
+    "referenced_tables": [],
+    "review_state": "provisional",
+    "source_anchor": {
+      "appendix": null,
+      "bbox": [
+        52.08,
+        550.03,
+        149.299,
+        563.128
+      ],
+      "chapter": "5",
+      "line_id": "poppler-line:f11f2eff3a70b867bcea",
+      "observed_text_sha256": "390822790c4654a908ec111d505e91da029cf7007363393183151dce3696d445",
+      "pdf_page": 135,
+      "printed_page": "108"
+    },
+    "source_section": "506.2.3",
+    "units": [],
+    "variables": [
+      "Aa",
+      "At",
+      "If",
+      "NS",
+      "Sa"
+    ]
+  },
+  {
+    "applicability_anchors": [],
+    "applicability_text": null,
+    "continuation_anchors": [],
+    "equation_identifier": null,
+    "exceptions": [],
+    "external_references": [],
+    "extraction_confidence": 0.84,
+    "id": "ibc2018:equation:a392e8d2c8b9b6b1ac6dc227",
+    "internal_references": [],
+    "nearby_variable_definitions": [
+      {
+        "appendix": null,
+        "bbox": [
+          60.05,
+          548.129,
+          239.474,
+          561.327
+        ],
+        "chapter": "7",
+        "line_id": "poppler-line:bb6eeca7263cd04aad52",
+        "observed_text_sha256": "724e59eb7aa52f7838af9c8f1aa9e883f045a89f0cf7c1292d9d33345a725c21",
+        "pdf_page": 154,
+        "printed_page": "127"
+      },
+      {
+        "appendix": null,
+        "bbox": [
+          60.038,
+          561.796,
+          222.819,
+          574.14
+        ],
+        "chapter": "7",
+        "line_id": "poppler-line:8968f3bab81c83f9233f",
+        "observed_text_sha256": "942b1ce46c2fa0ad5c357ce7c45915b4bdb7ac11b7446f62b2a602f622a73ac9",
+        "pdf_page": 154,
+        "printed_page": "127"
+      },
+      {
+        "appendix": null,
+        "bbox": [
+          60.039,
+          575.579,
+          306.032,
+          588.827
+        ],
+        "chapter": "7",
+        "line_id": "poppler-line:aa713c326cf649a825f8",
+        "observed_text_sha256": "9c85cf9b2cc590a2a2fa0b5956815ec80ff7f4a2f2312be04119fc88e9d1ee75",
+        "pdf_page": 154,
+        "printed_page": "127"
+      },
+      {
+        "appendix": null,
+        "bbox": [
+          60.038,
+          621.529,
+          305.877,
+          634.777
+        ],
+        "chapter": "7",
+        "line_id": "poppler-line:51487c9c46b40998fab3",
+        "observed_text_sha256": "635b649d5ad7867956a5945615c5b40377ae867b0a57cab73b5637c6db0f02cc",
+        "pdf_page": 154,
+        "printed_page": "127"
+      }
+    ],
+    "normalized_expression": null,
+    "normalized_expression_confidence": 0.0,
+    "observed_expression": "Ae = A + (Af × Feo)",
+    "observed_expression_sha256": "5c5db1677e4dfdb2832d13f82d983872e69f52bdaca430186cf0a0b40b535e22",
+    "record_type": "equation",
+    "referenced_sections": [],
+    "referenced_tables": [],
+    "review_state": "provisional",
+    "source_anchor": {
+      "appendix": null,
+      "bbox": [
+        59.999,
+        520.629,
+        132.397,
+        533.827
+      ],
+      "chapter": "7",
+      "line_id": "poppler-line:ca4c2366a1562df96ff8",
+      "observed_text_sha256": "5c5db1677e4dfdb2832d13f82d983872e69f52bdaca430186cf0a0b40b535e22",
+      "pdf_page": 154,
+      "printed_page": "127"
+    },
+    "source_section": "705.7",
+    "units": [],
+    "variables": [
+      "A",
+      "Ae",
+      "Af",
+      "Feo"
+    ]
+  },
+  {
+    "applicability_anchors": [],
+    "applicability_text": null,
+    "continuation_anchors": [],
+    "equation_identifier": null,
+    "exceptions": [],
+    "external_references": [],
+    "extraction_confidence": 0.84,
+    "id": "ibc2018:equation:300070ddaae4993284095b35",
+    "internal_references": [],
+    "nearby_variable_definitions": [],
+    "normalized_expression": null,
+    "normalized_expression_confidence": 0.0,
+    "observed_expression": "Tea = Te + Tef",
+    "observed_expression_sha256": "62bef902064daf06e8c0006af7a78de5096fc46f6ca19a87459374a98c2df09a",
+    "record_type": "equation",
+    "referenced_sections": [],
+    "referenced_tables": [],
+    "review_state": "provisional",
+    "source_anchor": {
+      "appendix": null,
+      "bbox": [
+        63.997,
+        101.97,
+        115.713,
+        115.928
+      ],
+      "chapter": "7",
+      "line_id": "poppler-line:f355ceb65cd6144f5973",
+      "observed_text_sha256": "62bef902064daf06e8c0006af7a78de5096fc46f6ca19a87459374a98c2df09a",
+      "pdf_page": 217,
+      "printed_page": "190"
+    },
+    "source_section": "722.2.4.3",
+    "units": [],
+    "variables": [
+      "Te",
+      "Tea",
+      "Tef"
+    ]
+  },
+  {
+    "applicability_anchors": [],
+    "applicability_text": null,
+    "continuation_anchors": [],
+    "equation_identifier": null,
+    "exceptions": [],
+    "external_references": [],
+    "extraction_confidence": 0.84,
+    "id": "ibc2018:equation:907313a19914c6c93bef2395",
+    "internal_references": [],
+    "nearby_variable_definitions": [
+      {
+        "appendix": null,
+        "bbox": [
+          317.952,
+          386.238,
+          528.492,
+          400.228
+        ],
+        "chapter": "7",
+        "line_id": "poppler-line:861d18d628c067861cf4",
+        "observed_text_sha256": "99c1dd044130007e971eae7afdd366d6392236d56354ab373323564d1510baef",
+        "pdf_page": 217,
+        "printed_page": "190"
+      }
+    ],
+    "normalized_expression": null,
+    "normalized_expression_confidence": 0.0,
+    "observed_expression": "RA = (R10.59 + R20.59 +... + Rn0.59 + A1 + A2 +... + An)1.7",
+    "observed_expression_sha256": "7667321a2e215190dd798e57b4d5759d40cf593f94d227eed1e6c911c4881020",
+    "record_type": "equation",
+    "referenced_sections": [],
+    "referenced_tables": [],
+    "review_state": "provisional",
+    "source_anchor": {
+      "appendix": null,
+      "bbox": [
+        317.938,
+        342.681,
+        527.818,
+        356.878
+      ],
+      "chapter": "7",
+      "line_id": "poppler-line:5e76f74c2d527ed1fdb7",
+      "observed_text_sha256": "7667321a2e215190dd798e57b4d5759d40cf593f94d227eed1e6c911c4881020",
+      "pdf_page": 217,
+      "printed_page": "190"
+    },
+    "source_section": "722.3.3",
+    "units": [],
+    "variables": [
+      "A1",
+      "A2",
+      "An",
+      "R10",
+      "R20",
+      "RA",
+      "Rn0"
+    ]
+  },
+  {
+    "applicability_anchors": [],
+    "applicability_text": null,
+    "continuation_anchors": [],
+    "equation_identifier": null,
+    "exceptions": [],
+    "external_references": [],
+    "extraction_confidence": 0.84,
+    "id": "ibc2018:equation:68ea1042a3a24f493efddae1",
+    "internal_references": [],
+    "nearby_variable_definitions": [
+      {
+        "appendix": null,
+        "bbox": [
+          350.089,
+          694.399,
+          474.698,
+          707.21
+        ],
+        "chapter": "7",
+        "line_id": "poppler-line:809e9a7d2775c2f6d4a3",
+        "observed_text_sha256": "23091a9f4708927db603943a2047985015b5baf9f69b349dafd1dd28d1f23abc",
+        "pdf_page": 222,
+        "printed_page": "195"
+      },
+      {
+        "appendix": null,
+        "bbox": [
+          350.089,
+          708.454,
+          571.824,
+          721.264
+        ],
+        "chapter": "7",
+        "line_id": "poppler-line:5f5aeb62c2225f3ec6bf",
+        "observed_text_sha256": "5cc4cbf95df8199ef2f00d23c68cd08e80f3d3117e58f953a69a76479ef65208",
+        "pdf_page": 222,
+        "printed_page": "195"
+      }
+    ],
+    "normalized_expression": null,
+    "normalized_expression_confidence": 0.0,
+    "observed_expression": "R = [C1(W/D) + C2]h",
+    "observed_expression_sha256": "e4286d58af8e930ab385426519727ee45fb862211f8c2d70262d9ceb4364a774",
+    "record_type": "equation",
+    "referenced_sections": [],
+    "referenced_tables": [],
+    "review_state": "provisional",
+    "source_anchor": {
+      "appendix": null,
+      "bbox": [
+        349.872,
+        665.239,
+        433.192,
+        679.152
+      ],
+      "chapter": "7",
+      "line_id": "poppler-line:9301b0349a3d68263e5b",
+      "observed_text_sha256": "e4286d58af8e930ab385426519727ee45fb862211f8c2d70262d9ceb4364a774",
+      "pdf_page": 222,
+      "printed_page": "195"
+    },
+    "source_section": "722.5.1.3",
+    "units": [],
+    "variables": [
+      "C1",
+      "C2",
+      "D",
+      "R",
+      "W",
+      "h"
+    ]
+  },
+  {
+    "applicability_anchors": [],
+    "applicability_text": null,
+    "continuation_anchors": [],
+    "equation_identifier": null,
+    "exceptions": [],
+    "external_references": [],
+    "extraction_confidence": 0.84,
+    "id": "ibc2018:equation:b758d10ab2c6e50e73538a00",
+    "internal_references": [],
+    "nearby_variable_definitions": [
+      {
+        "appendix": null,
+        "bbox": [
+          342.043,
+          221.36,
+          551.809,
+          235.328
+        ],
+        "chapter": "7",
+        "line_id": "poppler-line:6c676e8fc97f17e3a546",
+        "observed_text_sha256": "77820a6fb52cbaba12e613c94b838ccf68e0fc8d21ab97fbe875252d441af623",
+        "pdf_page": 223,
+        "printed_page": "196"
+      },
+      {
+        "appendix": null,
+        "bbox": [
+          342.035,
+          246.344,
+          546.08,
+          259.154
+        ],
+        "chapter": "7",
+        "line_id": "poppler-line:e89a69b1e7f98f38a7a5",
+        "observed_text_sha256": "e5d53bd8a2df06aebb584b4a4c57345438964a64b1b6a03ebb4bf5215ce60720",
+        "pdf_page": 223,
+        "printed_page": "196"
+      },
+      {
+        "appendix": null,
+        "bbox": [
+          342.034,
+          260.398,
+          551.863,
+          274.328
+        ],
+        "chapter": "7",
+        "line_id": "poppler-line:22c35b7b5a0d5cedb5e0",
+        "observed_text_sha256": "cc85113f3c1ebbf8d35a30b1aac3731304ececad97334fe82c04457ac1288369",
+        "pdf_page": 223,
+        "printed_page": "196"
+      }
+    ],
+    "normalized_expression": null,
+    "normalized_expression_confidence": 0.0,
+    "observed_expression": "H = 0.11 W + (pccc/144) (bfd - As)",
+    "observed_expression_sha256": "9e3840c7bb76f90919b62663929698c56b6fde931d006c6db910dba0412371f0",
+    "record_type": "equation",
+    "referenced_sections": [],
+    "referenced_tables": [],
+    "review_state": "provisional",
+    "source_anchor": {
+      "appendix": null,
+      "bbox": [
+        341.988,
+        181.188,
+        475.145,
+        195.128
+      ],
+      "chapter": "7",
+      "line_id": "poppler-line:8b276a76e79b861ce165",
+      "observed_text_sha256": "9e3840c7bb76f90919b62663929698c56b6fde931d006c6db910dba0412371f0",
+      "pdf_page": 223,
+      "printed_page": "196"
+    },
+    "source_section": "722.5.1.4.1",
+    "units": [],
+    "variables": [
+      "As",
+      "H",
+      "W",
+      "bfd",
+      "pccc"
+    ]
+  },
+  {
+    "applicability_anchors": [],
+    "applicability_text": null,
+    "continuation_anchors": [],
+    "equation_identifier": null,
+    "exceptions": [],
+    "external_references": [],
+    "extraction_confidence": 0.84,
+    "id": "ibc2018:equation:9fc1cc81c76c157d89eb402a",
+    "internal_references": [],
+    "nearby_variable_definitions": [],
+    "normalized_expression": null,
+    "normalized_expression_confidence": 0.0,
+    "observed_expression": "R = Ro(1 + 0.03m)",
+    "observed_expression_sha256": "f64c16ef2dc49da118e72c5d68057e687863433619a3684862dd9b6790e60d3d",
+    "record_type": "equation",
+    "referenced_sections": [],
+    "referenced_tables": [],
+    "review_state": "provisional",
+    "source_anchor": {
+      "appendix": null,
+      "bbox": [
+        63.947,
+        405.135,
+        136.253,
+        419.178
+      ],
+      "chapter": "7",
+      "line_id": "poppler-line:6136c8ad5ebad5583761",
+      "observed_text_sha256": "f64c16ef2dc49da118e72c5d68057e687863433619a3684862dd9b6790e60d3d",
+      "pdf_page": 223,
+      "printed_page": "196"
+    },
+    "source_section": "722.5.1.4",
+    "units": [],
+    "variables": [
+      "R",
+      "Ro"
+    ]
+  },
+  {
+    "applicability_anchors": [],
+    "applicability_text": null,
+    "continuation_anchors": [
+      {
+        "appendix": null,
+        "bbox": [
+          86.066,
+          445.266,
+          198.145,
+          459.228
+        ],
+        "chapter": "7",
+        "line_id": "poppler-line:564033f4830beec45c67",
+        "observed_text_sha256": "6a57903303b00b12c71cb44f9a0c4af7f63e0161fc4289f94c12d17081226c48",
+        "pdf_page": 223,
+        "printed_page": "196"
+      }
+    ],
+    "equation_identifier": null,
+    "exceptions": [],
+    "external_references": [],
+    "extraction_confidence": 0.84,
+    "id": "ibc2018:equation:1ae9131604c5352b4a88ef5a",
+    "internal_references": [],
+    "nearby_variable_definitions": [
+      {
+        "appendix": null,
+        "bbox": [
+          64.114,
+          473.397,
+          285.802,
+          486.208
+        ],
+        "chapter": "7",
+        "line_id": "poppler-line:7592ec6d28877f3eceba",
+        "observed_text_sha256": "1da69b34cdaa412c5a8a6abe253df6bc7f88b71a156cb6074d4105e61b16de20",
+        "pdf_page": 223,
+        "printed_page": "196"
+      },
+      {
+        "appendix": null,
+        "bbox": [
+          64.114,
+          498.338,
+          286.046,
+          512.178
+        ],
+        "chapter": "7",
+        "line_id": "poppler-line:39d7b5337924e725fecb",
+        "observed_text_sha256": "e6be88b505c3e1d999f5870aa02c450fc6f36737689791be8f11336a60faa0d1",
+        "pdf_page": 223,
+        "printed_page": "196"
+      },
+      {
+        "appendix": null,
+        "bbox": [
+          64.105,
+          523.293,
+          285.774,
+          536.104
+        ],
+        "chapter": "7",
+        "line_id": "poppler-line:61d3c5c81af6be5163bb",
+        "observed_text_sha256": "3079614b3ab1fca383b5cbb390ecf0e2ba350bd41d13a59b1a35140f54301ab9",
+        "pdf_page": 223,
+        "printed_page": "196"
+      },
+      {
+        "appendix": null,
+        "bbox": [
+          64.105,
+          548.249,
+          285.941,
+          561.059
+        ],
+        "chapter": "7",
+        "line_id": "poppler-line:b02d4612a4f8df486813",
+        "observed_text_sha256": "61ad69b73a9b91aaba6860040d7acad14d10c3111720b27d576098bc1a42b951",
+        "pdf_page": 223,
+        "printed_page": "196"
+      },
+      {
+        "appendix": null,
+        "bbox": [
+          64.105,
+          573.204,
+          285.997,
+          586.015
+        ],
+        "chapter": "7",
+        "line_id": "poppler-line:dbcedeeaf51094a13e8b",
+        "observed_text_sha256": "75e5ce8e986d81beedb9df33b782d8361190507af9196d796de437d712d6aa46",
+        "pdf_page": 223,
+        "printed_page": "196"
+      }
+    ],
+    "normalized_expression": null,
+    "normalized_expression_confidence": 0.0,
+    "observed_expression": "Ro = 10 (W/D) 0.7 + 17 (h1.6/kc0.2) ×",
+    "observed_expression_sha256": "f3d84667b121d2ca46e2cae5f2359dce47e07857766e30ce97255bc79a97cf43",
+    "record_type": "equation",
+    "referenced_sections": [],
+    "referenced_tables": [],
+    "review_state": "provisional",
+    "source_anchor": {
+      "appendix": null,
+      "bbox": [
+        63.961,
+        434.216,
+        198.679,
+        448.228
+      ],
+      "chapter": "7",
+      "line_id": "poppler-line:d0bc683ac87067dc2405",
+      "observed_text_sha256": "f3d84667b121d2ca46e2cae5f2359dce47e07857766e30ce97255bc79a97cf43",
+      "pdf_page": 223,
+      "printed_page": "196"
+    },
+    "source_section": "722.5.1.4",
+    "units": [],
+    "variables": [
+      "D",
+      "Ro",
+      "W",
+      "h1",
+      "kc0"
+    ]
+  },
+  {
+    "applicability_anchors": [],
+    "applicability_text": null,
+    "continuation_anchors": [
+      {
+        "appendix": null,
+        "bbox": [
+          352.081,
+          610.116,
+          506.646,
+          624.128
+        ],
+        "chapter": "7",
+        "line_id": "poppler-line:549a3b12efad88c5c30e",
+        "observed_text_sha256": "575ffbea5a538d140563a9bc74035517524f94f3b9d77f0dc85615f94316763a",
+        "pdf_page": 223,
+        "printed_page": "196"
+      }
+    ],
+    "equation_identifier": null,
+    "exceptions": [],
+    "external_references": [],
+    "extraction_confidence": 0.84,
+    "id": "ibc2018:equation:8e2118f351c345852e8c1f11",
+    "internal_references": [],
+    "nearby_variable_definitions": [
+      {
+        "appendix": null,
+        "bbox": [
+          342.016,
+          654.344,
+          551.769,
+          667.155
+        ],
+        "chapter": "7",
+        "line_id": "poppler-line:cfc52278987f9465c643",
+        "observed_text_sha256": "f789e3b4d59191e10b9485f22479926259c7054e0a602a60a6d72dfab66e32f0",
+        "pdf_page": 223,
+        "printed_page": "196"
+      },
+      {
+        "appendix": null,
+        "bbox": [
+          342.016,
+          679.3,
+          551.845,
+          692.11
+        ],
+        "chapter": "7",
+        "line_id": "poppler-line:a01779568d31511bcd6f",
+        "observed_text_sha256": "c7b3d13c5a055c35e73318063cb816b1c15b25095cce64b3ff1e2837572efb5d",
+        "pdf_page": 223,
+        "printed_page": "196"
+      }
+    ],
+    "normalized_expression": null,
+    "normalized_expression_confidence": 0.0,
+    "observed_expression": "R = 0.17 (W/D)0.7 + [0.285 (Te1.6/K0.2)]",
+    "observed_expression_sha256": "a80889fdef58c0de265f324213c179fddbe79aba6c7de93a254eb32499e32b74",
+    "record_type": "equation",
+    "referenced_sections": [],
+    "referenced_tables": [],
+    "review_state": "provisional",
+    "source_anchor": {
+      "appendix": null,
+      "bbox": [
+        342.035,
+        596.566,
+        491.93,
+        610.578
+      ],
+      "chapter": "7",
+      "line_id": "poppler-line:a8253265b48c715183e7",
+      "observed_text_sha256": "a80889fdef58c0de265f324213c179fddbe79aba6c7de93a254eb32499e32b74",
+      "pdf_page": 223,
+      "printed_page": "196"
+    },
+    "source_section": "722.5.1.4.5",
+    "units": [],
+    "variables": [
+      "D",
+      "K0",
+      "R",
+      "Te1",
+      "W"
+    ]
+  },
+  {
+    "applicability_anchors": [],
+    "applicability_text": null,
+    "continuation_anchors": [],
+    "equation_identifier": null,
+    "exceptions": [],
+    "external_references": [],
+    "extraction_confidence": 0.84,
+    "id": "ibc2018:equation:f16b00c8af3da4c4612f92e4",
+    "internal_references": [],
+    "nearby_variable_definitions": [],
+    "normalized_expression": null,
+    "normalized_expression_confidence": 0.0,
+    "observed_expression": "For SI: 1 inch = 25.4 mm, 1 pound per cubic foot = 16.02 kg/m3.",
+    "observed_expression_sha256": "af9bbcffd520c916c2adad84c41c96f801c981b6d7628bb109d4c768dad5513f",
+    "record_type": "equation",
+    "referenced_sections": [],
+    "referenced_tables": [],
+    "review_state": "provisional",
+    "source_anchor": {
+      "appendix": null,
+      "bbox": [
+        61.346,
+        720.053,
+        268.289,
+        730.373
+      ],
+      "chapter": "7",
+      "line_id": "poppler-line:83f99354fae90af23139",
+      "observed_text_sha256": "af9bbcffd520c916c2adad84c41c96f801c981b6d7628bb109d4c768dad5513f",
+      "pdf_page": 232,
+      "printed_page": "205"
+    },
+    "source_section": "722.6.2",
+    "units": [],
+    "variables": [
+      "cubic",
+      "foot",
+      "inch",
+      "kg",
+      "m3",
+      "mm",
+      "per",
+      "pound"
+    ]
+  },
+  {
+    "applicability_anchors": [],
+    "applicability_text": null,
+    "continuation_anchors": [],
+    "equation_identifier": null,
+    "exceptions": [],
+    "external_references": [],
+    "extraction_confidence": 0.84,
+    "id": "ibc2018:equation:41f48ced4f57d2774d43f38c",
+    "internal_references": [],
+    "nearby_variable_definitions": [],
+    "normalized_expression": null,
+    "normalized_expression_confidence": 0.0,
+    "observed_expression": "A/Aw = 0.00035",
+    "observed_expression_sha256": "b04d000da7935b754a58cc92e466bc3ed76d9ffa5983eb66a4769289a22d1af2",
+    "record_type": "equation",
+    "referenced_sections": [],
+    "referenced_tables": [],
+    "review_state": "provisional",
+    "source_anchor": {
+      "appendix": null,
+      "bbox": [
+        330.032,
+        230.243,
+        391.541,
+        244.227
+      ],
+      "chapter": "9",
+      "line_id": "poppler-line:41e9007e3bc4fc4a1704",
+      "observed_text_sha256": "b04d000da7935b754a58cc92e466bc3ed76d9ffa5983eb66a4769289a22d1af2",
+      "pdf_page": 269,
+      "printed_page": "242"
+    },
+    "source_section": "909.5",
+    "units": [],
+    "variables": [
+      "A",
+      "Aw"
+    ]
+  },
+  {
+    "applicability_anchors": [],
+    "applicability_text": null,
+    "continuation_anchors": [],
+    "equation_identifier": null,
+    "exceptions": [],
+    "external_references": [],
+    "extraction_confidence": 0.84,
+    "id": "ibc2018:equation:362372f438cebcfbd3a4005b",
+    "internal_references": [],
+    "nearby_variable_definitions": [],
+    "normalized_expression": null,
+    "normalized_expression_confidence": 0.0,
+    "observed_expression": "shafts: A/Aw = 0.00150",
+    "observed_expression_sha256": "c36c04082b2e1bb3119ac1530812620d665e538578b94daff0751243b2fa9749",
+    "record_type": "equation",
+    "referenced_sections": [],
+    "referenced_tables": [],
+    "review_state": "provisional",
+    "source_anchor": {
+      "appendix": null,
+      "bbox": [
+        330.027,
+        255.193,
+        420.513,
+        269.177
+      ],
+      "chapter": "9",
+      "line_id": "poppler-line:d3f98bbdb6232554a9a4",
+      "observed_text_sha256": "c36c04082b2e1bb3119ac1530812620d665e538578b94daff0751243b2fa9749",
+      "pdf_page": 269,
+      "printed_page": "242"
+    },
+    "source_section": "909.5",
+    "units": [],
+    "variables": [
+      "A",
+      "Aw",
+      "shafts"
+    ]
+  },
+  {
+    "applicability_anchors": [],
+    "applicability_text": null,
+    "continuation_anchors": [],
+    "equation_identifier": null,
+    "exceptions": [],
+    "external_references": [],
+    "extraction_confidence": 0.84,
+    "id": "ibc2018:equation:af13b0fc8424d4d14b200162",
+    "internal_references": [],
+    "nearby_variable_definitions": [
+      {
+        "appendix": null,
+        "bbox": [
+          318.02,
+          297.166,
+          478.289,
+          310.047
+        ],
+        "chapter": "9",
+        "line_id": "poppler-line:06b92c112058212e0f0e",
+        "observed_text_sha256": "41dfeafc031cd954e6096857751f250f7880b8b708a8a5b4d107dcfb4881f630",
+        "pdf_page": 269,
+        "printed_page": "242"
+      },
+      {
+        "appendix": null,
+        "bbox": [
+          318.053,
+          311.216,
+          537.595,
+          325.228
+        ],
+        "chapter": "9",
+        "line_id": "poppler-line:0911c0bf7def4d0e0bab",
+        "observed_text_sha256": "1d1ae30d09676e35355e25b2cb7a8ef9a5ea791a87586ba8ab1f15ec928f7136",
+        "pdf_page": 269,
+        "printed_page": "242"
+      },
+      {
+        "appendix": null,
+        "bbox": [
+          318.041,
+          325.116,
+          505.694,
+          339.128
+        ],
+        "chapter": "9",
+        "line_id": "poppler-line:ef1c9842a39fca22a1aa",
+        "observed_text_sha256": "e01cbec65374b6be0a6a7013a8de348ddf7700570fa1690fb919045119404f6a",
+        "pdf_page": 269,
+        "printed_page": "242"
+      }
+    ],
+    "normalized_expression": null,
+    "normalized_expression_confidence": 0.0,
+    "observed_expression": "4. Floors and roofs: A/AF = 0.00050",
+    "observed_expression_sha256": "211dee75c4f32a88ae40a074dd639fc1e72e7d3c8531d6d9fb88ce7e943fe482",
+    "record_type": "equation",
+    "referenced_sections": [],
+    "referenced_tables": [],
+    "review_state": "provisional",
+    "source_anchor": {
+      "appendix": null,
+      "bbox": [
+        318.007,
+        269.243,
+        462.471,
+        283.227
+      ],
+      "chapter": "9",
+      "line_id": "poppler-line:28249b73d432d4522f76",
+      "observed_text_sha256": "211dee75c4f32a88ae40a074dd639fc1e72e7d3c8531d6d9fb88ce7e943fe482",
+      "pdf_page": 269,
+      "printed_page": "242"
+    },
+    "source_section": "909.5",
+    "units": [],
+    "variables": [
+      "A",
+      "AF",
+      "Floors",
+      "roofs"
+    ]
+  },
+  {
+    "applicability_anchors": [],
+    "applicability_text": null,
+    "continuation_anchors": [],
+    "equation_identifier": null,
+    "exceptions": [],
+    "external_references": [],
+    "extraction_confidence": 0.84,
+    "id": "ibc2018:equation:a072fe970e04b44d71fccdc5",
+    "internal_references": [],
+    "nearby_variable_definitions": [
+      {
+        "appendix": null,
+        "bbox": [
+          338.054,
+          143.216,
+          471.943,
+          155.923
+        ],
+        "chapter": "9",
+        "line_id": "poppler-line:507c44a07ee34a6a233b",
+        "observed_text_sha256": "340f95e1689ccc87fee240dab32d041ded3c822c27334f75cd2586c8d303230a",
+        "pdf_page": 270,
+        "printed_page": "243"
+      },
+      {
+        "appendix": null,
+        "bbox": [
+          338.045,
+          157.634,
+          572.057,
+          169.978
+        ],
+        "chapter": "9",
+        "line_id": "poppler-line:3afc32d5cf7c7310978b",
+        "observed_text_sha256": "f4787db2fe279eb498ddadc9d1ac602ba7cabddba4d27c3403658a633db24c79",
+        "pdf_page": 270,
+        "printed_page": "243"
+      },
+      {
+        "appendix": null,
+        "bbox": [
+          338.044,
+          182.589,
+          513.699,
+          194.933
+        ],
+        "chapter": "9",
+        "line_id": "poppler-line:6737c8c734639dcde6da",
+        "observed_text_sha256": "3391c166708ccb36590728297de930625aeef501e149fa5c9521821c04fce45e",
+        "pdf_page": 270,
+        "printed_page": "243"
+      },
+      {
+        "appendix": null,
+        "bbox": [
+          338.044,
+          196.63,
+          571.721,
+          209.728
+        ],
+        "chapter": "9",
+        "line_id": "poppler-line:359d347db1cba6e3a2f5",
+        "observed_text_sha256": "44402a7502122bf772fdd923ea8a143d175e93e23d4a60a6d6d9c726dc43b198",
+        "pdf_page": 270,
+        "printed_page": "243"
+      },
+      {
+        "appendix": null,
+        "bbox": [
+          338.084,
+          221.585,
+          445.47,
+          233.929
+        ],
+        "chapter": "9",
+        "line_id": "poppler-line:962fb284c3ae7689f450",
+        "observed_text_sha256": "a81c66b659020420dba843cb9da758f4a88db021f3f038999e4ef5b4ff3c4402",
+        "pdf_page": 270,
+        "printed_page": "243"
+      },
+      {
+        "appendix": null,
+        "bbox": [
+          338.084,
+          235.639,
+          446.623,
+          247.983
+        ],
+        "chapter": "9",
+        "line_id": "poppler-line:eb7bbfeef1425f5c65f8",
+        "observed_text_sha256": "e68f2af46925b9c3e12607c66f628bc62d1a23d9bb1f4148c890186e8a1ea618",
+        "pdf_page": 270,
+        "printed_page": "243"
+      },
+      {
+        "appendix": null,
+        "bbox": [
+          338.084,
+          246.864,
+          556.245,
+          262.929
+        ],
+        "chapter": "9",
+        "line_id": "poppler-line:440d28e5f8ce7d7b2710",
+        "observed_text_sha256": "6351149a7fb682878103e686d37527a4044c66d40827877d5d30f9fb8b347366",
+        "pdf_page": 270,
+        "printed_page": "243"
+      }
+    ],
+    "normalized_expression": null,
+    "normalized_expression_confidence": 0.0,
+    "observed_expression": "F = Fdc + K(WAP)/2(W-d)",
+    "observed_expression_sha256": "48fa2ecb45641ab73c4ce382d7831253c3fe93b5872006401e9daf6ab75eadc7",
+    "record_type": "equation",
+    "referenced_sections": [],
+    "referenced_tables": [],
+    "review_state": "provisional",
+    "source_anchor": {
+      "appendix": null,
+      "bbox": [
+        338.023,
+        112.327,
+        447.086,
+        126.828
+      ],
+      "chapter": "9",
+      "line_id": "poppler-line:233897eb51040c4c1821",
+      "observed_text_sha256": "48fa2ecb45641ab73c4ce382d7831253c3fe93b5872006401e9daf6ab75eadc7",
+      "pdf_page": 270,
+      "printed_page": "243"
+    },
+    "source_section": "909.5.3",
+    "units": [],
+    "variables": [
+      "F",
+      "Fdc",
+      "K",
+      "P",
+      "W",
+      "WA",
+      "d"
+    ]
+  },
+  {
+    "applicability_anchors": [],
+    "applicability_text": null,
+    "continuation_anchors": [],
+    "equation_identifier": null,
+    "exceptions": [],
+    "external_references": [],
+    "extraction_confidence": 0.84,
+    "id": "ibc2018:equation:7758999d48ea648b5d7d2b8c",
+    "internal_references": [],
+    "nearby_variable_definitions": [
+      {
+        "appendix": null,
+        "bbox": [
+          65.285,
+          394.648,
+          285.852,
+          406.992
+        ],
+        "chapter": "9",
+        "line_id": "poppler-line:e35cfce0b717fedeaafa",
+        "observed_text_sha256": "5442cf38ce07b16ae2f1c50f61e1209b6130a814c524da205ba47ef44d5518f3",
+        "pdf_page": 271,
+        "printed_page": "244"
+      },
+      {
+        "appendix": null,
+        "bbox": [
+          52.116,
+          420.212,
+          232.838,
+          432.556
+        ],
+        "chapter": "9",
+        "line_id": "poppler-line:11872512e02748f9204b",
+        "observed_text_sha256": "361c4a4dea6bfbb77edf5a58590810d3fe62d778d59ef8b5a83740180bd4bebd",
+        "pdf_page": 271,
+        "printed_page": "244"
+      },
+      {
+        "appendix": null,
+        "bbox": [
+          52.116,
+          434.83,
+          247.625,
+          448.028
+        ],
+        "chapter": "9",
+        "line_id": "poppler-line:92075d5a0c89df933187",
+        "observed_text_sha256": "bc8228a96015310e22c1b2b956ab0863ec18345dbb3be4f8f54f6411d6febfa4",
+        "pdf_page": 271,
+        "printed_page": "244"
+      },
+      {
+        "appendix": null,
+        "bbox": [
+          52.135,
+          449.48,
+          194.093,
+          462.678
+        ],
+        "chapter": "9",
+        "line_id": "poppler-line:d5b4e2e9b87d76662b5d",
+        "observed_text_sha256": "3fc7ca344a15219177372c86dde9d802c47e19ddcefe856b4d2d63d356756bd2",
+        "pdf_page": 271,
+        "printed_page": "244"
+      },
+      {
+        "appendix": null,
+        "bbox": [
+          52.135,
+          464.13,
+          186.9,
+          477.328
+        ],
+        "chapter": "9",
+        "line_id": "poppler-line:445d30f7e44ad6b7d4e3",
+        "observed_text_sha256": "43e47808204617532af3d1140ffea4544718cb7c3742a5283316f835ee81ec5d",
+        "pdf_page": 271,
+        "printed_page": "244"
+      }
+    ],
+    "normalized_expression": null,
+    "normalized_expression_confidence": 0.0,
+    "observed_expression": "Ts = (Qc/mc) + (Ta)",
+    "observed_expression_sha256": "b061747b5155aab0125a1178044b4594114d43a2af6f33ea5fcb5eacb24cac88",
+    "record_type": "equation",
+    "referenced_sections": [],
+    "referenced_tables": [],
+    "review_state": "provisional",
+    "source_anchor": {
+      "appendix": null,
+      "bbox": [
+        52.049,
+        363.33,
+        126.897,
+        376.528
+      ],
+      "chapter": "9",
+      "line_id": "poppler-line:cdf3cfbf0271368ad088",
+      "observed_text_sha256": "b061747b5155aab0125a1178044b4594114d43a2af6f33ea5fcb5eacb24cac88",
+      "pdf_page": 271,
+      "printed_page": "244"
+    },
+    "source_section": "909.10.1",
+    "units": [],
+    "variables": [
+      "Qc",
+      "Ta",
+      "Ts",
+      "mc"
+    ]
+  },
+  {
+    "applicability_anchors": [],
+    "applicability_text": null,
+    "continuation_anchors": [],
+    "equation_identifier": null,
+    "exceptions": [],
+    "external_references": [],
+    "extraction_confidence": 0.84,
+    "id": "ibc2018:equation:d294a4e4847e27f3efb20379",
+    "internal_references": [],
+    "nearby_variable_definitions": [
+      {
+        "appendix": null,
+        "bbox": [
+          347.95,
+          215.216,
+          508.094,
+          227.923
+        ],
+        "chapter": "9",
+        "line_id": "poppler-line:598d7e890dd681055530",
+        "observed_text_sha256": "122c32d00f0dee7c5a64ed8283a993e49a00a5fb1129193233a27f522febe090",
+        "pdf_page": 277,
+        "printed_page": "250"
+      },
+      {
+        "appendix": null,
+        "bbox": [
+          348.024,
+          229.116,
+          551.976,
+          241.978
+        ],
+        "chapter": "9",
+        "line_id": "poppler-line:ba570217ad5a07d33bb3",
+        "observed_text_sha256": "8b845e2bb76ef4b73e79a3fce5a3630134eb088f2f64311724b8b1a74d72b2bf",
+        "pdf_page": 277,
+        "printed_page": "250"
+      }
+    ],
+    "normalized_expression": null,
+    "normalized_expression_confidence": 0.0,
+    "observed_expression": "AVR = V/9000",
+    "observed_expression_sha256": "abe032fcb3c6d315246c3f322be1282a1cc31c35a22359c0bbfa5c0203002bcc",
+    "record_type": "equation",
+    "referenced_sections": [],
+    "referenced_tables": [],
+    "review_state": "provisional",
+    "source_anchor": {
+      "appendix": null,
+      "bbox": [
+        318.084,
+        185.579,
+        370.799,
+        198.827
+      ],
+      "chapter": "9",
+      "line_id": "poppler-line:c89e5edbdbe7fc1acbaa",
+      "observed_text_sha256": "abe032fcb3c6d315246c3f322be1282a1cc31c35a22359c0bbfa5c0203002bcc",
+      "pdf_page": 277,
+      "printed_page": "250"
+    },
+    "source_section": "910.3.3",
+    "units": [],
+    "variables": [
+      "AVR",
+      "V"
+    ]
+  },
+  {
+    "applicability_anchors": [],
+    "applicability_text": null,
+    "continuation_anchors": [],
+    "equation_identifier": null,
+    "exceptions": [],
+    "external_references": [],
+    "extraction_confidence": 0.84,
+    "id": "ibc2018:equation:9185b1f1021c95ec7ba009d5",
+    "internal_references": [],
+    "nearby_variable_definitions": [
+      {
+        "appendix": null,
+        "bbox": [
+          347.95,
+          300.166,
+          508.094,
+          312.873
+        ],
+        "chapter": "9",
+        "line_id": "poppler-line:13040cf34eaf527c166f",
+        "observed_text_sha256": "122c32d00f0dee7c5a64ed8283a993e49a00a5fb1129193233a27f522febe090",
+        "pdf_page": 277,
+        "printed_page": "250"
+      },
+      {
+        "appendix": null,
+        "bbox": [
+          347.95,
+          314.579,
+          551.719,
+          326.923
+        ],
+        "chapter": "9",
+        "line_id": "poppler-line:dd6a3165b9c23049e928",
+        "observed_text_sha256": "5434d3a18ca62e243574a25270b2150862b9d87eef9a317b210f5581d1f32b47",
+        "pdf_page": 277,
+        "printed_page": "250"
+      }
+    ],
+    "normalized_expression": null,
+    "normalized_expression_confidence": 0.0,
+    "observed_expression": "AVR = AFA/50",
+    "observed_expression_sha256": "d8da4bb95d2830fa4a6fdf50c532dca8536a92ba712d98b731095c08b5d3821b",
+    "record_type": "equation",
+    "referenced_sections": [],
+    "referenced_tables": [],
+    "review_state": "provisional",
+    "source_anchor": {
+      "appendix": null,
+      "bbox": [
+        318.144,
+        270.529,
+        368.135,
+        283.777
+      ],
+      "chapter": "9",
+      "line_id": "poppler-line:8002930bddfb3fed6f94",
+      "observed_text_sha256": "d8da4bb95d2830fa4a6fdf50c532dca8536a92ba712d98b731095c08b5d3821b",
+      "pdf_page": 277,
+      "printed_page": "250"
+    },
+    "source_section": "910.3.3",
+    "units": [],
+    "variables": [
+      "AFA",
+      "AVR"
+    ]
+  },
+  {
+    "applicability_anchors": [],
+    "applicability_text": null,
+    "continuation_anchors": [],
+    "equation_identifier": null,
+    "exceptions": [],
+    "external_references": [],
+    "extraction_confidence": 0.84,
+    "id": "ibc2018:equation:e97cfe4e7e5af93725572dfc",
+    "internal_references": [],
+    "nearby_variable_definitions": [],
+    "normalized_expression": null,
+    "normalized_expression_confidence": 0.0,
+    "observed_expression": "For SI: 1 foot = 304.8 mm, 1 square foot = 0.0929 m2.",
+    "observed_expression_sha256": "bec003f01c3f1033d20843f7097b390330d2fd62b35c09cac00725d8a447814e",
+    "record_type": "equation",
+    "referenced_sections": [],
+    "referenced_tables": [],
+    "review_state": "provisional",
+    "source_anchor": {
+      "appendix": null,
+      "bbox": [
+        325.209,
+        724.603,
+        498.588,
+        734.853
+      ],
+      "chapter": "10",
+      "line_id": "poppler-line:e41a36c47685ac282463",
+      "observed_text_sha256": "bec003f01c3f1033d20843f7097b390330d2fd62b35c09cac00725d8a447814e",
+      "pdf_page": 286,
+      "printed_page": "259"
+    },
+    "source_section": "1004.3",
+    "units": [],
+    "variables": [
+      "foot",
+      "m2",
+      "mm",
+      "square"
+    ]
+  },
+  {
+    "applicability_anchors": [],
+    "applicability_text": null,
+    "continuation_anchors": [],
+    "equation_identifier": null,
+    "exceptions": [],
+    "external_references": [],
+    "extraction_confidence": 0.84,
+    "id": "ibc2018:equation:db2c3550b796cd8bdd98a1db",
+    "internal_references": [],
+    "nearby_variable_definitions": [],
+    "normalized_expression": null,
+    "normalized_expression_confidence": 0.0,
+    "observed_expression": "D + F",
+    "observed_expression_sha256": "9899868e1c061957b59298170ada30aeef73b29f265e56b7d6cda8a3cf9ab60e",
+    "record_type": "equation",
+    "referenced_sections": [],
+    "referenced_tables": [],
+    "review_state": "provisional",
+    "source_anchor": {
+      "appendix": null,
+      "bbox": [
+        317.982,
+        134.137,
+        342.451,
+        146.948
+      ],
+      "chapter": "16",
+      "line_id": "poppler-line:5d3fb4dfe901a088fcf3",
+      "observed_text_sha256": "9899868e1c061957b59298170ada30aeef73b29f265e56b7d6cda8a3cf9ab60e",
+      "pdf_page": 393,
+      "printed_page": "366"
+    },
+    "source_section": "1605.3.1",
+    "units": [],
+    "variables": [
+      "D",
+      "F"
+    ]
+  },
+  {
+    "applicability_anchors": [],
+    "applicability_text": null,
+    "continuation_anchors": [],
+    "equation_identifier": null,
+    "exceptions": [],
+    "external_references": [],
+    "extraction_confidence": 0.84,
+    "id": "ibc2018:equation:93d4872874cd0458626f4d33",
+    "internal_references": [],
+    "nearby_variable_definitions": [],
+    "normalized_expression": null,
+    "normalized_expression_confidence": 0.0,
+    "observed_expression": "D + H + F + L",
+    "observed_expression_sha256": "7fc81f204beb9ee3c55192b2c7e416a6c1d8d1f5c3a9127a149b0cc6b22f3df9",
+    "record_type": "equation",
+    "referenced_sections": [],
+    "referenced_tables": [],
+    "review_state": "provisional",
+    "source_anchor": {
+      "appendix": null,
+      "bbox": [
+        317.982,
+        149.132,
+        375.759,
+        161.943
+      ],
+      "chapter": "16",
+      "line_id": "poppler-line:d5e33770b6da91972467",
+      "observed_text_sha256": "7fc81f204beb9ee3c55192b2c7e416a6c1d8d1f5c3a9127a149b0cc6b22f3df9",
+      "pdf_page": 393,
+      "printed_page": "366"
+    },
+    "source_section": "1605.3.1",
+    "units": [],
+    "variables": [
+      "D",
+      "F",
+      "H",
+      "L"
+    ]
+  },
+  {
+    "applicability_anchors": [],
+    "applicability_text": null,
+    "continuation_anchors": [],
+    "equation_identifier": null,
+    "exceptions": [],
+    "external_references": [],
+    "extraction_confidence": 0.84,
+    "id": "ibc2018:equation:5f48be477054f24f9f515e30",
+    "internal_references": [],
+    "nearby_variable_definitions": [],
+    "normalized_expression": null,
+    "normalized_expression_confidence": 0.0,
+    "observed_expression": "D + H + F + (Lr or S or R)",
+    "observed_expression_sha256": "581be6e73a1f6f6bbfb90ba178547cb87d885c6bdd8a0b2b4e8b42803cf22d8f",
+    "record_type": "equation",
+    "referenced_sections": [],
+    "referenced_tables": [],
+    "review_state": "provisional",
+    "source_anchor": {
+      "appendix": null,
+      "bbox": [
+        317.982,
+        164.128,
+        422.229,
+        178.078
+      ],
+      "chapter": "16",
+      "line_id": "poppler-line:4bc9f5968bb336ea920a",
+      "observed_text_sha256": "581be6e73a1f6f6bbfb90ba178547cb87d885c6bdd8a0b2b4e8b42803cf22d8f",
+      "pdf_page": 393,
+      "printed_page": "366"
+    },
+    "source_section": "1605.3.1",
+    "units": [],
+    "variables": [
+      "D",
+      "F",
+      "H",
+      "Lr",
+      "R",
+      "S"
+    ]
+  },
+  {
+    "applicability_anchors": [],
+    "applicability_text": null,
+    "continuation_anchors": [],
+    "equation_identifier": "16-11",
+    "exceptions": [],
+    "external_references": [],
+    "extraction_confidence": 0.84,
+    "id": "ibc2018:equation:c093d87b3033121e2fe5cb45",
+    "internal_references": [
+      "ibc2018:cross-reference:602cf5c4b6160961eb51b6c3"
+    ],
+    "nearby_variable_definitions": [],
+    "normalized_expression": null,
+    "normalized_expression_confidence": 0.0,
+    "observed_expression": "D + H + F+ 0.75(L) + 0.75(Lr or S or R) (Equation 16-11)",
+    "observed_expression_sha256": "4eabe8ef7f0ee1e287dcc53769f22b48f1d609e3f5e1f2cb0e363c3500432fbb",
+    "record_type": "equation",
+    "referenced_sections": [],
+    "referenced_tables": [],
+    "review_state": "provisional",
+    "source_anchor": {
+      "appendix": null,
+      "bbox": [
+        318.011,
+        177.492,
+        551.553,
+        194.178
+      ],
+      "chapter": "16",
+      "line_id": "poppler-line:bbaf0e4a71ed4a9af8a7",
+      "observed_text_sha256": "4eabe8ef7f0ee1e287dcc53769f22b48f1d609e3f5e1f2cb0e363c3500432fbb",
+      "pdf_page": 393,
+      "printed_page": "366"
+    },
+    "source_section": "1605.3.1",
+    "units": [],
+    "variables": [
+      "D",
+      "F",
+      "H",
+      "L",
+      "Lr",
+      "R",
+      "S"
+    ]
+  },
+  {
+    "applicability_anchors": [],
+    "applicability_text": null,
+    "continuation_anchors": [],
+    "equation_identifier": null,
+    "exceptions": [],
+    "external_references": [],
+    "extraction_confidence": 0.84,
+    "id": "ibc2018:equation:91600c515979eb50a8f065b6",
+    "internal_references": [],
+    "nearby_variable_definitions": [],
+    "normalized_expression": null,
+    "normalized_expression_confidence": 0.0,
+    "observed_expression": "D + H + F + (0.6W or 0.7E)",
+    "observed_expression_sha256": "b8a3d3ede791db957fad8dff5efa94058a729337977c1ab0ca3e8983c542f384",
+    "record_type": "equation",
+    "referenced_sections": [],
+    "referenced_tables": [],
+    "review_state": "provisional",
+    "source_anchor": {
+      "appendix": null,
+      "bbox": [
+        318.005,
+        196.401,
+        429.472,
+        209.212
+      ],
+      "chapter": "16",
+      "line_id": "poppler-line:8bb74b2608e1d5af2717",
+      "observed_text_sha256": "b8a3d3ede791db957fad8dff5efa94058a729337977c1ab0ca3e8983c542f384",
+      "pdf_page": 393,
+      "printed_page": "366"
+    },
+    "source_section": "1605.3.1",
+    "units": [],
+    "variables": [
+      "D",
+      "F",
+      "H"
+    ]
+  },
+  {
+    "applicability_anchors": [],
+    "applicability_text": null,
+    "continuation_anchors": [],
+    "equation_identifier": null,
+    "exceptions": [],
+    "external_references": [],
+    "extraction_confidence": 0.84,
+    "id": "ibc2018:equation:9aafb9967cae578cf66ba74e",
+    "internal_references": [],
+    "nearby_variable_definitions": [],
+    "normalized_expression": null,
+    "normalized_expression_confidence": 0.0,
+    "observed_expression": "D + H + F + 0.75(0.6W) + 0.75L + 0.75(Lr or S or R)",
+    "observed_expression_sha256": "86ad2a7fa886bd9e9a442151143eb2acdcae16550dd34449101dc7b58226484d",
+    "record_type": "equation",
+    "referenced_sections": [],
+    "referenced_tables": [],
+    "review_state": "provisional",
+    "source_anchor": {
+      "appendix": null,
+      "bbox": [
+        318.005,
+        211.389,
+        529.03,
+        225.378
+      ],
+      "chapter": "16",
+      "line_id": "poppler-line:c385a77c91845fa54c26",
+      "observed_text_sha256": "86ad2a7fa886bd9e9a442151143eb2acdcae16550dd34449101dc7b58226484d",
+      "pdf_page": 393,
+      "printed_page": "366"
+    },
+    "source_section": "1605.3.1",
+    "units": [],
+    "variables": [
+      "D",
+      "F",
+      "H",
+      "Lr",
+      "R",
+      "S"
+    ]
+  },
+  {
+    "applicability_anchors": [],
+    "applicability_text": null,
+    "continuation_anchors": [],
+    "equation_identifier": null,
+    "exceptions": [],
+    "external_references": [],
+    "extraction_confidence": 0.84,
+    "id": "ibc2018:equation:1889e33d37f8112eaa870490",
+    "internal_references": [],
+    "nearby_variable_definitions": [],
+    "normalized_expression": null,
+    "normalized_expression_confidence": 0.0,
+    "observed_expression": "D + H + F + 0.75 (0.7 E) + 0.75 L + 0.75 S",
+    "observed_expression_sha256": "b43112554032f65c1fc4582ec2e5845defaa2760f335a5da626b517764f380af",
+    "record_type": "equation",
+    "referenced_sections": [],
+    "referenced_tables": [],
+    "review_state": "provisional",
+    "source_anchor": {
+      "appendix": null,
+      "bbox": [
+        318.019,
+        238.557,
+        495.755,
+        251.368
+      ],
+      "chapter": "16",
+      "line_id": "poppler-line:92eeb0fa52d932cf3d24",
+      "observed_text_sha256": "b43112554032f65c1fc4582ec2e5845defaa2760f335a5da626b517764f380af",
+      "pdf_page": 393,
+      "printed_page": "366"
+    },
+    "source_section": "1605.3.1",
+    "units": [],
+    "variables": [
+      "D",
+      "E",
+      "F",
+      "H",
+      "L",
+      "S"
+    ]
+  },
+  {
+    "applicability_anchors": [],
+    "applicability_text": null,
+    "continuation_anchors": [],
+    "equation_identifier": null,
+    "exceptions": [],
+    "external_references": [],
+    "extraction_confidence": 0.84,
+    "id": "ibc2018:equation:993d021ed45a30af80c405ef",
+    "internal_references": [],
+    "nearby_variable_definitions": [],
+    "normalized_expression": null,
+    "normalized_expression_confidence": 0.0,
+    "observed_expression": "1.4(D +F)",
+    "observed_expression_sha256": "569fe97eb9fb147e84627b1da061cde5a6a67352ac19c0d3df744c12d481b49e",
+    "record_type": "equation",
+    "referenced_sections": [],
+    "referenced_tables": [],
+    "review_state": "provisional",
+    "source_anchor": {
+      "appendix": null,
+      "bbox": [
+        40.097,
+        258.894,
+        80.074,
+        271.705
+      ],
+      "chapter": "16",
+      "line_id": "poppler-line:a376a5674845753287ef",
+      "observed_text_sha256": "569fe97eb9fb147e84627b1da061cde5a6a67352ac19c0d3df744c12d481b49e",
+      "pdf_page": 393,
+      "printed_page": "366"
+    },
+    "source_section": "1605.2",
+    "units": [],
+    "variables": [
+      "D",
+      "F"
+    ]
+  },
+  {
+    "applicability_anchors": [],
+    "applicability_text": null,
+    "continuation_anchors": [],
+    "equation_identifier": null,
+    "exceptions": [],
+    "external_references": [],
+    "extraction_confidence": 0.84,
+    "id": "ibc2018:equation:7cc78751347e9fd7d0fab60a",
+    "internal_references": [],
+    "nearby_variable_definitions": [],
+    "normalized_expression": null,
+    "normalized_expression_confidence": 0.0,
+    "observed_expression": "0.6D + 0.6W+H",
+    "observed_expression_sha256": "7f9e122ad0603799c4d6a8657abbbc8f1723e10f5e52ccf500433da56a068198",
+    "record_type": "equation",
+    "referenced_sections": [],
+    "referenced_tables": [],
+    "review_state": "provisional",
+    "source_anchor": {
+      "appendix": null,
+      "bbox": [
+        318.02,
+        264.453,
+        382.728,
+        277.263
+      ],
+      "chapter": "16",
+      "line_id": "poppler-line:1b9db8f270d35ba51ff9",
+      "observed_text_sha256": "7f9e122ad0603799c4d6a8657abbbc8f1723e10f5e52ccf500433da56a068198",
+      "pdf_page": 393,
+      "printed_page": "366"
+    },
+    "source_section": "0.6D",
+    "units": [],
+    "variables": [
+      "H"
+    ]
+  },
+  {
+    "applicability_anchors": [],
+    "applicability_text": null,
+    "continuation_anchors": [],
+    "equation_identifier": null,
+    "exceptions": [],
+    "external_references": [],
+    "extraction_confidence": 0.84,
+    "id": "ibc2018:equation:2b571fc85a99323bcab9c9e4",
+    "internal_references": [],
+    "nearby_variable_definitions": [],
+    "normalized_expression": null,
+    "normalized_expression_confidence": 0.0,
+    "observed_expression": "1.2(D + F) + 1.6(L + H) + 0.5(Lr or S or R)",
+    "observed_expression_sha256": "fe02a933a91fe8c6ee1f888c6ead7054dababa8b537ac23e3cf8b86d1b3f6381",
+    "record_type": "equation",
+    "referenced_sections": [],
+    "referenced_tables": [],
+    "review_state": "provisional",
+    "source_anchor": {
+      "appendix": null,
+      "bbox": [
+        40.097,
+        273.889,
+        211.24,
+        287.878
+      ],
+      "chapter": "16",
+      "line_id": "poppler-line:ae31d63fab9817b4b31a",
+      "observed_text_sha256": "fe02a933a91fe8c6ee1f888c6ead7054dababa8b537ac23e3cf8b86d1b3f6381",
+      "pdf_page": 393,
+      "printed_page": "366"
+    },
+    "source_section": "1605.2",
+    "units": [],
+    "variables": [
+      "D",
+      "F",
+      "H",
+      "L",
+      "Lr",
+      "R",
+      "S"
+    ]
+  },
+  {
+    "applicability_anchors": [],
+    "applicability_text": null,
+    "continuation_anchors": [],
+    "equation_identifier": null,
+    "exceptions": [],
+    "external_references": [],
+    "extraction_confidence": 0.84,
+    "id": "ibc2018:equation:a0e8e1bbb91f41db7c5d1efb",
+    "internal_references": [],
+    "nearby_variable_definitions": [],
+    "normalized_expression": null,
+    "normalized_expression_confidence": 0.0,
+    "observed_expression": "0.6(D + F) + 0.7E+H",
+    "observed_expression_sha256": "21fad782b54b754dddca2072361a4a85eacd11df8abff594fa6b1c3826b83ecc",
+    "record_type": "equation",
+    "referenced_sections": [],
+    "referenced_tables": [],
+    "review_state": "provisional",
+    "source_anchor": {
+      "appendix": null,
+      "bbox": [
+        318.02,
+        279.448,
+        404.917,
+        292.259
+      ],
+      "chapter": "16",
+      "line_id": "poppler-line:081490b36fc3002231b2",
+      "observed_text_sha256": "21fad782b54b754dddca2072361a4a85eacd11df8abff594fa6b1c3826b83ecc",
+      "pdf_page": 393,
+      "printed_page": "366"
+    },
+    "source_section": "0.6D",
+    "units": [],
+    "variables": [
+      "D",
+      "F",
+      "H"
+    ]
+  },
+  {
+    "applicability_anchors": [],
+    "applicability_text": null,
+    "continuation_anchors": [],
+    "equation_identifier": null,
+    "exceptions": [],
+    "external_references": [],
+    "extraction_confidence": 0.84,
+    "id": "ibc2018:equation:521ff5d91a43330d03ba3580",
+    "internal_references": [],
+    "nearby_variable_definitions": [],
+    "normalized_expression": null,
+    "normalized_expression_confidence": 0.0,
+    "observed_expression": "1.2(D + F) + 1.6(Lr or S or R) + 1.6H + (ƒ1L or 0.5W)",
+    "observed_expression_sha256": "a61bd2d8c3d5c9ca1a0d090fd55f46ba626e827b5bf44a5cf4229e090a816cc0",
+    "record_type": "equation",
+    "referenced_sections": [],
+    "referenced_tables": [],
+    "review_state": "provisional",
+    "source_anchor": {
+      "appendix": null,
+      "bbox": [
+        40.124,
+        301.038,
+        253.376,
+        315.028
+      ],
+      "chapter": "16",
+      "line_id": "poppler-line:9bec548baca06f6b7003",
+      "observed_text_sha256": "a61bd2d8c3d5c9ca1a0d090fd55f46ba626e827b5bf44a5cf4229e090a816cc0",
+      "pdf_page": 393,
+      "printed_page": "366"
+    },
+    "source_section": "1605.2",
+    "units": [],
+    "variables": [
+      "D",
+      "F",
+      "Lr",
+      "R",
+      "S"
+    ]
+  },
+  {
+    "applicability_anchors": [],
+    "applicability_text": null,
+    "continuation_anchors": [],
+    "equation_identifier": null,
+    "exceptions": [],
+    "external_references": [],
+    "extraction_confidence": 0.84,
+    "id": "ibc2018:equation:1ac9f6f6acb7a58f1cd1a3be",
+    "internal_references": [],
+    "nearby_variable_definitions": [],
+    "normalized_expression": null,
+    "normalized_expression_confidence": 0.0,
+    "observed_expression": "1.2(D + F) + 1.0W + ƒ1L + 1.6H + 0.5(Lr or S or R)",
+    "observed_expression_sha256": "52a26b2ccd5ab80b16372dc23638b1c4f1583ea3ff34bee1f2873b4d727e4cf5",
+    "record_type": "equation",
+    "referenced_sections": [],
+    "referenced_tables": [],
+    "review_state": "provisional",
+    "source_anchor": {
+      "appendix": null,
+      "bbox": [
+        40.097,
+        328.152,
+        246.519,
+        342.128
+      ],
+      "chapter": "16",
+      "line_id": "poppler-line:97280dc99dad22d46585",
+      "observed_text_sha256": "52a26b2ccd5ab80b16372dc23638b1c4f1583ea3ff34bee1f2873b4d727e4cf5",
+      "pdf_page": 393,
+      "printed_page": "366"
+    },
+    "source_section": "1605.2",
+    "units": [],
+    "variables": [
+      "D",
+      "F",
+      "Lr",
+      "R",
+      "S"
+    ]
+  },
+  {
+    "applicability_anchors": [],
+    "applicability_text": null,
+    "continuation_anchors": [],
+    "equation_identifier": null,
+    "exceptions": [],
+    "external_references": [],
+    "extraction_confidence": 0.84,
+    "id": "ibc2018:equation:40cc7a0ea4170ecceee43373",
+    "internal_references": [],
+    "nearby_variable_definitions": [],
+    "normalized_expression": null,
+    "normalized_expression_confidence": 0.0,
+    "observed_expression": "1.2(D + F) + 1.0E + ƒ1L + 1.6H + ƒ2S",
+    "observed_expression_sha256": "344b7daa1be439d39b87ccb127c6b2cb33792c88eb141da12dca81154c24924d",
+    "record_type": "equation",
+    "referenced_sections": [],
+    "referenced_tables": [],
+    "review_state": "provisional",
+    "source_anchor": {
+      "appendix": null,
+      "bbox": [
+        40.101,
+        355.288,
+        190.707,
+        369.152
+      ],
+      "chapter": "16",
+      "line_id": "poppler-line:a850e3bc740fb2775f06",
+      "observed_text_sha256": "344b7daa1be439d39b87ccb127c6b2cb33792c88eb141da12dca81154c24924d",
+      "pdf_page": 393,
+      "printed_page": "366"
+    },
+    "source_section": "1605.2",
+    "units": [],
+    "variables": [
+      "D",
+      "F"
+    ]
+  },
+  {
+    "applicability_anchors": [],
+    "applicability_text": null,
+    "continuation_anchors": [],
+    "equation_identifier": null,
+    "exceptions": [],
+    "external_references": [],
+    "extraction_confidence": 0.84,
+    "id": "ibc2018:equation:df27e71f771c8df7c141fd0b",
+    "internal_references": [],
+    "nearby_variable_definitions": [
+      {
+        "appendix": null,
+        "bbox": [
+          40.086,
+          415.435,
+          286.515,
+          429.302
+        ],
+        "chapter": "16",
+        "line_id": "poppler-line:ee1008c43c430ab9b6f5",
+        "observed_text_sha256": "9fc8422dbb8f7926666775a3e4f72b09e040d4ca0a0bc810ed9eada6c8a15df2",
+        "pdf_page": 393,
+        "printed_page": "366"
+      },
+      {
+        "appendix": null,
+        "bbox": [
+          40.118,
+          452.345,
+          285.725,
+          466.152
+        ],
+        "chapter": "16",
+        "line_id": "poppler-line:4cb36dce339525c04eff",
+        "observed_text_sha256": "0bc81c6c2e498f9b76e3cf0190091db2afbc681253d594d903921578ba0d8f18",
+        "pdf_page": 393,
+        "printed_page": "366"
+      }
+    ],
+    "normalized_expression": null,
+    "normalized_expression_confidence": 0.0,
+    "observed_expression": "0.9(D + F) + 1.0E+ 1.6H",
+    "observed_expression_sha256": "9cc660ef87ddca0129ab29c08deb231fe4aab0ecaf70d3a56de978162961f931",
+    "record_type": "equation",
+    "referenced_sections": [],
+    "referenced_tables": [],
+    "review_state": "provisional",
+    "source_anchor": {
+      "appendix": null,
+      "bbox": [
+        40.085,
+        386.386,
+        140.815,
+        399.197
+      ],
+      "chapter": "16",
+      "line_id": "poppler-line:532ee505ba8191b825eb",
+      "observed_text_sha256": "9cc660ef87ddca0129ab29c08deb231fe4aab0ecaf70d3a56de978162961f931",
+      "pdf_page": 393,
+      "printed_page": "366"
+    },
+    "source_section": "1605.2",
+    "units": [],
+    "variables": [
+      "D",
+      "F"
+    ]
+  },
+  {
+    "applicability_anchors": [],
+    "applicability_text": null,
+    "continuation_anchors": [],
+    "equation_identifier": null,
+    "exceptions": [],
+    "external_references": [],
+    "extraction_confidence": 0.84,
+    "id": "ibc2018:equation:511da6f84acd7e89e768d9a8",
+    "internal_references": [],
+    "nearby_variable_definitions": [],
+    "normalized_expression": null,
+    "normalized_expression_confidence": 0.0,
+    "observed_expression": "D + L + (Lr or S or R)",
+    "observed_expression_sha256": "b79b90724565d608dbfb83e1c83660bd000c9fabcf7ab144b7045bbf06e55cca",
+    "record_type": "equation",
+    "referenced_sections": [],
+    "referenced_tables": [],
+    "review_state": "provisional",
+    "source_anchor": {
+      "appendix": null,
+      "bbox": [
+        72.019,
+        419.584,
+        157.728,
+        433.578
+      ],
+      "chapter": "16",
+      "line_id": "poppler-line:e4ee1b3ab9e542745493",
+      "observed_text_sha256": "b79b90724565d608dbfb83e1c83660bd000c9fabcf7ab144b7045bbf06e55cca",
+      "pdf_page": 394,
+      "printed_page": "367"
+    },
+    "source_section": "1605.3.2",
+    "units": [],
+    "variables": [
+      "D",
+      "L",
+      "Lr",
+      "R",
+      "S"
+    ]
+  },
+  {
+    "applicability_anchors": [],
+    "applicability_text": null,
+    "continuation_anchors": [],
+    "equation_identifier": null,
+    "exceptions": [],
+    "external_references": [],
+    "extraction_confidence": 0.84,
+    "id": "ibc2018:equation:244500ad181e13073285a3de",
+    "internal_references": [],
+    "nearby_variable_definitions": [],
+    "normalized_expression": null,
+    "normalized_expression_confidence": 0.0,
+    "observed_expression": "D + L + 0.6 W",
+    "observed_expression_sha256": "3137016d3774d3852e0cc8476663180cf34e6f0bb915b38f33b39d0304d4c259",
+    "record_type": "equation",
+    "referenced_sections": [],
+    "referenced_tables": [],
+    "review_state": "provisional",
+    "source_anchor": {
+      "appendix": null,
+      "bbox": [
+        71.991,
+        435.789,
+        136.374,
+        448.612
+      ],
+      "chapter": "16",
+      "line_id": "poppler-line:8374d5addd02e3739ee8",
+      "observed_text_sha256": "3137016d3774d3852e0cc8476663180cf34e6f0bb915b38f33b39d0304d4c259",
+      "pdf_page": 394,
+      "printed_page": "367"
+    },
+    "source_section": "1605.3.2",
+    "units": [],
+    "variables": [
+      "D",
+      "L",
+      "W"
+    ]
+  },
+  {
+    "applicability_anchors": [],
+    "applicability_text": null,
+    "continuation_anchors": [],
+    "equation_identifier": null,
+    "exceptions": [],
+    "external_references": [],
+    "extraction_confidence": 0.84,
+    "id": "ibc2018:equation:65ab761f5fc87a02131a64d5",
+    "internal_references": [],
+    "nearby_variable_definitions": [],
+    "normalized_expression": null,
+    "normalized_expression_confidence": 0.0,
+    "observed_expression": "D + L + 0.6 W + S/2",
+    "observed_expression_sha256": "6df08571b2c1d1bc306fa903f2ef7fa64503d9dff361b6f387790e17c00fb6fa",
+    "record_type": "equation",
+    "referenced_sections": [],
+    "referenced_tables": [],
+    "review_state": "provisional",
+    "source_anchor": {
+      "appendix": null,
+      "bbox": [
+        72.037,
+        450.784,
+        158.577,
+        463.599
+      ],
+      "chapter": "16",
+      "line_id": "poppler-line:ab44f85e792e67446566",
+      "observed_text_sha256": "6df08571b2c1d1bc306fa903f2ef7fa64503d9dff361b6f387790e17c00fb6fa",
+      "pdf_page": 394,
+      "printed_page": "367"
+    },
+    "source_section": "1605.3.2",
+    "units": [],
+    "variables": [
+      "D",
+      "L",
+      "S",
+      "W"
+    ]
+  },
+  {
+    "applicability_anchors": [],
+    "applicability_text": null,
+    "continuation_anchors": [],
+    "equation_identifier": null,
+    "exceptions": [],
+    "external_references": [],
+    "extraction_confidence": 0.84,
+    "id": "ibc2018:equation:914d6ed781364f89a70bbba9",
+    "internal_references": [],
+    "nearby_variable_definitions": [],
+    "normalized_expression": null,
+    "normalized_expression_confidence": 0.0,
+    "observed_expression": "D + L + S + 0.6 W/2",
+    "observed_expression_sha256": "091b24342f598fcd5cc77daa6af89667fee3e2c0c15267074251f2c425b8722a",
+    "record_type": "equation",
+    "referenced_sections": [],
+    "referenced_tables": [],
+    "review_state": "provisional",
+    "source_anchor": {
+      "appendix": null,
+      "bbox": [
+        72.037,
+        465.673,
+        158.318,
+        478.5
+      ],
+      "chapter": "16",
+      "line_id": "poppler-line:80c794239281955db1e7",
+      "observed_text_sha256": "091b24342f598fcd5cc77daa6af89667fee3e2c0c15267074251f2c425b8722a",
+      "pdf_page": 394,
+      "printed_page": "367"
+    },
+    "source_section": "1605.3.2",
+    "units": [],
+    "variables": [
+      "D",
+      "L",
+      "S",
+      "W"
+    ]
+  },
+  {
+    "applicability_anchors": [],
+    "applicability_text": null,
+    "continuation_anchors": [],
+    "equation_identifier": null,
+    "exceptions": [],
+    "external_references": [],
+    "extraction_confidence": 0.84,
+    "id": "ibc2018:equation:fc4e2ea3eb8c9a36f4f92a92",
+    "internal_references": [],
+    "nearby_variable_definitions": [],
+    "normalized_expression": null,
+    "normalized_expression_confidence": 0.0,
+    "observed_expression": "D + L + S + E/1.4",
+    "observed_expression_sha256": "44f3c6a06e653adb61d3c3fa99a10ece68d18e4e3d5344652f316beee133ccbc",
+    "record_type": "equation",
+    "referenced_sections": [],
+    "referenced_tables": [],
+    "review_state": "provisional",
+    "source_anchor": {
+      "appendix": null,
+      "bbox": [
+        71.999,
+        480.684,
+        142.869,
+        493.495
+      ],
+      "chapter": "16",
+      "line_id": "poppler-line:feaf7821dd5c03d37ca7",
+      "observed_text_sha256": "44f3c6a06e653adb61d3c3fa99a10ece68d18e4e3d5344652f316beee133ccbc",
+      "pdf_page": 394,
+      "printed_page": "367"
+    },
+    "source_section": "1605.3.2",
+    "units": [],
+    "variables": [
+      "D",
+      "E",
+      "L",
+      "S"
+    ]
+  },
+  {
+    "applicability_anchors": [],
+    "applicability_text": null,
+    "continuation_anchors": [],
+    "equation_identifier": null,
+    "exceptions": [],
+    "external_references": [],
+    "extraction_confidence": 0.84,
+    "id": "ibc2018:equation:2126b49e8acdee5d23a623b2",
+    "internal_references": [],
+    "nearby_variable_definitions": [],
+    "normalized_expression": null,
+    "normalized_expression_confidence": 0.0,
+    "observed_expression": "0.9D + E/1.4",
+    "observed_expression_sha256": "36d6a00df3b8dc9691abc5c762a01496adc98fa8f57b98cbcf4feeb267890137",
+    "record_type": "equation",
+    "referenced_sections": [],
+    "referenced_tables": [],
+    "review_state": "provisional",
+    "source_anchor": {
+      "appendix": null,
+      "bbox": [
+        71.999,
+        495.679,
+        123.448,
+        508.49
+      ],
+      "chapter": "16",
+      "line_id": "poppler-line:ee5269438a17218cb869",
+      "observed_text_sha256": "36d6a00df3b8dc9691abc5c762a01496adc98fa8f57b98cbcf4feeb267890137",
+      "pdf_page": 394,
+      "printed_page": "367"
+    },
+    "source_section": "0.9D",
+    "units": [],
+    "variables": [
+      "E"
+    ]
+  },
+  {
+    "applicability_anchors": [
+      {
+        "appendix": null,
+        "bbox": [
+          330.039,
+          89.915,
+          408.319,
+          104.427
+        ],
+        "chapter": "16",
+        "line_id": "poppler-line:1b6ff5480c58fda8813c",
+        "observed_text_sha256": "e1192d20fffe16665c7c4fda607dbc31937c6e584f0206da3ee6155a23b6f73a",
+        "pdf_page": 399,
+        "printed_page": "372"
+      }
+    ],
+    "applicability_text": null,
+    "continuation_anchors": [],
+    "equation_identifier": null,
+    "exceptions": [],
+    "external_references": [],
+    "extraction_confidence": 0.84,
+    "id": "ibc2018:equation:2defb75f5ed88a80ab848a56",
+    "internal_references": [],
+    "nearby_variable_definitions": [],
+    "normalized_expression": null,
+    "normalized_expression_confidence": 0.0,
+    "observed_expression": "Lr = Lo R1R2",
+    "observed_expression_sha256": "37f509471b2d9fc6bbbdf7eaff78a65671ad48d328a1771054af73d7ddca7196",
+    "record_type": "equation",
+    "referenced_sections": [],
+    "referenced_tables": [],
+    "review_state": "provisional",
+    "source_anchor": {
+      "appendix": null,
+      "bbox": [
+        329.99,
+        75.188,
+        377.611,
+        89.177
+      ],
+      "chapter": "16",
+      "line_id": "poppler-line:b57e835275ced3fdbd78",
+      "observed_text_sha256": "37f509471b2d9fc6bbbdf7eaff78a65671ad48d328a1771054af73d7ddca7196",
+      "pdf_page": 399,
+      "printed_page": "372"
+    },
+    "source_section": "1607.11.2",
+    "units": [],
+    "variables": [
+      "Lo",
+      "Lr",
+      "R1R2"
+    ]
+  },
+  {
+    "applicability_anchors": [],
+    "applicability_text": null,
+    "continuation_anchors": [],
+    "equation_identifier": null,
+    "exceptions": [],
+    "external_references": [],
+    "extraction_confidence": 0.84,
+    "id": "ibc2018:equation:274763fb174275a7bb703a2c",
+    "internal_references": [],
+    "nearby_variable_definitions": [],
+    "normalized_expression": null,
+    "normalized_expression_confidence": 0.0,
+    "observed_expression": "For SI: Lr = LoR1R2",
+    "observed_expression_sha256": "0b1ba8ac7279ad6cf0404d3dec998f524c171f4bc2eeb9683acbf1ced14aacd3",
+    "record_type": "equation",
+    "referenced_sections": [],
+    "referenced_tables": [],
+    "review_state": "provisional",
+    "source_anchor": {
+      "appendix": null,
+      "bbox": [
+        330.008,
+        104.588,
+        406.762,
+        118.577
+      ],
+      "chapter": "16",
+      "line_id": "poppler-line:1a722a404f6b25606af5",
+      "observed_text_sha256": "0b1ba8ac7279ad6cf0404d3dec998f524c171f4bc2eeb9683acbf1ced14aacd3",
+      "pdf_page": 399,
+      "printed_page": "372"
+    },
+    "source_section": "1607.11.2",
+    "units": [],
+    "variables": [
+      "LoR1R2",
+      "Lr"
+    ]
+  },
+  {
+    "applicability_anchors": [],
+    "applicability_text": null,
+    "continuation_anchors": [],
+    "equation_identifier": null,
+    "exceptions": [],
+    "external_references": [],
+    "extraction_confidence": 0.84,
+    "id": "ibc2018:equation:ff486df93c4117225beef088",
+    "internal_references": [],
+    "nearby_variable_definitions": [
+      {
+        "appendix": null,
+        "bbox": [
+          76.099,
+          148.657,
+          285.806,
+          161.468
+        ],
+        "chapter": "16",
+        "line_id": "poppler-line:3b5a703424f37e76232e",
+        "observed_text_sha256": "3808239fd8de36a3a2facafb21213bc667b26f2c1964322e07d3bd8276117179",
+        "pdf_page": 399,
+        "printed_page": "372"
+      },
+      {
+        "appendix": null,
+        "bbox": [
+          76.101,
+          174.516,
+          285.934,
+          187.505
+        ],
+        "chapter": "16",
+        "line_id": "poppler-line:97fdbea4cfcca74a3963",
+        "observed_text_sha256": "bee2a685b437fba199d18bb9300b150ef6b136f41b93d174f6ced625564c4928",
+        "pdf_page": 399,
+        "printed_page": "372"
+      },
+      {
+        "appendix": null,
+        "bbox": [
+          76.078,
+          200.716,
+          286.66,
+          214.678
+        ],
+        "chapter": "16",
+        "line_id": "poppler-line:ba59a9ba22f4836d3f0e",
+        "observed_text_sha256": "5dfa10dad3ae2ca442a3cee8413f0bcacbf3b870e00b9a0c0a95bebd7f4093d9",
+        "pdf_page": 399,
+        "printed_page": "372"
+      }
+    ],
+    "normalized_expression": null,
+    "normalized_expression_confidence": 0.0,
+    "observed_expression": "R = 23.1(1+ D/Lo)",
+    "observed_expression_sha256": "964b3a6e430e408f6506e4e4d407bb09e0e49946d1b7cd79b7678a1065dd9144",
+    "record_type": "equation",
+    "referenced_sections": [],
+    "referenced_tables": [],
+    "review_state": "provisional",
+    "source_anchor": {
+      "appendix": null,
+      "bbox": [
+        78.644,
+        117.352,
+        150.549,
+        131.278
+      ],
+      "chapter": "16",
+      "line_id": "poppler-line:bbd024f02b60c44ebe19",
+      "observed_text_sha256": "964b3a6e430e408f6506e4e4d407bb09e0e49946d1b7cd79b7678a1065dd9144",
+      "pdf_page": 399,
+      "printed_page": "372"
+    },
+    "source_section": "1607.11.1.3",
+    "units": [],
+    "variables": [
+      "D",
+      "Lo",
+      "R"
+    ]
+  },
+  {
+    "applicability_anchors": [],
+    "applicability_text": null,
+    "continuation_anchors": [],
+    "equation_identifier": null,
+    "exceptions": [],
+    "external_references": [],
+    "extraction_confidence": 0.84,
+    "id": "ibc2018:equation:c9c9f1420834068ec940e57e",
+    "internal_references": [],
+    "nearby_variable_definitions": [],
+    "normalized_expression": null,
+    "normalized_expression_confidence": 0.0,
+    "observed_expression": "R1 = 1 for At ≤ 200 square feet (18.58 m2)",
+    "observed_expression_sha256": "39d8f796eb87fc7a0f6241249faa4ae538220261c57b3d472fe77f87697cd9bd",
+    "record_type": "equation",
+    "referenced_sections": [],
+    "referenced_tables": [],
+    "review_state": "provisional",
+    "source_anchor": {
+      "appendix": null,
+      "bbox": [
+        330.045,
+        219.865,
+        495.05,
+        234.377
+      ],
+      "chapter": "16",
+      "line_id": "poppler-line:5e1a9e02d1726f5053bf",
+      "observed_text_sha256": "39d8f796eb87fc7a0f6241249faa4ae538220261c57b3d472fe77f87697cd9bd",
+      "pdf_page": 399,
+      "printed_page": "372"
+    },
+    "source_section": "1607.11.2",
+    "units": [],
+    "variables": [
+      "At",
+      "R1",
+      "feet",
+      "m2",
+      "square"
+    ]
+  },
+  {
+    "applicability_anchors": [
+      {
+        "appendix": null,
+        "bbox": [
+          330.006,
+          274.038,
+          551.804,
+          288.027
+        ],
+        "chapter": "16",
+        "line_id": "poppler-line:0c8307a3fa3ff507eef4",
+        "observed_text_sha256": "d1340e533b4d2a35a0fd69c4326e784b43bdfcfc4895f7858ef165db208cc037",
+        "pdf_page": 399,
+        "printed_page": "372"
+      }
+    ],
+    "applicability_text": null,
+    "continuation_anchors": [],
+    "equation_identifier": null,
+    "exceptions": [],
+    "external_references": [],
+    "extraction_confidence": 0.84,
+    "id": "ibc2018:equation:5a243e97f182a2923e3bc2c6",
+    "internal_references": [],
+    "nearby_variable_definitions": [],
+    "normalized_expression": null,
+    "normalized_expression_confidence": 0.0,
+    "observed_expression": "R1 = 1.2 - 0.001At for 200 square feet",
+    "observed_expression_sha256": "2c6d03c81cbc92e230bdcd7fd7845502910fda56439b4d35ac2b4f14d1322f86",
+    "record_type": "equation",
+    "referenced_sections": [],
+    "referenced_tables": [],
+    "review_state": "provisional",
+    "source_anchor": {
+      "appendix": null,
+      "bbox": [
+        330.021,
+        246.56,
+        478.504,
+        260.527
+      ],
+      "chapter": "16",
+      "line_id": "poppler-line:7c493309665daf203ac7",
+      "observed_text_sha256": "2c6d03c81cbc92e230bdcd7fd7845502910fda56439b4d35ac2b4f14d1322f86",
+      "pdf_page": 399,
+      "printed_page": "372"
+    },
+    "source_section": "1607.11.2",
+    "units": [],
+    "variables": [
+      "R1",
+      "feet",
+      "square"
+    ]
+  },
+  {
+    "applicability_anchors": [],
+    "applicability_text": null,
+    "continuation_anchors": [],
+    "equation_identifier": null,
+    "exceptions": [],
+    "external_references": [],
+    "extraction_confidence": 0.84,
+    "id": "ibc2018:equation:bdda3c706c5030cdbbf14642",
+    "internal_references": [],
+    "nearby_variable_definitions": [
+      {
+        "appendix": null,
+        "bbox": [
+          330.046,
+          340.776,
+          552.091,
+          354.727
+        ],
+        "chapter": "16",
+        "line_id": "poppler-line:487fd76f3058ae1813c6",
+        "observed_text_sha256": "bf5570119292cbcbdd0c9c7b0351790e9615dd784b37c4d9625d6089f8f5c985",
+        "pdf_page": 399,
+        "printed_page": "372"
+      }
+    ],
+    "normalized_expression": null,
+    "normalized_expression_confidence": 0.0,
+    "observed_expression": "R1 = 0.6 for At  600 square feet (55.74 m2)",
+    "observed_expression_sha256": "c1e32b206b4753d0e73d7a70e212676804f0d322948dd0a3e63c18bd2bd652a0",
+    "record_type": "equation",
+    "referenced_sections": [],
+    "referenced_tables": [],
+    "review_state": "provisional",
+    "source_anchor": {
+      "appendix": null,
+      "bbox": [
+        330.04,
+        299.915,
+        502.601,
+        314.427
+      ],
+      "chapter": "16",
+      "line_id": "poppler-line:a4a3a2b433992532a127",
+      "observed_text_sha256": "c1e32b206b4753d0e73d7a70e212676804f0d322948dd0a3e63c18bd2bd652a0",
+      "pdf_page": 399,
+      "printed_page": "372"
+    },
+    "source_section": "55.74",
+    "units": [],
+    "variables": [
+      "At",
+      "R1",
+      "feet",
+      "m2",
+      "square"
+    ]
+  },
+  {
+    "applicability_anchors": [],
+    "applicability_text": null,
+    "continuation_anchors": [],
+    "equation_identifier": null,
+    "exceptions": [],
+    "external_references": [],
+    "extraction_confidence": 0.84,
+    "id": "ibc2018:equation:9d077734ed66732ae4d92ae9",
+    "internal_references": [],
+    "nearby_variable_definitions": [],
+    "normalized_expression": null,
+    "normalized_expression_confidence": 0.0,
+    "observed_expression": "R2 = 1 for F ≤ 4",
+    "observed_expression_sha256": "fb0fb90ae4d9e7f50c3732a161f7b6a368e814794193bf5018c09c66cbb494cf",
+    "record_type": "equation",
+    "referenced_sections": [],
+    "referenced_tables": [],
+    "review_state": "provisional",
+    "source_anchor": {
+      "appendix": null,
+      "bbox": [
+        330.036,
+        376.365,
+        392.679,
+        390.752
+      ],
+      "chapter": "16",
+      "line_id": "poppler-line:2ef685c6f1a148c8b5ac",
+      "observed_text_sha256": "fb0fb90ae4d9e7f50c3732a161f7b6a368e814794193bf5018c09c66cbb494cf",
+      "pdf_page": 399,
+      "printed_page": "372"
+    },
+    "source_section": "55.74",
+    "units": [],
+    "variables": [
+      "F",
+      "R2"
+    ]
+  },
+  {
+    "applicability_anchors": [],
+    "applicability_text": null,
+    "continuation_anchors": [],
+    "equation_identifier": null,
+    "exceptions": [],
+    "external_references": [],
+    "extraction_confidence": 0.84,
+    "id": "ibc2018:equation:c26a5a68baf14d98ad3fee15",
+    "internal_references": [],
+    "nearby_variable_definitions": [],
+    "normalized_expression": null,
+    "normalized_expression_confidence": 0.0,
+    "observed_expression": "R2 = 1.2 - 0.05 F for 4 < F < 12",
+    "observed_expression_sha256": "e4a6f8d6d577fb4a86b2fba79db4bb8e81251b3e6c653a44829d914b94cdd54a",
+    "record_type": "equation",
+    "referenced_sections": [],
+    "referenced_tables": [],
+    "review_state": "provisional",
+    "source_anchor": {
+      "appendix": null,
+      "bbox": [
+        330.028,
+        392.104,
+        455.36,
+        406.002
+      ],
+      "chapter": "16",
+      "line_id": "poppler-line:bd4742c2034fef9e2261",
+      "observed_text_sha256": "e4a6f8d6d577fb4a86b2fba79db4bb8e81251b3e6c653a44829d914b94cdd54a",
+      "pdf_page": 399,
+      "printed_page": "372"
+    },
+    "source_section": "55.74",
+    "units": [],
+    "variables": [
+      "F",
+      "R2"
+    ]
+  },
+  {
+    "applicability_anchors": [],
+    "applicability_text": null,
+    "continuation_anchors": [],
+    "equation_identifier": null,
+    "exceptions": [],
+    "external_references": [],
+    "extraction_confidence": 0.84,
+    "id": "ibc2018:equation:7fc9a98561b880d8ab2c9030",
+    "internal_references": [],
+    "nearby_variable_definitions": [
+      {
+        "appendix": null,
+        "bbox": [
+          330.029,
+          436.769,
+          551.924,
+          449.58
+        ],
+        "chapter": "16",
+        "line_id": "poppler-line:b7ef25ceaa05fa3dffad",
+        "observed_text_sha256": "8292eaca5daa7bad6deed435ac722bbcaa5bf49d4766ad56bf69ff54ad524a2b",
+        "pdf_page": 399,
+        "printed_page": "372"
+      }
+    ],
+    "normalized_expression": null,
+    "normalized_expression_confidence": 0.0,
+    "observed_expression": "R2 = 0.6 for F  12",
+    "observed_expression_sha256": "8a4edb07af78b176fece889172bbebaf79f5885dd5df75710c274c10994fd67f",
+    "record_type": "equation",
+    "referenced_sections": [],
+    "referenced_tables": [],
+    "review_state": "provisional",
+    "source_anchor": {
+      "appendix": null,
+      "bbox": [
+        330.028,
+        406.865,
+        405.173,
+        421.251
+      ],
+      "chapter": "16",
+      "line_id": "poppler-line:5e85bb3d383e2157b9a3",
+      "observed_text_sha256": "8a4edb07af78b176fece889172bbebaf79f5885dd5df75710c274c10994fd67f",
+      "pdf_page": 399,
+      "printed_page": "372"
+    },
+    "source_section": "55.74",
+    "units": [],
+    "variables": [
+      "F",
+      "R2"
+    ]
+  },
+  {
+    "applicability_anchors": [],
+    "applicability_text": null,
+    "continuation_anchors": [],
+    "equation_identifier": null,
+    "exceptions": [],
+    "external_references": [],
+    "extraction_confidence": 0.84,
+    "id": "ibc2018:equation:0b5a43396362457a3e903fa5",
+    "internal_references": [],
+    "nearby_variable_definitions": [
+      {
+        "appendix": null,
+        "bbox": [
+          82.049,
+          274.879,
+          285.679,
+          287.223
+        ],
+        "chapter": "16",
+        "line_id": "poppler-line:5d0daaaecab895378715",
+        "observed_text_sha256": "62b8b37dc3b17bbedfdddc2ab67aa25c3126d9a44cc966285698fc50d686ab23",
+        "pdf_page": 405,
+        "printed_page": "378"
+      },
+      {
+        "appendix": null,
+        "bbox": [
+          82.049,
+          310.846,
+          286.213,
+          323.19
+        ],
+        "chapter": "16",
+        "line_id": "poppler-line:29dbf37164c1bedc7586",
+        "observed_text_sha256": "e2c59763238a90a1ea0b928731bad05aedcbcac41b7856fc30bf3d4c4e4160da",
+        "pdf_page": 405,
+        "printed_page": "378"
+      }
+    ],
+    "normalized_expression": null,
+    "normalized_expression_confidence": 0.0,
+    "observed_expression": "Vasd = V 0.6",
+    "observed_expression_sha256": "4086de194186409a7fcc1f1024edc133d1e27121b61909b445f22474f6fe85b8",
+    "record_type": "equation",
+    "referenced_sections": [],
+    "referenced_tables": [],
+    "review_state": "provisional",
+    "source_anchor": {
+      "appendix": null,
+      "bbox": [
+        53.056,
+        239.582,
+        111.848,
+        258.892
+      ],
+      "chapter": "16",
+      "line_id": "poppler-line:e51f1a717d671fdac590",
+      "observed_text_sha256": "4086de194186409a7fcc1f1024edc133d1e27121b61909b445f22474f6fe85b8",
+      "pdf_page": 405,
+      "printed_page": "378"
+    },
+    "source_section": "1609.3(8)",
+    "units": [],
+    "variables": [
+      "V",
+      "Vasd"
+    ]
+  },
+  {
+    "applicability_anchors": [],
+    "applicability_text": null,
+    "continuation_anchors": [],
+    "equation_identifier": null,
+    "exceptions": [],
+    "external_references": [],
+    "extraction_confidence": 0.84,
+    "id": "ibc2018:equation:f144fe31ec80c67555e7e790",
+    "internal_references": [],
+    "nearby_variable_definitions": [],
+    "normalized_expression": null,
+    "normalized_expression_confidence": 0.0,
+    "observed_expression": "Ma = qhCLbLLa[1.0 - GCp]",
+    "observed_expression_sha256": "27b3294e07396ffa086d224221a7a4209aeea6321b2b95d6ed1d24e9201d78ad",
+    "record_type": "equation",
+    "referenced_sections": [],
+    "referenced_tables": [],
+    "review_state": "provisional",
+    "source_anchor": {
+      "appendix": null,
+      "bbox": [
+        71.95,
+        112.629,
+        174.499,
+        125.854
+      ],
+      "chapter": "16",
+      "line_id": "poppler-line:a7c1e8afcd7b06e4b2ef",
+      "observed_text_sha256": "27b3294e07396ffa086d224221a7a4209aeea6321b2b95d6ed1d24e9201d78ad",
+      "pdf_page": 418,
+      "printed_page": "391"
+    },
+    "source_section": "1609.5.3",
+    "units": [],
+    "variables": [
+      "GCp",
+      "Ma",
+      "qhCLbLLa"
+    ]
+  },
+  {
+    "applicability_anchors": [],
+    "applicability_text": null,
+    "continuation_anchors": [],
+    "equation_identifier": null,
+    "exceptions": [],
+    "external_references": [],
+    "extraction_confidence": 0.84,
+    "id": "ibc2018:equation:0fe31ac0d93a00111e27e243",
+    "internal_references": [],
+    "nearby_variable_definitions": [
+      {
+        "appendix": null,
+        "bbox": [
+          72.008,
+          184.784,
+          262.157,
+          197.128
+        ],
+        "chapter": "16",
+        "line_id": "poppler-line:648e6d21e8efd4c85b0e",
+        "observed_text_sha256": "f1970ff537cce8ecd605d8b5611249bde24a8babb9b7be2a09e70af14624eb71",
+        "pdf_page": 418,
+        "printed_page": "391"
+      },
+      {
+        "appendix": null,
+        "bbox": [
+          72.009,
+          198.779,
+          305.833,
+          212.154
+        ],
+        "chapter": "16",
+        "line_id": "poppler-line:b01ed292c4311d56436c",
+        "observed_text_sha256": "9c752fae097fdaf0a61eaed9e314eb76b7ec9bbb560044c73d749fcddff99c49",
+        "pdf_page": 418,
+        "printed_page": "391"
+      },
+      {
+        "appendix": null,
+        "bbox": [
+          67.222,
+          234.779,
+          306.536,
+          248.154
+        ],
+        "chapter": "16",
+        "line_id": "poppler-line:e46bdf6cddd513115b68",
+        "observed_text_sha256": "581aa5ef18cb8bca824e75ca676b625b12bbee803d3e5839b242d68b726b067e",
+        "pdf_page": 418,
+        "printed_page": "391"
+      },
+      {
+        "appendix": null,
+        "bbox": [
+          72.036,
+          281.812,
+          230.701,
+          294.156
+        ],
+        "chapter": "16",
+        "line_id": "poppler-line:05eb79c649be9d3f8304",
+        "observed_text_sha256": "59620f243bfdba74e39bb5aca533941c05b16d3b566a751f9eca253237d48c5a",
+        "pdf_page": 418,
+        "printed_page": "391"
+      },
+      {
+        "appendix": null,
+        "bbox": [
+          72.036,
+          295.729,
+          305.656,
+          309.104
+        ],
+        "chapter": "16",
+        "line_id": "poppler-line:c4ffcad1c610f723914d",
+        "observed_text_sha256": "ae84d9d26a0e13e1ab8d45d3aecd2346ea2ba52cc61e98cc9b3806c9bd7ba89d",
+        "pdf_page": 418,
+        "printed_page": "391"
+      }
+    ],
+    "normalized_expression": null,
+    "normalized_expression_confidence": 0.0,
+    "observed_expression": "Ma =",
+    "observed_expression_sha256": "2c5c0fc42bdd9b0136a19c35e64807caefa9b7de2a2a01d9fb3cb335f4be6fb9",
+    "record_type": "equation",
+    "referenced_sections": [],
+    "referenced_tables": [],
+    "review_state": "provisional",
+    "source_anchor": {
+      "appendix": null,
+      "bbox": [
+        73.002,
+        147.99,
+        95.496,
+        163.281
+      ],
+      "chapter": "16",
+      "line_id": "poppler-line:9e1b57c1977cc9ad9925",
+      "observed_text_sha256": "2c5c0fc42bdd9b0136a19c35e64807caefa9b7de2a2a01d9fb3cb335f4be6fb9",
+      "pdf_page": 418,
+      "printed_page": "391"
+    },
+    "source_section": "1609.5.3",
+    "units": [],
+    "variables": [
+      "Ma"
+    ]
+  },
+  {
+    "applicability_anchors": [],
+    "applicability_text": null,
+    "continuation_anchors": [],
+    "equation_identifier": null,
+    "exceptions": [],
+    "external_references": [],
+    "extraction_confidence": 0.84,
+    "id": "ibc2018:equation:5d8b770a6ef9e8fac7c4c005",
+    "internal_references": [],
+    "nearby_variable_definitions": [],
+    "normalized_expression": null,
+    "normalized_expression_confidence": 0.0,
+    "observed_expression": "R = 5.2(ds + dh)",
+    "observed_expression_sha256": "77b988b27ad1504d4bc07fd510d2f4cc85a42d98390c5eb729f12d9d3404a78a",
+    "record_type": "equation",
+    "referenced_sections": [],
+    "referenced_tables": [],
+    "review_state": "provisional",
+    "source_anchor": {
+      "appendix": null,
+      "bbox": [
+        326.017,
+        555.45,
+        387.292,
+        568.904
+      ],
+      "chapter": "16",
+      "line_id": "poppler-line:c1085b1312633899359d",
+      "observed_text_sha256": "77b988b27ad1504d4bc07fd510d2f4cc85a42d98390c5eb729f12d9d3404a78a",
+      "pdf_page": 418,
+      "printed_page": "391"
+    },
+    "source_section": "1611.1",
+    "units": [],
+    "variables": [
+      "R",
+      "dh",
+      "ds"
+    ]
+  },
+  {
+    "applicability_anchors": [],
+    "applicability_text": null,
+    "continuation_anchors": [],
+    "equation_identifier": null,
+    "exceptions": [],
+    "external_references": [],
+    "extraction_confidence": 0.84,
+    "id": "ibc2018:equation:b65708054b1efcc56f7f2a04",
+    "internal_references": [],
+    "nearby_variable_definitions": [
+      {
+        "appendix": null,
+        "bbox": [
+          326.073,
+          599.579,
+          572.486,
+          613.152
+        ],
+        "chapter": "16",
+        "line_id": "poppler-line:79273d8b0567eb6c03d8",
+        "observed_text_sha256": "2f24c6a65920735459dfd2330d99361d839442b427acdb09cfe238a0a42805b2",
+        "pdf_page": 418,
+        "printed_page": "391"
+      },
+      {
+        "appendix": null,
+        "bbox": [
+          326.034,
+          646.629,
+          571.95,
+          660.152
+        ],
+        "chapter": "16",
+        "line_id": "poppler-line:8115a04c00d7d4e90ff9",
+        "observed_text_sha256": "800bc2b6cea503c1f796253cb7b7ec407030d3e330b04c032e17f5078057d422",
+        "pdf_page": 418,
+        "printed_page": "391"
+      }
+    ],
+    "normalized_expression": null,
+    "normalized_expression_confidence": 0.0,
+    "observed_expression": "For SI: R = 0.0098(ds + dh)",
+    "observed_expression_sha256": "7c13721a5b848a5423b94d744f97721ce623f83310e933cd41d9991185b2674f",
+    "record_type": "equation",
+    "referenced_sections": [],
+    "referenced_tables": [],
+    "review_state": "provisional",
+    "source_anchor": {
+      "appendix": null,
+      "bbox": [
+        326.068,
+        571.629,
+        432.892,
+        584.954
+      ],
+      "chapter": "16",
+      "line_id": "poppler-line:bbb713e6a06e3383d416",
+      "observed_text_sha256": "7c13721a5b848a5423b94d744f97721ce623f83310e933cd41d9991185b2674f",
+      "pdf_page": 418,
+      "printed_page": "391"
+    },
+    "source_section": "1611.1",
+    "units": [],
+    "variables": [
+      "R",
+      "dh",
+      "ds"
+    ]
+  },
+  {
+    "applicability_anchors": [],
+    "applicability_text": null,
+    "continuation_anchors": [],
+    "equation_identifier": null,
+    "exceptions": [],
+    "external_references": [],
+    "extraction_confidence": 0.84,
+    "id": "ibc2018:equation:a1c32a86c6523c72514e0fba",
+    "internal_references": [],
+    "nearby_variable_definitions": [],
+    "normalized_expression": null,
+    "normalized_expression_confidence": 0.0,
+    "observed_expression": "SDS = SMS",
+    "observed_expression_sha256": "f827ba743ab69e30de517bbcf4225803174a44270b551aff9f9b85c5c0da0af9",
+    "record_type": "equation",
+    "referenced_sections": [],
+    "referenced_tables": [],
+    "review_state": "provisional",
+    "source_anchor": {
+      "appendix": null,
+      "bbox": [
+        339.039,
+        180.584,
+        390.391,
+        204.351
+      ],
+      "chapter": "16",
+      "line_id": "poppler-line:efd69878929515d4652b",
+      "observed_text_sha256": "f827ba743ab69e30de517bbcf4225803174a44270b551aff9f9b85c5c0da0af9",
+      "pdf_page": 426,
+      "printed_page": "399"
+    },
+    "source_section": "1613.2.4",
+    "units": [],
+    "variables": [
+      "SDS",
+      "SMS"
+    ]
+  },
+  {
+    "applicability_anchors": [],
+    "applicability_text": null,
+    "continuation_anchors": [
+      {
+        "appendix": null,
+        "bbox": [
+          368.0,
+          255.08,
+          571.965,
+          267.423
+        ],
+        "chapter": "16",
+        "line_id": "poppler-line:1a9d111caf50623cdcad",
+        "observed_text_sha256": "8e3babd6e27e7afa0607fefc9088f32daec14b85511b346ade3983aefd527152",
+        "pdf_page": 426,
+        "printed_page": "399"
+      },
+      {
+        "appendix": null,
+        "bbox": [
+          368.001,
+          291.08,
+          571.966,
+          303.423
+        ],
+        "chapter": "16",
+        "line_id": "poppler-line:61e059a4013dca751e27",
+        "observed_text_sha256": "8e3babd6e27e7afa0607fefc9088f32daec14b85511b346ade3983aefd527152",
+        "pdf_page": 426,
+        "printed_page": "399"
+      }
+    ],
+    "equation_identifier": null,
+    "exceptions": [],
+    "external_references": [],
+    "extraction_confidence": 0.84,
+    "id": "ibc2018:equation:f0341ac7cd4616e57b97f115",
+    "internal_references": [],
+    "nearby_variable_definitions": [],
+    "normalized_expression": null,
+    "normalized_expression_confidence": 0.0,
+    "observed_expression": "SD1 = SM1",
+    "observed_expression_sha256": "8f62830123ac374e4b1391d948e990f56d84973f4a27019cc74ca7f9456906dd",
+    "record_type": "equation",
+    "referenced_sections": [],
+    "referenced_tables": [],
+    "review_state": "provisional",
+    "source_anchor": {
+      "appendix": null,
+      "bbox": [
+        339.034,
+        210.811,
+        389.699,
+        234.602
+      ],
+      "chapter": "16",
+      "line_id": "poppler-line:b01dca87e94eaaaf3c8f",
+      "observed_text_sha256": "8f62830123ac374e4b1391d948e990f56d84973f4a27019cc74ca7f9456906dd",
+      "pdf_page": 426,
+      "printed_page": "399"
+    },
+    "source_section": "1613.2.4",
+    "units": [],
+    "variables": [
+      "SD1",
+      "SM1"
+    ]
+  },
+  {
+    "applicability_anchors": [],
+    "applicability_text": null,
+    "continuation_anchors": [],
+    "equation_identifier": null,
+    "exceptions": [],
+    "external_references": [],
+    "extraction_confidence": 0.84,
+    "id": "ibc2018:equation:f8b269588b8c1920ce0c81e1",
+    "internal_references": [],
+    "nearby_variable_definitions": [],
+    "normalized_expression": null,
+    "normalized_expression_confidence": 0.0,
+    "observed_expression": "SMS = FaSs",
+    "observed_expression_sha256": "2e5c5aa3ab44723d944ff3e92e11adf2707204b303197df16062041a978ee980",
+    "record_type": "equation",
+    "referenced_sections": [],
+    "referenced_tables": [],
+    "review_state": "provisional",
+    "source_anchor": {
+      "appendix": null,
+      "bbox": [
+        72.021,
+        344.238,
+        111.848,
+        358.228
+      ],
+      "chapter": "16",
+      "line_id": "poppler-line:aece71a9f7456f0a4193",
+      "observed_text_sha256": "2e5c5aa3ab44723d944ff3e92e11adf2707204b303197df16062041a978ee980",
+      "pdf_page": 426,
+      "printed_page": "399"
+    },
+    "source_section": "1613.2.3",
+    "units": [],
+    "variables": [
+      "FaSs",
+      "SMS"
+    ]
+  },
+  {
+    "applicability_anchors": [],
+    "applicability_text": null,
+    "continuation_anchors": [],
+    "equation_identifier": null,
+    "exceptions": [],
+    "external_references": [],
+    "extraction_confidence": 0.84,
+    "id": "ibc2018:equation:0451d331989a8ab54ad272cf",
+    "internal_references": [
+      "ibc2018:cross-reference:ba53cc1f388f2c7086384726",
+      "ibc2018:cross-reference:f3ccbe034f0fc1d1a824a647"
+    ],
+    "nearby_variable_definitions": [
+      {
+        "appendix": null,
+        "bbox": [
+          72.024,
+          425.498,
+          275.727,
+          439.428
+        ],
+        "chapter": "16",
+        "line_id": "poppler-line:929ee18d063d5c4470e3",
+        "observed_text_sha256": "52e444155e235804887d53da50569668c224452e174ff3ac8ec47d4c49873b5a",
+        "pdf_page": 426,
+        "printed_page": "399"
+      },
+      {
+        "appendix": null,
+        "bbox": [
+          72.037,
+          439.543,
+          275.731,
+          453.478
+        ],
+        "chapter": "16",
+        "line_id": "poppler-line:c62ff34befdc87392ecf",
+        "observed_text_sha256": "f2b17a6f777fa48141f3f84ff520a474fa41bcf52a8559e98758be635c09713e",
+        "pdf_page": 426,
+        "printed_page": "399"
+      },
+      {
+        "appendix": null,
+        "bbox": [
+          72.038,
+          453.593,
+          305.566,
+          467.528
+        ],
+        "chapter": "16",
+        "line_id": "poppler-line:bb7b10b144926ed1a0cd",
+        "observed_text_sha256": "2417455d859d4944145df1c3f6fe593b1e2421995a504404145a520cde4c8cc7",
+        "pdf_page": 426,
+        "printed_page": "399"
+      },
+      {
+        "appendix": null,
+        "bbox": [
+          72.038,
+          478.543,
+          305.956,
+          492.402
+        ],
+        "chapter": "16",
+        "line_id": "poppler-line:b6b37315211f5c0db5ea",
+        "observed_text_sha256": "1428351349533c5d0583a6688976ff9c7626fc5b0a18aa20d20e115c838071f8",
+        "pdf_page": 426,
+        "printed_page": "399"
+      }
+    ],
+    "normalized_expression": null,
+    "normalized_expression_confidence": 0.0,
+    "observed_expression": "SM1 = Fv S1",
+    "observed_expression_sha256": "60387a4284555f15dab5316faeee3355d3f7d62d1ad1645c158ff43063d7ad5d",
+    "record_type": "equation",
+    "referenced_sections": [],
+    "referenced_tables": [],
+    "review_state": "provisional",
+    "source_anchor": {
+      "appendix": null,
+      "bbox": [
+        72.047,
+        360.438,
+        113.223,
+        374.278
+      ],
+      "chapter": "16",
+      "line_id": "poppler-line:f92e90598c53aa2cb1bb",
+      "observed_text_sha256": "60387a4284555f15dab5316faeee3355d3f7d62d1ad1645c158ff43063d7ad5d",
+      "pdf_page": 426,
+      "printed_page": "399"
+    },
+    "source_section": "1613.2.3",
+    "units": [],
+    "variables": [
+      "Fv",
+      "S1",
+      "SM1"
+    ]
+  },
+  {
+    "applicability_anchors": [],
+    "applicability_text": null,
+    "continuation_anchors": [],
+    "equation_identifier": null,
+    "exceptions": [],
+    "external_references": [],
+    "extraction_confidence": 0.84,
+    "id": "ibc2018:equation:6860990b7bcd269bca8a2950",
+    "internal_references": [],
+    "nearby_variable_definitions": [
+      {
+        "appendix": null,
+        "bbox": [
+          330.006,
+          141.338,
+          551.895,
+          154.149
+        ],
+        "chapter": "16",
+        "line_id": "poppler-line:a5c584303c6d5842eb1a",
+        "observed_text_sha256": "90fdc247f068dab16d57f43c5f5115ed93560994a66b79f1f9493d0afc107ce4",
+        "pdf_page": 429,
+        "printed_page": "402"
+      },
+      {
+        "appendix": null,
+        "bbox": [
+          330.007,
+          177.304,
+          551.895,
+          190.115
+        ],
+        "chapter": "16",
+        "line_id": "poppler-line:97de759aeaedc9a471ed",
+        "observed_text_sha256": "f4f904b4a9a947dc61d9266d771d757fbd31e3eb70278938cd7165d5bcf11ad0",
+        "pdf_page": 429,
+        "printed_page": "402"
+      },
+      {
+        "appendix": null,
+        "bbox": [
+          330.029,
+          202.277,
+          493.79,
+          215.088
+        ],
+        "chapter": "16",
+        "line_id": "poppler-line:2213f24761c53e67fc9a",
+        "observed_text_sha256": "946579b2729effba98afcfb366501dc1bac19b092a81d234c06f86cf425ced04",
+        "pdf_page": 429,
+        "printed_page": "402"
+      }
+    ],
+    "normalized_expression": null,
+    "normalized_expression_confidence": 0.0,
+    "observed_expression": "TT= w LS ≤ TS",
+    "observed_expression_sha256": "925258cd3dddf33f63018240370c35ec4d1fd5789b3cb12cb6cb1ca07ddbca93",
+    "record_type": "equation",
+    "referenced_sections": [],
+    "referenced_tables": [],
+    "review_state": "provisional",
+    "source_anchor": {
+      "appendix": null,
+      "bbox": [
+        329.952,
+        111.765,
+        393.258,
+        126.128
+      ],
+      "chapter": "16",
+      "line_id": "poppler-line:b273e04a0cdd220b70b3",
+      "observed_text_sha256": "925258cd3dddf33f63018240370c35ec4d1fd5789b3cb12cb6cb1ca07ddbca93",
+      "pdf_page": 429,
+      "printed_page": "402"
+    },
+    "source_section": "1616.2.2",
+    "units": [],
+    "variables": [
+      "LS",
+      "TS",
+      "TT",
+      "w"
+    ]
+  },
+  {
+    "applicability_anchors": [
+      {
+        "appendix": null,
+        "bbox": [
+          330.037,
+          548.815,
+          420.474,
+          563.278
+        ],
+        "chapter": "16",
+        "line_id": "poppler-line:14ee3721a5cc81f8b0da",
+        "observed_text_sha256": "c46b16a324734fc70315df465d2246f932262b42e1330820272e3ba1a2aed869",
+        "pdf_page": 429,
+        "printed_page": "402"
+      }
+    ],
+    "applicability_text": null,
+    "continuation_anchors": [],
+    "equation_identifier": null,
+    "exceptions": [],
+    "external_references": [],
+    "extraction_confidence": 0.84,
+    "id": "ibc2018:equation:07a194c4d9e701da89ab4ec8",
+    "internal_references": [
+      "ibc2018:cross-reference:680ae1b36b52c28c0a875b02"
+    ],
+    "nearby_variable_definitions": [
+      {
+        "appendix": null,
+        "bbox": [
+          329.95,
+          577.277,
+          487.314,
+          590.088
+        ],
+        "chapter": "16",
+        "line_id": "poppler-line:b2c0f964f0da95ad5b72",
+        "observed_text_sha256": "a7acbdec3bf2d15f96597925523a1a5ef1f5911b129076ae63e58341cd66cc69",
+        "pdf_page": 429,
+        "printed_page": "402"
+      }
+    ],
+    "normalized_expression": null,
+    "normalized_expression_confidence": 0.0,
+    "observed_expression": "Tp = 200w ≤ T",
+    "observed_expression_sha256": "b7383e162c9c5eb7bb4bb5ba4bd8607a5ab8052c1421b9d19caba40fa8e1ca36",
+    "record_type": "equation",
+    "referenced_sections": [],
+    "referenced_tables": [],
+    "review_state": "provisional",
+    "source_anchor": {
+      "appendix": null,
+      "bbox": [
+        330.023,
+        533.665,
+        389.974,
+        548.178
+      ],
+      "chapter": "16",
+      "line_id": "poppler-line:ba5b35c09be67df79bbe",
+      "observed_text_sha256": "b7383e162c9c5eb7bb4bb5ba4bd8607a5ab8052c1421b9d19caba40fa8e1ca36",
+      "pdf_page": 429,
+      "printed_page": "402"
+    },
+    "source_section": "1616.3.2.3",
+    "units": [],
+    "variables": [
+      "T",
+      "Tp"
+    ]
+  },
+  {
+    "applicability_anchors": [],
+    "applicability_text": null,
+    "continuation_anchors": [],
+    "equation_identifier": null,
+    "exceptions": [],
+    "external_references": [],
+    "extraction_confidence": 0.84,
+    "id": "ibc2018:equation:855240a8fd69ed322ed640e0",
+    "internal_references": [],
+    "nearby_variable_definitions": [],
+    "normalized_expression": null,
+    "normalized_expression_confidence": 0.0,
+    "observed_expression": "Pa = 0.5 Pu",
+    "observed_expression_sha256": "114d4e2f1e421600a783fc83fc9b1b72f9c083d48d8c440bddfdc28e069dbd95",
+    "record_type": "equation",
+    "referenced_sections": [],
+    "referenced_tables": [],
+    "review_state": "provisional",
+    "source_anchor": {
+      "appendix": null,
+      "bbox": [
+        342.047,
+        628.288,
+        385.845,
+        642.228
+      ],
+      "chapter": "18",
+      "line_id": "poppler-line:a22bf5da6463fc72cdc8",
+      "observed_text_sha256": "114d4e2f1e421600a783fc83fc9b1b72f9c083d48d8c440bddfdc28e069dbd95",
+      "pdf_page": 475,
+      "printed_page": "448"
+    },
+    "source_section": "1810.3.3.1.9",
+    "units": [],
+    "variables": [
+      "Pa",
+      "Pu"
+    ]
+  },
+  {
+    "applicability_anchors": [],
+    "applicability_text": null,
+    "continuation_anchors": [],
+    "equation_identifier": null,
+    "exceptions": [],
+    "external_references": [],
+    "extraction_confidence": 0.84,
+    "id": "ibc2018:equation:348c2e8a3cb152a2e25f1883",
+    "internal_references": [],
+    "nearby_variable_definitions": [],
+    "normalized_expression": null,
+    "normalized_expression_confidence": 0.0,
+    "observed_expression": "ρs = 0.06(f c /fyh)[2.8 + 2.34P/f c Ag)]",
+    "observed_expression_sha256": "3a920d0fa2881c6bbd128cbb6786aad0b0db6d4e5b402a613677675424d37a04",
+    "record_type": "equation",
+    "referenced_sections": [],
+    "referenced_tables": [],
+    "review_state": "provisional",
+    "source_anchor": {
+      "appendix": null,
+      "bbox": [
+        385.87,
+        274.288,
+        533.335,
+        288.128
+      ],
+      "chapter": "18",
+      "line_id": "poppler-line:4881e0fdfcffe5009bd3",
+      "observed_text_sha256": "3a920d0fa2881c6bbd128cbb6786aad0b0db6d4e5b402a613677675424d37a04",
+      "pdf_page": 478,
+      "printed_page": "451"
+    },
+    "source_section": "1810.3.8.3",
+    "units": [],
+    "variables": [
+      "Ag",
+      "c",
+      "f",
+      "fyh"
+    ]
+  },
+  {
+    "applicability_anchors": [],
+    "applicability_text": null,
+    "continuation_anchors": [],
+    "equation_identifier": "18-5",
+    "exceptions": [],
+    "external_references": [],
+    "extraction_confidence": 0.84,
+    "id": "ibc2018:equation:7a20c9ee6e495b7519bafc94",
+    "internal_references": [
+      "ibc2018:cross-reference:f432b1bd8fe97f843b80e2e6"
+    ],
+    "nearby_variable_definitions": [
+      {
+        "appendix": null,
+        "bbox": [
+          96.013,
+          313.366,
+          302.644,
+          327.378
+        ],
+        "chapter": "18",
+        "line_id": "poppler-line:dacc377e718bc29baddf",
+        "observed_text_sha256": "df81372ab6e6a2fbd7b82bf9e9d256334278c6a09db79c95b6c3c17a8b7e3d85",
+        "pdf_page": 478,
+        "printed_page": "451"
+      }
+    ],
+    "normalized_expression": null,
+    "normalized_expression_confidence": 0.0,
+    "observed_expression": "ρs = 0.04(f c /fyh)[2.8 + 2.34P/f c Ag)](Equation 18-5)",
+    "observed_expression_sha256": "59d89fd2cd5dcaa4ac1cad3978e3367256857258a45986cb8854a7eb8af359f2",
+    "record_type": "equation",
+    "referenced_sections": [],
+    "referenced_tables": [],
+    "review_state": "provisional",
+    "source_anchor": {
+      "appendix": null,
+      "bbox": [
+        95.95,
+        280.687,
+        304.813,
+        298.357
+      ],
+      "chapter": "18",
+      "line_id": "poppler-line:d33d9ae177331b593a5a",
+      "observed_text_sha256": "59d89fd2cd5dcaa4ac1cad3978e3367256857258a45986cb8854a7eb8af359f2",
+      "pdf_page": 478,
+      "printed_page": "451"
+    },
+    "source_section": "1810.3.8.3.2",
+    "units": [],
+    "variables": [
+      "Ag",
+      "c",
+      "f",
+      "fyh"
+    ]
+  },
+  {
+    "applicability_anchors": [],
+    "applicability_text": null,
+    "continuation_anchors": [],
+    "equation_identifier": null,
+    "exceptions": [],
+    "external_references": [],
+    "extraction_confidence": 0.84,
+    "id": "ibc2018:equation:2c7007d78e36bff4adc52d86",
+    "internal_references": [],
+    "nearby_variable_definitions": [
+      {
+        "appendix": null,
+        "bbox": [
+          386.063,
+          349.399,
+          571.667,
+          363.378
+        ],
+        "chapter": "18",
+        "line_id": "poppler-line:39b4a2351616671ea82d",
+        "observed_text_sha256": "7de2b1b0166d6e7765f583ca8b05332c5b81bf26082ecc40d2cb971c59ab0332",
+        "pdf_page": 478,
+        "printed_page": "451"
+      },
+      {
+        "appendix": null,
+        "bbox": [
+          386.071,
+          399.454,
+          564.502,
+          413.278
+        ],
+        "chapter": "18",
+        "line_id": "poppler-line:ecf8914e465abaa44ff4",
+        "observed_text_sha256": "7ef88a916da3853de8acee33bd9961103a2acda384be76ea41dd1823530bf7d6",
+        "pdf_page": 478,
+        "printed_page": "451"
+      },
+      {
+        "appendix": null,
+        "bbox": [
+          386.063,
+          424.387,
+          571.602,
+          437.198
+        ],
+        "chapter": "18",
+        "line_id": "poppler-line:f88212fdddc14c91e452",
+        "observed_text_sha256": "a51a1e98f6b9d5c9ca32d02f58e7abd30cf38d8b236dbb9d2bbcfa2545b64d3a",
+        "pdf_page": 478,
+        "printed_page": "451"
+      },
+      {
+        "appendix": null,
+        "bbox": [
+          386.063,
+          460.729,
+          567.502,
+          474.378
+        ],
+        "chapter": "18",
+        "line_id": "poppler-line:39b208a21444c5c8d9eb",
+        "observed_text_sha256": "38893b7c62931343d538ee60ee83bea03e9f43f51685ab04e44269cd323e6bd6",
+        "pdf_page": 478,
+        "printed_page": "451"
+      }
+    ],
+    "normalized_expression": null,
+    "normalized_expression_confidence": 0.0,
+    "observed_expression": "ρs = 0.021",
+    "observed_expression_sha256": "9a1e65a0dcd041c21eeb7b6c996da92a03f190a68fe194235081afb1aa7d0a19",
+    "record_type": "equation",
+    "referenced_sections": [],
+    "referenced_tables": [],
+    "review_state": "provisional",
+    "source_anchor": {
+      "appendix": null,
+      "bbox": [
+        385.96,
+        320.579,
+        425.416,
+        334.228
+      ],
+      "chapter": "18",
+      "line_id": "poppler-line:c7a048579d07d9255732",
+      "observed_text_sha256": "9a1e65a0dcd041c21eeb7b6c996da92a03f190a68fe194235081afb1aa7d0a19",
+      "pdf_page": 478,
+      "printed_page": "451"
+    },
+    "source_section": "1810.3.8.3",
+    "units": [],
+    "variables": []
+  },
+  {
+    "applicability_anchors": [],
+    "applicability_text": null,
+    "continuation_anchors": [
+      {
+        "appendix": null,
+        "bbox": [
+          409.347,
+          697.506,
+          487.475,
+          711.478
+        ],
+        "chapter": "18",
+        "line_id": "poppler-line:95bdaceef9853a7ea6e3",
+        "observed_text_sha256": "94bf52a04df066f4c4e6df3beab7933ef0adcaecf878c99b26710956cc6b1917",
+        "pdf_page": 478,
+        "printed_page": "451"
+      }
+    ],
+    "equation_identifier": null,
+    "exceptions": [],
+    "external_references": [],
+    "extraction_confidence": 0.84,
+    "id": "ibc2018:equation:3fa9fe6a1a74c6d791b46e9d",
+    "internal_references": [],
+    "nearby_variable_definitions": [],
+    "normalized_expression": null,
+    "normalized_expression_confidence": 0.0,
+    "observed_expression": "Ash = 0.3s hc (f c /fyh)(Ag /Ach - 1.0)",
+    "observed_expression_sha256": "21cb0f06ea9c0421af8de4574705c37b4dbeae85a89d415b1e1693fb91c2bd91",
+    "record_type": "equation",
+    "referenced_sections": [],
+    "referenced_tables": [],
+    "review_state": "provisional",
+    "source_anchor": {
+      "appendix": null,
+      "bbox": [
+        385.966,
+        685.388,
+        520.186,
+        699.378
+      ],
+      "chapter": "18",
+      "line_id": "poppler-line:dcdba3e1fc1f617e380f",
+      "observed_text_sha256": "21cb0f06ea9c0421af8de4574705c37b4dbeae85a89d415b1e1693fb91c2bd91",
+      "pdf_page": 478,
+      "printed_page": "451"
+    },
+    "source_section": "1810.3.8.3",
+    "units": [],
+    "variables": [
+      "Ach",
+      "Ag",
+      "Ash",
+      "c",
+      "f",
+      "fyh",
+      "hc"
+    ]
+  },
+  {
+    "applicability_anchors": [],
+    "applicability_text": null,
+    "continuation_anchors": [],
+    "equation_identifier": null,
+    "exceptions": [],
+    "external_references": [],
+    "extraction_confidence": 0.84,
+    "id": "ibc2018:equation:5b5ed939993ee310ac9fea8e",
+    "internal_references": [],
+    "nearby_variable_definitions": [
+      {
+        "appendix": null,
+        "bbox": [
+          100.05,
+          130.73,
+          235.009,
+          143.82
+        ],
+        "chapter": "18",
+        "line_id": "poppler-line:75309a6f85243af0b870",
+        "observed_text_sha256": "f5a7150e7a4b57466cafeff1f28532d24a09db8311c17357cc7040497b5c49dd",
+        "pdf_page": 479,
+        "printed_page": "452"
+      },
+      {
+        "appendix": null,
+        "bbox": [
+          100.05,
+          155.73,
+          285.892,
+          168.87
+        ],
+        "chapter": "18",
+        "line_id": "poppler-line:c4211d9bc33b9dc4da3a",
+        "observed_text_sha256": "e98e29531249bc26446ae60c0a0e83d7ac76bcd2863a30b695bff7fcc9770c1a",
+        "pdf_page": 479,
+        "printed_page": "452"
+      },
+      {
+        "appendix": null,
+        "bbox": [
+          100.05,
+          191.73,
+          286.297,
+          204.073
+        ],
+        "chapter": "18",
+        "line_id": "poppler-line:4dcc5ced7fe992ca608a",
+        "observed_text_sha256": "ce677f618e3cfc31bf41c2e9e09a33ca02551c5eb7578d8d8a5c1c48bdaef0b6",
+        "pdf_page": 479,
+        "printed_page": "452"
+      },
+      {
+        "appendix": null,
+        "bbox": [
+          100.049,
+          227.73,
+          285.958,
+          240.87
+        ],
+        "chapter": "18",
+        "line_id": "poppler-line:3850df11090c7b68c1b7",
+        "observed_text_sha256": "51b847ed1debbb82877d09d8c043bb9b34dd3590bc02c8ee225790d436eeee74",
+        "pdf_page": 479,
+        "printed_page": "452"
+      }
+    ],
+    "normalized_expression": null,
+    "normalized_expression_confidence": 0.0,
+    "observed_expression": "Ash = 0.12s hc (fc /fyh) [0.5 + 1.4P/(fc Ag)]",
+    "observed_expression_sha256": "90c1559e38b298844a6d7aa3954bb7c782a9cc8c39a5eadc31b85255b1a1b0a3",
+    "record_type": "equation",
+    "referenced_sections": [],
+    "referenced_tables": [],
+    "review_state": "provisional",
+    "source_anchor": {
+      "appendix": null,
+      "bbox": [
+        99.995,
+        90.184,
+        266.784,
+        104.178
+      ],
+      "chapter": "18",
+      "line_id": "poppler-line:329ebc025ba78424a38b",
+      "observed_text_sha256": "90c1559e38b298844a6d7aa3954bb7c782a9cc8c39a5eadc31b85255b1a1b0a3",
+      "pdf_page": 479,
+      "printed_page": "452"
+    },
+    "source_section": "1810.3.8.3.3",
+    "units": [],
+    "variables": [
+      "Ag",
+      "Ash",
+      "c",
+      "f",
+      "fyh",
+      "hc"
+    ]
+  },
+  {
+    "applicability_anchors": [],
+    "applicability_text": null,
+    "continuation_anchors": [],
+    "equation_identifier": null,
+    "exceptions": [],
+    "external_references": [],
+    "extraction_confidence": 0.84,
+    "id": "ibc2018:equation:991665932e6947c0e7de6e27",
+    "internal_references": [],
+    "nearby_variable_definitions": [
+      {
+        "appendix": null,
+        "bbox": [
+          64.05,
+          670.638,
+          286.137,
+          684.478
+        ],
+        "chapter": "18",
+        "line_id": "poppler-line:280cefc6230df52e234a",
+        "observed_text_sha256": "db54343bfd6206030d569f365978f567e785c94b219e6916c2d3e177f87b859e",
+        "pdf_page": 479,
+        "printed_page": "452"
+      }
+    ],
+    "normalized_expression": null,
+    "normalized_expression_confidence": 0.0,
+    "observed_expression": "For SI:  n = 0.25 c m",
+    "observed_expression_sha256": "329c25199f690f8c90aabc04d0877e54720fdca808eb5f82a2ca8324adc9a5a5",
+    "record_type": "equation",
+    "referenced_sections": [],
+    "referenced_tables": [],
+    "review_state": "provisional",
+    "source_anchor": {
+      "appendix": null,
+      "bbox": [
+        63.987,
+        616.503,
+        175.643,
+        633.951
+      ],
+      "chapter": "18",
+      "line_id": "poppler-line:cf8a1d1592cdfffc9162",
+      "observed_text_sha256": "329c25199f690f8c90aabc04d0877e54720fdca808eb5f82a2ca8324adc9a5a5",
+      "pdf_page": 479,
+      "printed_page": "452"
+    },
+    "source_section": "1810.3.9.1",
+    "units": [],
+    "variables": [
+      "c",
+      "m",
+      "n"
+    ]
+  },
+  {
+    "applicability_anchors": [],
+    "applicability_text": null,
+    "continuation_anchors": [],
+    "equation_identifier": null,
+    "exceptions": [],
+    "external_references": [],
+    "extraction_confidence": 0.84,
+    "id": "ibc2018:equation:e3441db11e761de748ec9f3f",
+    "internal_references": [],
+    "nearby_variable_definitions": [],
+    "normalized_expression": null,
+    "normalized_expression_confidence": 0.0,
+    "observed_expression": "ld = 0.002db fs",
+    "observed_expression_sha256": "c0fd35312e41ba1a2cd4b907cd53fd31d383380d934235a2f39c79b302f1702f",
+    "record_type": "equation",
+    "referenced_sections": [],
+    "referenced_tables": [],
+    "review_state": "provisional",
+    "source_anchor": {
+      "appendix": null,
+      "bbox": [
+        72.014,
+        137.729,
+        125.298,
+        150.927
+      ],
+      "chapter": "21",
+      "line_id": "poppler-line:df83760e3e3eaaf023d2",
+      "observed_text_sha256": "c0fd35312e41ba1a2cd4b907cd53fd31d383380d934235a2f39c79b302f1702f",
+      "pdf_page": 496,
+      "printed_page": "469"
+    },
+    "source_section": "2107.2.1",
+    "units": [],
+    "variables": [
+      "fs",
+      "ld"
+    ]
+  },
+  {
+    "applicability_anchors": [],
+    "applicability_text": null,
+    "continuation_anchors": [],
+    "equation_identifier": null,
+    "exceptions": [],
+    "external_references": [],
+    "extraction_confidence": 0.84,
+    "id": "ibc2018:equation:f0afb2df139196111e3a0803",
+    "internal_references": [],
+    "nearby_variable_definitions": [
+      {
+        "appendix": null,
+        "bbox": [
+          71.951,
+          206.229,
+          259.618,
+          219.427
+        ],
+        "chapter": "21",
+        "line_id": "poppler-line:74a5647c89f06d38deff",
+        "observed_text_sha256": "6390d32c61054e7895cf24da412aeda5c8ca2d14c0783f3442b94e8f20919a52",
+        "pdf_page": 496,
+        "printed_page": "469"
+      },
+      {
+        "appendix": null,
+        "bbox": [
+          72.037,
+          220.279,
+          305.866,
+          233.477
+        ],
+        "chapter": "21",
+        "line_id": "poppler-line:99fdc1f63a81321b69b4",
+        "observed_text_sha256": "f3b604c6daac079f9f7bca415928dbefd2c1d49d961abc0b12c07556916cd724",
+        "pdf_page": 496,
+        "printed_page": "469"
+      }
+    ],
+    "normalized_expression": null,
+    "normalized_expression_confidence": 0.0,
+    "observed_expression": "For SI: ld = 0.29db fs",
+    "observed_expression_sha256": "ff508242fc05cd8039da5c201f8244f6edb273ad0343e9761b64d6e9f75792bc",
+    "record_type": "equation",
+    "referenced_sections": [],
+    "referenced_tables": [],
+    "review_state": "provisional",
+    "source_anchor": {
+      "appendix": null,
+      "bbox": [
+        72.049,
+        152.929,
+        150.848,
+        166.177
+      ],
+      "chapter": "21",
+      "line_id": "poppler-line:79f3a48218c640ce2c43",
+      "observed_text_sha256": "ff508242fc05cd8039da5c201f8244f6edb273ad0343e9761b64d6e9f75792bc",
+      "pdf_page": 496,
+      "printed_page": "469"
+    },
+    "source_section": "2107.2.1",
+    "units": [],
+    "variables": [
+      "fs",
+      "ld"
+    ]
+  },
+  {
+    "applicability_anchors": [],
+    "applicability_text": null,
+    "continuation_anchors": [],
+    "equation_identifier": null,
+    "exceptions": [],
+    "external_references": [],
+    "extraction_confidence": 0.84,
+    "id": "ibc2018:equation:f9d14c00b8741b565e0e0372",
+    "internal_references": [],
+    "nearby_variable_definitions": [
+      {
+        "appendix": null,
+        "bbox": [
+          76.139,
+          182.109,
+          285.799,
+          195.978
+        ],
+        "chapter": "21",
+        "line_id": "poppler-line:094dbbb9c28847d3498d",
+        "observed_text_sha256": "779ca111e4952c9fb47dca08ee5e2e863c5e01a92b38a5963ce1c5328b4470e9",
+        "pdf_page": 497,
+        "printed_page": "470"
+      },
+      {
+        "appendix": null,
+        "bbox": [
+          76.083,
+          207.923,
+          224.222,
+          221.878
+        ],
+        "chapter": "21",
+        "line_id": "poppler-line:1e486d1d9d330954df5f",
+        "observed_text_sha256": "5ed0191902ff5f149c2e3c19838fb2f7f9edd4b719af3924684c6227c0ceac0f",
+        "pdf_page": 497,
+        "printed_page": "470"
+      },
+      {
+        "appendix": null,
+        "bbox": [
+          76.138,
+          222.823,
+          264.217,
+          236.628
+        ],
+        "chapter": "21",
+        "line_id": "poppler-line:6ee4ab95c7d2a0a08db9",
+        "observed_text_sha256": "c62aace4146b4231964f4bc87e3de651dce3ef2a77869c73737f82d37737cddd",
+        "pdf_page": 497,
+        "printed_page": "470"
+      },
+      {
+        "appendix": null,
+        "bbox": [
+          76.139,
+          237.562,
+          286.002,
+          251.528
+        ],
+        "chapter": "21",
+        "line_id": "poppler-line:02e13ab36a6c4a97dc67",
+        "observed_text_sha256": "3c837e96c30357d44b5c4f4abe21ed1548bd89c9c6378d091ea6d59a65eec54a",
+        "pdf_page": 497,
+        "printed_page": "470"
+      },
+      {
+        "appendix": null,
+        "bbox": [
+          76.084,
+          263.484,
+          257.493,
+          276.295
+        ],
+        "chapter": "21",
+        "line_id": "poppler-line:931e1b40fd97c3d51e63",
+        "observed_text_sha256": "bd844334ca29aa2f8fb288ec968e3ab992c2648acd6fe0102766cc4e28a7e42d",
+        "pdf_page": 497,
+        "printed_page": "470"
+      }
+    ],
+    "normalized_expression": null,
+    "normalized_expression_confidence": 0.0,
+    "observed_expression": "fr = 3 PLs /2 Sw (St2)",
+    "observed_expression_sha256": "ffa7c98db60debe403f28b4875dfaec0b4440b273097e40a9efba6fbe2b8552c",
+    "record_type": "equation",
+    "referenced_sections": [],
+    "referenced_tables": [],
+    "review_state": "provisional",
+    "source_anchor": {
+      "appendix": null,
+      "bbox": [
+        76.05,
+        151.166,
+        154.849,
+        165.228
+      ],
+      "chapter": "21",
+      "line_id": "poppler-line:5332187d51c4e3c1a459",
+      "observed_text_sha256": "ffa7c98db60debe403f28b4875dfaec0b4440b273097e40a9efba6fbe2b8552c",
+      "pdf_page": 497,
+      "printed_page": "470"
+    },
+    "source_section": "2109.2.1.2.4",
+    "units": [],
+    "variables": [
+      "PLs",
+      "St2",
+      "Sw",
+      "fr"
+    ]
+  },
+  {
+    "applicability_anchors": [],
+    "applicability_text": null,
+    "continuation_anchors": [],
+    "equation_identifier": null,
+    "exceptions": [],
+    "external_references": [],
+    "extraction_confidence": 0.84,
+    "id": "ibc2018:equation:5afba855eb7b7b557b280b77",
+    "internal_references": [],
+    "nearby_variable_definitions": [],
+    "normalized_expression": null,
+    "normalized_expression_confidence": 0.0,
+    "observed_expression": "0.6Fgw ≤ Fga",
+    "observed_expression_sha256": "5aac7fb577a1ea47ab5eb7289b921ea3e37b03d898a36d3e2593a499023da19e",
+    "record_type": "equation",
+    "referenced_sections": [],
+    "referenced_tables": [],
+    "review_state": "provisional",
+    "source_anchor": {
+      "appendix": null,
+      "bbox": [
+        40.098,
+        102.53,
+        87.51,
+        116.102
+      ],
+      "chapter": "24",
+      "line_id": "poppler-line:d008546bc34588130867",
+      "observed_text_sha256": "5aac7fb577a1ea47ab5eb7289b921ea3e37b03d898a36d3e2593a499023da19e",
+      "pdf_page": 583,
+      "printed_page": "556"
+    },
+    "source_section": "2403.2",
+    "units": [],
+    "variables": [
+      "Fga"
+    ]
+  },
+  {
+    "applicability_anchors": [],
+    "applicability_text": null,
+    "continuation_anchors": [],
+    "equation_identifier": null,
+    "exceptions": [],
+    "external_references": [
+      "ibc2018:citation:c6d4ae8d37469f3dd04602a2"
+    ],
+    "extraction_confidence": 0.84,
+    "id": "ibc2018:equation:23523452806fed4002c982ed",
+    "internal_references": [],
+    "nearby_variable_definitions": [
+      {
+        "appendix": null,
+        "bbox": [
+          318.043,
+          142.86,
+          551.904,
+          156.303
+        ],
+        "chapter": "24",
+        "line_id": "poppler-line:e920355212a811bf7583",
+        "observed_text_sha256": "43ac152bf2855d3d00fb4e04495373445eb25dd68967072de2a7e044e1528584",
+        "pdf_page": 583,
+        "printed_page": "556"
+      },
+      {
+        "appendix": null,
+        "bbox": [
+          318.034,
+          179.234,
+          551.973,
+          192.753
+        ],
+        "chapter": "24",
+        "line_id": "poppler-line:2a6129468b4d4da44b9c",
+        "observed_text_sha256": "d01dbcabdc2043678fdeddd48994dcaef0e2b1d8a4e347150c9c9cf18531d87a",
+        "pdf_page": 583,
+        "printed_page": "556"
+      }
+    ],
+    "normalized_expression": null,
+    "normalized_expression_confidence": 0.0,
+    "observed_expression": "0.6Fgw < 0.5 Fge",
+    "observed_expression_sha256": "394b26d9268d25c285356f9c02c8a25ffd6feca24f73a1628a3672ce769f9a07",
+    "record_type": "equation",
+    "referenced_sections": [],
+    "referenced_tables": [],
+    "review_state": "provisional",
+    "source_anchor": {
+      "appendix": null,
+      "bbox": [
+        317.971,
+        112.98,
+        380.936,
+        126.403
+      ],
+      "chapter": "24",
+      "line_id": "poppler-line:3955d40a9524c241d78d",
+      "observed_text_sha256": "394b26d9268d25c285356f9c02c8a25ffd6feca24f73a1628a3672ce769f9a07",
+      "pdf_page": 583,
+      "printed_page": "556"
+    },
+    "source_section": "2404.1",
+    "units": [],
+    "variables": [
+      "Fge"
+    ]
+  },
+  {
+    "applicability_anchors": [],
+    "applicability_text": null,
+    "continuation_anchors": [],
+    "equation_identifier": null,
+    "exceptions": [],
+    "external_references": [],
+    "extraction_confidence": 0.84,
+    "id": "ibc2018:equation:96d3b8d0626bb198cec485c4",
+    "internal_references": [],
+    "nearby_variable_definitions": [],
+    "normalized_expression": null,
+    "normalized_expression_confidence": 0.0,
+    "observed_expression": "Fg = 0.6Wo – D",
+    "observed_expression_sha256": "72dc1e4c7b82932614513a865943bf52d4a4499c024dc6699605a2eb9cd93233",
+    "record_type": "equation",
+    "referenced_sections": [],
+    "referenced_tables": [],
+    "review_state": "provisional",
+    "source_anchor": {
+      "appendix": null,
+      "bbox": [
+        40.09,
+        242.566,
+        101.826,
+        256.152
+      ],
+      "chapter": "24",
+      "line_id": "poppler-line:a3968f5b1eed635f536c",
+      "observed_text_sha256": "72dc1e4c7b82932614513a865943bf52d4a4499c024dc6699605a2eb9cd93233",
+      "pdf_page": 583,
+      "printed_page": "556"
+    },
+    "source_section": "2404.2",
+    "units": [],
+    "variables": [
+      "D",
+      "Fg"
+    ]
+  },
+  {
+    "applicability_anchors": [],
+    "applicability_text": null,
+    "continuation_anchors": [],
+    "equation_identifier": null,
+    "exceptions": [],
+    "external_references": [],
+    "extraction_confidence": 0.84,
+    "id": "ibc2018:equation:01758bedd7bccf1d89f98c33",
+    "internal_references": [],
+    "nearby_variable_definitions": [],
+    "normalized_expression": null,
+    "normalized_expression_confidence": 0.0,
+    "observed_expression": "Fg = 0.6Wi + D + 0.5 S",
+    "observed_expression_sha256": "1727be66044b1f52d2491da042e46f7a22eb5d1f4cd03a8ffcf9d0eed62834ba",
+    "record_type": "equation",
+    "referenced_sections": [],
+    "referenced_tables": [],
+    "review_state": "provisional",
+    "source_anchor": {
+      "appendix": null,
+      "bbox": [
+        40.101,
+        258.53,
+        134.318,
+        272.102
+      ],
+      "chapter": "24",
+      "line_id": "poppler-line:06b5dadb3f896d8a802d",
+      "observed_text_sha256": "1727be66044b1f52d2491da042e46f7a22eb5d1f4cd03a8ffcf9d0eed62834ba",
+      "pdf_page": 583,
+      "printed_page": "556"
+    },
+    "source_section": "2404.2",
+    "units": [],
+    "variables": [
+      "D",
+      "Fg",
+      "S"
+    ]
+  },
+  {
+    "applicability_anchors": [],
+    "applicability_text": null,
+    "continuation_anchors": [],
+    "equation_identifier": null,
+    "exceptions": [],
+    "external_references": [],
+    "extraction_confidence": 0.84,
+    "id": "ibc2018:equation:303dec89db9535b5693341a4",
+    "internal_references": [],
+    "nearby_variable_definitions": [],
+    "normalized_expression": null,
+    "normalized_expression_confidence": 0.0,
+    "observed_expression": "Fg = 0.3 Wi + D + S",
+    "observed_expression_sha256": "75be2304d9b68d7ee0f43fc8adb091f8144c16ea8fc7f9f88616637f9e09441f",
+    "record_type": "equation",
+    "referenced_sections": [],
+    "referenced_tables": [],
+    "review_state": "provisional",
+    "source_anchor": {
+      "appendix": null,
+      "bbox": [
+        40.135,
+        274.63,
+        121.722,
+        288.052
+      ],
+      "chapter": "24",
+      "line_id": "poppler-line:21b0c018fe89f9e0afef",
+      "observed_text_sha256": "75be2304d9b68d7ee0f43fc8adb091f8144c16ea8fc7f9f88616637f9e09441f",
+      "pdf_page": 583,
+      "printed_page": "556"
+    },
+    "source_section": "2404.2",
+    "units": [],
+    "variables": [
+      "D",
+      "Fg",
+      "S",
+      "Wi"
+    ]
+  },
+  {
+    "applicability_anchors": [],
+    "applicability_text": null,
+    "continuation_anchors": [],
+    "equation_identifier": null,
+    "exceptions": [],
+    "external_references": [],
+    "extraction_confidence": 0.84,
+    "id": "ibc2018:equation:76be2263b505dab9e7531a91",
+    "internal_references": [],
+    "nearby_variable_definitions": [],
+    "normalized_expression": null,
+    "normalized_expression_confidence": 0.0,
+    "observed_expression": "Fg < 0.5 Fge",
+    "observed_expression_sha256": "50eed55cca9a56af7b5265fcedf3888daefce32c58dbfe9a0edb74bd66da53e0",
+    "record_type": "equation",
+    "referenced_sections": [],
+    "referenced_tables": [],
+    "review_state": "provisional",
+    "source_anchor": {
+      "appendix": null,
+      "bbox": [
+        318.035,
+        289.232,
+        364.486,
+        302.803
+      ],
+      "chapter": "24",
+      "line_id": "poppler-line:a7757c8ea86e7f31d1af",
+      "observed_text_sha256": "50eed55cca9a56af7b5265fcedf3888daefce32c58dbfe9a0edb74bd66da53e0",
+      "pdf_page": 583,
+      "printed_page": "556"
+    },
+    "source_section": "2404.3.2",
+    "units": [],
+    "variables": [
+      "Fg",
+      "Fge"
+    ]
+  },
+  {
+    "applicability_anchors": [],
+    "applicability_text": null,
+    "continuation_anchors": [],
+    "equation_identifier": null,
+    "exceptions": [],
+    "external_references": [
+      "ibc2018:citation:2fda7252b2088b7f4804c294"
+    ],
+    "extraction_confidence": 0.84,
+    "id": "ibc2018:equation:173d50ff67450ed52b97f862",
+    "internal_references": [],
+    "nearby_variable_definitions": [
+      {
+        "appendix": null,
+        "bbox": [
+          318.043,
+          347.692,
+          551.71,
+          361.252
+        ],
+        "chapter": "24",
+        "line_id": "poppler-line:411048b464341259d8e0",
+        "observed_text_sha256": "d8c91e9c71f91c5466506416ecc05d20b4d853fe9c0a4d1c1bf75eb4d9e17d08",
+        "pdf_page": 583,
+        "printed_page": "556"
+      },
+      {
+        "appendix": null,
+        "bbox": [
+          318.035,
+          373.127,
+          550.388,
+          386.552
+        ],
+        "chapter": "24",
+        "line_id": "poppler-line:ac34bfd438544bc0e86b",
+        "observed_text_sha256": "86e76b78e1421886019a2fe6efa006276d07191d9ff580e80ca89180bc9254a9",
+        "pdf_page": 583,
+        "printed_page": "556"
+      }
+    ],
+    "normalized_expression": null,
+    "normalized_expression_confidence": 0.0,
+    "observed_expression": "Fg < 0.3 Fge",
+    "observed_expression_sha256": "b4ecb12f5fab0a2514fc6241010418db03a05a7f44e3a16bbbb61513ecec59fa",
+    "record_type": "equation",
+    "referenced_sections": [],
+    "referenced_tables": [],
+    "review_state": "provisional",
+    "source_anchor": {
+      "appendix": null,
+      "bbox": [
+        318.014,
+        319.03,
+        364.486,
+        332.553
+      ],
+      "chapter": "24",
+      "line_id": "poppler-line:66a32b105f4b9fb99192",
+      "observed_text_sha256": "b4ecb12f5fab0a2514fc6241010418db03a05a7f44e3a16bbbb61513ecec59fa",
+      "pdf_page": 583,
+      "printed_page": "556"
+    },
+    "source_section": "2404.3.2",
+    "units": [],
+    "variables": [
+      "Fg",
+      "Fge"
+    ]
+  },
+  {
+    "applicability_anchors": [],
+    "applicability_text": null,
+    "continuation_anchors": [],
+    "equation_identifier": null,
+    "exceptions": [],
+    "external_references": [
+      "ibc2018:citation:a161e936955a4beb708c416f"
+    ],
+    "extraction_confidence": 0.84,
+    "id": "ibc2018:equation:bf000805234e5a174ddf3ed8",
+    "internal_references": [],
+    "nearby_variable_definitions": [
+      {
+        "appendix": null,
+        "bbox": [
+          318.042,
+          487.759,
+          551.904,
+          501.152
+        ],
+        "chapter": "24",
+        "line_id": "poppler-line:e65b4cf6b6bf40957855",
+        "observed_text_sha256": "43ac152bf2855d3d00fb4e04495373445eb25dd68967072de2a7e044e1528584",
+        "pdf_page": 583,
+        "printed_page": "556"
+      },
+      {
+        "appendix": null,
+        "bbox": [
+          318.033,
+          524.083,
+          551.327,
+          537.652
+        ],
+        "chapter": "24",
+        "line_id": "poppler-line:68b2e7b29c4ca5934f93",
+        "observed_text_sha256": "86e76b78e1421886019a2fe6efa006276d07191d9ff580e80ca89180bc9254a9",
+        "pdf_page": 583,
+        "printed_page": "556"
+      }
+    ],
+    "normalized_expression": null,
+    "normalized_expression_confidence": 0.0,
+    "observed_expression": "Fgw < 1.0 Fge",
+    "observed_expression_sha256": "2fdda10765ef3ca08679bbceaf42fdfe5207fcbf35cae3a60f9e9779db695346",
+    "record_type": "equation",
+    "referenced_sections": [],
+    "referenced_tables": [],
+    "review_state": "provisional",
+    "source_anchor": {
+      "appendix": null,
+      "bbox": [
+        318.034,
+        457.844,
+        368.435,
+        471.302
+      ],
+      "chapter": "24",
+      "line_id": "poppler-line:b7be0338aa1c5bcfd520",
+      "observed_text_sha256": "2fdda10765ef3ca08679bbceaf42fdfe5207fcbf35cae3a60f9e9779db695346",
+      "pdf_page": 583,
+      "printed_page": "556"
+    },
+    "source_section": "2404.3.3",
+    "units": [],
+    "variables": [
+      "Fge",
+      "Fgw"
+    ]
+  },
+  {
+    "applicability_anchors": [],
+    "applicability_text": null,
+    "continuation_anchors": [],
+    "equation_identifier": null,
+    "exceptions": [],
+    "external_references": [],
+    "extraction_confidence": 0.84,
+    "id": "ibc2018:equation:e851d091afba42888891a499",
+    "internal_references": [],
+    "nearby_variable_definitions": [
+      {
+        "appendix": null,
+        "bbox": [
+          40.09,
+          606.575,
+          285.509,
+          620.102
+        ],
+        "chapter": "24",
+        "line_id": "poppler-line:1483ad8c22b643a3821a",
+        "observed_text_sha256": "888e20a442aec7588553840c861eafa031c180ee57253436ef107cc7a3f227e1",
+        "pdf_page": 583,
+        "printed_page": "556"
+      },
+      {
+        "appendix": null,
+        "bbox": [
+          40.091,
+          631.651,
+          285.556,
+          645.152
+        ],
+        "chapter": "24",
+        "line_id": "poppler-line:7e1d9815673532dd718a",
+        "observed_text_sha256": "d1db0d1eec5d059c31878c73387d75b11fc00bcacf3c66ec0a115cd8ea79e07d",
+        "pdf_page": 583,
+        "printed_page": "556"
+      }
+    ],
+    "normalized_expression": null,
+    "normalized_expression_confidence": 0.0,
+    "observed_expression": "Fg ≤ Fga",
+    "observed_expression_sha256": "74508b643479acb6f04db99e982c2879c784f785787b679d9832f2f37df28396",
+    "record_type": "equation",
+    "referenced_sections": [],
+    "referenced_tables": [],
+    "review_state": "provisional",
+    "source_anchor": {
+      "appendix": null,
+      "bbox": [
+        40.091,
+        575.665,
+        73.111,
+        590.102
+      ],
+      "chapter": "24",
+      "line_id": "poppler-line:fbe2574b2e64f7d258bc",
+      "observed_text_sha256": "74508b643479acb6f04db99e982c2879c784f785787b679d9832f2f37df28396",
+      "pdf_page": 583,
+      "printed_page": "556"
+    },
+    "source_section": "2404.2",
+    "units": [],
+    "variables": [
+      "Fg",
+      "Fga"
+    ]
+  },
+  {
+    "applicability_anchors": [],
+    "applicability_text": null,
+    "continuation_anchors": [],
+    "equation_identifier": null,
+    "exceptions": [],
+    "external_references": [],
+    "extraction_confidence": 0.84,
+    "id": "ibc2018:equation:5597a5e49a5ab6a364ca70e9",
+    "internal_references": [],
+    "nearby_variable_definitions": [],
+    "normalized_expression": null,
+    "normalized_expression_confidence": 0.0,
+    "observed_expression": "Fg < 1.0 Fge",
+    "observed_expression_sha256": "a104c0f6648ad1d8632691816734ffa93605c22ce3f13a4db424c520e0108514",
+    "record_type": "equation",
+    "referenced_sections": [],
+    "referenced_tables": [],
+    "review_state": "provisional",
+    "source_anchor": {
+      "appendix": null,
+      "bbox": [
+        318.033,
+        656.209,
+        364.485,
+        669.652
+      ],
+      "chapter": "24",
+      "line_id": "poppler-line:379b983dbeb656d38e69",
+      "observed_text_sha256": "a104c0f6648ad1d8632691816734ffa93605c22ce3f13a4db424c520e0108514",
+      "pdf_page": 583,
+      "printed_page": "556"
+    },
+    "source_section": "2404.3.4",
+    "units": [],
+    "variables": [
+      "Fg",
+      "Fge"
+    ]
+  },
+  {
+    "applicability_anchors": [],
+    "applicability_text": null,
+    "continuation_anchors": [],
+    "equation_identifier": null,
+    "exceptions": [],
+    "external_references": [],
+    "extraction_confidence": 0.84,
+    "id": "ibc2018:equation:05f04b504e39810f04abcb9b",
+    "internal_references": [],
+    "nearby_variable_definitions": [
+      {
+        "appendix": null,
+        "bbox": [
+          318.028,
+          714.542,
+          551.709,
+          728.102
+        ],
+        "chapter": "24",
+        "line_id": "poppler-line:2281fb981df1ac95d813",
+        "observed_text_sha256": "d8c91e9c71f91c5466506416ecc05d20b4d853fe9c0a4d1c1bf75eb4d9e17d08",
+        "pdf_page": 583,
+        "printed_page": "556"
+      }
+    ],
+    "normalized_expression": null,
+    "normalized_expression_confidence": 0.0,
+    "observed_expression": "Fg < 0.6Fge",
+    "observed_expression_sha256": "9ef85054c38ebe7b7cb3e9dbed484ee0bcdee6c031d098b3238aae100f09f5d6",
+    "record_type": "equation",
+    "referenced_sections": [],
+    "referenced_tables": [],
+    "review_state": "provisional",
+    "source_anchor": {
+      "appendix": null,
+      "bbox": [
+        318.028,
+        685.879,
+        361.935,
+        699.402
+      ],
+      "chapter": "24",
+      "line_id": "poppler-line:49490e7971af54b9ae2e",
+      "observed_text_sha256": "9ef85054c38ebe7b7cb3e9dbed484ee0bcdee6c031d098b3238aae100f09f5d6",
+      "pdf_page": 583,
+      "printed_page": "556"
+    },
+    "source_section": "2404.3.4",
+    "units": [],
+    "variables": [
+      "Fg"
+    ]
+  },
+  {
+    "applicability_anchors": [],
+    "applicability_text": null,
+    "continuation_anchors": [],
+    "equation_identifier": null,
+    "exceptions": [],
+    "external_references": [
+      "ibc2018:citation:207bd40725c8dcd4f3f3b2be"
+    ],
+    "extraction_confidence": 0.84,
+    "id": "ibc2018:equation:17cb8a979728fd841bd52525",
+    "internal_references": [],
+    "nearby_variable_definitions": [
+      {
+        "appendix": null,
+        "bbox": [
+          72.046,
+          232.88,
+          305.906,
+          249.402
+        ],
+        "chapter": "24",
+        "line_id": "poppler-line:d9460c6b0b33f3576c94",
+        "observed_text_sha256": "b009fdf44ab8b43f8bd739cdda5f3ce88a442271abf3241db5ccde1ac3197ac5",
+        "pdf_page": 584,
+        "printed_page": "557"
+      },
+      {
+        "appendix": null,
+        "bbox": [
+          72.036,
+          269.58,
+          305.441,
+          286.152
+        ],
+        "chapter": "24",
+        "line_id": "poppler-line:488a83f2da1c5b0c302a",
+        "observed_text_sha256": "081570a58311105753beb22411f16347aa0263364f2adb9a5a93161a1ec993b1",
+        "pdf_page": 584,
+        "printed_page": "557"
+      }
+    ],
+    "normalized_expression": null,
+    "normalized_expression_confidence": 0.0,
+    "observed_expression": "0.6Fgw < 0.5 Fge",
+    "observed_expression_sha256": "394b26d9268d25c285356f9c02c8a25ffd6feca24f73a1628a3672ce769f9a07",
+    "record_type": "equation",
+    "referenced_sections": [],
+    "referenced_tables": [],
+    "review_state": "provisional",
+    "source_anchor": {
+      "appendix": null,
+      "bbox": [
+        72.036,
+        202.12,
+        134.787,
+        218.702
+      ],
+      "chapter": "24",
+      "line_id": "poppler-line:e3a1a69428dde326eae3",
+      "observed_text_sha256": "394b26d9268d25c285356f9c02c8a25ffd6feca24f73a1628a3672ce769f9a07",
+      "pdf_page": 584,
+      "printed_page": "557"
+    },
+    "source_section": "2404.3.5",
+    "units": [],
+    "variables": [
+      "Fge"
+    ]
+  },
+  {
+    "applicability_anchors": [],
+    "applicability_text": null,
+    "continuation_anchors": [],
+    "equation_identifier": null,
+    "exceptions": [],
+    "external_references": [],
+    "extraction_confidence": 0.84,
+    "id": "ibc2018:equation:a6dc93e787705c5309a68e2b",
+    "internal_references": [],
+    "nearby_variable_definitions": [],
+    "normalized_expression": null,
+    "normalized_expression_confidence": 0.0,
+    "observed_expression": "Fgo= 0.",
+    "observed_expression_sha256": "0d1907a7cc7dcc9c9bc4c5a5b2fe4dfaeeec3e5618f7960284c179a6fa6d81be",
+    "record_type": "equation",
+    "referenced_sections": [],
+    "referenced_tables": [],
+    "review_state": "provisional",
+    "source_anchor": {
+      "appendix": null,
+      "bbox": [
+        318.036,
+        325.63,
+        348.856,
+        342.078
+      ],
+      "chapter": "24",
+      "line_id": "poppler-line:85bcb2370953a9d99fe6",
+      "observed_text_sha256": "0d1907a7cc7dcc9c9bc4c5a5b2fe4dfaeeec3e5618f7960284c179a6fa6d81be",
+      "pdf_page": 585,
+      "printed_page": "558"
+    },
+    "source_section": "2405.4",
+    "units": [],
+    "variables": [
+      "Fgo"
+    ]
+  },
+  {
+    "applicability_anchors": [],
+    "applicability_text": null,
+    "continuation_anchors": [],
+    "equation_identifier": null,
+    "exceptions": [],
+    "external_references": [],
+    "extraction_confidence": 0.84,
+    "id": "ibc2018:equation:3984d6cd64dbb5b816c025b4",
+    "internal_references": [],
+    "nearby_variable_definitions": [
+      {
+        "appendix": null,
+        "bbox": [
+          79.151,
+          500.73,
+          286.027,
+          517.179
+        ],
+        "chapter": "24",
+        "line_id": "poppler-line:b5d33b889c35d89b50cb",
+        "observed_text_sha256": "ae4d48d535b42ef1b8d0fc343cd3628d697d160f457a8988b08ec451a6ca94ff",
+        "pdf_page": 585,
+        "printed_page": "558"
+      },
+      {
+        "appendix": null,
+        "bbox": [
+          79.15,
+          526.736,
+          252.931,
+          543.185
+        ],
+        "chapter": "24",
+        "line_id": "poppler-line:3b72112555ed9c15acaa",
+        "observed_text_sha256": "893ed8d3fcf2baf6b68ffb507601b131dbfd6af0ee64e6e724f8cbb237e5896a",
+        "pdf_page": 585,
+        "printed_page": "558"
+      }
+    ],
+    "normalized_expression": null,
+    "normalized_expression_confidence": 0.0,
+    "observed_expression": "Fg ≤ PG",
+    "observed_expression_sha256": "53cc37e40bafc86f52314dc573728c4da242a508336694cbb13941ae30495dd6",
+    "record_type": "equation",
+    "referenced_sections": [],
+    "referenced_tables": [],
+    "review_state": "provisional",
+    "source_anchor": {
+      "appendix": null,
+      "bbox": [
+        52.058,
+        473.484,
+        84.56,
+        487.152
+      ],
+      "chapter": "24",
+      "line_id": "poppler-line:94f9eb64907a0e90e7a5",
+      "observed_text_sha256": "53cc37e40bafc86f52314dc573728c4da242a508336694cbb13941ae30495dd6",
+      "pdf_page": 585,
+      "printed_page": "558"
+    },
+    "source_section": "2405.5.1",
+    "units": [],
+    "variables": [
+      "Fg",
+      "PG"
+    ]
+  },
+  {
+    "applicability_anchors": [],
+    "applicability_text": null,
+    "continuation_anchors": [],
+    "equation_identifier": null,
+    "exceptions": [],
+    "external_references": [],
+    "extraction_confidence": 0.84,
+    "id": "ibc2018:equation:59c6e5b7ec097aeed3a98973",
+    "internal_references": [],
+    "nearby_variable_definitions": [],
+    "normalized_expression": null,
+    "normalized_expression_confidence": 0.0,
+    "observed_expression": "Fgi ≤ PGPos",
+    "observed_expression_sha256": "19300436aaaf9ee94c36f17f8c18bd1330b8c358aeaa48e2380ef6ffe989e291",
+    "record_type": "equation",
+    "referenced_sections": [],
+    "referenced_tables": [],
+    "review_state": "provisional",
+    "source_anchor": {
+      "appendix": null,
+      "bbox": [
+        52.093,
+        602.72,
+        97.822,
+        616.252
+      ],
+      "chapter": "24",
+      "line_id": "poppler-line:cdf9d114dd73d10696f8",
+      "observed_text_sha256": "19300436aaaf9ee94c36f17f8c18bd1330b8c358aeaa48e2380ef6ffe989e291",
+      "pdf_page": 585,
+      "printed_page": "558"
+    },
+    "source_section": "2405.5.2",
+    "units": [],
+    "variables": [
+      "Fgi",
+      "PGPos"
+    ]
+  },
+  {
+    "applicability_anchors": [],
+    "applicability_text": null,
+    "continuation_anchors": [],
+    "equation_identifier": null,
+    "exceptions": [],
+    "external_references": [],
+    "extraction_confidence": 0.84,
+    "id": "ibc2018:equation:1fad28378703d95aa9404c03",
+    "internal_references": [],
+    "nearby_variable_definitions": [
+      {
+        "appendix": null,
+        "bbox": [
+          52.092,
+          646.03,
+          286.025,
+          662.478
+        ],
+        "chapter": "24",
+        "line_id": "poppler-line:fc228650557f651f44ed",
+        "observed_text_sha256": "3e4bb63c3c523d195cee067dc115ecc7f9483c0e41c2808d801802180b2a3a58",
+        "pdf_page": 585,
+        "printed_page": "558"
+      },
+      {
+        "appendix": null,
+        "bbox": [
+          52.094,
+          671.93,
+          286.025,
+          688.502
+        ],
+        "chapter": "24",
+        "line_id": "poppler-line:3a8b79c6df7fc0d636e6",
+        "observed_text_sha256": "341f241cbc318559ce673b6ddd46373a2f998ccc6d2daf0ebbcebb75bcad9826",
+        "pdf_page": 585,
+        "printed_page": "558"
+      }
+    ],
+    "normalized_expression": null,
+    "normalized_expression_confidence": 0.0,
+    "observed_expression": "Fgo ≤ PGNeg",
+    "observed_expression_sha256": "ad141a4beabbc07e5423f677cf679664a0b19f6253a43388bd1e2855a702f62f",
+    "record_type": "equation",
+    "referenced_sections": [],
+    "referenced_tables": [],
+    "review_state": "provisional",
+    "source_anchor": {
+      "appendix": null,
+      "bbox": [
+        52.092,
+        618.776,
+        99.972,
+        632.352
+      ],
+      "chapter": "24",
+      "line_id": "poppler-line:6e471e778ae1993e1617",
+      "observed_text_sha256": "ad141a4beabbc07e5423f677cf679664a0b19f6253a43388bd1e2855a702f62f",
+      "pdf_page": 585,
+      "printed_page": "558"
+    },
+    "source_section": "2405.5.2",
+    "units": [],
+    "variables": [
+      "Fgo",
+      "PGNeg"
+    ]
+  }
+]

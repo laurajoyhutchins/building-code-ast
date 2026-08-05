@@ -1,0 +1,42 @@
+{
+  "evidence_category_counts": {
+    "external_reference": 1458,
+    "incidental_layout": 12,
+    "internal_reference": 4615,
+    "normalized_structure": 2328,
+    "primary_structure": 363,
+    "relationship_or_routine_record": 2702,
+    "semantic_interpretation": 27,
+    "vector_graphic_candidate": 322,
+    "vector_tabular_candidate": 247
+  },
+  "policy": "deterministic risk ordering; review state is synchronized from current source-safe inventories",
+  "priority_counts": {
+    "P0": 349,
+    "P1": 1083,
+    "P2": 2691,
+    "P3": 7951
+  },
+  "record_count": 12074,
+  "record_type_counts": {
+    "attachment_relationship": 2702,
+    "chapter35_referenced_standard_entry": 555,
+    "definition": 12,
+    "detected_structure": 437,
+    "equation": 90,
+    "exception_block": 769,
+    "external_citation_occurrence": 1458,
+    "external_document_family": 555,
+    "figure": 56,
+    "incidental_layout": 12,
+    "internal_cross_reference": 4615,
+    "semantic_pilot_record": 27,
+    "table": 215,
+    "uncaptioned_technical_graphic_candidate": 2,
+    "vector_graphic_region_detection": 569
+  },
+  "review_state_counts": {
+    "disputed": 622,
+    "provisional": 11452
+  }
+}

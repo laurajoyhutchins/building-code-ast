@@ -1,0 +1,129 @@
+{
+  "$id": "https://example.invalid/building-code-ast/ibc-2018-source-manifest.schema.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "properties": {
+    "access_restrictions": {
+      "type": "object"
+    },
+    "acquisition_provenance": {
+      "type": "object"
+    },
+    "code_family": {
+      "const": "IBC"
+    },
+    "date_of_first_publication": {
+      "type": "string"
+    },
+    "edition": {
+      "const": "2018"
+    },
+    "file_size_bytes": {
+      "const": 32608171
+    },
+    "first_printing": {
+      "type": "string"
+    },
+    "identity_assurance": {
+      "additionalProperties": false,
+      "properties": {
+        "exact_bytes": {
+          "const": "verified"
+        },
+        "official_copy_equivalence": {
+          "enum": [
+            "unverified",
+            "verified",
+            "different"
+          ]
+        },
+        "publication_identity_from_artifact": {
+          "enum": [
+            "verified",
+            "provisional"
+          ]
+        },
+        "source_copy_markings": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "exact_bytes",
+        "publication_identity_from_artifact",
+        "official_copy_equivalence",
+        "source_copy_markings"
+      ],
+      "type": "object"
+    },
+    "ingestion_timestamp": {
+      "type": "string"
+    },
+    "parser": {
+      "type": "object"
+    },
+    "pdf_metadata": {
+      "type": "object"
+    },
+    "pdf_page_count": {
+      "const": 761
+    },
+    "printed_page_mapping": {
+      "type": "object"
+    },
+    "publication_sections": {
+      "minItems": 6,
+      "type": "array"
+    },
+    "publication_title": {
+      "const": "2018 International Building Code"
+    },
+    "publisher": {
+      "const": "International Code Council, Inc."
+    },
+    "record_type": {
+      "const": "source_artifact"
+    },
+    "schema_version": {
+      "const": "0.1.0"
+    },
+    "sha256": {
+      "const": "c8f0b75522707a39daf5202edee25d7fdce6c177c382f828a6dc1dfd5cc0b18d"
+    },
+    "source_filename": {
+      "const": "icc-2018.pdf"
+    },
+    "verification_state": {
+      "enum": [
+        "provisional",
+        "verified",
+        "corrected",
+        "superseded",
+        "disputed",
+        "rejected"
+      ]
+    }
+  },
+  "required": [
+    "schema_version",
+    "record_type",
+    "code_family",
+    "edition",
+    "publication_title",
+    "publisher",
+    "source_filename",
+    "sha256",
+    "file_size_bytes",
+    "pdf_page_count",
+    "pdf_metadata",
+    "printed_page_mapping",
+    "publication_sections",
+    "acquisition_provenance",
+    "access_restrictions",
+    "ingestion_timestamp",
+    "parser",
+    "verification_state",
+    "identity_assurance"
+  ],
+  "title": "IBC 2018 Source Manifest",
+  "type": "object"
+}

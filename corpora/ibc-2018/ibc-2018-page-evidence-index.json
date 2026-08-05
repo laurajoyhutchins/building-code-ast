@@ -1,0 +1,5329 @@
+[
+  {
+    "image_region_count": 1,
+    "pdf_page": 1,
+    "positioned_line_count": 2,
+    "public_projection": "anchors_hashes_and_counts_only",
+    "raw_evidence_availability": "private_local"
+  },
+  {
+    "image_region_count": 0,
+    "pdf_page": 2,
+    "positioned_line_count": 19,
+    "public_projection": "anchors_hashes_and_counts_only",
+    "raw_evidence_availability": "private_local"
+  },
+  {
+    "image_region_count": 0,
+    "pdf_page": 3,
+    "positioned_line_count": 20,
+    "public_projection": "anchors_hashes_and_counts_only",
+    "raw_evidence_availability": "private_local"
+  },
+  {
+    "image_region_count": 0,
+    "pdf_page": 4,
+    "positioned_line_count": 65,
+    "public_projection": "anchors_hashes_and_counts_only",
+    "raw_evidence_availability": "private_local"
+  },
+  {
+    "image_region_count": 0,
+    "pdf_page": 5,
+    "positioned_line_count": 56,
+    "public_projection": "anchors_hashes_and_counts_only",
+    "raw_evidence_availability": "private_local"
+  },
+  {
+    "image_region_count": 0,
+    "pdf_page": 6,
+    "positioned_line_count": 33,
+    "public_projection": "anchors_hashes_and_counts_only",
+    "raw_evidence_availability": "private_local"
+  },
+  {
+    "image_region_count": 0,
+    "pdf_page": 7,
+    "positioned_line_count": 70,
+    "public_projection": "anchors_hashes_and_counts_only",
+    "raw_evidence_availability": "private_local"
+  },
+  {
+    "image_region_count": 0,
+    "pdf_page": 8,
+    "positioned_line_count": 62,
+    "public_projection": "anchors_hashes_and_counts_only",
+    "raw_evidence_availability": "private_local"
+  },
+  {
+    "image_region_count": 0,
+    "pdf_page": 9,
+    "positioned_line_count": 21,
+    "public_projection": "anchors_hashes_and_counts_only",
+    "raw_evidence_availability": "private_local"
+  },
+  {
+    "image_region_count": 0,
+    "pdf_page": 10,
+    "positioned_line_count": 76,
+    "public_projection": "anchors_hashes_and_counts_only",
+    "raw_evidence_availability": "private_local"
+  },
+  {
+    "image_region_count": 0,
+    "pdf_page": 11,
+    "positioned_line_count": 81,
+    "public_projection": "anchors_hashes_and_counts_only",
+    "raw_evidence_availability": "private_local"
+  },
+  {
+    "image_region_count": 0,
+    "pdf_page": 12,
+    "positioned_line_count": 61,
+    "public_projection": "anchors_hashes_and_counts_only",
+    "raw_evidence_availability": "private_local"
+  },
+  {
+    "image_region_count": 0,
+    "pdf_page": 13,
+    "positioned_line_count": 61,
+    "public_projection": "anchors_hashes_and_counts_only",
+    "raw_evidence_availability": "private_local"
+  },
+  {
+    "image_region_count": 0,
+    "pdf_page": 14,
+    "positioned_line_count": 60,
+    "public_projection": "anchors_hashes_and_counts_only",
+    "raw_evidence_availability": "private_local"
+  },
+  {
+    "image_region_count": 0,
+    "pdf_page": 15,
+    "positioned_line_count": 58,
+    "public_projection": "anchors_hashes_and_counts_only",
+    "raw_evidence_availability": "private_local"
+  },
+  {
+    "image_region_count": 0,
+    "pdf_page": 16,
+    "positioned_line_count": 60,
+    "public_projection": "anchors_hashes_and_counts_only",
+    "raw_evidence_availability": "private_local"
+  },
+  {
+    "image_region_count": 0,
+    "pdf_page": 17,
+    "positioned_line_count": 58,
+    "public_projection": "anchors_hashes_and_counts_only",
+    "raw_evidence_availability": "private_local"
+  },
+  {
+    "image_region_count": 0,
+    "pdf_page": 18,
+    "positioned_line_count": 55,
+    "public_projection": "anchors_hashes_and_counts_only",
+    "raw_evidence_availability": "private_local"
+  },
+  {
+    "image_region_count": 0,
+    "pdf_page": 19,
+    "positioned_line_count": 53,
+    "public_projection": "anchors_hashes_and_counts_only",
+    "raw_evidence_availability": "private_local"
+  },
+  {
+    "image_region_count": 0,
+    "pdf_page": 20,
+    "positioned_line_count": 142,
+    "public_projection": "anchors_hashes_and_counts_only",
+    "raw_evidence_availability": "private_local"
+  },
+  {
+    "image_region_count": 0,
+    "pdf_page": 21,
+    "positioned_line_count": 148,
+    "public_projection": "anchors_hashes_and_counts_only",
+    "raw_evidence_availability": "private_local"
+  },
+  {
+    "image_region_count": 0,
+    "pdf_page": 22,
+    "positioned_line_count": 100,
+    "public_projection": "anchors_hashes_and_counts_only",
+    "raw_evidence_availability": "private_local"
+  },
+  {
+    "image_region_count": 0,
+    "pdf_page": 23,
+    "positioned_line_count": 94,
+    "public_projection": "anchors_hashes_and_counts_only",
+    "raw_evidence_availability": "private_local"
+  },
+  {
+    "image_region_count": 0,
+    "pdf_page": 24,
+    "positioned_line_count": 100,
+    "public_projection": "anchors_hashes_and_counts_only",
+    "raw_evidence_availability": "private_local"
+  },
+  {
+    "image_region_count": 0,
+    "pdf_page": 25,
+    "positioned_line_count": 91,
+    "public_projection": "anchors_hashes_and_counts_only",
+    "raw_evidence_availability": "private_local"
+  },
+  {
+    "image_region_count": 0,
+    "pdf_page": 26,
+    "positioned_line_count": 102,
+    "public_projection": "anchors_hashes_and_counts_only",
+    "raw_evidence_availability": "private_local"
+  },
+  {
+    "image_region_count": 0,
+    "pdf_page": 27,
+    "positioned_line_count": 19,
+    "public_projection": "anchors_hashes_and_counts_only",
+    "raw_evidence_availability": "private_local"
+  },
+  {
+    "image_region_count": 0,
+    "pdf_page": 28,
+    "positioned_line_count": 96,
+    "public_projection": "anchors_hashes_and_counts_only",
+    "raw_evidence_availability": "private_local"
+  },
+  {
+    "image_region_count": 0,
+    "pdf_page": 29,
+    "positioned_line_count": 110,
+    "public_projection": "anchors_hashes_and_counts_only",
+    "raw_evidence_availability": "private_local"
+  },
+  {
+    "image_region_count": 0,
+    "pdf_page": 30,
+    "positioned_line_count": 118,
+    "public_projection": "anchors_hashes_and_counts_only",
+    "raw_evidence_availability": "private_local"
+  },
+  {
+    "image_region_count": 0,
+    "pdf_page": 31,
+    "positioned_line_count": 114,
+    "public_projection": "anchors_hashes_and_counts_only",
+    "raw_evidence_availability": "private_local"
+  },
+  {
+    "image_region_count": 0,
+    "pdf_page": 32,
+    "positioned_line_count": 113,
+    "public_projection": "anchors_hashes_and_counts_only",
+    "raw_evidence_availability": "private_local"
+  },
+  {
+    "image_region_count": 0,
+    "pdf_page": 33,
+    "positioned_line_count": 114,
+    "public_projection": "anchors_hashes_and_counts_only",
+    "raw_evidence_availability": "private_local"
+  },
+  {
+    "image_region_count": 0,
+    "pdf_page": 34,
+    "positioned_line_count": 114,
+    "public_projection": "anchors_hashes_and_counts_only",
+    "raw_evidence_availability": "private_local"
+  },
+  {
+    "image_region_count": 0,
+    "pdf_page": 35,
+    "positioned_line_count": 118,
+    "public_projection": "anchors_hashes_and_counts_only",
+    "raw_evidence_availability": "private_local"
+  },
+  {
+    "image_region_count": 0,
+    "pdf_page": 36,
+    "positioned_line_count": 112,
+    "public_projection": "anchors_hashes_and_counts_only",
+    "raw_evidence_availability": "private_local"
+  },
+  {
+    "image_region_count": 0,
+    "pdf_page": 37,
+    "positioned_line_count": 123,
+    "public_projection": "anchors_hashes_and_counts_only",
+    "raw_evidence_availability": "private_local"
+  },
+  {
+    "image_region_count": 0,
+    "pdf_page": 38,
+    "positioned_line_count": 18,
+    "public_projection": "anchors_hashes_and_counts_only",
+    "raw_evidence_availability": "private_local"
+  },
+  {
+    "image_region_count": 0,
+    "pdf_page": 39,
+    "positioned_line_count": 4,
+    "public_projection": "anchors_hashes_and_counts_only",
+    "raw_evidence_availability": "private_local"
+  },
+  {
+    "image_region_count": 0,
+    "pdf_page": 40,
+    "positioned_line_count": 94,
+    "public_projection": "anchors_hashes_and_counts_only",
+    "raw_evidence_availability": "private_local"
+  },
+  {
+    "image_region_count": 0,
+    "pdf_page": 41,
+    "positioned_line_count": 116,
+    "public_projection": "anchors_hashes_and_counts_only",
+    "raw_evidence_availability": "private_local"
+  },
+  {
+    "image_region_count": 0,
+    "pdf_page": 42,
+    "positioned_line_count": 119,
+    "public_projection": "anchors_hashes_and_counts_only",
+    "raw_evidence_availability": "private_local"
+  },
+  {
+    "image_region_count": 0,
+    "pdf_page": 43,
+    "positioned_line_count": 119,
+    "public_projection": "anchors_hashes_and_counts_only",
+    "raw_evidence_availability": "private_local"
+  },
+  {
+    "image_region_count": 0,
+    "pdf_page": 44,
+    "positioned_line_count": 119,
+    "public_projection": "anchors_hashes_and_counts_only",
+    "raw_evidence_availability": "private_local"
+  },
+  {
+    "image_region_count": 0,
+    "pdf_page": 45,
+    "positioned_line_count": 121,
+    "public_projection": "anchors_hashes_and_counts_only",
+    "raw_evidence_availability": "private_local"
+  },
+  {
+    "image_region_count": 0,
+    "pdf_page": 46,
+    "positioned_line_count": 113,
+    "public_projection": "anchors_hashes_and_counts_only",
+    "raw_evidence_availability": "private_local"
+  },
+  {
+    "image_region_count": 0,
+    "pdf_page": 47,
+    "positioned_line_count": 117,
+    "public_projection": "anchors_hashes_and_counts_only",
+    "raw_evidence_availability": "private_local"
+  },
+  {
+    "image_region_count": 0,
+    "pdf_page": 48,
+    "positioned_line_count": 117,
+    "public_projection": "anchors_hashes_and_counts_only",
+    "raw_evidence_availability": "private_local"
+  },
+  {
+    "image_region_count": 0,
+    "pdf_page": 49,
+    "positioned_line_count": 116,
+    "public_projection": "anchors_hashes_and_counts_only",
+    "raw_evidence_availability": "private_local"
+  },
+  {
+    "image_region_count": 0,
+    "pdf_page": 50,
+    "positioned_line_count": 117,
+    "public_projection": "anchors_hashes_and_counts_only",
+    "raw_evidence_availability": "private_local"
+  },
+  {
+    "image_region_count": 0,
+    "pdf_page": 51,
+    "positioned_line_count": 117,
+    "public_projection": "anchors_hashes_and_counts_only",
+    "raw_evidence_availability": "private_local"
+  },
+  {
+    "image_region_count": 0,
+    "pdf_page": 52,
+    "positioned_line_count": 117,
+    "public_projection": "anchors_hashes_and_counts_only",
+    "raw_evidence_availability": "private_local"
+  },
+  {
+    "image_region_count": 0,
+    "pdf_page": 53,
+    "positioned_line_count": 117,
+    "public_projection": "anchors_hashes_and_counts_only",
+    "raw_evidence_availability": "private_local"
+  },
+  {
+    "image_region_count": 0,
+    "pdf_page": 54,
+    "positioned_line_count": 119,
+    "public_projection": "anchors_hashes_and_counts_only",
+    "raw_evidence_availability": "private_local"
+  },
+  {
+    "image_region_count": 0,
+    "pdf_page": 55,
+    "positioned_line_count": 116,
+    "public_projection": "anchors_hashes_and_counts_only",
+    "raw_evidence_availability": "private_local"
+  },
+  {
+    "image_region_count": 0,
+    "pdf_page": 56,
+    "positioned_line_count": 118,
+    "public_projection": "anchors_hashes_and_counts_only",
+    "raw_evidence_availability": "private_local"
+  },
+  {
+    "image_region_count": 0,
+    "pdf_page": 57,
+    "positioned_line_count": 118,
+    "public_projection": "anchors_hashes_and_counts_only",
+    "raw_evidence_availability": "private_local"
+  },
+  {
+    "image_region_count": 0,
+    "pdf_page": 58,
+    "positioned_line_count": 118,
+    "public_projection": "anchors_hashes_and_counts_only",
+    "raw_evidence_availability": "private_local"
+  },
+  {
+    "image_region_count": 0,
+    "pdf_page": 59,
+    "positioned_line_count": 117,
+    "public_projection": "anchors_hashes_and_counts_only",
+    "raw_evidence_availability": "private_local"
+  },
+  {
+    "image_region_count": 0,
+    "pdf_page": 60,
+    "positioned_line_count": 111,
+    "public_projection": "anchors_hashes_and_counts_only",
+    "raw_evidence_availability": "private_local"
+  },
+  {
+    "image_region_count": 0,
+    "pdf_page": 61,
+    "positioned_line_count": 117,
+    "public_projection": "anchors_hashes_and_counts_only",
+    "raw_evidence_availability": "private_local"
+  },
+  {
+    "image_region_count": 0,
+    "pdf_page": 62,
+    "positioned_line_count": 115,
+    "public_projection": "anchors_hashes_and_counts_only",
+    "raw_evidence_availability": "private_local"
+  },
+  {
+    "image_region_count": 0,
+    "pdf_page": 63,
+    "positioned_line_count": 115,
+    "public_projection": "anchors_hashes_and_counts_only",
+    "raw_evidence_availability": "private_local"
+  },
+  {
+    "image_region_count": 0,
+    "pdf_page": 64,
+    "positioned_line_count": 120,
+    "public_projection": "anchors_hashes_and_counts_only",
+    "raw_evidence_availability": "private_local"
+  },
+  {
+    "image_region_count": 0,
+    "pdf_page": 65,
+    "positioned_line_count": 118,
+    "public_projection": "anchors_hashes_and_counts_only",
+    "raw_evidence_availability": "private_local"
+  },
+  {
+    "image_region_count": 0,
+    "pdf_page": 66,
+    "positioned_line_count": 118,
+    "public_projection": "anchors_hashes_and_counts_only",
+    "raw_evidence_availability": "private_local"
+  },
+  {
+    "image_region_count": 0,
+    "pdf_page": 67,
+    "positioned_line_count": 117,
+    "public_projection": "anchors_hashes_and_counts_only",
+    "raw_evidence_availability": "private_local"
+  },
+  {
+    "image_region_count": 0,
+    "pdf_page": 68,
+    "positioned_line_count": 116,
+    "public_projection": "anchors_hashes_and_counts_only",
+    "raw_evidence_availability": "private_local"
+  },
+  {
+    "image_region_count": 0,
+    "pdf_page": 69,
+    "positioned_line_count": 115,
+    "public_projection": "anchors_hashes_and_counts_only",
+    "raw_evidence_availability": "private_local"
+  },
+  {
+    "image_region_count": 0,
+    "pdf_page": 70,
+    "positioned_line_count": 74,
+    "public_projection": "anchors_hashes_and_counts_only",
+    "raw_evidence_availability": "private_local"
+  },
+  {
+    "image_region_count": 0,
+    "pdf_page": 71,
+    "positioned_line_count": 4,
+    "public_projection": "anchors_hashes_and_counts_only",
+    "raw_evidence_availability": "private_local"
+  },
+  {
+    "image_region_count": 0,
+    "pdf_page": 72,
+    "positioned_line_count": 91,
+    "public_projection": "anchors_hashes_and_counts_only",
+    "raw_evidence_availability": "private_local"
+  },
+  {
+    "image_region_count": 0,
+    "pdf_page": 73,
+    "positioned_line_count": 112,
+    "public_projection": "anchors_hashes_and_counts_only",
+    "raw_evidence_availability": "private_local"
+  },
+  {
+    "image_region_count": 0,
+    "pdf_page": 74,
+    "positioned_line_count": 117,
+    "public_projection": "anchors_hashes_and_counts_only",
+    "raw_evidence_availability": "private_local"
+  },
+  {
+    "image_region_count": 0,
+    "pdf_page": 75,
+    "positioned_line_count": 260,
+    "public_projection": "anchors_hashes_and_counts_only",
+    "raw_evidence_availability": "private_local"
+  },
+  {
+    "image_region_count": 0,
+    "pdf_page": 76,
+    "positioned_line_count": 274,
+    "public_projection": "anchors_hashes_and_counts_only",
+    "raw_evidence_availability": "private_local"
+  },
+  {
+    "image_region_count": 0,
+    "pdf_page": 77,
+    "positioned_line_count": 130,
+    "public_projection": "anchors_hashes_and_counts_only",
+    "raw_evidence_availability": "private_local"
+  },
+  {
+    "image_region_count": 0,
+    "pdf_page": 78,
+    "positioned_line_count": 118,
+    "public_projection": "anchors_hashes_and_counts_only",
+    "raw_evidence_availability": "private_local"
+  },
+  {
+    "image_region_count": 0,
+    "pdf_page": 79,
+    "positioned_line_count": 116,
+    "public_projection": "anchors_hashes_and_counts_only",
+    "raw_evidence_availability": "private_local"
+  },
+  {
+    "image_region_count": 0,
+    "pdf_page": 80,
+    "positioned_line_count": 119,
+    "public_projection": "anchors_hashes_and_counts_only",
+    "raw_evidence_availability": "private_local"
+  },
+  {
+    "image_region_count": 0,
+    "pdf_page": 81,
+    "positioned_line_count": 93,
+    "public_projection": "anchors_hashes_and_counts_only",
+    "raw_evidence_availability": "private_local"
+  },
+  {
+    "image_region_count": 0,
+    "pdf_page": 82,
+    "positioned_line_count": 92,
+    "public_projection": "anchors_hashes_and_counts_only",
+    "raw_evidence_availability": "private_local"
+  },
+  {
+    "image_region_count": 0,
+    "pdf_page": 83,
+    "positioned_line_count": 118,
+    "public_projection": "anchors_hashes_and_counts_only",
+    "raw_evidence_availability": "private_local"
+  },
+  {
+    "image_region_count": 0,
+    "pdf_page": 84,
+    "positioned_line_count": 118,
+    "public_projection": "anchors_hashes_and_counts_only",
+    "raw_evidence_availability": "private_local"
+  },
+  {
+    "image_region_count": 0,
+    "pdf_page": 85,
+    "positioned_line_count": 117,
+    "public_projection": "anchors_hashes_and_counts_only",
+    "raw_evidence_availability": "private_local"
+  },
+  {
+    "image_region_count": 0,
+    "pdf_page": 86,
+    "positioned_line_count": 108,
+    "public_projection": "anchors_hashes_and_counts_only",
+    "raw_evidence_availability": "private_local"
+  },
+  {
+    "image_region_count": 0,
+    "pdf_page": 87,
+    "positioned_line_count": 117,
+    "public_projection": "anchors_hashes_and_counts_only",
+    "raw_evidence_availability": "private_local"
+  },
+  {
+    "image_region_count": 0,
+    "pdf_page": 88,
+    "positioned_line_count": 110,
+    "public_projection": "anchors_hashes_and_counts_only",
+    "raw_evidence_availability": "private_local"
+  },
+  {
+    "image_region_count": 0,
+    "pdf_page": 89,
+    "positioned_line_count": 117,
+    "public_projection": "anchors_hashes_and_counts_only",
+    "raw_evidence_availability": "private_local"
+  },
+  {
+    "image_region_count": 0,
+    "pdf_page": 90,
+    "positioned_line_count": 117,
+    "public_projection": "anchors_hashes_and_counts_only",
+    "raw_evidence_availability": "private_local"
+  },
+  {
+    "image_region_count": 0,
+    "pdf_page": 91,
+    "positioned_line_count": 115,
+    "public_projection": "anchors_hashes_and_counts_only",
+    "raw_evidence_availability": "private_local"
+  },
+  {
+    "image_region_count": 0,
+    "pdf_page": 92,
+    "positioned_line_count": 120,
+    "public_projection": "anchors_hashes_and_counts_only",
+    "raw_evidence_availability": "private_local"
+  },
+  {
+    "image_region_count": 0,
+    "pdf_page": 93,
+    "positioned_line_count": 133,
+    "public_projection": "anchors_hashes_and_counts_only",
+    "raw_evidence_availability": "private_local"
+  },
+  {
+    "image_region_count": 0,
+    "pdf_page": 94,
+    "positioned_line_count": 112,
+    "public_projection": "anchors_hashes_and_counts_only",
+    "raw_evidence_availability": "private_local"
+  },
+  {
+    "image_region_count": 0,
+    "pdf_page": 95,
+    "positioned_line_count": 114,
+    "public_projection": "anchors_hashes_and_counts_only",
+    "raw_evidence_availability": "private_local"
+  },
+  {
+    "image_region_count": 0,
+    "pdf_page": 96,
+    "positioned_line_count": 114,
+    "public_projection": "anchors_hashes_and_counts_only",
+    "raw_evidence_availability": "private_local"
+  },
+  {
+    "image_region_count": 0,
+    "pdf_page": 97,
+    "positioned_line_count": 115,
+    "public_projection": "anchors_hashes_and_counts_only",
+    "raw_evidence_availability": "private_local"
+  },
+  {
+    "image_region_count": 0,
+    "pdf_page": 98,
+    "positioned_line_count": 113,
+    "public_projection": "anchors_hashes_and_counts_only",
+    "raw_evidence_availability": "private_local"
+  },
+  {
+    "image_region_count": 0,
+    "pdf_page": 99,
+    "positioned_line_count": 116,
+    "public_projection": "anchors_hashes_and_counts_only",
+    "raw_evidence_availability": "private_local"
+  },
+  {
+    "image_region_count": 0,
+    "pdf_page": 100,
+    "positioned_line_count": 117,
+    "public_projection": "anchors_hashes_and_counts_only",
+    "raw_evidence_availability": "private_local"
+  },
+  {
+    "image_region_count": 0,
+    "pdf_page": 101,
+    "positioned_line_count": 112,
+    "public_projection": "anchors_hashes_and_counts_only",
+    "raw_evidence_availability": "private_local"
+  },
+  {
+    "image_region_count": 0,
+    "pdf_page": 102,
+    "positioned_line_count": 123,
+    "public_projection": "anchors_hashes_and_counts_only",
+    "raw_evidence_availability": "private_local"
+  },
+  {
+    "image_region_count": 0,
+    "pdf_page": 103,
+    "positioned_line_count": 110,
+    "public_projection": "anchors_hashes_and_counts_only",
+    "raw_evidence_availability": "private_local"
+  },
+  {
+    "image_region_count": 0,
+    "pdf_page": 104,
+    "positioned_line_count": 118,
+    "public_projection": "anchors_hashes_and_counts_only",
+    "raw_evidence_availability": "private_local"
+  },
+  {
+    "image_region_count": 0,
+    "pdf_page": 105,
+    "positioned_line_count": 175,
+    "public_projection": "anchors_hashes_and_counts_only",
+    "raw_evidence_availability": "private_local"
+  },
+  {
+    "image_region_count": 0,
+    "pdf_page": 106,
+    "positioned_line_count": 119,
+    "public_projection": "anchors_hashes_and_counts_only",
+    "raw_evidence_availability": "private_local"
+  },
+  {
+    "image_region_count": 0,
+    "pdf_page": 107,
+    "positioned_line_count": 151,
+    "public_projection": "anchors_hashes_and_counts_only",
+    "raw_evidence_availability": "private_local"
+  },
+  {
+    "image_region_count": 0,
+    "pdf_page": 108,
+    "positioned_line_count": 146,
+    "public_projection": "anchors_hashes_and_counts_only",
+    "raw_evidence_availability": "private_local"
+  },
+  {
+    "image_region_count": 0,
+    "pdf_page": 109,
+    "positioned_line_count": 117,
+    "public_projection": "anchors_hashes_and_counts_only",
+    "raw_evidence_availability": "private_local"
+  },
+  {
+    "image_region_count": 0,
+    "pdf_page": 110,
+    "positioned_line_count": 105,
+    "public_projection": "anchors_hashes_and_counts_only",
+    "raw_evidence_availability": "private_local"
+  },
+  {
+    "image_region_count": 0,
+    "pdf_page": 111,
+    "positioned_line_count": 146,
+    "public_projection": "anchors_hashes_and_counts_only",
+    "raw_evidence_availability": "private_local"
+  },
+  {
+    "image_region_count": 0,
+    "pdf_page": 112,
+    "positioned_line_count": 119,
+    "public_projection": "anchors_hashes_and_counts_only",
+    "raw_evidence_availability": "private_local"
+  },
+  {
+    "image_region_count": 0,
+    "pdf_page": 113,
+    "positioned_line_count": 134,
+    "public_projection": "anchors_hashes_and_counts_only",
+    "raw_evidence_availability": "private_local"
+  },
+  {
+    "image_region_count": 0,
+    "pdf_page": 114,
+    "positioned_line_count": 107,
+    "public_projection": "anchors_hashes_and_counts_only",
+    "raw_evidence_availability": "private_local"
+  },
+  {
+    "image_region_count": 0,
+    "pdf_page": 115,
+    "positioned_line_count": 171,
+    "public_projection": "anchors_hashes_and_counts_only",
+    "raw_evidence_availability": "private_local"
+  },
+  {
+    "image_region_count": 0,
+    "pdf_page": 116,
+    "positioned_line_count": 118,
+    "public_projection": "anchors_hashes_and_counts_only",
+    "raw_evidence_availability": "private_local"
+  },
+  {
+    "image_region_count": 0,
+    "pdf_page": 117,
+    "positioned_line_count": 117,
+    "public_projection": "anchors_hashes_and_counts_only",
+    "raw_evidence_availability": "private_local"
+  },
+  {
+    "image_region_count": 0,
+    "pdf_page": 118,
+    "positioned_line_count": 113,
+    "public_projection": "anchors_hashes_and_counts_only",
+    "raw_evidence_availability": "private_local"
+  },
+  {
+    "image_region_count": 0,
+    "pdf_page": 119,
+    "positioned_line_count": 115,
+    "public_projection": "anchors_hashes_and_counts_only",
+    "raw_evidence_availability": "private_local"
+  },
+  {
+    "image_region_count": 0,
+    "pdf_page": 120,
+    "positioned_line_count": 112,
+    "public_projection": "anchors_hashes_and_counts_only",
+    "raw_evidence_availability": "private_local"
+  },
+  {
+    "image_region_count": 0,
+    "pdf_page": 121,
+    "positioned_line_count": 112,
+    "public_projection": "anchors_hashes_and_counts_only",
+    "raw_evidence_availability": "private_local"
+  },
+  {
+    "image_region_count": 0,
+    "pdf_page": 122,
+    "positioned_line_count": 115,
+    "public_projection": "anchors_hashes_and_counts_only",
+    "raw_evidence_availability": "private_local"
+  },
+  {
+    "image_region_count": 0,
+    "pdf_page": 123,
+    "positioned_line_count": 105,
+    "public_projection": "anchors_hashes_and_counts_only",
+    "raw_evidence_availability": "private_local"
+  },
+  {
+    "image_region_count": 0,
+    "pdf_page": 124,
+    "positioned_line_count": 114,
+    "public_projection": "anchors_hashes_and_counts_only",
+    "raw_evidence_availability": "private_local"
+  },
+  {
+    "image_region_count": 0,
+    "pdf_page": 125,
+    "positioned_line_count": 112,
+    "public_projection": "anchors_hashes_and_counts_only",
+    "raw_evidence_availability": "private_local"
+  },
+  {
+    "image_region_count": 0,
+    "pdf_page": 126,
+    "positioned_line_count": 123,
+    "public_projection": "anchors_hashes_and_counts_only",
+    "raw_evidence_availability": "private_local"
+  },
+  {
+    "image_region_count": 0,
+    "pdf_page": 127,
+    "positioned_line_count": 131,
+    "public_projection": "anchors_hashes_and_counts_only",
+    "raw_evidence_availability": "private_local"
+  },
+  {
+    "image_region_count": 0,
+    "pdf_page": 128,
+    "positioned_line_count": 19,
+    "public_projection": "anchors_hashes_and_counts_only",
+    "raw_evidence_availability": "private_local"
+  },
+  {
+    "image_region_count": 0,
+    "pdf_page": 129,
+    "positioned_line_count": 4,
+    "public_projection": "anchors_hashes_and_counts_only",
+    "raw_evidence_availability": "private_local"
+  },
+  {
+    "image_region_count": 0,
+    "pdf_page": 130,
+    "positioned_line_count": 101,
+    "public_projection": "anchors_hashes_and_counts_only",
+    "raw_evidence_availability": "private_local"
+  },
+  {
+    "image_region_count": 0,
+    "pdf_page": 131,
+    "positioned_line_count": 229,
+    "public_projection": "anchors_hashes_and_counts_only",
+    "raw_evidence_availability": "private_local"
+  },
+  {
+    "image_region_count": 0,
+    "pdf_page": 132,
+    "positioned_line_count": 108,
+    "public_projection": "anchors_hashes_and_counts_only",
+    "raw_evidence_availability": "private_local"
+  },
+  {
+    "image_region_count": 0,
+    "pdf_page": 133,
+    "positioned_line_count": 401,
+    "public_projection": "anchors_hashes_and_counts_only",
+    "raw_evidence_availability": "private_local"
+  },
+  {
+    "image_region_count": 0,
+    "pdf_page": 134,
+    "positioned_line_count": 252,
+    "public_projection": "anchors_hashes_and_counts_only",
+    "raw_evidence_availability": "private_local"
+  },
+  {
+    "image_region_count": 0,
+    "pdf_page": 135,
+    "positioned_line_count": 112,
+    "public_projection": "anchors_hashes_and_counts_only",
+    "raw_evidence_availability": "private_local"
+  },
+  {
+    "image_region_count": 0,
+    "pdf_page": 136,
+    "positioned_line_count": 389,
+    "public_projection": "anchors_hashes_and_counts_only",
+    "raw_evidence_availability": "private_local"
+  },
+  {
+    "image_region_count": 0,
+    "pdf_page": 137,
+    "positioned_line_count": 392,
+    "public_projection": "anchors_hashes_and_counts_only",
+    "raw_evidence_availability": "private_local"
+  },
+  {
+    "image_region_count": 0,
+    "pdf_page": 138,
+    "positioned_line_count": 96,
+    "public_projection": "anchors_hashes_and_counts_only",
+    "raw_evidence_availability": "private_local"
+  },
+  {
+    "image_region_count": 0,
+    "pdf_page": 139,
+    "positioned_line_count": 117,
+    "public_projection": "anchors_hashes_and_counts_only",
+    "raw_evidence_availability": "private_local"
+  },
+  {
+    "image_region_count": 0,
+    "pdf_page": 140,
+    "positioned_line_count": 112,
+    "public_projection": "anchors_hashes_and_counts_only",
+    "raw_evidence_availability": "private_local"
+  },
+  {
+    "image_region_count": 0,
+    "pdf_page": 141,
+    "positioned_line_count": 114,
+    "public_projection": "anchors_hashes_and_counts_only",
+    "raw_evidence_availability": "private_local"
+  },
+  {
+    "image_region_count": 0,
+    "pdf_page": 142,
+    "positioned_line_count": 315,
+    "public_projection": "anchors_hashes_and_counts_only",
+    "raw_evidence_availability": "private_local"
+  },
+  {
+    "image_region_count": 0,
+    "pdf_page": 143,
+    "positioned_line_count": 98,
+    "public_projection": "anchors_hashes_and_counts_only",
+    "raw_evidence_availability": "private_local"
+  },
+  {
+    "image_region_count": 0,
+    "pdf_page": 144,
+    "positioned_line_count": 117,
+    "public_projection": "anchors_hashes_and_counts_only",
+    "raw_evidence_availability": "private_local"
+  },
+  {
+    "image_region_count": 0,
+    "pdf_page": 145,
+    "positioned_line_count": 37,
+    "public_projection": "anchors_hashes_and_counts_only",
+    "raw_evidence_availability": "private_local"
+  },
+  {
+    "image_region_count": 0,
+    "pdf_page": 146,
+    "positioned_line_count": 149,
+    "public_projection": "anchors_hashes_and_counts_only",
+    "raw_evidence_availability": "private_local"
+  },
+  {
+    "image_region_count": 0,
+    "pdf_page": 147,
+    "positioned_line_count": 132,
+    "public_projection": "anchors_hashes_and_counts_only",
+    "raw_evidence_availability": "private_local"
+  },
+  {
+    "image_region_count": 0,
+    "pdf_page": 148,
+    "positioned_line_count": 84,
+    "public_projection": "anchors_hashes_and_counts_only",
+    "raw_evidence_availability": "private_local"
+  },
+  {
+    "image_region_count": 0,
+    "pdf_page": 149,
+    "positioned_line_count": 4,
+    "public_projection": "anchors_hashes_and_counts_only",
+    "raw_evidence_availability": "private_local"
+  },
+  {
+    "image_region_count": 0,
+    "pdf_page": 150,
+    "positioned_line_count": 99,
+    "public_projection": "anchors_hashes_and_counts_only",
+    "raw_evidence_availability": "private_local"
+  },
+  {
+    "image_region_count": 0,
+    "pdf_page": 151,
+    "positioned_line_count": 118,
+    "public_projection": "anchors_hashes_and_counts_only",
+    "raw_evidence_availability": "private_local"
+  },
+  {
+    "image_region_count": 0,
+    "pdf_page": 152,
+    "positioned_line_count": 122,
+    "public_projection": "anchors_hashes_and_counts_only",
+    "raw_evidence_availability": "private_local"
+  },
+  {
+    "image_region_count": 0,
+    "pdf_page": 153,
+    "positioned_line_count": 125,
+    "public_projection": "anchors_hashes_and_counts_only",
+    "raw_evidence_availability": "private_local"
+  },
+  {
+    "image_region_count": 0,
+    "pdf_page": 154,
+    "positioned_line_count": 119,
+    "public_projection": "anchors_hashes_and_counts_only",
+    "raw_evidence_availability": "private_local"
+  },
+  {
+    "image_region_count": 1,
+    "pdf_page": 155,
+    "positioned_line_count": 51,
+    "public_projection": "anchors_hashes_and_counts_only",
+    "raw_evidence_availability": "private_local"
+  },
+  {
+    "image_region_count": 0,
+    "pdf_page": 156,
+    "positioned_line_count": 105,
+    "public_projection": "anchors_hashes_and_counts_only",
+    "raw_evidence_availability": "private_local"
+  },
+  {
+    "image_region_count": 0,
+    "pdf_page": 157,
+    "positioned_line_count": 116,
+    "public_projection": "anchors_hashes_and_counts_only",
+    "raw_evidence_availability": "private_local"
+  },
+  {
+    "image_region_count": 0,
+    "pdf_page": 158,
+    "positioned_line_count": 126,
+    "public_projection": "anchors_hashes_and_counts_only",
+    "raw_evidence_availability": "private_local"
+  },
+  {
+    "image_region_count": 0,
+    "pdf_page": 159,
+    "positioned_line_count": 116,
+    "public_projection": "anchors_hashes_and_counts_only",
+    "raw_evidence_availability": "private_local"
+  },
+  {
+    "image_region_count": 0,
+    "pdf_page": 160,
+    "positioned_line_count": 123,
+    "public_projection": "anchors_hashes_and_counts_only",
+    "raw_evidence_availability": "private_local"
+  },
+  {
+    "image_region_count": 0,
+    "pdf_page": 161,
+    "positioned_line_count": 113,
+    "public_projection": "anchors_hashes_and_counts_only",
+    "raw_evidence_availability": "private_local"
+  },
+  {
+    "image_region_count": 0,
+    "pdf_page": 162,
+    "positioned_line_count": 117,
+    "public_projection": "anchors_hashes_and_counts_only",
+    "raw_evidence_availability": "private_local"
+  },
+  {
+    "image_region_count": 0,
+    "pdf_page": 163,
+    "positioned_line_count": 109,
+    "public_projection": "anchors_hashes_and_counts_only",
+    "raw_evidence_availability": "private_local"
+  },
+  {
+    "image_region_count": 0,
+    "pdf_page": 164,
+    "positioned_line_count": 114,
+    "public_projection": "anchors_hashes_and_counts_only",
+    "raw_evidence_availability": "private_local"
+  },
+  {
+    "image_region_count": 0,
+    "pdf_page": 165,
+    "positioned_line_count": 112,
+    "public_projection": "anchors_hashes_and_counts_only",
+    "raw_evidence_availability": "private_local"
+  },
+  {
+    "image_region_count": 0,
+    "pdf_page": 166,
+    "positioned_line_count": 117,
+    "public_projection": "anchors_hashes_and_counts_only",
+    "raw_evidence_availability": "private_local"
+  },
+  {
+    "image_region_count": 0,
+    "pdf_page": 167,
+    "positioned_line_count": 118,
+    "public_projection": "anchors_hashes_and_counts_only",
+    "raw_evidence_availability": "private_local"
+  },
+  {
+    "image_region_count": 0,
+    "pdf_page": 168,
+    "positioned_line_count": 118,
+    "public_projection": "anchors_hashes_and_counts_only",
+    "raw_evidence_availability": "private_local"
+  },
+  {
+    "image_region_count": 0,
+    "pdf_page": 169,
+    "positioned_line_count": 117,
+    "public_projection": "anchors_hashes_and_counts_only",
+    "raw_evidence_availability": "private_local"
+  },
+  {
+    "image_region_count": 0,
+    "pdf_page": 170,
+    "positioned_line_count": 117,
+    "public_projection": "anchors_hashes_and_counts_only",
+    "raw_evidence_availability": "private_local"
+  },
+  {
+    "image_region_count": 0,
+    "pdf_page": 171,
+    "positioned_line_count": 112,
+    "public_projection": "anchors_hashes_and_counts_only",
+    "raw_evidence_availability": "private_local"
+  },
+  {
+    "image_region_count": 0,
+    "pdf_page": 172,
+    "positioned_line_count": 119,
+    "public_projection": "anchors_hashes_and_counts_only",
+    "raw_evidence_availability": "private_local"
+  },
+  {
+    "image_region_count": 0,
+    "pdf_page": 173,
+    "positioned_line_count": 205,
+    "public_projection": "anchors_hashes_and_counts_only",
+    "raw_evidence_availability": "private_local"
+  },
+  {
+    "image_region_count": 0,
+    "pdf_page": 174,
+    "positioned_line_count": 147,
+    "public_projection": "anchors_hashes_and_counts_only",
+    "raw_evidence_availability": "private_local"
+  },
+  {
+    "image_region_count": 0,
+    "pdf_page": 175,
+    "positioned_line_count": 118,
+    "public_projection": "anchors_hashes_and_counts_only",
+    "raw_evidence_availability": "private_local"
+  },
+  {
+    "image_region_count": 0,
+    "pdf_page": 176,
+    "positioned_line_count": 113,
+    "public_projection": "anchors_hashes_and_counts_only",
+    "raw_evidence_availability": "private_local"
+  },
+  {
+    "image_region_count": 0,
+    "pdf_page": 177,
+    "positioned_line_count": 135,
+    "public_projection": "anchors_hashes_and_counts_only",
+    "raw_evidence_availability": "private_local"
+  },
+  {
+    "image_region_count": 0,
+    "pdf_page": 178,
+    "positioned_line_count": 116,
+    "public_projection": "anchors_hashes_and_counts_only",
+    "raw_evidence_availability": "private_local"
+  },
+  {
+    "image_region_count": 0,
+    "pdf_page": 179,
+    "positioned_line_count": 116,
+    "public_projection": "anchors_hashes_and_counts_only",
+    "raw_evidence_availability": "private_local"
+  },
+  {
+    "image_region_count": 0,
+    "pdf_page": 180,
+    "positioned_line_count": 117,
+    "public_projection": "anchors_hashes_and_counts_only",
+    "raw_evidence_availability": "private_local"
+  },
+  {
+    "image_region_count": 0,
+    "pdf_page": 181,
+    "positioned_line_count": 115,
+    "public_projection": "anchors_hashes_and_counts_only",
+    "raw_evidence_availability": "private_local"
+  },
+  {
+    "image_region_count": 0,
+    "pdf_page": 182,
+    "positioned_line_count": 114,
+    "public_projection": "anchors_hashes_and_counts_only",
+    "raw_evidence_availability": "private_local"
+  },
+  {
+    "image_region_count": 0,
+    "pdf_page": 183,
+    "positioned_line_count": 118,
+    "public_projection": "anchors_hashes_and_counts_only",
+    "raw_evidence_availability": "private_local"
+  },
+  {
+    "image_region_count": 0,
+    "pdf_page": 184,
+    "positioned_line_count": 113,
+    "public_projection": "anchors_hashes_and_counts_only",
+    "raw_evidence_availability": "private_local"
+  },
+  {
+    "image_region_count": 0,
+    "pdf_page": 185,
+    "positioned_line_count": 109,
+    "public_projection": "anchors_hashes_and_counts_only",
+    "raw_evidence_availability": "private_local"
+  },
+  {
+    "image_region_count": 0,
+    "pdf_page": 186,
+    "positioned_line_count": 161,
+    "public_projection": "anchors_hashes_and_counts_only",
+    "raw_evidence_availability": "private_local"
+  },
+  {
+    "image_region_count": 0,
+    "pdf_page": 187,
+    "positioned_line_count": 127,
+    "public_projection": "anchors_hashes_and_counts_only",
+    "raw_evidence_availability": "private_local"
+  },
+  {
+    "image_region_count": 0,
+    "pdf_page": 188,
+    "positioned_line_count": 93,
+    "public_projection": "anchors_hashes_and_counts_only",
+    "raw_evidence_availability": "private_local"
+  },
+  {
+    "image_region_count": 0,
+    "pdf_page": 189,
+    "positioned_line_count": 145,
+    "public_projection": "anchors_hashes_and_counts_only",
+    "raw_evidence_availability": "private_local"
+  },
+  {
+    "image_region_count": 0,
+    "pdf_page": 190,
+    "positioned_line_count": 174,
+    "public_projection": "anchors_hashes_and_counts_only",
+    "raw_evidence_availability": "private_local"
+  },
+  {
+    "image_region_count": 0,
+    "pdf_page": 191,
+    "positioned_line_count": 133,
+    "public_projection": "anchors_hashes_and_counts_only",
+    "raw_evidence_availability": "private_local"
+  },
+  {
+    "image_region_count": 0,
+    "pdf_page": 192,
+    "positioned_line_count": 135,
+    "public_projection": "anchors_hashes_and_counts_only",
+    "raw_evidence_availability": "private_local"
+  },
+  {
+    "image_region_count": 0,
+    "pdf_page": 193,
+    "positioned_line_count": 128,
+    "public_projection": "anchors_hashes_and_counts_only",
+    "raw_evidence_availability": "private_local"
+  },
+  {
+    "image_region_count": 0,
+    "pdf_page": 194,
+    "positioned_line_count": 81,
+    "public_projection": "anchors_hashes_and_counts_only",
+    "raw_evidence_availability": "private_local"
+  },
+  {
+    "image_region_count": 0,
+    "pdf_page": 195,
+    "positioned_line_count": 92,
+    "public_projection": "anchors_hashes_and_counts_only",
+    "raw_evidence_availability": "private_local"
+  },
+  {
+    "image_region_count": 0,
+    "pdf_page": 196,
+    "positioned_line_count": 106,
+    "public_projection": "anchors_hashes_and_counts_only",
+    "raw_evidence_availability": "private_local"
+  },
+  {
+    "image_region_count": 0,
+    "pdf_page": 197,
+    "positioned_line_count": 99,
+    "public_projection": "anchors_hashes_and_counts_only",
+    "raw_evidence_availability": "private_local"
+  },
+  {
+    "image_region_count": 0,
+    "pdf_page": 198,
+    "positioned_line_count": 130,
+    "public_projection": "anchors_hashes_and_counts_only",
+    "raw_evidence_availability": "private_local"
+  },
+  {
+    "image_region_count": 0,
+    "pdf_page": 199,
+    "positioned_line_count": 160,
+    "public_projection": "anchors_hashes_and_counts_only",
+    "raw_evidence_availability": "private_local"
+  },
+  {
+    "image_region_count": 0,
+    "pdf_page": 200,
+    "positioned_line_count": 115,
+    "public_projection": "anchors_hashes_and_counts_only",
+    "raw_evidence_availability": "private_local"
+  },
+  {
+    "image_region_count": 0,
+    "pdf_page": 201,
+    "positioned_line_count": 133,
+    "public_projection": "anchors_hashes_and_counts_only",
+    "raw_evidence_availability": "private_local"
+  },
+  {
+    "image_region_count": 0,
+    "pdf_page": 202,
+    "positioned_line_count": 109,
+    "public_projection": "anchors_hashes_and_counts_only",
+    "raw_evidence_availability": "private_local"
+  },
+  {
+    "image_region_count": 0,
+    "pdf_page": 203,
+    "positioned_line_count": 110,
+    "public_projection": "anchors_hashes_and_counts_only",
+    "raw_evidence_availability": "private_local"
+  },
+  {
+    "image_region_count": 0,
+    "pdf_page": 204,
+    "positioned_line_count": 102,
+    "public_projection": "anchors_hashes_and_counts_only",
+    "raw_evidence_availability": "private_local"
+  },
+  {
+    "image_region_count": 0,
+    "pdf_page": 205,
+    "positioned_line_count": 153,
+    "public_projection": "anchors_hashes_and_counts_only",
+    "raw_evidence_availability": "private_local"
+  },
+  {
+    "image_region_count": 0,
+    "pdf_page": 206,
+    "positioned_line_count": 95,
+    "public_projection": "anchors_hashes_and_counts_only",
+    "raw_evidence_availability": "private_local"
+  },
+  {
+    "image_region_count": 0,
+    "pdf_page": 207,
+    "positioned_line_count": 105,
+    "public_projection": "anchors_hashes_and_counts_only",
+    "raw_evidence_availability": "private_local"
+  },
+  {
+    "image_region_count": 0,
+    "pdf_page": 208,
+    "positioned_line_count": 96,
+    "public_projection": "anchors_hashes_and_counts_only",
+    "raw_evidence_availability": "private_local"
+  },
+  {
+    "image_region_count": 0,
+    "pdf_page": 209,
+    "positioned_line_count": 201,
+    "public_projection": "anchors_hashes_and_counts_only",
+    "raw_evidence_availability": "private_local"
+  },
+  {
+    "image_region_count": 0,
+    "pdf_page": 210,
+    "positioned_line_count": 190,
+    "public_projection": "anchors_hashes_and_counts_only",
+    "raw_evidence_availability": "private_local"
+  },
+  {
+    "image_region_count": 0,
+    "pdf_page": 211,
+    "positioned_line_count": 164,
+    "public_projection": "anchors_hashes_and_counts_only",
+    "raw_evidence_availability": "private_local"
+  },
+  {
+    "image_region_count": 0,
+    "pdf_page": 212,
+    "positioned_line_count": 174,
+    "public_projection": "anchors_hashes_and_counts_only",
+    "raw_evidence_availability": "private_local"
+  },
+  {
+    "image_region_count": 0,
+    "pdf_page": 213,
+    "positioned_line_count": 258,
+    "public_projection": "anchors_hashes_and_counts_only",
+    "raw_evidence_availability": "private_local"
+  },
+  {
+    "image_region_count": 0,
+    "pdf_page": 214,
+    "positioned_line_count": 253,
+    "public_projection": "anchors_hashes_and_counts_only",
+    "raw_evidence_availability": "private_local"
+  },
+  {
+    "image_region_count": 0,
+    "pdf_page": 215,
+    "positioned_line_count": 237,
+    "public_projection": "anchors_hashes_and_counts_only",
+    "raw_evidence_availability": "private_local"
+  },
+  {
+    "image_region_count": 0,
+    "pdf_page": 216,
+    "positioned_line_count": 198,
+    "public_projection": "anchors_hashes_and_counts_only",
+    "raw_evidence_availability": "private_local"
+  },
+  {
+    "image_region_count": 0,
+    "pdf_page": 217,
+    "positioned_line_count": 137,
+    "public_projection": "anchors_hashes_and_counts_only",
+    "raw_evidence_availability": "private_local"
+  },
+  {
+    "image_region_count": 0,
+    "pdf_page": 218,
+    "positioned_line_count": 117,
+    "public_projection": "anchors_hashes_and_counts_only",
+    "raw_evidence_availability": "private_local"
+  },
+  {
+    "image_region_count": 0,
+    "pdf_page": 219,
+    "positioned_line_count": 163,
+    "public_projection": "anchors_hashes_and_counts_only",
+    "raw_evidence_availability": "private_local"
+  },
+  {
+    "image_region_count": 3,
+    "pdf_page": 220,
+    "positioned_line_count": 143,
+    "public_projection": "anchors_hashes_and_counts_only",
+    "raw_evidence_availability": "private_local"
+  },
+  {
+    "image_region_count": 1,
+    "pdf_page": 221,
+    "positioned_line_count": 108,
+    "public_projection": "anchors_hashes_and_counts_only",
+    "raw_evidence_availability": "private_local"
+  },
+  {
+    "image_region_count": 5,
+    "pdf_page": 222,
+    "positioned_line_count": 90,
+    "public_projection": "anchors_hashes_and_counts_only",
+    "raw_evidence_availability": "private_local"
+  },
+  {
+    "image_region_count": 0,
+    "pdf_page": 223,
+    "positioned_line_count": 109,
+    "public_projection": "anchors_hashes_and_counts_only",
+    "raw_evidence_availability": "private_local"
+  },
+  {
+    "image_region_count": 2,
+    "pdf_page": 224,
+    "positioned_line_count": 113,
+    "public_projection": "anchors_hashes_and_counts_only",
+    "raw_evidence_availability": "private_local"
+  },
+  {
+    "image_region_count": 0,
+    "pdf_page": 225,
+    "positioned_line_count": 81,
+    "public_projection": "anchors_hashes_and_counts_only",
+    "raw_evidence_availability": "private_local"
+  },
+  {
+    "image_region_count": 0,
+    "pdf_page": 226,
+    "positioned_line_count": 226,
+    "public_projection": "anchors_hashes_and_counts_only",
+    "raw_evidence_availability": "private_local"
+  },
+  {
+    "image_region_count": 0,
+    "pdf_page": 227,
+    "positioned_line_count": 127,
+    "public_projection": "anchors_hashes_and_counts_only",
+    "raw_evidence_availability": "private_local"
+  },
+  {
+    "image_region_count": 0,
+    "pdf_page": 228,
+    "positioned_line_count": 242,
+    "public_projection": "anchors_hashes_and_counts_only",
+    "raw_evidence_availability": "private_local"
+  },
+  {
+    "image_region_count": 0,
+    "pdf_page": 229,
+    "positioned_line_count": 179,
+    "public_projection": "anchors_hashes_and_counts_only",
+    "raw_evidence_availability": "private_local"
+  },
+  {
+    "image_region_count": 0,
+    "pdf_page": 230,
+    "positioned_line_count": 458,
+    "public_projection": "anchors_hashes_and_counts_only",
+    "raw_evidence_availability": "private_local"
+  },
+  {
+    "image_region_count": 0,
+    "pdf_page": 231,
+    "positioned_line_count": 354,
+    "public_projection": "anchors_hashes_and_counts_only",
+    "raw_evidence_availability": "private_local"
+  },
+  {
+    "image_region_count": 0,
+    "pdf_page": 232,
+    "positioned_line_count": 454,
+    "public_projection": "anchors_hashes_and_counts_only",
+    "raw_evidence_availability": "private_local"
+  },
+  {
+    "image_region_count": 0,
+    "pdf_page": 233,
+    "positioned_line_count": 169,
+    "public_projection": "anchors_hashes_and_counts_only",
+    "raw_evidence_availability": "private_local"
+  },
+  {
+    "image_region_count": 0,
+    "pdf_page": 234,
+    "positioned_line_count": 215,
+    "public_projection": "anchors_hashes_and_counts_only",
+    "raw_evidence_availability": "private_local"
+  },
+  {
+    "image_region_count": 0,
+    "pdf_page": 235,
+    "positioned_line_count": 98,
+    "public_projection": "anchors_hashes_and_counts_only",
+    "raw_evidence_availability": "private_local"
+  },
+  {
+    "image_region_count": 0,
+    "pdf_page": 236,
+    "positioned_line_count": 43,
+    "public_projection": "anchors_hashes_and_counts_only",
+    "raw_evidence_availability": "private_local"
+  },
+  {
+    "image_region_count": 0,
+    "pdf_page": 237,
+    "positioned_line_count": 4,
+    "public_projection": "anchors_hashes_and_counts_only",
+    "raw_evidence_availability": "private_local"
+  },
+  {
+    "image_region_count": 0,
+    "pdf_page": 238,
+    "positioned_line_count": 92,
+    "public_projection": "anchors_hashes_and_counts_only",
+    "raw_evidence_availability": "private_local"
+  },
+  {
+    "image_region_count": 0,
+    "pdf_page": 239,
+    "positioned_line_count": 119,
+    "public_projection": "anchors_hashes_and_counts_only",
+    "raw_evidence_availability": "private_local"
+  },
+  {
+    "image_region_count": 0,
+    "pdf_page": 240,
+    "positioned_line_count": 174,
+    "public_projection": "anchors_hashes_and_counts_only",
+    "raw_evidence_availability": "private_local"
+  },
+  {
+    "image_region_count": 0,
+    "pdf_page": 241,
+    "positioned_line_count": 111,
+    "public_projection": "anchors_hashes_and_counts_only",
+    "raw_evidence_availability": "private_local"
+  },
+  {
+    "image_region_count": 0,
+    "pdf_page": 242,
+    "positioned_line_count": 111,
+    "public_projection": "anchors_hashes_and_counts_only",
+    "raw_evidence_availability": "private_local"
+  },
+  {
+    "image_region_count": 0,
+    "pdf_page": 243,
+    "positioned_line_count": 45,
+    "public_projection": "anchors_hashes_and_counts_only",
+    "raw_evidence_availability": "private_local"
+  },
+  {
+    "image_region_count": 0,
+    "pdf_page": 244,
+    "positioned_line_count": 105,
+    "public_projection": "anchors_hashes_and_counts_only",
+    "raw_evidence_availability": "private_local"
+  },
+  {
+    "image_region_count": 0,
+    "pdf_page": 245,
+    "positioned_line_count": 116,
+    "public_projection": "anchors_hashes_and_counts_only",
+    "raw_evidence_availability": "private_local"
+  },
+  {
+    "image_region_count": 0,
+    "pdf_page": 246,
+    "positioned_line_count": 127,
+    "public_projection": "anchors_hashes_and_counts_only",
+    "raw_evidence_availability": "private_local"
+  },
+  {
+    "image_region_count": 0,
+    "pdf_page": 247,
+    "positioned_line_count": 115,
+    "public_projection": "anchors_hashes_and_counts_only",
+    "raw_evidence_availability": "private_local"
+  },
+  {
+    "image_region_count": 0,
+    "pdf_page": 248,
+    "positioned_line_count": 119,
+    "public_projection": "anchors_hashes_and_counts_only",
+    "raw_evidence_availability": "private_local"
+  },
+  {
+    "image_region_count": 0,
+    "pdf_page": 249,
+    "positioned_line_count": 135,
+    "public_projection": "anchors_hashes_and_counts_only",
+    "raw_evidence_availability": "private_local"
+  },
+  {
+    "image_region_count": 0,
+    "pdf_page": 250,
+    "positioned_line_count": 118,
+    "public_projection": "anchors_hashes_and_counts_only",
+    "raw_evidence_availability": "private_local"
+  },
+  {
+    "image_region_count": 0,
+    "pdf_page": 251,
+    "positioned_line_count": 116,
+    "public_projection": "anchors_hashes_and_counts_only",
+    "raw_evidence_availability": "private_local"
+  },
+  {
+    "image_region_count": 0,
+    "pdf_page": 252,
+    "positioned_line_count": 114,
+    "public_projection": "anchors_hashes_and_counts_only",
+    "raw_evidence_availability": "private_local"
+  },
+  {
+    "image_region_count": 0,
+    "pdf_page": 253,
+    "positioned_line_count": 118,
+    "public_projection": "anchors_hashes_and_counts_only",
+    "raw_evidence_availability": "private_local"
+  },
+  {
+    "image_region_count": 0,
+    "pdf_page": 254,
+    "positioned_line_count": 114,
+    "public_projection": "anchors_hashes_and_counts_only",
+    "raw_evidence_availability": "private_local"
+  },
+  {
+    "image_region_count": 0,
+    "pdf_page": 255,
+    "positioned_line_count": 116,
+    "public_projection": "anchors_hashes_and_counts_only",
+    "raw_evidence_availability": "private_local"
+  },
+  {
+    "image_region_count": 0,
+    "pdf_page": 256,
+    "positioned_line_count": 110,
+    "public_projection": "anchors_hashes_and_counts_only",
+    "raw_evidence_availability": "private_local"
+  },
+  {
+    "image_region_count": 0,
+    "pdf_page": 257,
+    "positioned_line_count": 192,
+    "public_projection": "anchors_hashes_and_counts_only",
+    "raw_evidence_availability": "private_local"
+  },
+  {
+    "image_region_count": 0,
+    "pdf_page": 258,
+    "positioned_line_count": 114,
+    "public_projection": "anchors_hashes_and_counts_only",
+    "raw_evidence_availability": "private_local"
+  },
+  {
+    "image_region_count": 0,
+    "pdf_page": 259,
+    "positioned_line_count": 118,
+    "public_projection": "anchors_hashes_and_counts_only",
+    "raw_evidence_availability": "private_local"
+  },
+  {
+    "image_region_count": 0,
+    "pdf_page": 260,
+    "positioned_line_count": 114,
+    "public_projection": "anchors_hashes_and_counts_only",
+    "raw_evidence_availability": "private_local"
+  },
+  {
+    "image_region_count": 0,
+    "pdf_page": 261,
+    "positioned_line_count": 116,
+    "public_projection": "anchors_hashes_and_counts_only",
+    "raw_evidence_availability": "private_local"
+  },
+  {
+    "image_region_count": 0,
+    "pdf_page": 262,
+    "positioned_line_count": 116,
+    "public_projection": "anchors_hashes_and_counts_only",
+    "raw_evidence_availability": "private_local"
+  },
+  {
+    "image_region_count": 0,
+    "pdf_page": 263,
+    "positioned_line_count": 120,
+    "public_projection": "anchors_hashes_and_counts_only",
+    "raw_evidence_availability": "private_local"
+  },
+  {
+    "image_region_count": 0,
+    "pdf_page": 264,
+    "positioned_line_count": 115,
+    "public_projection": "anchors_hashes_and_counts_only",
+    "raw_evidence_availability": "private_local"
+  },
+  {
+    "image_region_count": 0,
+    "pdf_page": 265,
+    "positioned_line_count": 117,
+    "public_projection": "anchors_hashes_and_counts_only",
+    "raw_evidence_availability": "private_local"
+  },
+  {
+    "image_region_count": 0,
+    "pdf_page": 266,
+    "positioned_line_count": 118,
+    "public_projection": "anchors_hashes_and_counts_only",
+    "raw_evidence_availability": "private_local"
+  },
+  {
+    "image_region_count": 0,
+    "pdf_page": 267,
+    "positioned_line_count": 124,
+    "public_projection": "anchors_hashes_and_counts_only",
+    "raw_evidence_availability": "private_local"
+  },
+  {
+    "image_region_count": 0,
+    "pdf_page": 268,
+    "positioned_line_count": 115,
+    "public_projection": "anchors_hashes_and_counts_only",
+    "raw_evidence_availability": "private_local"
+  },
+  {
+    "image_region_count": 0,
+    "pdf_page": 269,
+    "positioned_line_count": 116,
+    "public_projection": "anchors_hashes_and_counts_only",
+    "raw_evidence_availability": "private_local"
+  },
+  {
+    "image_region_count": 0,
+    "pdf_page": 270,
+    "positioned_line_count": 114,
+    "public_projection": "anchors_hashes_and_counts_only",
+    "raw_evidence_availability": "private_local"
+  },
+  {
+    "image_region_count": 0,
+    "pdf_page": 271,
+    "positioned_line_count": 121,
+    "public_projection": "anchors_hashes_and_counts_only",
+    "raw_evidence_availability": "private_local"
+  },
+  {
+    "image_region_count": 0,
+    "pdf_page": 272,
+    "positioned_line_count": 118,
+    "public_projection": "anchors_hashes_and_counts_only",
+    "raw_evidence_availability": "private_local"
+  },
+  {
+    "image_region_count": 0,
+    "pdf_page": 273,
+    "positioned_line_count": 119,
+    "public_projection": "anchors_hashes_and_counts_only",
+    "raw_evidence_availability": "private_local"
+  },
+  {
+    "image_region_count": 0,
+    "pdf_page": 274,
+    "positioned_line_count": 121,
+    "public_projection": "anchors_hashes_and_counts_only",
+    "raw_evidence_availability": "private_local"
+  },
+  {
+    "image_region_count": 0,
+    "pdf_page": 275,
+    "positioned_line_count": 120,
+    "public_projection": "anchors_hashes_and_counts_only",
+    "raw_evidence_availability": "private_local"
+  },
+  {
+    "image_region_count": 0,
+    "pdf_page": 276,
+    "positioned_line_count": 115,
+    "public_projection": "anchors_hashes_and_counts_only",
+    "raw_evidence_availability": "private_local"
+  },
+  {
+    "image_region_count": 0,
+    "pdf_page": 277,
+    "positioned_line_count": 122,
+    "public_projection": "anchors_hashes_and_counts_only",
+    "raw_evidence_availability": "private_local"
+  },
+  {
+    "image_region_count": 0,
+    "pdf_page": 278,
+    "positioned_line_count": 114,
+    "public_projection": "anchors_hashes_and_counts_only",
+    "raw_evidence_availability": "private_local"
+  },
+  {
+    "image_region_count": 0,
+    "pdf_page": 279,
+    "positioned_line_count": 113,
+    "public_projection": "anchors_hashes_and_counts_only",
+    "raw_evidence_availability": "private_local"
+  },
+  {
+    "image_region_count": 0,
+    "pdf_page": 280,
+    "positioned_line_count": 111,
+    "public_projection": "anchors_hashes_and_counts_only",
+    "raw_evidence_availability": "private_local"
+  },
+  {
+    "image_region_count": 0,
+    "pdf_page": 281,
+    "positioned_line_count": 119,
+    "public_projection": "anchors_hashes_and_counts_only",
+    "raw_evidence_availability": "private_local"
+  },
+  {
+    "image_region_count": 0,
+    "pdf_page": 282,
+    "positioned_line_count": 92,
+    "public_projection": "anchors_hashes_and_counts_only",
+    "raw_evidence_availability": "private_local"
+  },
+  {
+    "image_region_count": 0,
+    "pdf_page": 283,
+    "positioned_line_count": 4,
+    "public_projection": "anchors_hashes_and_counts_only",
+    "raw_evidence_availability": "private_local"
+  },
+  {
+    "image_region_count": 0,
+    "pdf_page": 284,
+    "positioned_line_count": 87,
+    "public_projection": "anchors_hashes_and_counts_only",
+    "raw_evidence_availability": "private_local"
+  },
+  {
+    "image_region_count": 0,
+    "pdf_page": 285,
+    "positioned_line_count": 114,
+    "public_projection": "anchors_hashes_and_counts_only",
+    "raw_evidence_availability": "private_local"
+  },
+  {
+    "image_region_count": 0,
+    "pdf_page": 286,
+    "positioned_line_count": 166,
+    "public_projection": "anchors_hashes_and_counts_only",
+    "raw_evidence_availability": "private_local"
+  },
+  {
+    "image_region_count": 0,
+    "pdf_page": 287,
+    "positioned_line_count": 118,
+    "public_projection": "anchors_hashes_and_counts_only",
+    "raw_evidence_availability": "private_local"
+  },
+  {
+    "image_region_count": 0,
+    "pdf_page": 288,
+    "positioned_line_count": 117,
+    "public_projection": "anchors_hashes_and_counts_only",
+    "raw_evidence_availability": "private_local"
+  },
+  {
+    "image_region_count": 0,
+    "pdf_page": 289,
+    "positioned_line_count": 149,
+    "public_projection": "anchors_hashes_and_counts_only",
+    "raw_evidence_availability": "private_local"
+  },
+  {
+    "image_region_count": 0,
+    "pdf_page": 290,
+    "positioned_line_count": 115,
+    "public_projection": "anchors_hashes_and_counts_only",
+    "raw_evidence_availability": "private_local"
+  },
+  {
+    "image_region_count": 0,
+    "pdf_page": 291,
+    "positioned_line_count": 113,
+    "public_projection": "anchors_hashes_and_counts_only",
+    "raw_evidence_availability": "private_local"
+  },
+  {
+    "image_region_count": 0,
+    "pdf_page": 292,
+    "positioned_line_count": 111,
+    "public_projection": "anchors_hashes_and_counts_only",
+    "raw_evidence_availability": "private_local"
+  },
+  {
+    "image_region_count": 0,
+    "pdf_page": 293,
+    "positioned_line_count": 114,
+    "public_projection": "anchors_hashes_and_counts_only",
+    "raw_evidence_availability": "private_local"
+  },
+  {
+    "image_region_count": 0,
+    "pdf_page": 294,
+    "positioned_line_count": 116,
+    "public_projection": "anchors_hashes_and_counts_only",
+    "raw_evidence_availability": "private_local"
+  },
+  {
+    "image_region_count": 0,
+    "pdf_page": 295,
+    "positioned_line_count": 113,
+    "public_projection": "anchors_hashes_and_counts_only",
+    "raw_evidence_availability": "private_local"
+  },
+  {
+    "image_region_count": 0,
+    "pdf_page": 296,
+    "positioned_line_count": 115,
+    "public_projection": "anchors_hashes_and_counts_only",
+    "raw_evidence_availability": "private_local"
+  },
+  {
+    "image_region_count": 0,
+    "pdf_page": 297,
+    "positioned_line_count": 129,
+    "public_projection": "anchors_hashes_and_counts_only",
+    "raw_evidence_availability": "private_local"
+  },
+  {
+    "image_region_count": 0,
+    "pdf_page": 298,
+    "positioned_line_count": 119,
+    "public_projection": "anchors_hashes_and_counts_only",
+    "raw_evidence_availability": "private_local"
+  },
+  {
+    "image_region_count": 0,
+    "pdf_page": 299,
+    "positioned_line_count": 116,
+    "public_projection": "anchors_hashes_and_counts_only",
+    "raw_evidence_availability": "private_local"
+  },
+  {
+    "image_region_count": 0,
+    "pdf_page": 300,
+    "positioned_line_count": 116,
+    "public_projection": "anchors_hashes_and_counts_only",
+    "raw_evidence_availability": "private_local"
+  },
+  {
+    "image_region_count": 0,
+    "pdf_page": 301,
+    "positioned_line_count": 114,
+    "public_projection": "anchors_hashes_and_counts_only",
+    "raw_evidence_availability": "private_local"
+  },
+  {
+    "image_region_count": 0,
+    "pdf_page": 302,
+    "positioned_line_count": 116,
+    "public_projection": "anchors_hashes_and_counts_only",
+    "raw_evidence_availability": "private_local"
+  },
+  {
+    "image_region_count": 0,
+    "pdf_page": 303,
+    "positioned_line_count": 116,
+    "public_projection": "anchors_hashes_and_counts_only",
+    "raw_evidence_availability": "private_local"
+  },
+  {
+    "image_region_count": 0,
+    "pdf_page": 304,
+    "positioned_line_count": 118,
+    "public_projection": "anchors_hashes_and_counts_only",
+    "raw_evidence_availability": "private_local"
+  },
+  {
+    "image_region_count": 0,
+    "pdf_page": 305,
+    "positioned_line_count": 118,
+    "public_projection": "anchors_hashes_and_counts_only",
+    "raw_evidence_availability": "private_local"
+  },
+  {
+    "image_region_count": 0,
+    "pdf_page": 306,
+    "positioned_line_count": 119,
+    "public_projection": "anchors_hashes_and_counts_only",
+    "raw_evidence_availability": "private_local"
+  },
+  {
+    "image_region_count": 0,
+    "pdf_page": 307,
+    "positioned_line_count": 113,
+    "public_projection": "anchors_hashes_and_counts_only",
+    "raw_evidence_availability": "private_local"
+  },
+  {
+    "image_region_count": 0,
+    "pdf_page": 308,
+    "positioned_line_count": 116,
+    "public_projection": "anchors_hashes_and_counts_only",
+    "raw_evidence_availability": "private_local"
+  },
+  {
+    "image_region_count": 0,
+    "pdf_page": 309,
+    "positioned_line_count": 119,
+    "public_projection": "anchors_hashes_and_counts_only",
+    "raw_evidence_availability": "private_local"
+  },
+  {
+    "image_region_count": 0,
+    "pdf_page": 310,
+    "positioned_line_count": 115,
+    "public_projection": "anchors_hashes_and_counts_only",
+    "raw_evidence_availability": "private_local"
+  },
+  {
+    "image_region_count": 0,
+    "pdf_page": 311,
+    "positioned_line_count": 116,
+    "public_projection": "anchors_hashes_and_counts_only",
+    "raw_evidence_availability": "private_local"
+  },
+  {
+    "image_region_count": 0,
+    "pdf_page": 312,
+    "positioned_line_count": 147,
+    "public_projection": "anchors_hashes_and_counts_only",
+    "raw_evidence_availability": "private_local"
+  },
+  {
+    "image_region_count": 0,
+    "pdf_page": 313,
+    "positioned_line_count": 115,
+    "public_projection": "anchors_hashes_and_counts_only",
+    "raw_evidence_availability": "private_local"
+  },
+  {
+    "image_region_count": 0,
+    "pdf_page": 314,
+    "positioned_line_count": 146,
+    "public_projection": "anchors_hashes_and_counts_only",
+    "raw_evidence_availability": "private_local"
+  },
+  {
+    "image_region_count": 0,
+    "pdf_page": 315,
+    "positioned_line_count": 115,
+    "public_projection": "anchors_hashes_and_counts_only",
+    "raw_evidence_availability": "private_local"
+  },
+  {
+    "image_region_count": 0,
+    "pdf_page": 316,
+    "positioned_line_count": 115,
+    "public_projection": "anchors_hashes_and_counts_only",
+    "raw_evidence_availability": "private_local"
+  },
+  {
+    "image_region_count": 0,
+    "pdf_page": 317,
+    "positioned_line_count": 117,
+    "public_projection": "anchors_hashes_and_counts_only",
+    "raw_evidence_availability": "private_local"
+  },
+  {
+    "image_region_count": 0,
+    "pdf_page": 318,
+    "positioned_line_count": 109,
+    "public_projection": "anchors_hashes_and_counts_only",
+    "raw_evidence_availability": "private_local"
+  },
+  {
+    "image_region_count": 0,
+    "pdf_page": 319,
+    "positioned_line_count": 120,
+    "public_projection": "anchors_hashes_and_counts_only",
+    "raw_evidence_availability": "private_local"
+  },
+  {
+    "image_region_count": 0,
+    "pdf_page": 320,
+    "positioned_line_count": 114,
+    "public_projection": "anchors_hashes_and_counts_only",
+    "raw_evidence_availability": "private_local"
+  },
+  {
+    "image_region_count": 0,
+    "pdf_page": 321,
+    "positioned_line_count": 118,
+    "public_projection": "anchors_hashes_and_counts_only",
+    "raw_evidence_availability": "private_local"
+  },
+  {
+    "image_region_count": 0,
+    "pdf_page": 322,
+    "positioned_line_count": 115,
+    "public_projection": "anchors_hashes_and_counts_only",
+    "raw_evidence_availability": "private_local"
+  },
+  {
+    "image_region_count": 0,
+    "pdf_page": 323,
+    "positioned_line_count": 133,
+    "public_projection": "anchors_hashes_and_counts_only",
+    "raw_evidence_availability": "private_local"
+  },
+  {
+    "image_region_count": 0,
+    "pdf_page": 324,
+    "positioned_line_count": 113,
+    "public_projection": "anchors_hashes_and_counts_only",
+    "raw_evidence_availability": "private_local"
+  },
+  {
+    "image_region_count": 0,
+    "pdf_page": 325,
+    "positioned_line_count": 116,
+    "public_projection": "anchors_hashes_and_counts_only",
+    "raw_evidence_availability": "private_local"
+  },
+  {
+    "image_region_count": 0,
+    "pdf_page": 326,
+    "positioned_line_count": 120,
+    "public_projection": "anchors_hashes_and_counts_only",
+    "raw_evidence_availability": "private_local"
+  },
+  {
+    "image_region_count": 0,
+    "pdf_page": 327,
+    "positioned_line_count": 140,
+    "public_projection": "anchors_hashes_and_counts_only",
+    "raw_evidence_availability": "private_local"
+  },
+  {
+    "image_region_count": 0,
+    "pdf_page": 328,
+    "positioned_line_count": 117,
+    "public_projection": "anchors_hashes_and_counts_only",
+    "raw_evidence_availability": "private_local"
+  },
+  {
+    "image_region_count": 0,
+    "pdf_page": 329,
+    "positioned_line_count": 115,
+    "public_projection": "anchors_hashes_and_counts_only",
+    "raw_evidence_availability": "private_local"
+  },
+  {
+    "image_region_count": 0,
+    "pdf_page": 330,
+    "positioned_line_count": 35,
+    "public_projection": "anchors_hashes_and_counts_only",
+    "raw_evidence_availability": "private_local"
+  },
+  {
+    "image_region_count": 0,
+    "pdf_page": 331,
+    "positioned_line_count": 4,
+    "public_projection": "anchors_hashes_and_counts_only",
+    "raw_evidence_availability": "private_local"
+  },
+  {
+    "image_region_count": 0,
+    "pdf_page": 332,
+    "positioned_line_count": 93,
+    "public_projection": "anchors_hashes_and_counts_only",
+    "raw_evidence_availability": "private_local"
+  },
+  {
+    "image_region_count": 0,
+    "pdf_page": 333,
+    "positioned_line_count": 110,
+    "public_projection": "anchors_hashes_and_counts_only",
+    "raw_evidence_availability": "private_local"
+  },
+  {
+    "image_region_count": 0,
+    "pdf_page": 334,
+    "positioned_line_count": 111,
+    "public_projection": "anchors_hashes_and_counts_only",
+    "raw_evidence_availability": "private_local"
+  },
+  {
+    "image_region_count": 0,
+    "pdf_page": 335,
+    "positioned_line_count": 124,
+    "public_projection": "anchors_hashes_and_counts_only",
+    "raw_evidence_availability": "private_local"
+  },
+  {
+    "image_region_count": 0,
+    "pdf_page": 336,
+    "positioned_line_count": 118,
+    "public_projection": "anchors_hashes_and_counts_only",
+    "raw_evidence_availability": "private_local"
+  },
+  {
+    "image_region_count": 0,
+    "pdf_page": 337,
+    "positioned_line_count": 144,
+    "public_projection": "anchors_hashes_and_counts_only",
+    "raw_evidence_availability": "private_local"
+  },
+  {
+    "image_region_count": 0,
+    "pdf_page": 338,
+    "positioned_line_count": 118,
+    "public_projection": "anchors_hashes_and_counts_only",
+    "raw_evidence_availability": "private_local"
+  },
+  {
+    "image_region_count": 0,
+    "pdf_page": 339,
+    "positioned_line_count": 122,
+    "public_projection": "anchors_hashes_and_counts_only",
+    "raw_evidence_availability": "private_local"
+  },
+  {
+    "image_region_count": 0,
+    "pdf_page": 340,
+    "positioned_line_count": 119,
+    "public_projection": "anchors_hashes_and_counts_only",
+    "raw_evidence_availability": "private_local"
+  },
+  {
+    "image_region_count": 0,
+    "pdf_page": 341,
+    "positioned_line_count": 117,
+    "public_projection": "anchors_hashes_and_counts_only",
+    "raw_evidence_availability": "private_local"
+  },
+  {
+    "image_region_count": 0,
+    "pdf_page": 342,
+    "positioned_line_count": 118,
+    "public_projection": "anchors_hashes_and_counts_only",
+    "raw_evidence_availability": "private_local"
+  },
+  {
+    "image_region_count": 0,
+    "pdf_page": 343,
+    "positioned_line_count": 112,
+    "public_projection": "anchors_hashes_and_counts_only",
+    "raw_evidence_availability": "private_local"
+  },
+  {
+    "image_region_count": 0,
+    "pdf_page": 344,
+    "positioned_line_count": 123,
+    "public_projection": "anchors_hashes_and_counts_only",
+    "raw_evidence_availability": "private_local"
+  },
+  {
+    "image_region_count": 0,
+    "pdf_page": 345,
+    "positioned_line_count": 109,
+    "public_projection": "anchors_hashes_and_counts_only",
+    "raw_evidence_availability": "private_local"
+  },
+  {
+    "image_region_count": 0,
+    "pdf_page": 346,
+    "positioned_line_count": 112,
+    "public_projection": "anchors_hashes_and_counts_only",
+    "raw_evidence_availability": "private_local"
+  },
+  {
+    "image_region_count": 0,
+    "pdf_page": 347,
+    "positioned_line_count": 66,
+    "public_projection": "anchors_hashes_and_counts_only",
+    "raw_evidence_availability": "private_local"
+  },
+  {
+    "image_region_count": 0,
+    "pdf_page": 348,
+    "positioned_line_count": 108,
+    "public_projection": "anchors_hashes_and_counts_only",
+    "raw_evidence_availability": "private_local"
+  },
+  {
+    "image_region_count": 0,
+    "pdf_page": 349,
+    "positioned_line_count": 110,
+    "public_projection": "anchors_hashes_and_counts_only",
+    "raw_evidence_availability": "private_local"
+  },
+  {
+    "image_region_count": 0,
+    "pdf_page": 350,
+    "positioned_line_count": 117,
+    "public_projection": "anchors_hashes_and_counts_only",
+    "raw_evidence_availability": "private_local"
+  },
+  {
+    "image_region_count": 0,
+    "pdf_page": 351,
+    "positioned_line_count": 114,
+    "public_projection": "anchors_hashes_and_counts_only",
+    "raw_evidence_availability": "private_local"
+  },
+  {
+    "image_region_count": 0,
+    "pdf_page": 352,
+    "positioned_line_count": 114,
+    "public_projection": "anchors_hashes_and_counts_only",
+    "raw_evidence_availability": "private_local"
+  },
+  {
+    "image_region_count": 0,
+    "pdf_page": 353,
+    "positioned_line_count": 41,
+    "public_projection": "anchors_hashes_and_counts_only",
+    "raw_evidence_availability": "private_local"
+  },
+  {
+    "image_region_count": 0,
+    "pdf_page": 354,
+    "positioned_line_count": 19,
+    "public_projection": "anchors_hashes_and_counts_only",
+    "raw_evidence_availability": "private_local"
+  },
+  {
+    "image_region_count": 0,
+    "pdf_page": 355,
+    "positioned_line_count": 4,
+    "public_projection": "anchors_hashes_and_counts_only",
+    "raw_evidence_availability": "private_local"
+  },
+  {
+    "image_region_count": 0,
+    "pdf_page": 356,
+    "positioned_line_count": 92,
+    "public_projection": "anchors_hashes_and_counts_only",
+    "raw_evidence_availability": "private_local"
+  },
+  {
+    "image_region_count": 0,
+    "pdf_page": 357,
+    "positioned_line_count": 119,
+    "public_projection": "anchors_hashes_and_counts_only",
+    "raw_evidence_availability": "private_local"
+  },
+  {
+    "image_region_count": 0,
+    "pdf_page": 358,
+    "positioned_line_count": 158,
+    "public_projection": "anchors_hashes_and_counts_only",
+    "raw_evidence_availability": "private_local"
+  },
+  {
+    "image_region_count": 0,
+    "pdf_page": 359,
+    "positioned_line_count": 119,
+    "public_projection": "anchors_hashes_and_counts_only",
+    "raw_evidence_availability": "private_local"
+  },
+  {
+    "image_region_count": 0,
+    "pdf_page": 360,
+    "positioned_line_count": 121,
+    "public_projection": "anchors_hashes_and_counts_only",
+    "raw_evidence_availability": "private_local"
+  },
+  {
+    "image_region_count": 0,
+    "pdf_page": 361,
+    "positioned_line_count": 119,
+    "public_projection": "anchors_hashes_and_counts_only",
+    "raw_evidence_availability": "private_local"
+  },
+  {
+    "image_region_count": 0,
+    "pdf_page": 362,
+    "positioned_line_count": 124,
+    "public_projection": "anchors_hashes_and_counts_only",
+    "raw_evidence_availability": "private_local"
+  },
+  {
+    "image_region_count": 0,
+    "pdf_page": 363,
+    "positioned_line_count": 160,
+    "public_projection": "anchors_hashes_and_counts_only",
+    "raw_evidence_availability": "private_local"
+  },
+  {
+    "image_region_count": 0,
+    "pdf_page": 364,
+    "positioned_line_count": 117,
+    "public_projection": "anchors_hashes_and_counts_only",
+    "raw_evidence_availability": "private_local"
+  },
+  {
+    "image_region_count": 0,
+    "pdf_page": 365,
+    "positioned_line_count": 149,
+    "public_projection": "anchors_hashes_and_counts_only",
+    "raw_evidence_availability": "private_local"
+  },
+  {
+    "image_region_count": 0,
+    "pdf_page": 366,
+    "positioned_line_count": 115,
+    "public_projection": "anchors_hashes_and_counts_only",
+    "raw_evidence_availability": "private_local"
+  },
+  {
+    "image_region_count": 0,
+    "pdf_page": 367,
+    "positioned_line_count": 74,
+    "public_projection": "anchors_hashes_and_counts_only",
+    "raw_evidence_availability": "private_local"
+  },
+  {
+    "image_region_count": 0,
+    "pdf_page": 368,
+    "positioned_line_count": 82,
+    "public_projection": "anchors_hashes_and_counts_only",
+    "raw_evidence_availability": "private_local"
+  },
+  {
+    "image_region_count": 0,
+    "pdf_page": 369,
+    "positioned_line_count": 132,
+    "public_projection": "anchors_hashes_and_counts_only",
+    "raw_evidence_availability": "private_local"
+  },
+  {
+    "image_region_count": 0,
+    "pdf_page": 370,
+    "positioned_line_count": 156,
+    "public_projection": "anchors_hashes_and_counts_only",
+    "raw_evidence_availability": "private_local"
+  },
+  {
+    "image_region_count": 0,
+    "pdf_page": 371,
+    "positioned_line_count": 116,
+    "public_projection": "anchors_hashes_and_counts_only",
+    "raw_evidence_availability": "private_local"
+  },
+  {
+    "image_region_count": 0,
+    "pdf_page": 372,
+    "positioned_line_count": 137,
+    "public_projection": "anchors_hashes_and_counts_only",
+    "raw_evidence_availability": "private_local"
+  },
+  {
+    "image_region_count": 0,
+    "pdf_page": 373,
+    "positioned_line_count": 109,
+    "public_projection": "anchors_hashes_and_counts_only",
+    "raw_evidence_availability": "private_local"
+  },
+  {
+    "image_region_count": 0,
+    "pdf_page": 374,
+    "positioned_line_count": 124,
+    "public_projection": "anchors_hashes_and_counts_only",
+    "raw_evidence_availability": "private_local"
+  },
+  {
+    "image_region_count": 0,
+    "pdf_page": 375,
+    "positioned_line_count": 138,
+    "public_projection": "anchors_hashes_and_counts_only",
+    "raw_evidence_availability": "private_local"
+  },
+  {
+    "image_region_count": 0,
+    "pdf_page": 376,
+    "positioned_line_count": 130,
+    "public_projection": "anchors_hashes_and_counts_only",
+    "raw_evidence_availability": "private_local"
+  },
+  {
+    "image_region_count": 0,
+    "pdf_page": 377,
+    "positioned_line_count": 135,
+    "public_projection": "anchors_hashes_and_counts_only",
+    "raw_evidence_availability": "private_local"
+  },
+  {
+    "image_region_count": 0,
+    "pdf_page": 378,
+    "positioned_line_count": 158,
+    "public_projection": "anchors_hashes_and_counts_only",
+    "raw_evidence_availability": "private_local"
+  },
+  {
+    "image_region_count": 0,
+    "pdf_page": 379,
+    "positioned_line_count": 117,
+    "public_projection": "anchors_hashes_and_counts_only",
+    "raw_evidence_availability": "private_local"
+  },
+  {
+    "image_region_count": 0,
+    "pdf_page": 380,
+    "positioned_line_count": 141,
+    "public_projection": "anchors_hashes_and_counts_only",
+    "raw_evidence_availability": "private_local"
+  },
+  {
+    "image_region_count": 0,
+    "pdf_page": 381,
+    "positioned_line_count": 130,
+    "public_projection": "anchors_hashes_and_counts_only",
+    "raw_evidence_availability": "private_local"
+  },
+  {
+    "image_region_count": 0,
+    "pdf_page": 382,
+    "positioned_line_count": 115,
+    "public_projection": "anchors_hashes_and_counts_only",
+    "raw_evidence_availability": "private_local"
+  },
+  {
+    "image_region_count": 0,
+    "pdf_page": 383,
+    "positioned_line_count": 120,
+    "public_projection": "anchors_hashes_and_counts_only",
+    "raw_evidence_availability": "private_local"
+  },
+  {
+    "image_region_count": 0,
+    "pdf_page": 384,
+    "positioned_line_count": 118,
+    "public_projection": "anchors_hashes_and_counts_only",
+    "raw_evidence_availability": "private_local"
+  },
+  {
+    "image_region_count": 0,
+    "pdf_page": 385,
+    "positioned_line_count": 115,
+    "public_projection": "anchors_hashes_and_counts_only",
+    "raw_evidence_availability": "private_local"
+  },
+  {
+    "image_region_count": 0,
+    "pdf_page": 386,
+    "positioned_line_count": 68,
+    "public_projection": "anchors_hashes_and_counts_only",
+    "raw_evidence_availability": "private_local"
+  },
+  {
+    "image_region_count": 0,
+    "pdf_page": 387,
+    "positioned_line_count": 4,
+    "public_projection": "anchors_hashes_and_counts_only",
+    "raw_evidence_availability": "private_local"
+  },
+  {
+    "image_region_count": 0,
+    "pdf_page": 388,
+    "positioned_line_count": 90,
+    "public_projection": "anchors_hashes_and_counts_only",
+    "raw_evidence_availability": "private_local"
+  },
+  {
+    "image_region_count": 0,
+    "pdf_page": 389,
+    "positioned_line_count": 113,
+    "public_projection": "anchors_hashes_and_counts_only",
+    "raw_evidence_availability": "private_local"
+  },
+  {
+    "image_region_count": 0,
+    "pdf_page": 390,
+    "positioned_line_count": 122,
+    "public_projection": "anchors_hashes_and_counts_only",
+    "raw_evidence_availability": "private_local"
+  },
+  {
+    "image_region_count": 0,
+    "pdf_page": 391,
+    "positioned_line_count": 86,
+    "public_projection": "anchors_hashes_and_counts_only",
+    "raw_evidence_availability": "private_local"
+  },
+  {
+    "image_region_count": 0,
+    "pdf_page": 392,
+    "positioned_line_count": 117,
+    "public_projection": "anchors_hashes_and_counts_only",
+    "raw_evidence_availability": "private_local"
+  },
+  {
+    "image_region_count": 0,
+    "pdf_page": 393,
+    "positioned_line_count": 119,
+    "public_projection": "anchors_hashes_and_counts_only",
+    "raw_evidence_availability": "private_local"
+  },
+  {
+    "image_region_count": 0,
+    "pdf_page": 394,
+    "positioned_line_count": 110,
+    "public_projection": "anchors_hashes_and_counts_only",
+    "raw_evidence_availability": "private_local"
+  },
+  {
+    "image_region_count": 0,
+    "pdf_page": 395,
+    "positioned_line_count": 260,
+    "public_projection": "anchors_hashes_and_counts_only",
+    "raw_evidence_availability": "private_local"
+  },
+  {
+    "image_region_count": 0,
+    "pdf_page": 396,
+    "positioned_line_count": 150,
+    "public_projection": "anchors_hashes_and_counts_only",
+    "raw_evidence_availability": "private_local"
+  },
+  {
+    "image_region_count": 0,
+    "pdf_page": 397,
+    "positioned_line_count": 118,
+    "public_projection": "anchors_hashes_and_counts_only",
+    "raw_evidence_availability": "private_local"
+  },
+  {
+    "image_region_count": 0,
+    "pdf_page": 398,
+    "positioned_line_count": 117,
+    "public_projection": "anchors_hashes_and_counts_only",
+    "raw_evidence_availability": "private_local"
+  },
+  {
+    "image_region_count": 0,
+    "pdf_page": 399,
+    "positioned_line_count": 120,
+    "public_projection": "anchors_hashes_and_counts_only",
+    "raw_evidence_availability": "private_local"
+  },
+  {
+    "image_region_count": 0,
+    "pdf_page": 400,
+    "positioned_line_count": 117,
+    "public_projection": "anchors_hashes_and_counts_only",
+    "raw_evidence_availability": "private_local"
+  },
+  {
+    "image_region_count": 0,
+    "pdf_page": 401,
+    "positioned_line_count": 159,
+    "public_projection": "anchors_hashes_and_counts_only",
+    "raw_evidence_availability": "private_local"
+  },
+  {
+    "image_region_count": 0,
+    "pdf_page": 402,
+    "positioned_line_count": 130,
+    "public_projection": "anchors_hashes_and_counts_only",
+    "raw_evidence_availability": "private_local"
+  },
+  {
+    "image_region_count": 1,
+    "pdf_page": 403,
+    "positioned_line_count": 7,
+    "public_projection": "anchors_hashes_and_counts_only",
+    "raw_evidence_availability": "private_local"
+  },
+  {
+    "image_region_count": 1,
+    "pdf_page": 404,
+    "positioned_line_count": 7,
+    "public_projection": "anchors_hashes_and_counts_only",
+    "raw_evidence_availability": "private_local"
+  },
+  {
+    "image_region_count": 0,
+    "pdf_page": 405,
+    "positioned_line_count": 132,
+    "public_projection": "anchors_hashes_and_counts_only",
+    "raw_evidence_availability": "private_local"
+  },
+  {
+    "image_region_count": 2,
+    "pdf_page": 406,
+    "positioned_line_count": 242,
+    "public_projection": "anchors_hashes_and_counts_only",
+    "raw_evidence_availability": "private_local"
+  },
+  {
+    "image_region_count": 1,
+    "pdf_page": 407,
+    "positioned_line_count": 7,
+    "public_projection": "anchors_hashes_and_counts_only",
+    "raw_evidence_availability": "private_local"
+  },
+  {
+    "image_region_count": 1,
+    "pdf_page": 408,
+    "positioned_line_count": 7,
+    "public_projection": "anchors_hashes_and_counts_only",
+    "raw_evidence_availability": "private_local"
+  },
+  {
+    "image_region_count": 1,
+    "pdf_page": 409,
+    "positioned_line_count": 7,
+    "public_projection": "anchors_hashes_and_counts_only",
+    "raw_evidence_availability": "private_local"
+  },
+  {
+    "image_region_count": 1,
+    "pdf_page": 410,
+    "positioned_line_count": 8,
+    "public_projection": "anchors_hashes_and_counts_only",
+    "raw_evidence_availability": "private_local"
+  },
+  {
+    "image_region_count": 1,
+    "pdf_page": 411,
+    "positioned_line_count": 7,
+    "public_projection": "anchors_hashes_and_counts_only",
+    "raw_evidence_availability": "private_local"
+  },
+  {
+    "image_region_count": 1,
+    "pdf_page": 412,
+    "positioned_line_count": 8,
+    "public_projection": "anchors_hashes_and_counts_only",
+    "raw_evidence_availability": "private_local"
+  },
+  {
+    "image_region_count": 1,
+    "pdf_page": 413,
+    "positioned_line_count": 7,
+    "public_projection": "anchors_hashes_and_counts_only",
+    "raw_evidence_availability": "private_local"
+  },
+  {
+    "image_region_count": 1,
+    "pdf_page": 414,
+    "positioned_line_count": 8,
+    "public_projection": "anchors_hashes_and_counts_only",
+    "raw_evidence_availability": "private_local"
+  },
+  {
+    "image_region_count": 1,
+    "pdf_page": 415,
+    "positioned_line_count": 7,
+    "public_projection": "anchors_hashes_and_counts_only",
+    "raw_evidence_availability": "private_local"
+  },
+  {
+    "image_region_count": 1,
+    "pdf_page": 416,
+    "positioned_line_count": 8,
+    "public_projection": "anchors_hashes_and_counts_only",
+    "raw_evidence_availability": "private_local"
+  },
+  {
+    "image_region_count": 1,
+    "pdf_page": 417,
+    "positioned_line_count": 7,
+    "public_projection": "anchors_hashes_and_counts_only",
+    "raw_evidence_availability": "private_local"
+  },
+  {
+    "image_region_count": 0,
+    "pdf_page": 418,
+    "positioned_line_count": 108,
+    "public_projection": "anchors_hashes_and_counts_only",
+    "raw_evidence_availability": "private_local"
+  },
+  {
+    "image_region_count": 0,
+    "pdf_page": 419,
+    "positioned_line_count": 131,
+    "public_projection": "anchors_hashes_and_counts_only",
+    "raw_evidence_availability": "private_local"
+  },
+  {
+    "image_region_count": 1,
+    "pdf_page": 420,
+    "positioned_line_count": 10,
+    "public_projection": "anchors_hashes_and_counts_only",
+    "raw_evidence_availability": "private_local"
+  },
+  {
+    "image_region_count": 1,
+    "pdf_page": 421,
+    "positioned_line_count": 10,
+    "public_projection": "anchors_hashes_and_counts_only",
+    "raw_evidence_availability": "private_local"
+  },
+  {
+    "image_region_count": 1,
+    "pdf_page": 422,
+    "positioned_line_count": 10,
+    "public_projection": "anchors_hashes_and_counts_only",
+    "raw_evidence_availability": "private_local"
+  },
+  {
+    "image_region_count": 1,
+    "pdf_page": 423,
+    "positioned_line_count": 10,
+    "public_projection": "anchors_hashes_and_counts_only",
+    "raw_evidence_availability": "private_local"
+  },
+  {
+    "image_region_count": 1,
+    "pdf_page": 424,
+    "positioned_line_count": 9,
+    "public_projection": "anchors_hashes_and_counts_only",
+    "raw_evidence_availability": "private_local"
+  },
+  {
+    "image_region_count": 0,
+    "pdf_page": 425,
+    "positioned_line_count": 108,
+    "public_projection": "anchors_hashes_and_counts_only",
+    "raw_evidence_availability": "private_local"
+  },
+  {
+    "image_region_count": 0,
+    "pdf_page": 426,
+    "positioned_line_count": 145,
+    "public_projection": "anchors_hashes_and_counts_only",
+    "raw_evidence_availability": "private_local"
+  },
+  {
+    "image_region_count": 0,
+    "pdf_page": 427,
+    "positioned_line_count": 107,
+    "public_projection": "anchors_hashes_and_counts_only",
+    "raw_evidence_availability": "private_local"
+  },
+  {
+    "image_region_count": 0,
+    "pdf_page": 428,
+    "positioned_line_count": 102,
+    "public_projection": "anchors_hashes_and_counts_only",
+    "raw_evidence_availability": "private_local"
+  },
+  {
+    "image_region_count": 0,
+    "pdf_page": 429,
+    "positioned_line_count": 106,
+    "public_projection": "anchors_hashes_and_counts_only",
+    "raw_evidence_availability": "private_local"
+  },
+  {
+    "image_region_count": 0,
+    "pdf_page": 430,
+    "positioned_line_count": 20,
+    "public_projection": "anchors_hashes_and_counts_only",
+    "raw_evidence_availability": "private_local"
+  },
+  {
+    "image_region_count": 1,
+    "pdf_page": 431,
+    "positioned_line_count": 9,
+    "public_projection": "anchors_hashes_and_counts_only",
+    "raw_evidence_availability": "private_local"
+  },
+  {
+    "image_region_count": 1,
+    "pdf_page": 432,
+    "positioned_line_count": 8,
+    "public_projection": "anchors_hashes_and_counts_only",
+    "raw_evidence_availability": "private_local"
+  },
+  {
+    "image_region_count": 1,
+    "pdf_page": 433,
+    "positioned_line_count": 9,
+    "public_projection": "anchors_hashes_and_counts_only",
+    "raw_evidence_availability": "private_local"
+  },
+  {
+    "image_region_count": 1,
+    "pdf_page": 434,
+    "positioned_line_count": 8,
+    "public_projection": "anchors_hashes_and_counts_only",
+    "raw_evidence_availability": "private_local"
+  },
+  {
+    "image_region_count": 1,
+    "pdf_page": 435,
+    "positioned_line_count": 8,
+    "public_projection": "anchors_hashes_and_counts_only",
+    "raw_evidence_availability": "private_local"
+  },
+  {
+    "image_region_count": 1,
+    "pdf_page": 436,
+    "positioned_line_count": 8,
+    "public_projection": "anchors_hashes_and_counts_only",
+    "raw_evidence_availability": "private_local"
+  },
+  {
+    "image_region_count": 1,
+    "pdf_page": 437,
+    "positioned_line_count": 8,
+    "public_projection": "anchors_hashes_and_counts_only",
+    "raw_evidence_availability": "private_local"
+  },
+  {
+    "image_region_count": 1,
+    "pdf_page": 438,
+    "positioned_line_count": 9,
+    "public_projection": "anchors_hashes_and_counts_only",
+    "raw_evidence_availability": "private_local"
+  },
+  {
+    "image_region_count": 1,
+    "pdf_page": 439,
+    "positioned_line_count": 9,
+    "public_projection": "anchors_hashes_and_counts_only",
+    "raw_evidence_availability": "private_local"
+  },
+  {
+    "image_region_count": 1,
+    "pdf_page": 440,
+    "positioned_line_count": 8,
+    "public_projection": "anchors_hashes_and_counts_only",
+    "raw_evidence_availability": "private_local"
+  },
+  {
+    "image_region_count": 0,
+    "pdf_page": 441,
+    "positioned_line_count": 36,
+    "public_projection": "anchors_hashes_and_counts_only",
+    "raw_evidence_availability": "private_local"
+  },
+  {
+    "image_region_count": 0,
+    "pdf_page": 442,
+    "positioned_line_count": 89,
+    "public_projection": "anchors_hashes_and_counts_only",
+    "raw_evidence_availability": "private_local"
+  },
+  {
+    "image_region_count": 0,
+    "pdf_page": 443,
+    "positioned_line_count": 119,
+    "public_projection": "anchors_hashes_and_counts_only",
+    "raw_evidence_availability": "private_local"
+  },
+  {
+    "image_region_count": 0,
+    "pdf_page": 444,
+    "positioned_line_count": 118,
+    "public_projection": "anchors_hashes_and_counts_only",
+    "raw_evidence_availability": "private_local"
+  },
+  {
+    "image_region_count": 0,
+    "pdf_page": 445,
+    "positioned_line_count": 114,
+    "public_projection": "anchors_hashes_and_counts_only",
+    "raw_evidence_availability": "private_local"
+  },
+  {
+    "image_region_count": 0,
+    "pdf_page": 446,
+    "positioned_line_count": 118,
+    "public_projection": "anchors_hashes_and_counts_only",
+    "raw_evidence_availability": "private_local"
+  },
+  {
+    "image_region_count": 0,
+    "pdf_page": 447,
+    "positioned_line_count": 140,
+    "public_projection": "anchors_hashes_and_counts_only",
+    "raw_evidence_availability": "private_local"
+  },
+  {
+    "image_region_count": 0,
+    "pdf_page": 448,
+    "positioned_line_count": 107,
+    "public_projection": "anchors_hashes_and_counts_only",
+    "raw_evidence_availability": "private_local"
+  },
+  {
+    "image_region_count": 0,
+    "pdf_page": 449,
+    "positioned_line_count": 117,
+    "public_projection": "anchors_hashes_and_counts_only",
+    "raw_evidence_availability": "private_local"
+  },
+  {
+    "image_region_count": 0,
+    "pdf_page": 450,
+    "positioned_line_count": 115,
+    "public_projection": "anchors_hashes_and_counts_only",
+    "raw_evidence_availability": "private_local"
+  },
+  {
+    "image_region_count": 0,
+    "pdf_page": 451,
+    "positioned_line_count": 118,
+    "public_projection": "anchors_hashes_and_counts_only",
+    "raw_evidence_availability": "private_local"
+  },
+  {
+    "image_region_count": 0,
+    "pdf_page": 452,
+    "positioned_line_count": 119,
+    "public_projection": "anchors_hashes_and_counts_only",
+    "raw_evidence_availability": "private_local"
+  },
+  {
+    "image_region_count": 0,
+    "pdf_page": 453,
+    "positioned_line_count": 115,
+    "public_projection": "anchors_hashes_and_counts_only",
+    "raw_evidence_availability": "private_local"
+  },
+  {
+    "image_region_count": 0,
+    "pdf_page": 454,
+    "positioned_line_count": 119,
+    "public_projection": "anchors_hashes_and_counts_only",
+    "raw_evidence_availability": "private_local"
+  },
+  {
+    "image_region_count": 0,
+    "pdf_page": 455,
+    "positioned_line_count": 46,
+    "public_projection": "anchors_hashes_and_counts_only",
+    "raw_evidence_availability": "private_local"
+  },
+  {
+    "image_region_count": 0,
+    "pdf_page": 456,
+    "positioned_line_count": 92,
+    "public_projection": "anchors_hashes_and_counts_only",
+    "raw_evidence_availability": "private_local"
+  },
+  {
+    "image_region_count": 0,
+    "pdf_page": 457,
+    "positioned_line_count": 114,
+    "public_projection": "anchors_hashes_and_counts_only",
+    "raw_evidence_availability": "private_local"
+  },
+  {
+    "image_region_count": 0,
+    "pdf_page": 458,
+    "positioned_line_count": 110,
+    "public_projection": "anchors_hashes_and_counts_only",
+    "raw_evidence_availability": "private_local"
+  },
+  {
+    "image_region_count": 0,
+    "pdf_page": 459,
+    "positioned_line_count": 116,
+    "public_projection": "anchors_hashes_and_counts_only",
+    "raw_evidence_availability": "private_local"
+  },
+  {
+    "image_region_count": 0,
+    "pdf_page": 460,
+    "positioned_line_count": 119,
+    "public_projection": "anchors_hashes_and_counts_only",
+    "raw_evidence_availability": "private_local"
+  },
+  {
+    "image_region_count": 0,
+    "pdf_page": 461,
+    "positioned_line_count": 130,
+    "public_projection": "anchors_hashes_and_counts_only",
+    "raw_evidence_availability": "private_local"
+  },
+  {
+    "image_region_count": 0,
+    "pdf_page": 462,
+    "positioned_line_count": 123,
+    "public_projection": "anchors_hashes_and_counts_only",
+    "raw_evidence_availability": "private_local"
+  },
+  {
+    "image_region_count": 0,
+    "pdf_page": 463,
+    "positioned_line_count": 355,
+    "public_projection": "anchors_hashes_and_counts_only",
+    "raw_evidence_availability": "private_local"
+  },
+  {
+    "image_region_count": 0,
+    "pdf_page": 464,
+    "positioned_line_count": 147,
+    "public_projection": "anchors_hashes_and_counts_only",
+    "raw_evidence_availability": "private_local"
+  },
+  {
+    "image_region_count": 0,
+    "pdf_page": 465,
+    "positioned_line_count": 180,
+    "public_projection": "anchors_hashes_and_counts_only",
+    "raw_evidence_availability": "private_local"
+  },
+  {
+    "image_region_count": 0,
+    "pdf_page": 466,
+    "positioned_line_count": 177,
+    "public_projection": "anchors_hashes_and_counts_only",
+    "raw_evidence_availability": "private_local"
+  },
+  {
+    "image_region_count": 0,
+    "pdf_page": 467,
+    "positioned_line_count": 175,
+    "public_projection": "anchors_hashes_and_counts_only",
+    "raw_evidence_availability": "private_local"
+  },
+  {
+    "image_region_count": 0,
+    "pdf_page": 468,
+    "positioned_line_count": 104,
+    "public_projection": "anchors_hashes_and_counts_only",
+    "raw_evidence_availability": "private_local"
+  },
+  {
+    "image_region_count": 0,
+    "pdf_page": 469,
+    "positioned_line_count": 101,
+    "public_projection": "anchors_hashes_and_counts_only",
+    "raw_evidence_availability": "private_local"
+  },
+  {
+    "image_region_count": 0,
+    "pdf_page": 470,
+    "positioned_line_count": 121,
+    "public_projection": "anchors_hashes_and_counts_only",
+    "raw_evidence_availability": "private_local"
+  },
+  {
+    "image_region_count": 0,
+    "pdf_page": 471,
+    "positioned_line_count": 115,
+    "public_projection": "anchors_hashes_and_counts_only",
+    "raw_evidence_availability": "private_local"
+  },
+  {
+    "image_region_count": 0,
+    "pdf_page": 472,
+    "positioned_line_count": 120,
+    "public_projection": "anchors_hashes_and_counts_only",
+    "raw_evidence_availability": "private_local"
+  },
+  {
+    "image_region_count": 0,
+    "pdf_page": 473,
+    "positioned_line_count": 119,
+    "public_projection": "anchors_hashes_and_counts_only",
+    "raw_evidence_availability": "private_local"
+  },
+  {
+    "image_region_count": 0,
+    "pdf_page": 474,
+    "positioned_line_count": 129,
+    "public_projection": "anchors_hashes_and_counts_only",
+    "raw_evidence_availability": "private_local"
+  },
+  {
+    "image_region_count": 0,
+    "pdf_page": 475,
+    "positioned_line_count": 119,
+    "public_projection": "anchors_hashes_and_counts_only",
+    "raw_evidence_availability": "private_local"
+  },
+  {
+    "image_region_count": 0,
+    "pdf_page": 476,
+    "positioned_line_count": 119,
+    "public_projection": "anchors_hashes_and_counts_only",
+    "raw_evidence_availability": "private_local"
+  },
+  {
+    "image_region_count": 0,
+    "pdf_page": 477,
+    "positioned_line_count": 117,
+    "public_projection": "anchors_hashes_and_counts_only",
+    "raw_evidence_availability": "private_local"
+  },
+  {
+    "image_region_count": 0,
+    "pdf_page": 478,
+    "positioned_line_count": 128,
+    "public_projection": "anchors_hashes_and_counts_only",
+    "raw_evidence_availability": "private_local"
+  },
+  {
+    "image_region_count": 0,
+    "pdf_page": 479,
+    "positioned_line_count": 119,
+    "public_projection": "anchors_hashes_and_counts_only",
+    "raw_evidence_availability": "private_local"
+  },
+  {
+    "image_region_count": 0,
+    "pdf_page": 480,
+    "positioned_line_count": 113,
+    "public_projection": "anchors_hashes_and_counts_only",
+    "raw_evidence_availability": "private_local"
+  },
+  {
+    "image_region_count": 0,
+    "pdf_page": 481,
+    "positioned_line_count": 120,
+    "public_projection": "anchors_hashes_and_counts_only",
+    "raw_evidence_availability": "private_local"
+  },
+  {
+    "image_region_count": 0,
+    "pdf_page": 482,
+    "positioned_line_count": 122,
+    "public_projection": "anchors_hashes_and_counts_only",
+    "raw_evidence_availability": "private_local"
+  },
+  {
+    "image_region_count": 0,
+    "pdf_page": 483,
+    "positioned_line_count": 119,
+    "public_projection": "anchors_hashes_and_counts_only",
+    "raw_evidence_availability": "private_local"
+  },
+  {
+    "image_region_count": 0,
+    "pdf_page": 484,
+    "positioned_line_count": 43,
+    "public_projection": "anchors_hashes_and_counts_only",
+    "raw_evidence_availability": "private_local"
+  },
+  {
+    "image_region_count": 0,
+    "pdf_page": 485,
+    "positioned_line_count": 4,
+    "public_projection": "anchors_hashes_and_counts_only",
+    "raw_evidence_availability": "private_local"
+  },
+  {
+    "image_region_count": 0,
+    "pdf_page": 486,
+    "positioned_line_count": 91,
+    "public_projection": "anchors_hashes_and_counts_only",
+    "raw_evidence_availability": "private_local"
+  },
+  {
+    "image_region_count": 0,
+    "pdf_page": 487,
+    "positioned_line_count": 118,
+    "public_projection": "anchors_hashes_and_counts_only",
+    "raw_evidence_availability": "private_local"
+  },
+  {
+    "image_region_count": 0,
+    "pdf_page": 488,
+    "positioned_line_count": 118,
+    "public_projection": "anchors_hashes_and_counts_only",
+    "raw_evidence_availability": "private_local"
+  },
+  {
+    "image_region_count": 0,
+    "pdf_page": 489,
+    "positioned_line_count": 118,
+    "public_projection": "anchors_hashes_and_counts_only",
+    "raw_evidence_availability": "private_local"
+  },
+  {
+    "image_region_count": 0,
+    "pdf_page": 490,
+    "positioned_line_count": 119,
+    "public_projection": "anchors_hashes_and_counts_only",
+    "raw_evidence_availability": "private_local"
+  },
+  {
+    "image_region_count": 0,
+    "pdf_page": 491,
+    "positioned_line_count": 19,
+    "public_projection": "anchors_hashes_and_counts_only",
+    "raw_evidence_availability": "private_local"
+  },
+  {
+    "image_region_count": 0,
+    "pdf_page": 492,
+    "positioned_line_count": 30,
+    "public_projection": "anchors_hashes_and_counts_only",
+    "raw_evidence_availability": "private_local"
+  },
+  {
+    "image_region_count": 0,
+    "pdf_page": 493,
+    "positioned_line_count": 4,
+    "public_projection": "anchors_hashes_and_counts_only",
+    "raw_evidence_availability": "private_local"
+  },
+  {
+    "image_region_count": 0,
+    "pdf_page": 494,
+    "positioned_line_count": 105,
+    "public_projection": "anchors_hashes_and_counts_only",
+    "raw_evidence_availability": "private_local"
+  },
+  {
+    "image_region_count": 0,
+    "pdf_page": 495,
+    "positioned_line_count": 121,
+    "public_projection": "anchors_hashes_and_counts_only",
+    "raw_evidence_availability": "private_local"
+  },
+  {
+    "image_region_count": 0,
+    "pdf_page": 496,
+    "positioned_line_count": 112,
+    "public_projection": "anchors_hashes_and_counts_only",
+    "raw_evidence_availability": "private_local"
+  },
+  {
+    "image_region_count": 0,
+    "pdf_page": 497,
+    "positioned_line_count": 136,
+    "public_projection": "anchors_hashes_and_counts_only",
+    "raw_evidence_availability": "private_local"
+  },
+  {
+    "image_region_count": 0,
+    "pdf_page": 498,
+    "positioned_line_count": 116,
+    "public_projection": "anchors_hashes_and_counts_only",
+    "raw_evidence_availability": "private_local"
+  },
+  {
+    "image_region_count": 0,
+    "pdf_page": 499,
+    "positioned_line_count": 121,
+    "public_projection": "anchors_hashes_and_counts_only",
+    "raw_evidence_availability": "private_local"
+  },
+  {
+    "image_region_count": 1,
+    "pdf_page": 500,
+    "positioned_line_count": 106,
+    "public_projection": "anchors_hashes_and_counts_only",
+    "raw_evidence_availability": "private_local"
+  },
+  {
+    "image_region_count": 0,
+    "pdf_page": 501,
+    "positioned_line_count": 117,
+    "public_projection": "anchors_hashes_and_counts_only",
+    "raw_evidence_availability": "private_local"
+  },
+  {
+    "image_region_count": 0,
+    "pdf_page": 502,
+    "positioned_line_count": 120,
+    "public_projection": "anchors_hashes_and_counts_only",
+    "raw_evidence_availability": "private_local"
+  },
+  {
+    "image_region_count": 0,
+    "pdf_page": 503,
+    "positioned_line_count": 114,
+    "public_projection": "anchors_hashes_and_counts_only",
+    "raw_evidence_availability": "private_local"
+  },
+  {
+    "image_region_count": 1,
+    "pdf_page": 504,
+    "positioned_line_count": 75,
+    "public_projection": "anchors_hashes_and_counts_only",
+    "raw_evidence_availability": "private_local"
+  },
+  {
+    "image_region_count": 2,
+    "pdf_page": 505,
+    "positioned_line_count": 85,
+    "public_projection": "anchors_hashes_and_counts_only",
+    "raw_evidence_availability": "private_local"
+  },
+  {
+    "image_region_count": 0,
+    "pdf_page": 506,
+    "positioned_line_count": 90,
+    "public_projection": "anchors_hashes_and_counts_only",
+    "raw_evidence_availability": "private_local"
+  },
+  {
+    "image_region_count": 0,
+    "pdf_page": 507,
+    "positioned_line_count": 107,
+    "public_projection": "anchors_hashes_and_counts_only",
+    "raw_evidence_availability": "private_local"
+  },
+  {
+    "image_region_count": 0,
+    "pdf_page": 508,
+    "positioned_line_count": 109,
+    "public_projection": "anchors_hashes_and_counts_only",
+    "raw_evidence_availability": "private_local"
+  },
+  {
+    "image_region_count": 0,
+    "pdf_page": 509,
+    "positioned_line_count": 42,
+    "public_projection": "anchors_hashes_and_counts_only",
+    "raw_evidence_availability": "private_local"
+  },
+  {
+    "image_region_count": 0,
+    "pdf_page": 510,
+    "positioned_line_count": 90,
+    "public_projection": "anchors_hashes_and_counts_only",
+    "raw_evidence_availability": "private_local"
+  },
+  {
+    "image_region_count": 0,
+    "pdf_page": 511,
+    "positioned_line_count": 120,
+    "public_projection": "anchors_hashes_and_counts_only",
+    "raw_evidence_availability": "private_local"
+  },
+  {
+    "image_region_count": 0,
+    "pdf_page": 512,
+    "positioned_line_count": 119,
+    "public_projection": "anchors_hashes_and_counts_only",
+    "raw_evidence_availability": "private_local"
+  },
+  {
+    "image_region_count": 0,
+    "pdf_page": 513,
+    "positioned_line_count": 116,
+    "public_projection": "anchors_hashes_and_counts_only",
+    "raw_evidence_availability": "private_local"
+  },
+  {
+    "image_region_count": 0,
+    "pdf_page": 514,
+    "positioned_line_count": 116,
+    "public_projection": "anchors_hashes_and_counts_only",
+    "raw_evidence_availability": "private_local"
+  },
+  {
+    "image_region_count": 0,
+    "pdf_page": 515,
+    "positioned_line_count": 172,
+    "public_projection": "anchors_hashes_and_counts_only",
+    "raw_evidence_availability": "private_local"
+  },
+  {
+    "image_region_count": 0,
+    "pdf_page": 516,
+    "positioned_line_count": 117,
+    "public_projection": "anchors_hashes_and_counts_only",
+    "raw_evidence_availability": "private_local"
+  },
+  {
+    "image_region_count": 0,
+    "pdf_page": 517,
+    "positioned_line_count": 223,
+    "public_projection": "anchors_hashes_and_counts_only",
+    "raw_evidence_availability": "private_local"
+  },
+  {
+    "image_region_count": 0,
+    "pdf_page": 518,
+    "positioned_line_count": 160,
+    "public_projection": "anchors_hashes_and_counts_only",
+    "raw_evidence_availability": "private_local"
+  },
+  {
+    "image_region_count": 0,
+    "pdf_page": 519,
+    "positioned_line_count": 118,
+    "public_projection": "anchors_hashes_and_counts_only",
+    "raw_evidence_availability": "private_local"
+  },
+  {
+    "image_region_count": 0,
+    "pdf_page": 520,
+    "positioned_line_count": 79,
+    "public_projection": "anchors_hashes_and_counts_only",
+    "raw_evidence_availability": "private_local"
+  },
+  {
+    "image_region_count": 0,
+    "pdf_page": 521,
+    "positioned_line_count": 87,
+    "public_projection": "anchors_hashes_and_counts_only",
+    "raw_evidence_availability": "private_local"
+  },
+  {
+    "image_region_count": 0,
+    "pdf_page": 522,
+    "positioned_line_count": 83,
+    "public_projection": "anchors_hashes_and_counts_only",
+    "raw_evidence_availability": "private_local"
+  },
+  {
+    "image_region_count": 0,
+    "pdf_page": 523,
+    "positioned_line_count": 106,
+    "public_projection": "anchors_hashes_and_counts_only",
+    "raw_evidence_availability": "private_local"
+  },
+  {
+    "image_region_count": 0,
+    "pdf_page": 524,
+    "positioned_line_count": 111,
+    "public_projection": "anchors_hashes_and_counts_only",
+    "raw_evidence_availability": "private_local"
+  },
+  {
+    "image_region_count": 0,
+    "pdf_page": 525,
+    "positioned_line_count": 137,
+    "public_projection": "anchors_hashes_and_counts_only",
+    "raw_evidence_availability": "private_local"
+  },
+  {
+    "image_region_count": 0,
+    "pdf_page": 526,
+    "positioned_line_count": 119,
+    "public_projection": "anchors_hashes_and_counts_only",
+    "raw_evidence_availability": "private_local"
+  },
+  {
+    "image_region_count": 0,
+    "pdf_page": 527,
+    "positioned_line_count": 138,
+    "public_projection": "anchors_hashes_and_counts_only",
+    "raw_evidence_availability": "private_local"
+  },
+  {
+    "image_region_count": 0,
+    "pdf_page": 528,
+    "positioned_line_count": 250,
+    "public_projection": "anchors_hashes_and_counts_only",
+    "raw_evidence_availability": "private_local"
+  },
+  {
+    "image_region_count": 0,
+    "pdf_page": 529,
+    "positioned_line_count": 198,
+    "public_projection": "anchors_hashes_and_counts_only",
+    "raw_evidence_availability": "private_local"
+  },
+  {
+    "image_region_count": 0,
+    "pdf_page": 530,
+    "positioned_line_count": 120,
+    "public_projection": "anchors_hashes_and_counts_only",
+    "raw_evidence_availability": "private_local"
+  },
+  {
+    "image_region_count": 1,
+    "pdf_page": 531,
+    "positioned_line_count": 177,
+    "public_projection": "anchors_hashes_and_counts_only",
+    "raw_evidence_availability": "private_local"
+  },
+  {
+    "image_region_count": 0,
+    "pdf_page": 532,
+    "positioned_line_count": 127,
+    "public_projection": "anchors_hashes_and_counts_only",
+    "raw_evidence_availability": "private_local"
+  },
+  {
+    "image_region_count": 1,
+    "pdf_page": 533,
+    "positioned_line_count": 9,
+    "public_projection": "anchors_hashes_and_counts_only",
+    "raw_evidence_availability": "private_local"
+  },
+  {
+    "image_region_count": 0,
+    "pdf_page": 534,
+    "positioned_line_count": 188,
+    "public_projection": "anchors_hashes_and_counts_only",
+    "raw_evidence_availability": "private_local"
+  },
+  {
+    "image_region_count": 0,
+    "pdf_page": 535,
+    "positioned_line_count": 138,
+    "public_projection": "anchors_hashes_and_counts_only",
+    "raw_evidence_availability": "private_local"
+  },
+  {
+    "image_region_count": 0,
+    "pdf_page": 536,
+    "positioned_line_count": 105,
+    "public_projection": "anchors_hashes_and_counts_only",
+    "raw_evidence_availability": "private_local"
+  },
+  {
+    "image_region_count": 0,
+    "pdf_page": 537,
+    "positioned_line_count": 890,
+    "public_projection": "anchors_hashes_and_counts_only",
+    "raw_evidence_availability": "private_local"
+  },
+  {
+    "image_region_count": 0,
+    "pdf_page": 538,
+    "positioned_line_count": 614,
+    "public_projection": "anchors_hashes_and_counts_only",
+    "raw_evidence_availability": "private_local"
+  },
+  {
+    "image_region_count": 0,
+    "pdf_page": 539,
+    "positioned_line_count": 187,
+    "public_projection": "anchors_hashes_and_counts_only",
+    "raw_evidence_availability": "private_local"
+  },
+  {
+    "image_region_count": 0,
+    "pdf_page": 540,
+    "positioned_line_count": 350,
+    "public_projection": "anchors_hashes_and_counts_only",
+    "raw_evidence_availability": "private_local"
+  },
+  {
+    "image_region_count": 0,
+    "pdf_page": 541,
+    "positioned_line_count": 355,
+    "public_projection": "anchors_hashes_and_counts_only",
+    "raw_evidence_availability": "private_local"
+  },
+  {
+    "image_region_count": 0,
+    "pdf_page": 542,
+    "positioned_line_count": 354,
+    "public_projection": "anchors_hashes_and_counts_only",
+    "raw_evidence_availability": "private_local"
+  },
+  {
+    "image_region_count": 0,
+    "pdf_page": 543,
+    "positioned_line_count": 356,
+    "public_projection": "anchors_hashes_and_counts_only",
+    "raw_evidence_availability": "private_local"
+  },
+  {
+    "image_region_count": 0,
+    "pdf_page": 544,
+    "positioned_line_count": 82,
+    "public_projection": "anchors_hashes_and_counts_only",
+    "raw_evidence_availability": "private_local"
+  },
+  {
+    "image_region_count": 10,
+    "pdf_page": 545,
+    "positioned_line_count": 107,
+    "public_projection": "anchors_hashes_and_counts_only",
+    "raw_evidence_availability": "private_local"
+  },
+  {
+    "image_region_count": 0,
+    "pdf_page": 546,
+    "positioned_line_count": 120,
+    "public_projection": "anchors_hashes_and_counts_only",
+    "raw_evidence_availability": "private_local"
+  },
+  {
+    "image_region_count": 0,
+    "pdf_page": 547,
+    "positioned_line_count": 104,
+    "public_projection": "anchors_hashes_and_counts_only",
+    "raw_evidence_availability": "private_local"
+  },
+  {
+    "image_region_count": 0,
+    "pdf_page": 548,
+    "positioned_line_count": 119,
+    "public_projection": "anchors_hashes_and_counts_only",
+    "raw_evidence_availability": "private_local"
+  },
+  {
+    "image_region_count": 0,
+    "pdf_page": 549,
+    "positioned_line_count": 282,
+    "public_projection": "anchors_hashes_and_counts_only",
+    "raw_evidence_availability": "private_local"
+  },
+  {
+    "image_region_count": 0,
+    "pdf_page": 550,
+    "positioned_line_count": 87,
+    "public_projection": "anchors_hashes_and_counts_only",
+    "raw_evidence_availability": "private_local"
+  },
+  {
+    "image_region_count": 2,
+    "pdf_page": 551,
+    "positioned_line_count": 112,
+    "public_projection": "anchors_hashes_and_counts_only",
+    "raw_evidence_availability": "private_local"
+  },
+  {
+    "image_region_count": 0,
+    "pdf_page": 552,
+    "positioned_line_count": 100,
+    "public_projection": "anchors_hashes_and_counts_only",
+    "raw_evidence_availability": "private_local"
+  },
+  {
+    "image_region_count": 0,
+    "pdf_page": 553,
+    "positioned_line_count": 140,
+    "public_projection": "anchors_hashes_and_counts_only",
+    "raw_evidence_availability": "private_local"
+  },
+  {
+    "image_region_count": 11,
+    "pdf_page": 554,
+    "positioned_line_count": 97,
+    "public_projection": "anchors_hashes_and_counts_only",
+    "raw_evidence_availability": "private_local"
+  },
+  {
+    "image_region_count": 0,
+    "pdf_page": 555,
+    "positioned_line_count": 110,
+    "public_projection": "anchors_hashes_and_counts_only",
+    "raw_evidence_availability": "private_local"
+  },
+  {
+    "image_region_count": 6,
+    "pdf_page": 556,
+    "positioned_line_count": 79,
+    "public_projection": "anchors_hashes_and_counts_only",
+    "raw_evidence_availability": "private_local"
+  },
+  {
+    "image_region_count": 0,
+    "pdf_page": 557,
+    "positioned_line_count": 119,
+    "public_projection": "anchors_hashes_and_counts_only",
+    "raw_evidence_availability": "private_local"
+  },
+  {
+    "image_region_count": 0,
+    "pdf_page": 558,
+    "positioned_line_count": 55,
+    "public_projection": "anchors_hashes_and_counts_only",
+    "raw_evidence_availability": "private_local"
+  },
+  {
+    "image_region_count": 1,
+    "pdf_page": 559,
+    "positioned_line_count": 108,
+    "public_projection": "anchors_hashes_and_counts_only",
+    "raw_evidence_availability": "private_local"
+  },
+  {
+    "image_region_count": 0,
+    "pdf_page": 560,
+    "positioned_line_count": 165,
+    "public_projection": "anchors_hashes_and_counts_only",
+    "raw_evidence_availability": "private_local"
+  },
+  {
+    "image_region_count": 0,
+    "pdf_page": 561,
+    "positioned_line_count": 86,
+    "public_projection": "anchors_hashes_and_counts_only",
+    "raw_evidence_availability": "private_local"
+  },
+  {
+    "image_region_count": 0,
+    "pdf_page": 562,
+    "positioned_line_count": 216,
+    "public_projection": "anchors_hashes_and_counts_only",
+    "raw_evidence_availability": "private_local"
+  },
+  {
+    "image_region_count": 0,
+    "pdf_page": 563,
+    "positioned_line_count": 218,
+    "public_projection": "anchors_hashes_and_counts_only",
+    "raw_evidence_availability": "private_local"
+  },
+  {
+    "image_region_count": 0,
+    "pdf_page": 564,
+    "positioned_line_count": 216,
+    "public_projection": "anchors_hashes_and_counts_only",
+    "raw_evidence_availability": "private_local"
+  },
+  {
+    "image_region_count": 0,
+    "pdf_page": 565,
+    "positioned_line_count": 218,
+    "public_projection": "anchors_hashes_and_counts_only",
+    "raw_evidence_availability": "private_local"
+  },
+  {
+    "image_region_count": 0,
+    "pdf_page": 566,
+    "positioned_line_count": 602,
+    "public_projection": "anchors_hashes_and_counts_only",
+    "raw_evidence_availability": "private_local"
+  },
+  {
+    "image_region_count": 0,
+    "pdf_page": 567,
+    "positioned_line_count": 236,
+    "public_projection": "anchors_hashes_and_counts_only",
+    "raw_evidence_availability": "private_local"
+  },
+  {
+    "image_region_count": 0,
+    "pdf_page": 568,
+    "positioned_line_count": 506,
+    "public_projection": "anchors_hashes_and_counts_only",
+    "raw_evidence_availability": "private_local"
+  },
+  {
+    "image_region_count": 0,
+    "pdf_page": 569,
+    "positioned_line_count": 334,
+    "public_projection": "anchors_hashes_and_counts_only",
+    "raw_evidence_availability": "private_local"
+  },
+  {
+    "image_region_count": 0,
+    "pdf_page": 570,
+    "positioned_line_count": 506,
+    "public_projection": "anchors_hashes_and_counts_only",
+    "raw_evidence_availability": "private_local"
+  },
+  {
+    "image_region_count": 0,
+    "pdf_page": 571,
+    "positioned_line_count": 333,
+    "public_projection": "anchors_hashes_and_counts_only",
+    "raw_evidence_availability": "private_local"
+  },
+  {
+    "image_region_count": 0,
+    "pdf_page": 572,
+    "positioned_line_count": 507,
+    "public_projection": "anchors_hashes_and_counts_only",
+    "raw_evidence_availability": "private_local"
+  },
+  {
+    "image_region_count": 0,
+    "pdf_page": 573,
+    "positioned_line_count": 334,
+    "public_projection": "anchors_hashes_and_counts_only",
+    "raw_evidence_availability": "private_local"
+  },
+  {
+    "image_region_count": 0,
+    "pdf_page": 574,
+    "positioned_line_count": 507,
+    "public_projection": "anchors_hashes_and_counts_only",
+    "raw_evidence_availability": "private_local"
+  },
+  {
+    "image_region_count": 0,
+    "pdf_page": 575,
+    "positioned_line_count": 334,
+    "public_projection": "anchors_hashes_and_counts_only",
+    "raw_evidence_availability": "private_local"
+  },
+  {
+    "image_region_count": 0,
+    "pdf_page": 576,
+    "positioned_line_count": 506,
+    "public_projection": "anchors_hashes_and_counts_only",
+    "raw_evidence_availability": "private_local"
+  },
+  {
+    "image_region_count": 0,
+    "pdf_page": 577,
+    "positioned_line_count": 332,
+    "public_projection": "anchors_hashes_and_counts_only",
+    "raw_evidence_availability": "private_local"
+  },
+  {
+    "image_region_count": 0,
+    "pdf_page": 578,
+    "positioned_line_count": 432,
+    "public_projection": "anchors_hashes_and_counts_only",
+    "raw_evidence_availability": "private_local"
+  },
+  {
+    "image_region_count": 0,
+    "pdf_page": 579,
+    "positioned_line_count": 113,
+    "public_projection": "anchors_hashes_and_counts_only",
+    "raw_evidence_availability": "private_local"
+  },
+  {
+    "image_region_count": 0,
+    "pdf_page": 580,
+    "positioned_line_count": 102,
+    "public_projection": "anchors_hashes_and_counts_only",
+    "raw_evidence_availability": "private_local"
+  },
+  {
+    "image_region_count": 0,
+    "pdf_page": 581,
+    "positioned_line_count": 4,
+    "public_projection": "anchors_hashes_and_counts_only",
+    "raw_evidence_availability": "private_local"
+  },
+  {
+    "image_region_count": 0,
+    "pdf_page": 582,
+    "positioned_line_count": 84,
+    "public_projection": "anchors_hashes_and_counts_only",
+    "raw_evidence_availability": "private_local"
+  },
+  {
+    "image_region_count": 0,
+    "pdf_page": 583,
+    "positioned_line_count": 120,
+    "public_projection": "anchors_hashes_and_counts_only",
+    "raw_evidence_availability": "private_local"
+  },
+  {
+    "image_region_count": 0,
+    "pdf_page": 584,
+    "positioned_line_count": 117,
+    "public_projection": "anchors_hashes_and_counts_only",
+    "raw_evidence_availability": "private_local"
+  },
+  {
+    "image_region_count": 0,
+    "pdf_page": 585,
+    "positioned_line_count": 117,
+    "public_projection": "anchors_hashes_and_counts_only",
+    "raw_evidence_availability": "private_local"
+  },
+  {
+    "image_region_count": 0,
+    "pdf_page": 586,
+    "positioned_line_count": 141,
+    "public_projection": "anchors_hashes_and_counts_only",
+    "raw_evidence_availability": "private_local"
+  },
+  {
+    "image_region_count": 0,
+    "pdf_page": 587,
+    "positioned_line_count": 116,
+    "public_projection": "anchors_hashes_and_counts_only",
+    "raw_evidence_availability": "private_local"
+  },
+  {
+    "image_region_count": 0,
+    "pdf_page": 588,
+    "positioned_line_count": 86,
+    "public_projection": "anchors_hashes_and_counts_only",
+    "raw_evidence_availability": "private_local"
+  },
+  {
+    "image_region_count": 0,
+    "pdf_page": 589,
+    "positioned_line_count": 4,
+    "public_projection": "anchors_hashes_and_counts_only",
+    "raw_evidence_availability": "private_local"
+  },
+  {
+    "image_region_count": 0,
+    "pdf_page": 590,
+    "positioned_line_count": 86,
+    "public_projection": "anchors_hashes_and_counts_only",
+    "raw_evidence_availability": "private_local"
+  },
+  {
+    "image_region_count": 0,
+    "pdf_page": 591,
+    "positioned_line_count": 108,
+    "public_projection": "anchors_hashes_and_counts_only",
+    "raw_evidence_availability": "private_local"
+  },
+  {
+    "image_region_count": 0,
+    "pdf_page": 592,
+    "positioned_line_count": 104,
+    "public_projection": "anchors_hashes_and_counts_only",
+    "raw_evidence_availability": "private_local"
+  },
+  {
+    "image_region_count": 0,
+    "pdf_page": 593,
+    "positioned_line_count": 124,
+    "public_projection": "anchors_hashes_and_counts_only",
+    "raw_evidence_availability": "private_local"
+  },
+  {
+    "image_region_count": 0,
+    "pdf_page": 594,
+    "positioned_line_count": 122,
+    "public_projection": "anchors_hashes_and_counts_only",
+    "raw_evidence_availability": "private_local"
+  },
+  {
+    "image_region_count": 0,
+    "pdf_page": 595,
+    "positioned_line_count": 119,
+    "public_projection": "anchors_hashes_and_counts_only",
+    "raw_evidence_availability": "private_local"
+  },
+  {
+    "image_region_count": 0,
+    "pdf_page": 596,
+    "positioned_line_count": 95,
+    "public_projection": "anchors_hashes_and_counts_only",
+    "raw_evidence_availability": "private_local"
+  },
+  {
+    "image_region_count": 0,
+    "pdf_page": 597,
+    "positioned_line_count": 119,
+    "public_projection": "anchors_hashes_and_counts_only",
+    "raw_evidence_availability": "private_local"
+  },
+  {
+    "image_region_count": 0,
+    "pdf_page": 598,
+    "positioned_line_count": 116,
+    "public_projection": "anchors_hashes_and_counts_only",
+    "raw_evidence_availability": "private_local"
+  },
+  {
+    "image_region_count": 1,
+    "pdf_page": 599,
+    "positioned_line_count": 74,
+    "public_projection": "anchors_hashes_and_counts_only",
+    "raw_evidence_availability": "private_local"
+  },
+  {
+    "image_region_count": 0,
+    "pdf_page": 600,
+    "positioned_line_count": 111,
+    "public_projection": "anchors_hashes_and_counts_only",
+    "raw_evidence_availability": "private_local"
+  },
+  {
+    "image_region_count": 0,
+    "pdf_page": 601,
+    "positioned_line_count": 299,
+    "public_projection": "anchors_hashes_and_counts_only",
+    "raw_evidence_availability": "private_local"
+  },
+  {
+    "image_region_count": 0,
+    "pdf_page": 602,
+    "positioned_line_count": 216,
+    "public_projection": "anchors_hashes_and_counts_only",
+    "raw_evidence_availability": "private_local"
+  },
+  {
+    "image_region_count": 0,
+    "pdf_page": 603,
+    "positioned_line_count": 208,
+    "public_projection": "anchors_hashes_and_counts_only",
+    "raw_evidence_availability": "private_local"
+  },
+  {
+    "image_region_count": 0,
+    "pdf_page": 604,
+    "positioned_line_count": 123,
+    "public_projection": "anchors_hashes_and_counts_only",
+    "raw_evidence_availability": "private_local"
+  },
+  {
+    "image_region_count": 0,
+    "pdf_page": 605,
+    "positioned_line_count": 137,
+    "public_projection": "anchors_hashes_and_counts_only",
+    "raw_evidence_availability": "private_local"
+  },
+  {
+    "image_region_count": 0,
+    "pdf_page": 606,
+    "positioned_line_count": 126,
+    "public_projection": "anchors_hashes_and_counts_only",
+    "raw_evidence_availability": "private_local"
+  },
+  {
+    "image_region_count": 0,
+    "pdf_page": 607,
+    "positioned_line_count": 111,
+    "public_projection": "anchors_hashes_and_counts_only",
+    "raw_evidence_availability": "private_local"
+  },
+  {
+    "image_region_count": 0,
+    "pdf_page": 608,
+    "positioned_line_count": 86,
+    "public_projection": "anchors_hashes_and_counts_only",
+    "raw_evidence_availability": "private_local"
+  },
+  {
+    "image_region_count": 0,
+    "pdf_page": 609,
+    "positioned_line_count": 4,
+    "public_projection": "anchors_hashes_and_counts_only",
+    "raw_evidence_availability": "private_local"
+  },
+  {
+    "image_region_count": 0,
+    "pdf_page": 610,
+    "positioned_line_count": 97,
+    "public_projection": "anchors_hashes_and_counts_only",
+    "raw_evidence_availability": "private_local"
+  },
+  {
+    "image_region_count": 0,
+    "pdf_page": 611,
+    "positioned_line_count": 80,
+    "public_projection": "anchors_hashes_and_counts_only",
+    "raw_evidence_availability": "private_local"
+  },
+  {
+    "image_region_count": 0,
+    "pdf_page": 612,
+    "positioned_line_count": 34,
+    "public_projection": "anchors_hashes_and_counts_only",
+    "raw_evidence_availability": "private_local"
+  },
+  {
+    "image_region_count": 0,
+    "pdf_page": 613,
+    "positioned_line_count": 4,
+    "public_projection": "anchors_hashes_and_counts_only",
+    "raw_evidence_availability": "private_local"
+  },
+  {
+    "image_region_count": 0,
+    "pdf_page": 614,
+    "positioned_line_count": 135,
+    "public_projection": "anchors_hashes_and_counts_only",
+    "raw_evidence_availability": "private_local"
+  },
+  {
+    "image_region_count": 0,
+    "pdf_page": 615,
+    "positioned_line_count": 181,
+    "public_projection": "anchors_hashes_and_counts_only",
+    "raw_evidence_availability": "private_local"
+  },
+  {
+    "image_region_count": 0,
+    "pdf_page": 616,
+    "positioned_line_count": 140,
+    "public_projection": "anchors_hashes_and_counts_only",
+    "raw_evidence_availability": "private_local"
+  },
+  {
+    "image_region_count": 0,
+    "pdf_page": 617,
+    "positioned_line_count": 122,
+    "public_projection": "anchors_hashes_and_counts_only",
+    "raw_evidence_availability": "private_local"
+  },
+  {
+    "image_region_count": 0,
+    "pdf_page": 618,
+    "positioned_line_count": 104,
+    "public_projection": "anchors_hashes_and_counts_only",
+    "raw_evidence_availability": "private_local"
+  },
+  {
+    "image_region_count": 0,
+    "pdf_page": 619,
+    "positioned_line_count": 109,
+    "public_projection": "anchors_hashes_and_counts_only",
+    "raw_evidence_availability": "private_local"
+  },
+  {
+    "image_region_count": 0,
+    "pdf_page": 620,
+    "positioned_line_count": 116,
+    "public_projection": "anchors_hashes_and_counts_only",
+    "raw_evidence_availability": "private_local"
+  },
+  {
+    "image_region_count": 0,
+    "pdf_page": 621,
+    "positioned_line_count": 115,
+    "public_projection": "anchors_hashes_and_counts_only",
+    "raw_evidence_availability": "private_local"
+  },
+  {
+    "image_region_count": 1,
+    "pdf_page": 622,
+    "positioned_line_count": 103,
+    "public_projection": "anchors_hashes_and_counts_only",
+    "raw_evidence_availability": "private_local"
+  },
+  {
+    "image_region_count": 0,
+    "pdf_page": 623,
+    "positioned_line_count": 119,
+    "public_projection": "anchors_hashes_and_counts_only",
+    "raw_evidence_availability": "private_local"
+  },
+  {
+    "image_region_count": 0,
+    "pdf_page": 624,
+    "positioned_line_count": 83,
+    "public_projection": "anchors_hashes_and_counts_only",
+    "raw_evidence_availability": "private_local"
+  },
+  {
+    "image_region_count": 0,
+    "pdf_page": 625,
+    "positioned_line_count": 4,
+    "public_projection": "anchors_hashes_and_counts_only",
+    "raw_evidence_availability": "private_local"
+  },
+  {
+    "image_region_count": 0,
+    "pdf_page": 626,
+    "positioned_line_count": 96,
+    "public_projection": "anchors_hashes_and_counts_only",
+    "raw_evidence_availability": "private_local"
+  },
+  {
+    "image_region_count": 0,
+    "pdf_page": 627,
+    "positioned_line_count": 115,
+    "public_projection": "anchors_hashes_and_counts_only",
+    "raw_evidence_availability": "private_local"
+  },
+  {
+    "image_region_count": 0,
+    "pdf_page": 628,
+    "positioned_line_count": 119,
+    "public_projection": "anchors_hashes_and_counts_only",
+    "raw_evidence_availability": "private_local"
+  },
+  {
+    "image_region_count": 0,
+    "pdf_page": 629,
+    "positioned_line_count": 117,
+    "public_projection": "anchors_hashes_and_counts_only",
+    "raw_evidence_availability": "private_local"
+  },
+  {
+    "image_region_count": 0,
+    "pdf_page": 630,
+    "positioned_line_count": 112,
+    "public_projection": "anchors_hashes_and_counts_only",
+    "raw_evidence_availability": "private_local"
+  },
+  {
+    "image_region_count": 0,
+    "pdf_page": 631,
+    "positioned_line_count": 35,
+    "public_projection": "anchors_hashes_and_counts_only",
+    "raw_evidence_availability": "private_local"
+  },
+  {
+    "image_region_count": 0,
+    "pdf_page": 632,
+    "positioned_line_count": 97,
+    "public_projection": "anchors_hashes_and_counts_only",
+    "raw_evidence_availability": "private_local"
+  },
+  {
+    "image_region_count": 0,
+    "pdf_page": 633,
+    "positioned_line_count": 4,
+    "public_projection": "anchors_hashes_and_counts_only",
+    "raw_evidence_availability": "private_local"
+  },
+  {
+    "image_region_count": 0,
+    "pdf_page": 634,
+    "positioned_line_count": 90,
+    "public_projection": "anchors_hashes_and_counts_only",
+    "raw_evidence_availability": "private_local"
+  },
+  {
+    "image_region_count": 0,
+    "pdf_page": 635,
+    "positioned_line_count": 110,
+    "public_projection": "anchors_hashes_and_counts_only",
+    "raw_evidence_availability": "private_local"
+  },
+  {
+    "image_region_count": 0,
+    "pdf_page": 636,
+    "positioned_line_count": 110,
+    "public_projection": "anchors_hashes_and_counts_only",
+    "raw_evidence_availability": "private_local"
+  },
+  {
+    "image_region_count": 0,
+    "pdf_page": 637,
+    "positioned_line_count": 64,
+    "public_projection": "anchors_hashes_and_counts_only",
+    "raw_evidence_availability": "private_local"
+  },
+  {
+    "image_region_count": 0,
+    "pdf_page": 638,
+    "positioned_line_count": 8,
+    "public_projection": "anchors_hashes_and_counts_only",
+    "raw_evidence_availability": "private_local"
+  },
+  {
+    "image_region_count": 0,
+    "pdf_page": 639,
+    "positioned_line_count": 4,
+    "public_projection": "anchors_hashes_and_counts_only",
+    "raw_evidence_availability": "private_local"
+  },
+  {
+    "image_region_count": 0,
+    "pdf_page": 640,
+    "positioned_line_count": 54,
+    "public_projection": "anchors_hashes_and_counts_only",
+    "raw_evidence_availability": "private_local"
+  },
+  {
+    "image_region_count": 0,
+    "pdf_page": 641,
+    "positioned_line_count": 57,
+    "public_projection": "anchors_hashes_and_counts_only",
+    "raw_evidence_availability": "private_local"
+  },
+  {
+    "image_region_count": 0,
+    "pdf_page": 642,
+    "positioned_line_count": 58,
+    "public_projection": "anchors_hashes_and_counts_only",
+    "raw_evidence_availability": "private_local"
+  },
+  {
+    "image_region_count": 0,
+    "pdf_page": 643,
+    "positioned_line_count": 55,
+    "public_projection": "anchors_hashes_and_counts_only",
+    "raw_evidence_availability": "private_local"
+  },
+  {
+    "image_region_count": 0,
+    "pdf_page": 644,
+    "positioned_line_count": 58,
+    "public_projection": "anchors_hashes_and_counts_only",
+    "raw_evidence_availability": "private_local"
+  },
+  {
+    "image_region_count": 0,
+    "pdf_page": 645,
+    "positioned_line_count": 58,
+    "public_projection": "anchors_hashes_and_counts_only",
+    "raw_evidence_availability": "private_local"
+  },
+  {
+    "image_region_count": 0,
+    "pdf_page": 646,
+    "positioned_line_count": 58,
+    "public_projection": "anchors_hashes_and_counts_only",
+    "raw_evidence_availability": "private_local"
+  },
+  {
+    "image_region_count": 0,
+    "pdf_page": 647,
+    "positioned_line_count": 58,
+    "public_projection": "anchors_hashes_and_counts_only",
+    "raw_evidence_availability": "private_local"
+  },
+  {
+    "image_region_count": 0,
+    "pdf_page": 648,
+    "positioned_line_count": 58,
+    "public_projection": "anchors_hashes_and_counts_only",
+    "raw_evidence_availability": "private_local"
+  },
+  {
+    "image_region_count": 0,
+    "pdf_page": 649,
+    "positioned_line_count": 59,
+    "public_projection": "anchors_hashes_and_counts_only",
+    "raw_evidence_availability": "private_local"
+  },
+  {
+    "image_region_count": 0,
+    "pdf_page": 650,
+    "positioned_line_count": 59,
+    "public_projection": "anchors_hashes_and_counts_only",
+    "raw_evidence_availability": "private_local"
+  },
+  {
+    "image_region_count": 0,
+    "pdf_page": 651,
+    "positioned_line_count": 57,
+    "public_projection": "anchors_hashes_and_counts_only",
+    "raw_evidence_availability": "private_local"
+  },
+  {
+    "image_region_count": 0,
+    "pdf_page": 652,
+    "positioned_line_count": 59,
+    "public_projection": "anchors_hashes_and_counts_only",
+    "raw_evidence_availability": "private_local"
+  },
+  {
+    "image_region_count": 0,
+    "pdf_page": 653,
+    "positioned_line_count": 59,
+    "public_projection": "anchors_hashes_and_counts_only",
+    "raw_evidence_availability": "private_local"
+  },
+  {
+    "image_region_count": 0,
+    "pdf_page": 654,
+    "positioned_line_count": 60,
+    "public_projection": "anchors_hashes_and_counts_only",
+    "raw_evidence_availability": "private_local"
+  },
+  {
+    "image_region_count": 0,
+    "pdf_page": 655,
+    "positioned_line_count": 58,
+    "public_projection": "anchors_hashes_and_counts_only",
+    "raw_evidence_availability": "private_local"
+  },
+  {
+    "image_region_count": 0,
+    "pdf_page": 656,
+    "positioned_line_count": 56,
+    "public_projection": "anchors_hashes_and_counts_only",
+    "raw_evidence_availability": "private_local"
+  },
+  {
+    "image_region_count": 0,
+    "pdf_page": 657,
+    "positioned_line_count": 54,
+    "public_projection": "anchors_hashes_and_counts_only",
+    "raw_evidence_availability": "private_local"
+  },
+  {
+    "image_region_count": 0,
+    "pdf_page": 658,
+    "positioned_line_count": 58,
+    "public_projection": "anchors_hashes_and_counts_only",
+    "raw_evidence_availability": "private_local"
+  },
+  {
+    "image_region_count": 0,
+    "pdf_page": 659,
+    "positioned_line_count": 49,
+    "public_projection": "anchors_hashes_and_counts_only",
+    "raw_evidence_availability": "private_local"
+  },
+  {
+    "image_region_count": 0,
+    "pdf_page": 660,
+    "positioned_line_count": 56,
+    "public_projection": "anchors_hashes_and_counts_only",
+    "raw_evidence_availability": "private_local"
+  },
+  {
+    "image_region_count": 0,
+    "pdf_page": 661,
+    "positioned_line_count": 57,
+    "public_projection": "anchors_hashes_and_counts_only",
+    "raw_evidence_availability": "private_local"
+  },
+  {
+    "image_region_count": 0,
+    "pdf_page": 662,
+    "positioned_line_count": 57,
+    "public_projection": "anchors_hashes_and_counts_only",
+    "raw_evidence_availability": "private_local"
+  },
+  {
+    "image_region_count": 0,
+    "pdf_page": 663,
+    "positioned_line_count": 56,
+    "public_projection": "anchors_hashes_and_counts_only",
+    "raw_evidence_availability": "private_local"
+  },
+  {
+    "image_region_count": 0,
+    "pdf_page": 664,
+    "positioned_line_count": 55,
+    "public_projection": "anchors_hashes_and_counts_only",
+    "raw_evidence_availability": "private_local"
+  },
+  {
+    "image_region_count": 0,
+    "pdf_page": 665,
+    "positioned_line_count": 56,
+    "public_projection": "anchors_hashes_and_counts_only",
+    "raw_evidence_availability": "private_local"
+  },
+  {
+    "image_region_count": 0,
+    "pdf_page": 666,
+    "positioned_line_count": 56,
+    "public_projection": "anchors_hashes_and_counts_only",
+    "raw_evidence_availability": "private_local"
+  },
+  {
+    "image_region_count": 0,
+    "pdf_page": 667,
+    "positioned_line_count": 59,
+    "public_projection": "anchors_hashes_and_counts_only",
+    "raw_evidence_availability": "private_local"
+  },
+  {
+    "image_region_count": 0,
+    "pdf_page": 668,
+    "positioned_line_count": 52,
+    "public_projection": "anchors_hashes_and_counts_only",
+    "raw_evidence_availability": "private_local"
+  },
+  {
+    "image_region_count": 0,
+    "pdf_page": 669,
+    "positioned_line_count": 4,
+    "public_projection": "anchors_hashes_and_counts_only",
+    "raw_evidence_availability": "private_local"
+  },
+  {
+    "image_region_count": 0,
+    "pdf_page": 670,
+    "positioned_line_count": 62,
+    "public_projection": "anchors_hashes_and_counts_only",
+    "raw_evidence_availability": "private_local"
+  },
+  {
+    "image_region_count": 0,
+    "pdf_page": 671,
+    "positioned_line_count": 4,
+    "public_projection": "anchors_hashes_and_counts_only",
+    "raw_evidence_availability": "private_local"
+  },
+  {
+    "image_region_count": 0,
+    "pdf_page": 672,
+    "positioned_line_count": 98,
+    "public_projection": "anchors_hashes_and_counts_only",
+    "raw_evidence_availability": "private_local"
+  },
+  {
+    "image_region_count": 0,
+    "pdf_page": 673,
+    "positioned_line_count": 4,
+    "public_projection": "anchors_hashes_and_counts_only",
+    "raw_evidence_availability": "private_local"
+  },
+  {
+    "image_region_count": 0,
+    "pdf_page": 674,
+    "positioned_line_count": 99,
+    "public_projection": "anchors_hashes_and_counts_only",
+    "raw_evidence_availability": "private_local"
+  },
+  {
+    "image_region_count": 0,
+    "pdf_page": 675,
+    "positioned_line_count": 4,
+    "public_projection": "anchors_hashes_and_counts_only",
+    "raw_evidence_availability": "private_local"
+  },
+  {
+    "image_region_count": 0,
+    "pdf_page": 676,
+    "positioned_line_count": 94,
+    "public_projection": "anchors_hashes_and_counts_only",
+    "raw_evidence_availability": "private_local"
+  },
+  {
+    "image_region_count": 0,
+    "pdf_page": 677,
+    "positioned_line_count": 113,
+    "public_projection": "anchors_hashes_and_counts_only",
+    "raw_evidence_availability": "private_local"
+  },
+  {
+    "image_region_count": 0,
+    "pdf_page": 678,
+    "positioned_line_count": 27,
+    "public_projection": "anchors_hashes_and_counts_only",
+    "raw_evidence_availability": "private_local"
+  },
+  {
+    "image_region_count": 0,
+    "pdf_page": 679,
+    "positioned_line_count": 4,
+    "public_projection": "anchors_hashes_and_counts_only",
+    "raw_evidence_availability": "private_local"
+  },
+  {
+    "image_region_count": 0,
+    "pdf_page": 680,
+    "positioned_line_count": 80,
+    "public_projection": "anchors_hashes_and_counts_only",
+    "raw_evidence_availability": "private_local"
+  },
+  {
+    "image_region_count": 0,
+    "pdf_page": 681,
+    "positioned_line_count": 115,
+    "public_projection": "anchors_hashes_and_counts_only",
+    "raw_evidence_availability": "private_local"
+  },
+  {
+    "image_region_count": 0,
+    "pdf_page": 682,
+    "positioned_line_count": 114,
+    "public_projection": "anchors_hashes_and_counts_only",
+    "raw_evidence_availability": "private_local"
+  },
+  {
+    "image_region_count": 0,
+    "pdf_page": 683,
+    "positioned_line_count": 117,
+    "public_projection": "anchors_hashes_and_counts_only",
+    "raw_evidence_availability": "private_local"
+  },
+  {
+    "image_region_count": 0,
+    "pdf_page": 684,
+    "positioned_line_count": 56,
+    "public_projection": "anchors_hashes_and_counts_only",
+    "raw_evidence_availability": "private_local"
+  },
+  {
+    "image_region_count": 0,
+    "pdf_page": 685,
+    "positioned_line_count": 4,
+    "public_projection": "anchors_hashes_and_counts_only",
+    "raw_evidence_availability": "private_local"
+  },
+  {
+    "image_region_count": 0,
+    "pdf_page": 686,
+    "positioned_line_count": 93,
+    "public_projection": "anchors_hashes_and_counts_only",
+    "raw_evidence_availability": "private_local"
+  },
+  {
+    "image_region_count": 0,
+    "pdf_page": 687,
+    "positioned_line_count": 4,
+    "public_projection": "anchors_hashes_and_counts_only",
+    "raw_evidence_availability": "private_local"
+  },
+  {
+    "image_region_count": 0,
+    "pdf_page": 688,
+    "positioned_line_count": 93,
+    "public_projection": "anchors_hashes_and_counts_only",
+    "raw_evidence_availability": "private_local"
+  },
+  {
+    "image_region_count": 0,
+    "pdf_page": 689,
+    "positioned_line_count": 115,
+    "public_projection": "anchors_hashes_and_counts_only",
+    "raw_evidence_availability": "private_local"
+  },
+  {
+    "image_region_count": 0,
+    "pdf_page": 690,
+    "positioned_line_count": 115,
+    "public_projection": "anchors_hashes_and_counts_only",
+    "raw_evidence_availability": "private_local"
+  },
+  {
+    "image_region_count": 0,
+    "pdf_page": 691,
+    "positioned_line_count": 110,
+    "public_projection": "anchors_hashes_and_counts_only",
+    "raw_evidence_availability": "private_local"
+  },
+  {
+    "image_region_count": 0,
+    "pdf_page": 692,
+    "positioned_line_count": 111,
+    "public_projection": "anchors_hashes_and_counts_only",
+    "raw_evidence_availability": "private_local"
+  },
+  {
+    "image_region_count": 0,
+    "pdf_page": 693,
+    "positioned_line_count": 99,
+    "public_projection": "anchors_hashes_and_counts_only",
+    "raw_evidence_availability": "private_local"
+  },
+  {
+    "image_region_count": 0,
+    "pdf_page": 694,
+    "positioned_line_count": 88,
+    "public_projection": "anchors_hashes_and_counts_only",
+    "raw_evidence_availability": "private_local"
+  },
+  {
+    "image_region_count": 0,
+    "pdf_page": 695,
+    "positioned_line_count": 111,
+    "public_projection": "anchors_hashes_and_counts_only",
+    "raw_evidence_availability": "private_local"
+  },
+  {
+    "image_region_count": 0,
+    "pdf_page": 696,
+    "positioned_line_count": 111,
+    "public_projection": "anchors_hashes_and_counts_only",
+    "raw_evidence_availability": "private_local"
+  },
+  {
+    "image_region_count": 0,
+    "pdf_page": 697,
+    "positioned_line_count": 118,
+    "public_projection": "anchors_hashes_and_counts_only",
+    "raw_evidence_availability": "private_local"
+  },
+  {
+    "image_region_count": 0,
+    "pdf_page": 698,
+    "positioned_line_count": 68,
+    "public_projection": "anchors_hashes_and_counts_only",
+    "raw_evidence_availability": "private_local"
+  },
+  {
+    "image_region_count": 0,
+    "pdf_page": 699,
+    "positioned_line_count": 4,
+    "public_projection": "anchors_hashes_and_counts_only",
+    "raw_evidence_availability": "private_local"
+  },
+  {
+    "image_region_count": 0,
+    "pdf_page": 700,
+    "positioned_line_count": 86,
+    "public_projection": "anchors_hashes_and_counts_only",
+    "raw_evidence_availability": "private_local"
+  },
+  {
+    "image_region_count": 0,
+    "pdf_page": 701,
+    "positioned_line_count": 103,
+    "public_projection": "anchors_hashes_and_counts_only",
+    "raw_evidence_availability": "private_local"
+  },
+  {
+    "image_region_count": 1,
+    "pdf_page": 702,
+    "positioned_line_count": 45,
+    "public_projection": "anchors_hashes_and_counts_only",
+    "raw_evidence_availability": "private_local"
+  },
+  {
+    "image_region_count": 0,
+    "pdf_page": 703,
+    "positioned_line_count": 85,
+    "public_projection": "anchors_hashes_and_counts_only",
+    "raw_evidence_availability": "private_local"
+  },
+  {
+    "image_region_count": 0,
+    "pdf_page": 704,
+    "positioned_line_count": 103,
+    "public_projection": "anchors_hashes_and_counts_only",
+    "raw_evidence_availability": "private_local"
+  },
+  {
+    "image_region_count": 0,
+    "pdf_page": 705,
+    "positioned_line_count": 114,
+    "public_projection": "anchors_hashes_and_counts_only",
+    "raw_evidence_availability": "private_local"
+  },
+  {
+    "image_region_count": 0,
+    "pdf_page": 706,
+    "positioned_line_count": 104,
+    "public_projection": "anchors_hashes_and_counts_only",
+    "raw_evidence_availability": "private_local"
+  },
+  {
+    "image_region_count": 0,
+    "pdf_page": 707,
+    "positioned_line_count": 4,
+    "public_projection": "anchors_hashes_and_counts_only",
+    "raw_evidence_availability": "private_local"
+  },
+  {
+    "image_region_count": 0,
+    "pdf_page": 708,
+    "positioned_line_count": 45,
+    "public_projection": "anchors_hashes_and_counts_only",
+    "raw_evidence_availability": "private_local"
+  },
+  {
+    "image_region_count": 0,
+    "pdf_page": 709,
+    "positioned_line_count": 4,
+    "public_projection": "anchors_hashes_and_counts_only",
+    "raw_evidence_availability": "private_local"
+  },
+  {
+    "image_region_count": 0,
+    "pdf_page": 710,
+    "positioned_line_count": 50,
+    "public_projection": "anchors_hashes_and_counts_only",
+    "raw_evidence_availability": "private_local"
+  },
+  {
+    "image_region_count": 0,
+    "pdf_page": 711,
+    "positioned_line_count": 4,
+    "public_projection": "anchors_hashes_and_counts_only",
+    "raw_evidence_availability": "private_local"
+  },
+  {
+    "image_region_count": 0,
+    "pdf_page": 712,
+    "positioned_line_count": 86,
+    "public_projection": "anchors_hashes_and_counts_only",
+    "raw_evidence_availability": "private_local"
+  },
+  {
+    "image_region_count": 0,
+    "pdf_page": 713,
+    "positioned_line_count": 108,
+    "public_projection": "anchors_hashes_and_counts_only",
+    "raw_evidence_availability": "private_local"
+  },
+  {
+    "image_region_count": 0,
+    "pdf_page": 714,
+    "positioned_line_count": 102,
+    "public_projection": "anchors_hashes_and_counts_only",
+    "raw_evidence_availability": "private_local"
+  },
+  {
+    "image_region_count": 0,
+    "pdf_page": 715,
+    "positioned_line_count": 109,
+    "public_projection": "anchors_hashes_and_counts_only",
+    "raw_evidence_availability": "private_local"
+  },
+  {
+    "image_region_count": 0,
+    "pdf_page": 716,
+    "positioned_line_count": 108,
+    "public_projection": "anchors_hashes_and_counts_only",
+    "raw_evidence_availability": "private_local"
+  },
+  {
+    "image_region_count": 0,
+    "pdf_page": 717,
+    "positioned_line_count": 107,
+    "public_projection": "anchors_hashes_and_counts_only",
+    "raw_evidence_availability": "private_local"
+  },
+  {
+    "image_region_count": 0,
+    "pdf_page": 718,
+    "positioned_line_count": 105,
+    "public_projection": "anchors_hashes_and_counts_only",
+    "raw_evidence_availability": "private_local"
+  },
+  {
+    "image_region_count": 0,
+    "pdf_page": 719,
+    "positioned_line_count": 109,
+    "public_projection": "anchors_hashes_and_counts_only",
+    "raw_evidence_availability": "private_local"
+  },
+  {
+    "image_region_count": 0,
+    "pdf_page": 720,
+    "positioned_line_count": 108,
+    "public_projection": "anchors_hashes_and_counts_only",
+    "raw_evidence_availability": "private_local"
+  },
+  {
+    "image_region_count": 0,
+    "pdf_page": 721,
+    "positioned_line_count": 108,
+    "public_projection": "anchors_hashes_and_counts_only",
+    "raw_evidence_availability": "private_local"
+  },
+  {
+    "image_region_count": 0,
+    "pdf_page": 722,
+    "positioned_line_count": 107,
+    "public_projection": "anchors_hashes_and_counts_only",
+    "raw_evidence_availability": "private_local"
+  },
+  {
+    "image_region_count": 0,
+    "pdf_page": 723,
+    "positioned_line_count": 107,
+    "public_projection": "anchors_hashes_and_counts_only",
+    "raw_evidence_availability": "private_local"
+  },
+  {
+    "image_region_count": 0,
+    "pdf_page": 724,
+    "positioned_line_count": 106,
+    "public_projection": "anchors_hashes_and_counts_only",
+    "raw_evidence_availability": "private_local"
+  },
+  {
+    "image_region_count": 0,
+    "pdf_page": 725,
+    "positioned_line_count": 110,
+    "public_projection": "anchors_hashes_and_counts_only",
+    "raw_evidence_availability": "private_local"
+  },
+  {
+    "image_region_count": 0,
+    "pdf_page": 726,
+    "positioned_line_count": 108,
+    "public_projection": "anchors_hashes_and_counts_only",
+    "raw_evidence_availability": "private_local"
+  },
+  {
+    "image_region_count": 0,
+    "pdf_page": 727,
+    "positioned_line_count": 108,
+    "public_projection": "anchors_hashes_and_counts_only",
+    "raw_evidence_availability": "private_local"
+  },
+  {
+    "image_region_count": 0,
+    "pdf_page": 728,
+    "positioned_line_count": 108,
+    "public_projection": "anchors_hashes_and_counts_only",
+    "raw_evidence_availability": "private_local"
+  },
+  {
+    "image_region_count": 0,
+    "pdf_page": 729,
+    "positioned_line_count": 107,
+    "public_projection": "anchors_hashes_and_counts_only",
+    "raw_evidence_availability": "private_local"
+  },
+  {
+    "image_region_count": 0,
+    "pdf_page": 730,
+    "positioned_line_count": 109,
+    "public_projection": "anchors_hashes_and_counts_only",
+    "raw_evidence_availability": "private_local"
+  },
+  {
+    "image_region_count": 0,
+    "pdf_page": 731,
+    "positioned_line_count": 111,
+    "public_projection": "anchors_hashes_and_counts_only",
+    "raw_evidence_availability": "private_local"
+  },
+  {
+    "image_region_count": 0,
+    "pdf_page": 732,
+    "positioned_line_count": 107,
+    "public_projection": "anchors_hashes_and_counts_only",
+    "raw_evidence_availability": "private_local"
+  },
+  {
+    "image_region_count": 0,
+    "pdf_page": 733,
+    "positioned_line_count": 109,
+    "public_projection": "anchors_hashes_and_counts_only",
+    "raw_evidence_availability": "private_local"
+  },
+  {
+    "image_region_count": 0,
+    "pdf_page": 734,
+    "positioned_line_count": 100,
+    "public_projection": "anchors_hashes_and_counts_only",
+    "raw_evidence_availability": "private_local"
+  },
+  {
+    "image_region_count": 0,
+    "pdf_page": 735,
+    "positioned_line_count": 105,
+    "public_projection": "anchors_hashes_and_counts_only",
+    "raw_evidence_availability": "private_local"
+  },
+  {
+    "image_region_count": 0,
+    "pdf_page": 736,
+    "positioned_line_count": 108,
+    "public_projection": "anchors_hashes_and_counts_only",
+    "raw_evidence_availability": "private_local"
+  },
+  {
+    "image_region_count": 0,
+    "pdf_page": 737,
+    "positioned_line_count": 108,
+    "public_projection": "anchors_hashes_and_counts_only",
+    "raw_evidence_availability": "private_local"
+  },
+  {
+    "image_region_count": 0,
+    "pdf_page": 738,
+    "positioned_line_count": 104,
+    "public_projection": "anchors_hashes_and_counts_only",
+    "raw_evidence_availability": "private_local"
+  },
+  {
+    "image_region_count": 0,
+    "pdf_page": 739,
+    "positioned_line_count": 107,
+    "public_projection": "anchors_hashes_and_counts_only",
+    "raw_evidence_availability": "private_local"
+  },
+  {
+    "image_region_count": 0,
+    "pdf_page": 740,
+    "positioned_line_count": 106,
+    "public_projection": "anchors_hashes_and_counts_only",
+    "raw_evidence_availability": "private_local"
+  },
+  {
+    "image_region_count": 0,
+    "pdf_page": 741,
+    "positioned_line_count": 107,
+    "public_projection": "anchors_hashes_and_counts_only",
+    "raw_evidence_availability": "private_local"
+  },
+  {
+    "image_region_count": 0,
+    "pdf_page": 742,
+    "positioned_line_count": 107,
+    "public_projection": "anchors_hashes_and_counts_only",
+    "raw_evidence_availability": "private_local"
+  },
+  {
+    "image_region_count": 0,
+    "pdf_page": 743,
+    "positioned_line_count": 107,
+    "public_projection": "anchors_hashes_and_counts_only",
+    "raw_evidence_availability": "private_local"
+  },
+  {
+    "image_region_count": 0,
+    "pdf_page": 744,
+    "positioned_line_count": 109,
+    "public_projection": "anchors_hashes_and_counts_only",
+    "raw_evidence_availability": "private_local"
+  },
+  {
+    "image_region_count": 0,
+    "pdf_page": 745,
+    "positioned_line_count": 108,
+    "public_projection": "anchors_hashes_and_counts_only",
+    "raw_evidence_availability": "private_local"
+  },
+  {
+    "image_region_count": 0,
+    "pdf_page": 746,
+    "positioned_line_count": 109,
+    "public_projection": "anchors_hashes_and_counts_only",
+    "raw_evidence_availability": "private_local"
+  },
+  {
+    "image_region_count": 0,
+    "pdf_page": 747,
+    "positioned_line_count": 109,
+    "public_projection": "anchors_hashes_and_counts_only",
+    "raw_evidence_availability": "private_local"
+  },
+  {
+    "image_region_count": 0,
+    "pdf_page": 748,
+    "positioned_line_count": 105,
+    "public_projection": "anchors_hashes_and_counts_only",
+    "raw_evidence_availability": "private_local"
+  },
+  {
+    "image_region_count": 0,
+    "pdf_page": 749,
+    "positioned_line_count": 104,
+    "public_projection": "anchors_hashes_and_counts_only",
+    "raw_evidence_availability": "private_local"
+  },
+  {
+    "image_region_count": 0,
+    "pdf_page": 750,
+    "positioned_line_count": 107,
+    "public_projection": "anchors_hashes_and_counts_only",
+    "raw_evidence_availability": "private_local"
+  },
+  {
+    "image_region_count": 0,
+    "pdf_page": 751,
+    "positioned_line_count": 107,
+    "public_projection": "anchors_hashes_and_counts_only",
+    "raw_evidence_availability": "private_local"
+  },
+  {
+    "image_region_count": 0,
+    "pdf_page": 752,
+    "positioned_line_count": 101,
+    "public_projection": "anchors_hashes_and_counts_only",
+    "raw_evidence_availability": "private_local"
+  },
+  {
+    "image_region_count": 0,
+    "pdf_page": 753,
+    "positioned_line_count": 4,
+    "public_projection": "anchors_hashes_and_counts_only",
+    "raw_evidence_availability": "private_local"
+  },
+  {
+    "image_region_count": 6,
+    "pdf_page": 754,
+    "positioned_line_count": 22,
+    "public_projection": "anchors_hashes_and_counts_only",
+    "raw_evidence_availability": "private_local"
+  },
+  {
+    "image_region_count": 4,
+    "pdf_page": 755,
+    "positioned_line_count": 18,
+    "public_projection": "anchors_hashes_and_counts_only",
+    "raw_evidence_availability": "private_local"
+  },
+  {
+    "image_region_count": 1,
+    "pdf_page": 756,
+    "positioned_line_count": 35,
+    "public_projection": "anchors_hashes_and_counts_only",
+    "raw_evidence_availability": "private_local"
+  },
+  {
+    "image_region_count": 3,
+    "pdf_page": 757,
+    "positioned_line_count": 31,
+    "public_projection": "anchors_hashes_and_counts_only",
+    "raw_evidence_availability": "private_local"
+  },
+  {
+    "image_region_count": 2,
+    "pdf_page": 758,
+    "positioned_line_count": 23,
+    "public_projection": "anchors_hashes_and_counts_only",
+    "raw_evidence_availability": "private_local"
+  },
+  {
+    "image_region_count": 1,
+    "pdf_page": 759,
+    "positioned_line_count": 59,
+    "public_projection": "anchors_hashes_and_counts_only",
+    "raw_evidence_availability": "private_local"
+  },
+  {
+    "image_region_count": 2,
+    "pdf_page": 760,
+    "positioned_line_count": 0,
+    "public_projection": "anchors_hashes_and_counts_only",
+    "raw_evidence_availability": "private_local"
+  },
+  {
+    "image_region_count": 2,
+    "pdf_page": 761,
+    "positioned_line_count": 0,
+    "public_projection": "anchors_hashes_and_counts_only",
+    "raw_evidence_availability": "private_local"
+  }
+]

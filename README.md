@@ -90,6 +90,17 @@ building-code-ast parse "Doors shall not be obstructed."
 
 The runtime package has no third-party dependencies. CLI calls default provision source identity and locator to `inline`; durable ingestion should provide stable identifiers tied to a source artifact, edition, and location.
 
+## 2018 IBC structural corpus
+
+The repository includes a source-safe structural corpus bound to one exact user-supplied 2018 IBC PDF. The corpus inventories formally captioned tables and figures, incidental layouts, technical-graphic candidates, displayed equations, definitions, exceptions, Chapter 35 rows, external citations, internal cross-references, and representative semantic records without committing the copyrighted source artifact.
+
+```bash
+PYTHONPATH=src python tools/validate_ibc_2018_corpus.py corpora/ibc-2018
+PYTHONPATH=src python tools/validate_ibc_2018_schemas.py corpora/ibc-2018 schemas
+```
+
+The source manifest records SHA-256 `c8f0b75522707a39daf5202edee25d7fdce6c177c382f828a6dc1dfd5cc0b18d`, 32,608,171 bytes, and 761 PDF pages. Counts are versioned assertions with review states and correction history, not hard-coded legal truth. See [`docs/reference/ibc-2018-corpus-contract.md`](docs/reference/ibc-2018-corpus-contract.md) and [`docs/how-to/build-ibc-2018-corpus.md`](docs/how-to/build-ibc-2018-corpus.md).
+
 ## Local NEC 2017 ingestion
 
 The optional local ingestion adapter can convert selected articles from a user-supplied 2017 NEC PDF into validated document AST seeds with block-level PDF coordinates. PyMuPDF is isolated in the `nec-pdf` optional dependency group; the base runtime remains dependency-free.
@@ -156,11 +167,16 @@ Do not edit accepted records, transaction receipts, extracted facts, or generate
 - `src/building_code_ast/evidence/`: publication-neutral source registration and guarded adapter contracts
 - `schemas/`: versioned JSON Schema projections of the public AST contracts and LORE trust-root schemas
 - `schemas/source-register.schema.json`: closed source-register `0.1.0` projection
-- `fixtures/`: synthetic source and expected-output fixtures
+- `fixtures/`: synthetic fixtures plus source-safe IBC geometry anchors and rationale
+- `corpora/ibc-2018/`: versioned source-safe 2018 IBC inventories, vector-path detections, reconciled references, coverage, corrections, and prioritized review packets
 - `tests/`: parser, provenance, malformed-input, and regression tests
+- `scripts/ingest_ibc_2018.py`: local-only coordinate-aware IBC 2018 chapter ingestion CLI
+- `tools/build_ibc_2018_corpus.py`: source-safe whole-document IBC structural inventory builder
+- `tools/validate_ibc_2018_corpus.py`: deterministic source-free IBC corpus validator
 - `scripts/ingest_nec_2017.py`: local-only coordinate-aware NEC 2017 ingestion CLI
 - `scripts/check_nec_2017_hierarchy.py`: source-free local hierarchy conformance reporter
 - `scripts/build_nec_2017_semantics.py`: private Article 100 definition and selected-section review generator
+- `schemas/ibc-2018-*.schema.json`: IBC source, corpus, and inventory-record contracts
 - `schemas/nec-*.schema.json`: versioned NEC definition, section-review, and language-profile contracts
 - `docs/reference/source-evidence.md`: source identity, publication state, rights, and adapter execution reference
 - `docs/reference/nec-definition-index.md`: structured Article 100 definition contract
@@ -195,7 +211,9 @@ Run the Python verification lanes:
 
 ```bash
 python -m unittest discover -s tests -v
-python -m compileall -q src tests
+python -m compileall -q src scripts tools tests
+PYTHONPATH=src python tools/validate_ibc_2018_corpus.py corpora/ibc-2018
+PYTHONPATH=src python tools/validate_ibc_2018_schemas.py corpora/ibc-2018 schemas
 ```
 
 The read-only LORE workflow pins an exact upstream LORE revision and verifies:

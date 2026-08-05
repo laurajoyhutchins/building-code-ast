@@ -16,8 +16,10 @@ class PackageMetadataTests(unittest.TestCase):
         self.assertEqual(
             payload["project"]["optional-dependencies"],
             {
+                "ibc-pdf": ["PyMuPDF>=1.24,<2"],
                 "nec-pdf": ["PyMuPDF>=1.24,<2"],
                 "evidence-pdf": ["PyMuPDF>=1.24,<2"],
+                "validation": ["jsonschema>=4.23,<5"],
             },
         )
 
