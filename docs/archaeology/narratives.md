@@ -194,3 +194,16 @@
 
 **Evidence:** PR #11; `lore.yaml`; `.lore/`; upstream Deciduous archaeology conventions.
 **Status:** active.
+
+## Section-first code addressing
+> Use the code publication's own hierarchy as the durable coordinate system.
+
+**Current state:** Draft PR #33 implements and verifies section-first addressing. Sections, subsections, tables, figures, exceptions, definitions, and equations are primary navigation coordinates. PDF pages remain secondary provenance.
+
+**Evolution:**
+1. Page coordinates were retained to reproduce source evidence and debug extraction.
+2. **PIVOT:** Engineers navigate and cite code by sections and subsections, while pagination varies across editions, printings, and source files.
+3. The section-addressing contract now forbids page-derived fallback identities and bases ordering and edition comparison on structural code addresses and explicit renumbering relationships.
+
+**Evidence:** Draft PR #33 at `3740ea3435ed7c2092ddb07001325d4b8ce3ba77`; `docs/reference/section-addressing.md` on `agent/ibc-2018-closeout`.
+**Status:** branch-only pending merge of PR #33.
