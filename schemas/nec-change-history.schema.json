@@ -1,0 +1,258 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/laurajoyhutchins/building-code-ast/schemas/nec-change-history.schema.json",
+  "title": "NEC Expected Changelog Dataset",
+  "type": "object",
+  "additionalProperties": false,
+  "properties": {
+    "dataset_version": {"const": "0.1.0"},
+    "type": {"const": "nec_expected_changelog"},
+    "cycle": {"type": "string", "minLength": 1},
+    "sources": {
+      "type": "array",
+      "items": {"$ref": "#/$defs/sourceManifest"}
+    },
+    "expected_changes": {
+      "type": "array",
+      "items": {"$ref": "#/$defs/expectedChange"}
+    },
+    "observed_changes": {
+      "type": "array",
+      "items": {"$ref": "#/$defs/observedChange"}
+    },
+    "reconciliations": {
+      "type": "array",
+      "items": {"$ref": "#/$defs/reconciliation"}
+    },
+    "diagnostics": {
+      "type": "array",
+      "items": {"$ref": "#/$defs/diagnostic"}
+    }
+  },
+  "required": [
+    "dataset_version",
+    "type",
+    "cycle",
+    "sources",
+    "expected_changes",
+    "observed_changes",
+    "reconciliations",
+    "diagnostics"
+  ],
+  "$defs": {
+    "necLocator": {
+      "type": "string",
+      "pattern": "^[0-9]{2,3}(\\.[0-9]+[A-Za-z]?)?(\\([A-Za-z0-9]+\\))*$"
+    },
+    "changeType": {
+      "enum": [
+        "add",
+        "add_subdivision",
+        "delete",
+        "modify_text",
+        "move",
+        "renumber",
+        "split",
+        "merge",
+        "restructure",
+        "change_heading",
+        "change_definition",
+        "change_table",
+        "change_exception",
+        "change_cross_reference",
+        "editorial_only",
+        "no_final_change",
+        "unknown"
+      ]
+    },
+    "sourceLocator": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "source_id": {"type": "string", "minLength": 1},
+        "page": {
+          "oneOf": [
+            {"type": "integer", "minimum": 1},
+            {"type": "null"}
+          ]
+        },
+        "anchor": {
+          "oneOf": [
+            {"type": "string", "minLength": 1},
+            {"type": "null"}
+          ]
+        }
+      },
+      "required": ["source_id", "page", "anchor"]
+    },
+    "sourceManifest": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "source_id": {"type": "string", "minLength": 1},
+        "document_type": {"type": "string", "minLength": 1},
+        "title": {"type": "string", "minLength": 1},
+        "cycle": {"type": "string", "minLength": 1},
+        "source_url": {"type": "string", "minLength": 1},
+        "retrieved_at": {"type": "string", "minLength": 1},
+        "sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+        "media_type": {"type": "string", "minLength": 1},
+        "access_scope": {"type": "string", "minLength": 1},
+        "panel": {
+          "oneOf": [
+            {"type": "string", "minLength": 1},
+            {"type": "null"}
+          ]
+        },
+        "page_count": {
+          "oneOf": [
+            {"type": "integer", "minimum": 1},
+            {"type": "null"}
+          ]
+        }
+      },
+      "required": [
+        "source_id",
+        "document_type",
+        "title",
+        "cycle",
+        "source_url",
+        "retrieved_at",
+        "sha256",
+        "media_type",
+        "access_scope",
+        "panel",
+        "page_count"
+      ]
+    },
+    "expectedChange": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "expectation_id": {"type": "string", "pattern": "^exp:.+$"},
+        "change_chain_id": {"type": "string", "minLength": 1},
+        "from_locators": {
+          "type": "array",
+          "items": {"$ref": "#/$defs/necLocator"},
+          "uniqueItems": true
+        },
+        "expected_target_references": {
+          "type": "array",
+          "items": {"type": "string", "minLength": 1},
+          "uniqueItems": true
+        },
+        "unresolved_references": {
+          "type": "array",
+          "items": {"type": "string", "minLength": 1},
+          "uniqueItems": true
+        },
+        "change_types": {
+          "type": "array",
+          "minItems": 1,
+          "items": {"$ref": "#/$defs/changeType"}
+        },
+        "summary": {"type": "string", "minLength": 1},
+        "disposition": {
+          "enum": ["change_expected", "no_change_expected", "uncertain"]
+        },
+        "confidence": {"enum": ["high", "medium", "low"]},
+        "controlling_record_id": {"type": "string", "minLength": 1},
+        "supporting_record_ids": {
+          "type": "array",
+          "minItems": 1,
+          "items": {"type": "string", "minLength": 1},
+          "uniqueItems": true
+        }
+      },
+      "required": [
+        "expectation_id",
+        "change_chain_id",
+        "from_locators",
+        "expected_target_references",
+        "unresolved_references",
+        "change_types",
+        "summary",
+        "disposition",
+        "confidence",
+        "controlling_record_id",
+        "supporting_record_ids"
+      ]
+    },
+    "observedChange": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "observed_change_id": {"type": "string", "minLength": 1},
+        "from_locators": {
+          "type": "array",
+          "items": {"$ref": "#/$defs/necLocator"}
+        },
+        "to_locators": {
+          "type": "array",
+          "items": {"$ref": "#/$defs/necLocator"}
+        },
+        "change_types": {
+          "type": "array",
+          "minItems": 1,
+          "items": {"$ref": "#/$defs/changeType"}
+        },
+        "summary": {"type": "string", "minLength": 1},
+        "alignment_confidence": {"type": "number", "minimum": 0, "maximum": 1}
+      },
+      "required": [
+        "observed_change_id",
+        "from_locators",
+        "to_locators",
+        "change_types",
+        "summary",
+        "alignment_confidence"
+      ]
+    },
+    "reconciliation": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "reconciliation_id": {"type": "string", "pattern": "^rec:.+$"},
+        "expectation_id": {
+          "oneOf": [
+            {"type": "string", "pattern": "^exp:.+$"},
+            {"type": "null"}
+          ]
+        },
+        "observed_change_ids": {
+          "type": "array",
+          "items": {"type": "string", "minLength": 1},
+          "uniqueItems": true
+        },
+        "outcome": {
+          "enum": [
+            "confirmed",
+            "expected_not_observed",
+            "contradicted",
+            "ambiguous",
+            "unexpected_observed"
+          ]
+        },
+        "message": {"type": "string", "minLength": 1}
+      },
+      "required": [
+        "reconciliation_id",
+        "expectation_id",
+        "observed_change_ids",
+        "outcome",
+        "message"
+      ]
+    },
+    "diagnostic": {
+      "type": "object",
+      "additionalProperties": true,
+      "properties": {
+        "code": {
+          "enum": ["unresolved-reference", "reconciliation-review"]
+        },
+        "message": {"type": "string", "minLength": 1}
+      },
+      "required": ["code", "message"]
+    }
+  }
+}
