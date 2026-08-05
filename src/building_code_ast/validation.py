@@ -6,7 +6,14 @@ This module provides dependency-free runtime validation. The JSON Schema in
 
 from __future__ import annotations
 
-from .model import Modality, ProvisionAst, SourceSpan
+from .model import (
+    ComparisonCondition,
+    LogicalCondition,
+    LogicalConditionType,
+    Modality,
+    ProvisionAst,
+    SourceSpan,
+)
 
 
 def _validate_span(source: str, span: SourceSpan, label: str) -> None:
@@ -14,6 +21,66 @@ def _validate_span(source: str, span: SourceSpan, label: str) -> None:
         raise ValueError(f"{label} span is outside the source text")
     if source[span.start : span.end] != span.text:
         raise ValueError(f"{label} span text does not match the source text")
+
+
+def _validate_condition(
+    source: str,
+    condition: ComparisonCondition | LogicalCondition,
+    label: str,
+    active_path: set[int],
+) -> None:
+    if isinstance(condition, ComparisonCondition):
+        _validate_span(source, condition.span, label)
+        if condition.operator not in {">", ">=", "<", "<=", "=="}:
+            raise ValueError(f"{label} has an unsupported operator")
+        if condition.threshold.original_text != condition.span.text:
+            raise ValueError(f"{label} threshold original text must match its span text")
+        return
+
+    if not isinstance(condition, LogicalCondition):
+        raise ValueError(f"{label} has an unsupported condition expression type")
+    if not isinstance(condition.type, LogicalConditionType):
+        raise ValueError(f"{label} has an unsupported logical condition type")
+    if len(condition.operands) < 2:
+        raise ValueError(f"{label} must contain at least two operands")
+
+    identity = id(condition)
+    if identity in active_path:
+        raise ValueError(f"{label} contains a logical condition cycle")
+
+    _validate_span(source, condition.span, label)
+    active_path.add(identity)
+    try:
+        previous_span: SourceSpan | None = None
+        for index, operand in enumerate(condition.operands):
+            if not isinstance(operand, (ComparisonCondition, LogicalCondition)):
+                raise ValueError(f"{label}.operands[{index}] has an unsupported condition expression type")
+
+            child_span = operand.span
+            if child_span.start < condition.span.start or child_span.end > condition.span.end:
+                raise ValueError(f"{label}.operands[{index}] span is outside its logical group")
+            if previous_span is not None:
+                if child_span.start <= previous_span.start:
+                    raise ValueError(f"{label} operands are not in strict source order")
+                if child_span.start < previous_span.end:
+                    raise ValueError(f"{label} operand spans overlap")
+
+            _validate_condition(
+                source,
+                operand,
+                f"{label}.operands[{index}]",
+                active_path,
+            )
+            previous_span = child_span
+
+        first_span = condition.operands[0].span
+        last_span = condition.operands[-1].span
+        if condition.span.start != first_span.start:
+            raise ValueError(f"{label} must start at its first operand")
+        if condition.span.end != last_span.end:
+            raise ValueError(f"{label} must end at its last operand")
+    finally:
+        active_path.remove(identity)
 
 
 def validate_ast(ast: ProvisionAst) -> None:
@@ -45,12 +112,10 @@ def validate_ast(ast: ProvisionAst) -> None:
     elif ast.subject_span is not None:
         raise ValueError("empty subject must not have an evidence span")
 
-    _validate_span(ast.source_text, ast.action.span, "action")
+    if ast.condition is not None:
+        _validate_condition(ast.source_text, ast.condition, "condition", set())
 
-    for index, condition in enumerate(ast.conditions):
-        _validate_span(ast.source_text, condition.span, f"condition[{index}]")
-        if condition.operator not in {">", ">=", "<", "<=", "=="}:
-            raise ValueError(f"condition[{index}] has an unsupported operator")
+    _validate_span(ast.source_text, ast.action.span, "action")
 
     for index, exception in enumerate(ast.exceptions):
         _validate_span(ast.source_text, exception.span, f"exception[{index}]")

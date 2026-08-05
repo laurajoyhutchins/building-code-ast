@@ -5,7 +5,7 @@ import unittest
 from pathlib import Path
 
 from building_code_ast import parse_provision, validate_ast
-from building_code_ast.model import Modality
+from building_code_ast.model import ComparisonCondition, Modality
 
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -24,6 +24,7 @@ class ParserTests(unittest.TestCase):
 
         self.assertEqual(ast.to_dict(), expected)
         self.assertEqual(ast.exceptions[0].section, "12.4")
+        self.assertIsInstance(ast.condition, ComparisonCondition)
         validate_ast(ast)
 
     def test_prohibition_is_distinct_from_requirement(self) -> None:
@@ -61,7 +62,8 @@ class ParserTests(unittest.TestCase):
         self.assertEqual(source[ast.modality_span.start : ast.modality_span.end], ast.modality_span.text)
         self.assertEqual(source[ast.subject_span.start : ast.subject_span.end], ast.subject_span.text)
         self.assertEqual(source[ast.action.span.start : ast.action.span.end], ast.action.span.text)
-        self.assertEqual(source[ast.conditions[0].span.start : ast.conditions[0].span.end], ast.conditions[0].span.text)
+        self.assertIsInstance(ast.condition, ComparisonCondition)
+        self.assertEqual(source[ast.condition.span.start : ast.condition.span.end], ast.condition.span.text)
 
     def test_original_whitespace_and_offsets_are_preserved(self) -> None:
         source = "  Doors shall provide clear access.  \n"
