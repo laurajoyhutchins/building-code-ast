@@ -4,8 +4,11 @@ This directory contains the source-safe 2018 IBC structural inventory bound to S
 
 The corpus records structure, provenance, review state, and constrained interpretation metadata. It does not contain the PDF, page images, full code text, complete table contents, or a compliance model.
 
+Code sections and other published structural addresses are the primary navigation and citation coordinates. PDF pages, printed-page labels, offsets, and bounding boxes are secondary provenance used to reproduce or inspect evidence. See `../../docs/reference/section-addressing.md` and `building_code_ast.section_index` for the section-first projection contract.
+
 Start with:
 
+- `../../docs/reference/section-addressing.md` for canonical section, table, figure, exception, definition, and equation addressing;
 - `ibc-2018-source-manifest.json` and `ibc-2018-source-register.json` for exact source identity;
 - `ibc-2018-corpus-manifest.json` for versioned counts and correction history;
 - `ibc-2018-coverage-report.md` for current totals;
