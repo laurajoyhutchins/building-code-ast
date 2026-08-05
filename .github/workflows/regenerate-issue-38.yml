@@ -1,0 +1,67 @@
+name: Regenerate issue 38 archaeology
+
+on:
+  push:
+    branches:
+      - agent/issue-38-deciduous-regeneration
+
+permissions:
+  contents: write
+
+jobs:
+  regenerate:
+    if: github.actor != 'github-actions[bot]'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Update canonical patch metadata
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+
+          root = Path('.')
+          base = 'e0e3aef4320ec20ce8508378f611f43336b24e4d'
+          branch = 'agent/issue-38-deciduous-regeneration'
+          for path in sorted((root / '.deciduous/patches').glob('building-code-ast-archaeology-*.json')):
+              data = json.loads(path.read_text(encoding='utf-8'))
+              data['base_commit'] = base
+              data['branch'] = branch
+              for node in data.get('nodes', []):
+                  meta = json.loads(node['metadata_json'])
+                  if meta.get('semantic_id') in {
+                      'decision.section-address-primary',
+                      'outcome.pages-provenance-only',
+                  }:
+                      meta['current_architecture'] = True
+                      meta['lifecycle_status'] = 'completed'
+                      meta['support_scope'] = 'merged through PR #33 at 7004e6ea333bd21eb7f4eb6989fe84de6651249d'
+                      node['status'] = 'completed'
+                  node['metadata_json'] = json.dumps(meta, sort_keys=True, separators=(',', ':'))
+              path.write_text(json.dumps(data, sort_keys=True, separators=(',', ':')) + '\n', encoding='utf-8')
+
+          graph = root / 'scripts/archaeology_graph.py'
+          text = graph.read_text(encoding='utf-8')
+          import re
+          text = re.sub(r"BASE_COMMIT='[0-9a-f]{40}'", f"BASE_COMMIT='{base}'", text)
+          graph.write_text(text, encoding='utf-8')
+          PY
+      - name: Regenerate deterministic projections
+        run: python scripts/validate_archaeology.py --write
+      - name: Validate archaeology
+        run: |
+          python scripts/validate_archaeology.py
+          python -m unittest tests.test_archaeology -v
+      - name: Commit regenerated artifacts
+        run: |
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add .deciduous scripts/archaeology_graph.py docs/archaeology
+          git diff --cached --quiet && exit 0
+          git commit -m 'docs: regenerate Deciduous archaeology for issue 38'
+          git push
