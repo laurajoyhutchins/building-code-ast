@@ -1,0 +1,141 @@
+{
+  "bundle_version": "0.1.0",
+  "cycle": "2017-to-2020",
+  "known_2017_locators": [
+    "210",
+    "210.8",
+    "210.8(A)",
+    "210.8(A)(1)",
+    "210.8(A)(2)",
+    "210.8(A)(3)",
+    "210.8(A)(4)",
+    "210.8(A)(5)",
+    "210.8(B)",
+    "210.8(F)"
+  ],
+  "sources": [
+    {
+      "source_id": "synthetic-first-draft",
+      "document_type": "first_draft_report",
+      "title": "Synthetic First Draft record",
+      "cycle": "2017-to-2020",
+      "source_url": "https://example.test/first-draft.pdf",
+      "retrieved_at": "2026-08-02T13:30:00Z",
+      "sha256": "1111111111111111111111111111111111111111111111111111111111111111",
+      "media_type": "application/pdf",
+      "access_scope": "synthetic-public",
+      "panel": "CMP-02",
+      "page_count": 12
+    },
+    {
+      "source_id": "synthetic-second-draft",
+      "document_type": "second_draft_report",
+      "title": "Synthetic Second Draft record",
+      "cycle": "2017-to-2020",
+      "source_url": "https://example.test/second-draft.pdf",
+      "retrieved_at": "2026-08-02T13:31:00Z",
+      "sha256": "2222222222222222222222222222222222222222222222222222222222222222",
+      "media_type": "application/pdf",
+      "access_scope": "synthetic-public",
+      "panel": "CMP-02",
+      "page_count": 18
+    },
+    {
+      "source_id": "synthetic-standards-council",
+      "document_type": "standards_council_decision",
+      "title": "Synthetic Standards Council record",
+      "cycle": "2017-to-2020",
+      "source_url": "https://example.test/council.pdf",
+      "retrieved_at": "2026-08-02T13:32:00Z",
+      "sha256": "3333333333333333333333333333333333333333333333333333333333333333",
+      "media_type": "application/pdf",
+      "access_scope": "synthetic-public",
+      "panel": "CMP-02",
+      "page_count": 4
+    }
+  ],
+  "development_records": [
+    {
+      "record_id": "FR-add",
+      "change_chain_id": "synthetic-add",
+      "record_type": "first_revision",
+      "stage": "first_revision",
+      "disposition": "accepted",
+      "panel": "CMP-02",
+      "affected_references_raw": ["210.8"],
+      "target_references_raw": ["210.8(F)"],
+      "change_types": ["add_subdivision"],
+      "summary": "Synthetic first-stage addition expectation.",
+      "source_locator": {
+        "source_id": "synthetic-first-draft",
+        "page": 3,
+        "anchor": "FR-add"
+      },
+      "related_record_ids": []
+    },
+    {
+      "record_id": "SC-add",
+      "change_chain_id": "synthetic-add",
+      "record_type": "standards_council_action",
+      "stage": "standards_council",
+      "disposition": "issued",
+      "panel": "CMP-02",
+      "affected_references_raw": ["210.8"],
+      "target_references_raw": ["210.8(F)"],
+      "change_types": ["add_subdivision"],
+      "summary": "Synthetic issued addition expectation.",
+      "source_locator": {
+        "source_id": "synthetic-standards-council",
+        "page": 2,
+        "anchor": "SC-add"
+      },
+      "related_record_ids": ["FR-add"]
+    },
+    {
+      "record_id": "FR-no-change",
+      "change_chain_id": "synthetic-no-change",
+      "record_type": "first_revision",
+      "stage": "first_revision",
+      "disposition": "accepted",
+      "panel": "CMP-02",
+      "affected_references_raw": ["210.8(A)(1) through (5)"],
+      "target_references_raw": ["210.8(A)"],
+      "change_types": ["modify_text"],
+      "summary": "Synthetic provisional modification expectation.",
+      "source_locator": {
+        "source_id": "synthetic-first-draft",
+        "page": 6,
+        "anchor": "FR-no-change"
+      },
+      "related_record_ids": []
+    },
+    {
+      "record_id": "SR-no-change",
+      "change_chain_id": "synthetic-no-change",
+      "record_type": "second_revision",
+      "stage": "second_revision",
+      "disposition": "returned_to_prior_edition",
+      "panel": "CMP-02",
+      "affected_references_raw": ["210.8(A)(1) through (5)"],
+      "target_references_raw": ["210.8(A)"],
+      "change_types": ["modify_text"],
+      "summary": "Synthetic return to prior-edition expectation.",
+      "source_locator": {
+        "source_id": "synthetic-second-draft",
+        "page": 9,
+        "anchor": "SR-no-change"
+      },
+      "related_record_ids": ["FR-no-change"]
+    }
+  ],
+  "observed_changes": [
+    {
+      "observed_change_id": "obs-add",
+      "from_locators": ["210.8"],
+      "to_locators": ["210.8(F)"],
+      "change_types": ["add_subdivision"],
+      "summary": "Synthetic observed addition.",
+      "alignment_confidence": 0.98
+    }
+  ]
+}
