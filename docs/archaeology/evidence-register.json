@@ -1,5 +1,5 @@
 {
-  "base_commit": "c8df331cbf6bf5b286acebb0f1e520f40d0fbb17",
+  "base_commit": "e0e3aef4320ec20ce8508378f611f43336b24e4d",
   "external_repositories": {
     "laurajoyhutchins/LORE": {
       "ref": "5dba6e9533270384008f837441173f8d8cb6e8eb",
@@ -113,6 +113,22 @@
     },
     "30": {
       "head_sha": "26ec025920a491ee82adedbd2657a9632543d3bb",
+      "state": "merged"
+    },
+    "33": {
+      "head_sha": "236bdbfdbe8edfd6f5af7530c9d6e7dd8e4ba518",
+      "state": "merged"
+    },
+    "34": {
+      "head_sha": "0fad7f39889f11840c7b23a311180c99ee686fa0",
+      "state": "merged"
+    },
+    "35": {
+      "head_sha": "8e4ba3623cb8546f16f307f91271ddf91f559ab1",
+      "state": "merged"
+    },
+    "37": {
+      "head_sha": "ea1bcd23803340cc600432980d4ceb3c08671c92",
       "state": "merged"
     },
     "7": {

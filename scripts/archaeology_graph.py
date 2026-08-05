@@ -12,7 +12,7 @@ DOT=ROOT/'docs/archaeology/graph.dot'
 CURRENT=ROOT/'docs/archaeology/current-architecture.json'
 STATUS=ROOT/'docs/archaeology/status-summary.json'
 MANIFEST=ROOT/'docs/archaeology/manifest.json'
-BASE_COMMIT='c8df331cbf6bf5b286acebb0f1e520f40d0fbb17'
+BASE_COMMIT='e0e3aef4320ec20ce8508378f611f43336b24e4d'
 UPSTREAM='notactuallytreyanastasio/deciduous@1bb5a1595011943973716f316d65cd03944feadd'
 
 def canonical_json(value:Any)->str:
