@@ -19,7 +19,7 @@ jobs:
       - uses: actions/setup-python@v5
         with:
           python-version: '3.12'
-      - name: Update canonical graph sources
+      - name: Normalize canonical graph sources
         run: |
           python - <<'PY'
           import json, re, uuid
@@ -28,105 +28,88 @@ jobs:
           root = Path('.')
           base = 'e0e3aef4320ec20ce8508378f611f43336b24e4d'
           namespace = uuid.UUID('1aec22c8-1541-49fb-a6c1-41e7d1228f91')
-          patch_paths = sorted((root / '.deciduous/patches').glob('building-code-ast-archaeology-*.json'))
-          first = json.loads(patch_paths[0].read_text(encoding='utf-8'))
+          paths = sorted((root / '.deciduous/patches').glob('building-code-ast-archaeology-*.json'))
+          first = json.loads(paths[0].read_text())
 
-          for path in patch_paths:
-              data = json.loads(path.read_text(encoding='utf-8'))
-              data['base_commit'] = base
-              data['branch'] = first['branch']
-              data['created_at'] = first['created_at']
+          for path in paths:
+              data = json.loads(path.read_text())
+              data.update(base_commit=base, branch=first['branch'], created_at=first['created_at'])
               for node in data.get('nodes', []):
                   meta = json.loads(node['metadata_json'])
                   if meta.get('semantic_id') in {'decision.section-address-primary', 'outcome.pages-provenance-only'}:
-                      meta['current_architecture'] = True
-                      meta['lifecycle_status'] = 'completed'
-                      meta['support_scope'] = 'merged through PR #33 at 7004e6ea333bd21eb7f4eb6989fe84de6651249d'
+                      meta.update(current_architecture=True, lifecycle_status='completed', support_scope='merged through PR #33 at 7004e6ea333bd21eb7f4eb6989fe84de6651249d')
                       node['status'] = 'completed'
                   node['metadata_json'] = json.dumps(meta, sort_keys=True, separators=(',', ':'))
-              path.write_text(json.dumps(data, sort_keys=True, separators=(',', ':')) + '\n', encoding='utf-8')
+              path.write_text(json.dumps(data, sort_keys=True, separators=(',', ':')) + '\n')
 
-          patch = json.loads(patch_paths[-1].read_text(encoding='utf-8'))
-          sid_map = {
+          patch = json.loads(paths[-1].read_text())
+          rename = {
               'history.ibc2018-stacked-prs-15-17-18': 'observation.ibc2018-stacked-prs-15-17-18',
               'history.nfpa13-review-pr20': 'observation.nfpa13-review-pr20',
               'history.nec2020-review-pr19': 'observation.nec2020-review-pr19',
               'history.provision-ast-review-pr12-pr36': 'observation.provision-ast-review-pr12-pr36',
           }
-          old_to_new = {}
+          id_map = {}
+          historical_prs = {12, 15, 17, 18, 19, 20, 36}
+          merged = {
+              33: '236bdbfdbe8edfd6f5af7530c9d6e7dd8e4ba518',
+              34: '0fad7f39889f11840c7b23a311180c99ee686fa0',
+              35: '8e4ba3623cb8546f16f307f91271ddf91f559ab1',
+              37: 'ea1bcd23803340cc600432980d4ceb3c08671c92',
+          }
           for node in patch['nodes']:
               old = node['change_id']
               meta = json.loads(node['metadata_json'])
-              sid = sid_map.get(meta['semantic_id'], meta['semantic_id'])
+              sid = rename.get(meta['semantic_id'], meta['semantic_id'])
               meta['semantic_id'] = sid
-              if sid.startswith('observation.'):
-                  node['node_type'] = 'observation'
+              node['node_type'] = 'observation' if sid.startswith('observation.') else node['node_type']
               if sid in {'observation.nec2020-review-pr19', 'outcome.nec2020-framework-merged-pr35'}:
                   meta['arc'] = 'nec-edition-comparison'
+              for ev in meta['evidence']:
+                  pr = ev.get('pr')
+                  if pr in historical_prs:
+                      ev.pop('pr', None)
+                      ev.pop('state', None)
+                      ev['kind'] = 'commit'
+                  elif pr in merged:
+                      ev['commit'] = merged[pr]
+                      ev['state'] = 'merged'
               node['change_id'] = str(uuid.uuid5(namespace, sid))
-              old_to_new[old] = node['change_id']
+              id_map[old] = node['change_id']
               node['metadata_json'] = json.dumps(meta, sort_keys=True, separators=(',', ':'))
           for edge in patch['edges']:
-              edge['from_change_id'] = old_to_new.get(edge['from_change_id'], edge['from_change_id'])
-              edge['to_change_id'] = old_to_new.get(edge['to_change_id'], edge['to_change_id'])
+              edge['from_change_id'] = id_map.get(edge['from_change_id'], edge['from_change_id'])
+              edge['to_change_id'] = id_map.get(edge['to_change_id'], edge['to_change_id'])
               if edge['edge_type'] == 'superseded_by':
                   edge['edge_type'] = 'rejected'
-          patch_paths[-1].write_text(json.dumps(patch, sort_keys=True, separators=(',', ':')) + '\n', encoding='utf-8')
+          paths[-1].write_text(json.dumps(patch, sort_keys=True, separators=(',', ':')) + '\n')
 
           register_path = root / 'docs/archaeology/evidence-register.json'
-          register = json.loads(register_path.read_text(encoding='utf-8'))
+          register = json.loads(register_path.read_text())
           register['base_commit'] = base
-          register['pull_requests'].update({
-              '12': {'head_sha': '359c0f27fb9b57761718aca38e462fa7f406338c', 'state': 'closed-superseded'},
-              '15': {'head_sha': 'd2659e9e1f9764bddb62e429bb76734289217878', 'state': 'closed-superseded'},
-              '17': {'head_sha': '270410a1e3fa6217887d74167f28702ad46f9967', 'state': 'closed-superseded'},
-              '18': {'head_sha': '6f0e2a75d5347ae192a0a18b94eb2f0ab874e710', 'state': 'closed-superseded'},
-              '19': {'head_sha': 'ef1603869ff4ed27656891787fe7d2e0fbe5e463', 'state': 'closed-superseded'},
-              '20': {'head_sha': '118b4464ef007fb7cc5f953383b617bc5bf3fb62', 'state': 'closed-superseded'},
-              '33': {'head_sha': '236bdbfdbe8edfd6f5af7530c9d6e7dd8e4ba518', 'state': 'merged'},
-              '34': {'head_sha': '0fad7f39889f11840c7b23a311180c99ee686fa0', 'state': 'merged'},
-              '35': {'head_sha': '8e4ba3623cb8546f16f307f91271ddf91f559ab1', 'state': 'merged'},
-              '36': {'head_sha': '3c7eb03db2937df4bc08b62be13c7848cad240a2', 'state': 'closed-superseded'},
-              '37': {'head_sha': 'ea1bcd23803340cc600432980d4ceb3c08671c92', 'state': 'merged'},
-          })
-          evidence = {
-              12: ('359c0f27fb9b57761718aca38e462fa7f406338c', 'closed-superseded'),
-              15: ('d2659e9e1f9764bddb62e429bb76734289217878', 'closed-superseded'),
-              17: ('270410a1e3fa6217887d74167f28702ad46f9967', 'closed-superseded'),
-              18: ('6f0e2a75d5347ae192a0a18b94eb2f0ab874e710', 'closed-superseded'),
-              19: ('ef1603869ff4ed27656891787fe7d2e0fbe5e463', 'closed-superseded'),
-              20: ('118b4464ef007fb7cc5f953383b617bc5bf3fb62', 'closed-superseded'),
-              33: ('236bdbfdbe8edfd6f5af7530c9d6e7dd8e4ba518', 'merged'),
-              34: ('0fad7f39889f11840c7b23a311180c99ee686fa0', 'merged'),
-              35: ('8e4ba3623cb8546f16f307f91271ddf91f559ab1', 'merged'),
-              36: ('3c7eb03db2937df4bc08b62be13c7848cad240a2', 'closed-superseded'),
-              37: ('ea1bcd23803340cc600432980d4ceb3c08671c92', 'merged'),
-          }
-          patch = json.loads(patch_paths[-1].read_text(encoding='utf-8'))
-          for node in patch['nodes']:
-              meta = json.loads(node['metadata_json'])
-              for ev in meta['evidence']:
-                  if ev.get('pr') in evidence:
-                      ev['commit'], ev['state'] = evidence[ev['pr']]
-              node['metadata_json'] = json.dumps(meta, sort_keys=True, separators=(',', ':'))
-          patch_paths[-1].write_text(json.dumps(patch, sort_keys=True, separators=(',', ':')) + '\n', encoding='utf-8')
-          register_path.write_text(json.dumps(register, indent=2, sort_keys=True) + '\n', encoding='utf-8')
+          for pr, sha in merged.items():
+              register['pull_requests'][str(pr)] = {'head_sha': sha, 'state': 'merged'}
+          register_path.write_text(json.dumps(register, indent=2, sort_keys=True) + '\n')
 
           graph = root / 'scripts/archaeology_graph.py'
-          text = re.sub(r"BASE_COMMIT='[0-9a-f]{40}'", f"BASE_COMMIT='{base}'", graph.read_text(encoding='utf-8'))
-          graph.write_text(text, encoding='utf-8')
+          graph.write_text(re.sub(r"BASE_COMMIT='[0-9a-f]{40}'", f"BASE_COMMIT='{base}'", graph.read_text()))
           (root / '.github/workflows/regenerate-issue-38.yml').unlink()
           PY
+      - name: Commit canonical source changes
+        run: |
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add -A
+          git commit -m 'docs: reconcile issue 38 archaeology sources'
+          git push
       - name: Regenerate deterministic projections
         run: python scripts/validate_archaeology.py --write
       - name: Validate archaeology
         run: |
           python scripts/validate_archaeology.py
           python -m unittest tests.test_archaeology -v
-      - name: Commit regenerated artifacts
+      - name: Commit regenerated projections
         run: |
-          git config user.name 'github-actions[bot]'
-          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
           git add -A
           git commit -m 'docs: regenerate Deciduous archaeology for issue 38'
           git push
