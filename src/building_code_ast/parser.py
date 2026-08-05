@@ -1,4 +1,4 @@
-"""Deterministic parser for the initial bounded provision grammar."""
+"""Deterministic parser for the bounded provision grammar."""
 
 from __future__ import annotations
 
@@ -7,8 +7,11 @@ import re
 from .model import (
     Action,
     ComparisonCondition,
+    ConditionExpression,
     Diagnostic,
     DiagnosticSeverity,
+    LogicalCondition,
+    LogicalConditionType,
     Modality,
     ProvisionAst,
     Quantity,
@@ -23,11 +26,21 @@ _MODAL_PATTERN = re.compile(
     re.IGNORECASE,
 )
 
+_THRESHOLD_MARKER_PATTERN = re.compile(
+    r"\b(?:exceeding|greater\s+than|more\s+than|at\s+least|not\s+less\s+than)\b",
+    re.IGNORECASE,
+)
+
 _THRESHOLD_PATTERN = re.compile(
     r"(?P<marker>exceeding|greater\s+than|more\s+than|at\s+least|not\s+less\s+than)\s+"
     r"(?P<value>\d+(?:\.\d+)?)\s*"
     r"(?P<unit>feet|foot|ft|inches|inch|in|square\s+feet|sq\.?\s*ft)"
     r"(?:\s+in)?\s+(?P<property>[A-Za-z][A-Za-z -]*?)$",
+    re.IGNORECASE,
+)
+
+_CONDITION_CONNECTOR_PATTERN = re.compile(
+    r"\b(?P<connector>and|or)\b",
     re.IGNORECASE,
 )
 
@@ -104,34 +117,203 @@ def _extract_exception(source: str, action_start: int, action_text: str) -> tupl
     return core_action, (exception,)
 
 
-def _extract_condition(
-    source: str, subject_start: int, subject_text: str
-) -> tuple[str, SourceSpan | None, tuple[ComparisonCondition, ...]]:
-    match = _THRESHOLD_PATTERN.search(subject_text)
-    if not match:
-        subject_end = subject_start + len(subject_text)
-        return subject_text, _span(source, subject_start, subject_end) if subject_text else None, ()
+def _comparison_from_clause(
+    source: str,
+    clause_start: int,
+    clause_end: int,
+) -> ComparisonCondition | None:
+    clause_text = source[clause_start:clause_end]
+    match = _THRESHOLD_PATTERN.fullmatch(clause_text)
+    if match is None:
+        return None
 
-    condition_start = subject_start + match.start("marker")
-    condition_end = subject_start + match.end("property")
     marker = " ".join(match.group("marker").lower().split())
     raw_unit = " ".join(match.group("unit").lower().replace(".", "").split())
     property_text = " ".join(match.group("property").lower().split())
-
-    condition = ComparisonCondition(
+    return ComparisonCondition(
         subject_property=property_text,
         operator=_OPERATOR_BY_MARKER[marker],
         threshold=Quantity(
             value=float(match.group("value")),
             unit=_UNIT_NORMALIZATION[raw_unit],
-            original_text=match.group(0),
+            original_text=clause_text,
         ),
-        span=_span(source, condition_start, condition_end),
+        span=_span(source, clause_start, clause_end),
     )
-    subject_end = subject_start + match.start()
-    subject_start, subject_end = _trimmed_bounds(source, subject_start, subject_end)
-    regulated_subject = source[subject_start:subject_end]
-    return regulated_subject, _span(source, subject_start, subject_end) if regulated_subject else None, (condition,)
+
+
+def _condition_warning(
+    source: str,
+    code: str,
+    message: str,
+    start: int,
+    end: int,
+) -> tuple[Diagnostic, ...]:
+    return (
+        Diagnostic(
+            code=code,
+            severity=DiagnosticSeverity.WARNING,
+            message=message,
+            span=_span(source, start, end),
+        ),
+    )
+
+
+def _extract_condition(
+    source: str,
+    subject_start: int,
+    subject_text: str,
+) -> tuple[
+    str,
+    SourceSpan | None,
+    ConditionExpression | None,
+    tuple[Diagnostic, ...],
+]:
+    subject_end = subject_start + len(subject_text)
+    subject_span = _span(source, subject_start, subject_end) if subject_text else None
+    marker_match = _THRESHOLD_MARKER_PATTERN.search(subject_text)
+    if marker_match is None:
+        return subject_text, subject_span, None, ()
+
+    candidate_start = subject_start + marker_match.start()
+    candidate_end = subject_end
+    candidate_text = source[candidate_start:candidate_end]
+
+    if "(" in candidate_text or ")" in candidate_text:
+        return (
+            subject_text,
+            subject_span,
+            None,
+            _condition_warning(
+                source,
+                "unsupported-condition-grouping",
+                "Parenthesized condition grouping is not supported by this parser version.",
+                candidate_start,
+                candidate_end,
+            ),
+        )
+
+    connector_matches = list(_CONDITION_CONNECTOR_PATTERN.finditer(candidate_text))
+    connector_types = {
+        match.group("connector").lower() for match in connector_matches
+    }
+    if connector_types == {"and", "or"}:
+        return (
+            subject_text,
+            subject_span,
+            None,
+            _condition_warning(
+                source,
+                "ambiguous-condition-connectors",
+                "Mixed condition connectors are preserved without assigning precedence.",
+                candidate_start,
+                candidate_end,
+            ),
+        )
+
+    comparisons: list[ComparisonCondition] = []
+    if not connector_matches:
+        clause_start, clause_end = _trimmed_bounds(
+            source,
+            candidate_start,
+            candidate_end,
+        )
+        comparison = _comparison_from_clause(source, clause_start, clause_end)
+        if comparison is None:
+            return (
+                subject_text,
+                subject_span,
+                None,
+                _condition_warning(
+                    source,
+                    "unsupported-condition-clause",
+                    "The candidate condition clause was preserved but did not match the supported comparison grammar.",
+                    candidate_start,
+                    candidate_end,
+                ),
+            )
+        condition: ConditionExpression = comparison
+    else:
+        segment_start = 0
+        for connector_match in connector_matches:
+            absolute_start, absolute_end = _trimmed_bounds(
+                source,
+                candidate_start + segment_start,
+                candidate_start + connector_match.start(),
+            )
+            comparison = _comparison_from_clause(
+                source,
+                absolute_start,
+                absolute_end,
+            )
+            if comparison is None:
+                return (
+                    subject_text,
+                    subject_span,
+                    None,
+                    _condition_warning(
+                        source,
+                        "unsupported-condition-clause",
+                        "At least one condition segment was preserved but did not match the supported comparison grammar.",
+                        candidate_start,
+                        candidate_end,
+                    ),
+                )
+            comparisons.append(comparison)
+            segment_start = connector_match.end()
+
+        absolute_start, absolute_end = _trimmed_bounds(
+            source,
+            candidate_start + segment_start,
+            candidate_end,
+        )
+        final_comparison = _comparison_from_clause(
+            source,
+            absolute_start,
+            absolute_end,
+        )
+        if final_comparison is None:
+            return (
+                subject_text,
+                subject_span,
+                None,
+                _condition_warning(
+                    source,
+                    "unsupported-condition-clause",
+                    "At least one condition segment was preserved but did not match the supported comparison grammar.",
+                    candidate_start,
+                    candidate_end,
+                ),
+            )
+        comparisons.append(final_comparison)
+
+        logical_type = (
+            LogicalConditionType.ALL_OF
+            if connector_types == {"and"}
+            else LogicalConditionType.ANY_OF
+        )
+        condition = LogicalCondition(
+            type=logical_type,
+            operands=tuple(comparisons),
+            span=_span(
+                source,
+                comparisons[0].span.start,
+                comparisons[-1].span.end,
+            ),
+        )
+
+    regulated_start, regulated_end = _trimmed_bounds(
+        source,
+        subject_start,
+        candidate_start,
+    )
+    regulated_subject = source[regulated_start:regulated_end]
+    regulated_span = (
+        _span(source, regulated_start, regulated_end)
+        if regulated_subject
+        else None
+    )
+    return regulated_subject, regulated_span, condition, ()
 
 
 def _parse_action(source: str, action_start: int, action_text: str) -> tuple[Action, tuple[Diagnostic, ...]]:
@@ -173,7 +355,7 @@ def parse_provision(
     source_artifact_id: str = "inline",
     provision_locator: str = "inline",
 ) -> ProvisionAst:
-    """Parse one provision from the initial bounded grammar.
+    """Parse one provision from the bounded grammar.
 
     Offsets always address the exact ``source_text`` supplied by the caller.
     Source identity and provision location distinguish identical text from
@@ -229,11 +411,15 @@ def parse_provision(
     raw_action = source[action_start:action_end]
 
     action_text, exceptions = _extract_exception(source, action_start, raw_action)
-    subject, subject_span, conditions = _extract_condition(source, subject_start, raw_subject)
+    subject, subject_span, condition, condition_diagnostics = _extract_condition(
+        source,
+        subject_start,
+        raw_subject,
+    )
     action, action_diagnostics = _parse_action(source, action_start, action_text)
 
-    diagnostics = list(action_diagnostics)
-    if not conditions:
+    diagnostics = [*action_diagnostics, *condition_diagnostics]
+    if condition is None and not condition_diagnostics:
         diagnostics.append(
             Diagnostic(
                 code="no-structured-condition",
@@ -250,7 +436,7 @@ def parse_provision(
         modality_span=_span(source, modal_match.start("modal"), modal_match.end("modal")),
         subject=subject,
         subject_span=subject_span,
-        conditions=conditions,
+        condition=condition,
         action=action,
         exceptions=exceptions,
         diagnostics=tuple(diagnostics),
