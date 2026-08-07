@@ -3,6 +3,7 @@ import json
 from pathlib import Path
 import sys
 import unittest
+from unittest import mock
 
 ROOT=Path(__file__).resolve().parents[1]
 sys.path.insert(0,str(ROOT/'scripts'))
@@ -15,6 +16,12 @@ class ArchaeologyTests(unittest.TestCase):
         self.assertEqual(summary['nodes'],107)
         self.assertEqual(summary['edges'],120)
         self.assertEqual(summary['patches'],11)
+
+    def test_validation_is_content_based_not_git_history_dependent(self):
+        with mock.patch('subprocess.run',side_effect=AssertionError('validation inspected git history')):
+            errors,summary=validate(write=False)
+        self.assertEqual(errors,[])
+        self.assertEqual(summary['nodes'],107)
 
     def test_current_support_tracks_merged_frameworks_and_remaining_gates(self):
         current=json.loads((ROOT/'docs/archaeology/current-architecture.json').read_text())
