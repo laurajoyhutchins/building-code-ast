@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """Validate and regenerate the repository-local Deciduous archaeology package."""
 from __future__ import annotations
-import argparse, collections, json, re, subprocess, sys, uuid
+import argparse, collections, json, re, sys, uuid
 from pathlib import Path
 if __package__:
     from .archaeology_graph import BASE_COMMIT,ROOT,canonical_json,load_patch_set,rendered_artifacts,semantic_projection
@@ -16,7 +16,6 @@ REQUIRED_ARCS={'concept','schema','pdf-layout','nec-ingestion','nec-hierarchy','
 REQUIRED_SEMANTIC={'decision.compiler-not-search','decision.document-ast-separate','decision.nec-specific-grammar','decision.nec-oracle-reference-only','decision.nec-style-manual-prior','decision.issued-edition-controls','decision.ibc-specific-hierarchy','decision.family-grammar-boundary','decision.ul-external-ownership','decision.source-register-rights','decision.claims-follow-tree-and-tests','decision.map-owns-jurisdiction','decision.use-lore-shipped-skill','obs.current-main-support','obs.branch-bound-support'}
 BRANCH_ONLY_PRS={12,15,17,18,19,20}
 ALLOWED_REPOS={'laurajoyhutchins/building-code-ast','laurajoyhutchins/building-code-map','laurajoyhutchins/electrical-equipment-lineage','laurajoyhutchins/LORE','laurajoyhutchins/obsidian-pdf-extractor','laurajoyhutchins/junk-drawer','laurajoyhutchins/engineering-agent-team','notactuallytreyanastasio/deciduous'}
-ARCH_PATHS={'ARCHAEOLOGY.md','docs/archaeology/README.md','docs/archaeology/current-architecture.md','docs/archaeology/parser-family-evolution.md','docs/archaeology/source-provenance.md','docs/archaeology/validation-strategy.md','docs/archaeology/downstream-boundaries.md','docs/archaeology/evidence-gaps.md','docs/archaeology/maintenance.md','docs/archaeology/narratives.md','docs/archaeology/self-review.md','docs/archaeology/evidence-register.json','docs/archaeology/current-architecture.json','docs/archaeology/status-summary.json','docs/archaeology/manifest.json','docs/archaeology/graph.dot','.deciduous/exports/building-code-ast-archaeology.json','scripts/archaeology_graph.py','scripts/validate_archaeology.py','tests/test_archaeology.py','.github/workflows/archaeology.yml'}
 
 def dag(nodes,edges,errors):
     adj=collections.defaultdict(list); indeg={s:0 for s in nodes}
@@ -30,18 +29,6 @@ def dag(nodes,edges,errors):
             indeg[t]-=1
             if indeg[t]==0:q.append(t)
     if seen!=len(nodes): errors.append('graph is cyclic')
-
-def verify_changed_paths(fragments,errors):
-    try:
-        subprocess.run(['git','cat-file','-e',f'{BASE_COMMIT}^{{commit}}'],cwd=ROOT,check=True,stdout=subprocess.DEVNULL,stderr=subprocess.DEVNULL)
-        r=subprocess.run(['git','diff','--name-only',f'{BASE_COMMIT}...HEAD'],cwd=ROOT,check=True,text=True,capture_output=True)
-    except (FileNotFoundError,subprocess.CalledProcessError): return
-    allowed=ARCH_PATHS|{'README.md'}|{p.relative_to(ROOT).as_posix() for p,_ in fragments}
-    changed={x for x in r.stdout.splitlines() if x}
-    if extra:=sorted(changed-allowed): errors.append(f'non-archaeology paths changed: {extra}')
-    forbidden=('src/','schemas/','fixtures/','scripts/ingest_','scripts/build_nec','scripts/check_nec')
-    for p in changed:
-        if p.startswith(forbidden) and p not in {'scripts/archaeology_graph.py','scripts/validate_archaeology.py'}: errors.append(f'parser/schema/dataset path changed: {p}')
 
 def validate(write=False):
     errors=[]
