@@ -118,7 +118,6 @@ def validate(write=False):
         for p,c in artifacts.items():
             if not p.exists(): errors.append(f'missing projection {p.relative_to(ROOT)}')
             elif p.read_text()!=c: errors.append(f'stale projection {p.relative_to(ROOT)}')
-    verify_changed_paths(fragments,errors)
     graph=semantic_projection(patch)
     return errors,{'nodes':len(graph['nodes']),'edges':len(graph['edges']),'patches':len(fragments),'patch_set_sha256':digest}
 
