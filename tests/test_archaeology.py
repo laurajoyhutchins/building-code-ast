@@ -18,7 +18,7 @@ class ArchaeologyTests(unittest.TestCase):
         self.assertEqual(summary['patches'],11)
 
     def test_validation_is_content_based_not_git_history_dependent(self):
-        with mock.patch('validate_archaeology.subprocess.run',side_effect=AssertionError('validation inspected git history')):
+        with mock.patch('subprocess.run',side_effect=AssertionError('validation inspected git history')):
             errors,summary=validate(write=False)
         self.assertEqual(errors,[])
         self.assertEqual(summary['nodes'],107)
