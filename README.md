@@ -33,25 +33,40 @@ The document contract represents publication structure before semantic interpret
 
 The document contract does not contain modality, condition, action, compliance, or interpretation fields. It is a source-structure layer, not a rule meaning layer.
 
-### Provision AST `0.2.0`
+### Provision AST `0.3.0`
 
 The provision parser recognizes a bounded family of synthetic code-style provisions containing:
 
 - requirement, prohibition, and permission modalities;
 - a regulated subject;
-- simple numeric threshold conditions;
+- numeric comparison conditions;
+- nullable recursive condition expressions with homogeneous `all_of` and `any_of` chains;
 - generic actions;
 - section-reference exceptions;
 - durable source-artifact identity and provision locators;
-- exact source spans for recognized modality, subject, conditions, action, exceptions, and diagnostics.
+- exact source spans for recognized modality, subject, condition expressions, action, exceptions, and diagnostics.
 
-The parser preserves the exact original input, including leading and trailing whitespace. All offsets address that unmodified string. Unsupported language remains visible in the output instead of being silently guessed.
+Unsupported grouping, mixed logical connectors, and malformed comparison clauses are rejected without partial semantic output. The parser preserves the exact original input, including leading and trailing whitespace. All offsets address that unmodified string. Unsupported language remains visible instead of being silently guessed.
 
-### Source evidence register `0.1.0`
+### Source evidence register and guarded adapters
 
 The publication-neutral evidence layer registers exact source artifacts without storing their prose. It distinguishes normative text, official corrections, development history, jurisdictional law, guidance, interpretations, commentary, and secondary analysis; records printing and correction state; and binds every artifact to a lowercase SHA-256.
 
-Future source-family adapters run through a guarded boundary that checks evidence role, media type, and exact source bytes before extraction. The scaffold does not yet parse IBC errata, development monographs, or jurisdictional amendments. See [`docs/reference/source-evidence.md`](docs/reference/source-evidence.md).
+Guarded source-family adapters now cover ICC development evidence, ICC errata, and Washington WAC jurisdictional amendments in addition to the publication parsers described below. Adapters verify the registered evidence role, media type, and exact source bytes before extraction and preserve unsupported or unresolved material as diagnostics instead of inventing legal meaning.
+
+Development records and amendment evidence remain evidence, not substitutes for issued code text, jurisdictional applicability, or compliance evaluation. See [`docs/reference/source-evidence.md`](docs/reference/source-evidence.md).
+
+### Current merged source-family support
+
+Current `main` includes:
+
+- local-only 2017 NEC ingestion, hierarchy inference, definition indexing, and selected semantic review;
+- a source-safe NEC 2020 expected-change framework derived from development records, with observed-edition reconciliation kept separate until an authorized issued-edition source is available;
+- a source-safe 2018 IBC structural corpus with section-first navigation, deterministic corpus and schema validation, inventories, review queues, and explicit unresolved records;
+- local-only NFPA 13 (2019) hierarchy extraction, strict bundle contracts, reviewed non-reconstructive cases, source-linked relationships, and producer-provenance checks;
+- ICC development and errata evidence plus Washington WAC amendment adapters behind the source-register boundary.
+
+The current architecture projection and its remaining review gates are maintained under [`docs/archaeology/`](docs/archaeology/).
 
 ## Provision example
 
@@ -70,7 +85,7 @@ python -m building_code_ast.cli parse \
   "Research facilities exceeding 40 feet in height shall provide two marked evacuation routes, except as permitted by Section 12.4."
 ```
 
-The output records source identity, the requirement and its evidence span, the regulated subject and its evidence span, the threshold condition, action, exception reference, exact original source text, and parser diagnostics.
+The output records source identity, the requirement and its evidence span, the regulated subject and its evidence span, the condition expression, action, exception reference, exact original source text, and parser diagnostics.
 
 ## Quick start
 
@@ -164,7 +179,7 @@ Do not edit accepted records, transaction receipts, extracted facts, or generate
 ## Repository layout
 
 - `src/building_code_ast/`: document and provision AST models, strict input handling, parsing, validation, and local ingestion adapters
-- `src/building_code_ast/evidence/`: publication-neutral source registration and guarded adapter contracts
+- `src/building_code_ast/evidence/`: publication-neutral source registration plus ICC development, errata, and Washington amendment evidence adapters
 - `schemas/`: versioned JSON Schema projections of the public AST contracts and LORE trust-root schemas
 - `schemas/source-register.schema.json`: closed source-register `0.1.0` projection
 - `fixtures/`: synthetic fixtures plus source-safe IBC geometry anchors and rationale
@@ -214,6 +229,7 @@ python -m unittest discover -s tests -v
 python -m compileall -q src scripts tools tests
 PYTHONPATH=src python tools/validate_ibc_2018_corpus.py corpora/ibc-2018
 PYTHONPATH=src python tools/validate_ibc_2018_schemas.py corpora/ibc-2018 schemas
+python scripts/validate_archaeology.py
 ```
 
 The read-only LORE workflow pins an exact upstream LORE revision and verifies:
@@ -224,7 +240,7 @@ lore validate
 lore project --check
 ```
 
-CI executes the Python and LORE verification lanes independently.
+CI executes the Python, Deciduous archaeology, and LORE verification lanes independently.
 
 ## Data and publication boundary
 
