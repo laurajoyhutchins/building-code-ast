@@ -46,6 +46,15 @@ def _pages(*, reverse_blocks: bool = False) -> tuple[PdfPage, ...]:
             _block(86, 230.0, "z = q (12.1-2)", 5, x0=80.0, x1=290.0),
             _block(86, 280.0, "r / s", 6, x0=80.0, x1=180.0),
             _block(86, 281.0, "(12.1-3)", 7, x0=200.0, x1=290.0),
+            _block(86, 330.0, "A B C (12.1-4)", 8, x0=80.0, x1=290.0),
+            _block(
+                86,
+                380.0,
+                "Synthetic prose deliberately too long to promote merely because it ends with (12.1-5)",
+                9,
+                x0=45.0,
+                x1=290.0,
+            ),
         ],
         87: [
             _block(87, 90.0, "See Figure 12A for synthetic context.", 1, x1=290.0),
@@ -106,9 +115,11 @@ class Nds2018NonproseTests(unittest.TestCase):
         separated = by_locator["equation:12.1-1"]
         inline = by_locator["equation:12.1-2"]
         same_baseline = by_locator["equation:12.1-3"]
+        short_inline = by_locator["equation:12.1-4"]
         self.assertEqual(separated.node_type, DocumentNodeType.EQUATION)
         self.assertEqual(inline.node_type, DocumentNodeType.EQUATION)
         self.assertEqual(same_baseline.node_type, DocumentNodeType.EQUATION)
+        self.assertEqual(short_inline.node_type, DocumentNodeType.EQUATION)
         self.assertIn("x \ue001 y", separated.span.text)
         self.assertIn("(12.1-1)", separated.span.text)
         self.assertIn("r / s", same_baseline.span.text)
@@ -117,6 +128,7 @@ class Nds2018NonproseTests(unittest.TestCase):
         self.assertEqual(dict(separated.attributes)["glyph_state"], "private_use_text_layer")
         self.assertNotIn("glyph_state", dict(same_baseline.attributes))
         self.assertNotIn("expression", dict(separated.attributes))
+        self.assertNotIn("equation:12.1-5", by_locator)
 
         figure = by_locator["figure:12A"]
         self.assertEqual(figure.node_type, DocumentNodeType.FIGURE)
