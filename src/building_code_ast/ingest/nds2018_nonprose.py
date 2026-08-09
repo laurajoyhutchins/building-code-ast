@@ -85,6 +85,17 @@ def _span(source_text: str, start: int, end: int) -> SourceSpan:
     return SourceSpan(start=start, end=end, text=source_text[start:end])
 
 
+def _same_baseline_equation(left: _Observation, label: _Observation) -> bool:
+    if left.block.page_number != label.block.page_number or len(left.text) > 80:
+        return False
+    lx0, ly0, lx1, ly1 = left.block.bbox
+    rx0, ry0, _, ry1 = label.block.bbox
+    vertical_overlap = min(ly1, ry1) - max(ly0, ry0)
+    centers_close = abs(((ly0 + ly1) / 2.0) - ((ry0 + ry1) / 2.0)) <= 12.0
+    horizontally_ordered = lx0 < rx0 and lx1 <= rx0 + 12.0
+    return horizontally_ordered and (vertical_overlap > 0.0 or centers_close)
+
+
 def _equation_regions(
     observations: tuple[_Observation, ...],
     *,
@@ -105,12 +116,14 @@ def _equation_regions(
             if index == 0:
                 continue
             previous = observations[index - 1]
+            private_use = _PRIVATE_USE_RE.search(previous.text) is not None
             if previous.block.page_number != observation.block.page_number:
                 continue
-            if _PRIVATE_USE_RE.search(previous.text) is None:
+            if not private_use and not _same_baseline_equation(previous, observation):
                 continue
             start = previous.start
-            attrs["glyph_state"] = "private_use_text_layer"
+            if private_use:
+                attrs["glyph_state"] = "private_use_text_layer"
         else:
             prefix = observation.text[: match.start()].rstrip()
             if not prefix or ("=" not in prefix and _PRIVATE_USE_RE.search(prefix) is None):
@@ -182,10 +195,7 @@ def _table_regions(
             item
             for item in observations
             if item.block.page_number in page_set
-            and (
-                item.block.page_number > first.block.page_number
-                or item.start >= first.start
-            )
+            and (item.block.page_number > first.block.page_number or item.start >= first.start)
         ]
         if not related:
             continue
@@ -208,20 +218,17 @@ def _table_regions(
             page_items = [
                 item
                 for item in related
-                if item.block.page_number == page_number
-                and _TABLE_RE.match(item.text) is None
+                if item.block.page_number == page_number and _TABLE_RE.match(item.text) is None
             ]
             footnotes = [item for item in page_items if _FOOTNOTE_RE.match(item.text)]
             body_items = [item for item in page_items if item not in footnotes]
             if body_items:
-                body_start = body_items[0].start
-                body_end = body_items[-1].end
                 children.append(
                     make_document_node(
                         source_artifact=source_artifact,
                         node_type=DocumentNodeType.UNSUPPORTED,
                         locator=f"table-body:{table_id}:pdf-page-{page_number}",
-                        span=_span(source_text, body_start, body_end),
+                        span=_span(source_text, body_items[0].start, body_items[-1].end),
                         attributes={
                             "pdf_page": str(page_number),
                             "source_role": "table_body_unparsed",
