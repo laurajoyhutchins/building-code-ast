@@ -1,0 +1,19 @@
+schema_version: 1
+id: bootstrap-aci-318-19-publication
+title: Bootstrap ACI 318-19 publication knowledge
+description: Capture the ACI 318-19 publication root, private-source boundary, and code-family ownership from exact repository evidence after this root is integrated. Preserve uncertainty about normative-code versus commentary or explanatory content until source characterization resolves it.
+paths:
+- docs/codebooks/aci-318-19/README.md
+components:
+- component.document-structure
+- component.validation
+tags:
+- codebook
+- aci-318-19
+- source-family
+- provenance
+audiences:
+- maintainers
+- contributors
+- integrators
+history: false
