@@ -29,3 +29,19 @@ Before claiming durable TMS ingestion coverage, verify and record:
 A descendant document-AST PR must preserve the TMS 402/TMS 602 distinction rather than flattening the combined PDF into one anonymous hierarchy. Cross-document references should remain explicit and edition-scoped.
 
 No protected source prose, tables, figures, or page images belong in public Git.
+
+## Knowledge bootstrap
+
+LORE source-profile bootstrap starts from `.lore/tasks/bootstrap-tms-402-602-16-source-profile.yaml`.
+
+Deciduous handoff metadata:
+
+- semantic ID: `action.characterize-tms402-602-16-source`
+- node type: `action`
+- arc: `parser-families`
+- lifecycle while branch-only: `proposed`
+- current architecture: `false`
+- evidence path: `docs/codebooks/tms-402-602-16/source-profile.md`
+- requires: `action.establish-tms402-602-16-publication-root`
+
+This remains noncanonical handoff metadata until the profile work is integrated and exact merge evidence is available.
