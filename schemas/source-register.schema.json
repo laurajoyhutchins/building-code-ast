@@ -54,6 +54,7 @@
         "edition": {"$ref": "#/$defs/nonemptyString"},
         "printing": {"$ref": "#/$defs/optionalString"},
         "digital_revision": {"$ref": "#/$defs/optionalString"},
+        "addenda_set": {"$ref": "#/$defs/nonemptyString"},
         "correction_set": {"$ref": "#/$defs/optionalString"},
         "published_on": {
           "type": ["string", "null"],
