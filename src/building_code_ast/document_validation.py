@@ -30,6 +30,11 @@ def validate_document_ast(ast: DocumentAst) -> None:
         raise ValueError("document source artifact id must not be empty")
     if not ast.source_artifact.edition_id.strip():
         raise ValueError("document source edition id must not be empty")
+    if (
+        ast.source_artifact.publication_component_id is not None
+        and not ast.source_artifact.publication_component_id.strip()
+    ):
+        raise ValueError("document source publication component id must not be empty")
     if ast.root.node_type is not DocumentNodeType.DOCUMENT:
         raise ValueError("document root node must have type 'document'")
 
@@ -56,6 +61,7 @@ def validate_document_ast(ast: DocumentAst) -> None:
         expected_id = document_node_id(
             artifact_id=ast.source_artifact.artifact_id,
             edition_id=ast.source_artifact.edition_id,
+            publication_component_id=ast.source_artifact.publication_component_id,
             node_type=node.node_type,
             locator=node.locator,
         )
