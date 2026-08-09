@@ -44,6 +44,8 @@ def _pages(*, reverse_blocks: bool = False) -> tuple[PdfPage, ...]:
             _block(86, 180.0, "x \ue001 y", 3, x0=70.0, x1=180.0),
             _block(86, 181.0, "(12.1-1)", 4, x0=200.0, x1=290.0),
             _block(86, 230.0, "z = q (12.1-2)", 5, x0=80.0, x1=290.0),
+            _block(86, 280.0, "r / s", 6, x0=80.0, x1=180.0),
+            _block(86, 281.0, "(12.1-3)", 7, x0=200.0, x1=290.0),
         ],
         87: [
             _block(87, 90.0, "See Figure 12A for synthetic context.", 1, x1=290.0),
@@ -103,12 +105,17 @@ class Nds2018NonproseTests(unittest.TestCase):
 
         separated = by_locator["equation:12.1-1"]
         inline = by_locator["equation:12.1-2"]
+        same_baseline = by_locator["equation:12.1-3"]
         self.assertEqual(separated.node_type, DocumentNodeType.EQUATION)
         self.assertEqual(inline.node_type, DocumentNodeType.EQUATION)
+        self.assertEqual(same_baseline.node_type, DocumentNodeType.EQUATION)
         self.assertIn("x \ue001 y", separated.span.text)
         self.assertIn("(12.1-1)", separated.span.text)
+        self.assertIn("r / s", same_baseline.span.text)
+        self.assertIn("(12.1-3)", same_baseline.span.text)
         self.assertEqual(dict(separated.attributes)["equation_id"], "12.1-1")
         self.assertEqual(dict(separated.attributes)["glyph_state"], "private_use_text_layer")
+        self.assertNotIn("glyph_state", dict(same_baseline.attributes))
         self.assertNotIn("expression", dict(separated.attributes))
 
         figure = by_locator["figure:12A"]
