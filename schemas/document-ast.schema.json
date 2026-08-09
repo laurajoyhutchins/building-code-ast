@@ -102,6 +102,7 @@
           "enum": [
             "document",
             "chapter",
+            "appendix",
             "section",
             "subsection",
             "paragraph",
