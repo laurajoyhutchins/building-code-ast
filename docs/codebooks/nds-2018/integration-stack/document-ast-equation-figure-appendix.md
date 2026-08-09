@@ -1,23 +1,27 @@
-# Publication-neutral appendix, equation, and figure structure
+# NDS-required neutral non-prose AST compatibility
 
 Predecessor: `feature/nds-2018-source-registration`.
 
+Exact-base observation: the shared Document AST already contains first-class `equation`, `figure`, and `graphical_region` nodes. This scope must not duplicate them.
+
 Owns:
-- extending the shared Document AST only where neutral structure is genuinely missing;
-- first-class appendix, equation, and figure node types with deterministic identity and ordinary source-span invariants;
-- JSON Schema/runtime validation and synthetic source-safe fixtures for the new node kinds;
-- compatibility/versioning decisions required by the additive structural vocabulary.
+- verifying that the existing equation, figure, graphical-region, table, note, footnote, and unsupported primitives satisfy the NDS structural contract;
+- deciding the smallest publication-neutral representation for appendices;
+- reusing existing chapter/heading plus source-role metadata when that preserves appendix identity and validation honestly;
+- adding a first-class neutral appendix node only if NDS demonstrates a source-independent representation gap;
+- any generic schema/runtime compatibility tests required by that appendix decision.
 
 Does not own:
 - NDS recognition rules;
+- duplicate equation or figure node types;
 - mathematical parsing or equation execution;
 - figure semantics;
-- table semantics or publication-specific appendix policy.
+- table semantics.
 
 Completion:
-- appendix, equation, and figure are representable without hiding them in headings or NDS-only metadata;
-- deterministic IDs, serialization, strict deserialization, containment, and span round-trip are covered by generic tests;
-- existing source-family adapters remain compatible or receive an explicit documented migration;
+- NDS appendices can be represented without ad hoc NDS-only identity fields or semantic loss;
+- existing equation/figure primitives are reused rather than re-created;
+- any generic model change has source-independent meaning and passes deterministic identity, serialization, validation, and source-safe tests;
 - no NDS source expression is required by public tests.
 
 Successor: `feature/nds-2018-layout-evidence`.
