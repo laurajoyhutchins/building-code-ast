@@ -1,6 +1,6 @@
 # Publication-neutral provenance graph core
 
-Status: active implementation gate.
+Status: implemented and verified.
 
 Canonical roadmap: #219.
 
@@ -32,6 +32,24 @@ A small versioned generic graph contract for normalized source-family graph obse
 - deterministic unresolved/ambiguous/nonexistent and cycle diagnostics;
 - canonical deterministic JSON serialization.
 
+The public API is `build_provenance_graph()`, `serialize_provenance_graph()`, and `PROVENANCE_GRAPH_VERSION`. Internal normalization/traversal helpers are private implementation details.
+
+## TDD evidence
+
+RED head: `8830e0974306e697db2302028310c2febd6820f2`.
+
+At RED, the complete repository suite reached the new provenance-graph test and failed only because `building_code_ast.provenance_graph` did not exist. Deciduous recorded 440 tests with one import error; LORE remained green.
+
+GREEN implementation head: `a148778f51905d8605b3e57abcdb2bf401b42773`.
+
+Fresh hosted checks on that exact head:
+
+- CI: success;
+- LORE: success;
+- Deciduous archaeology: success.
+
+The branch is converged with the current shared/publication implementation state before the graph code was added. Its comparison against that `main` contains only this scope note, the public graph module, two private helper modules, and the synthetic tests.
+
 ## Excludes
 
 - NEC-specific reference discovery;
@@ -46,6 +64,6 @@ Issue #5 still owns later amendment-aware consolidation. This PR establishes onl
 
 ## Completion evidence
 
-Synthetic tests must cover deterministic identity/serialization, resolved and external edges, missing and ambiguous targets, a reference cycle, source-safe evidence preservation, and fail-closed identity/state validation.
+Synthetic tests cover deterministic identity/serialization, resolved and external edges, missing and ambiguous targets, a reference cycle, source-safe evidence preservation, and fail-closed identity/state validation.
 
 The source-family graphs remain valid upstream evidence. Adoption by an individual publication can happen non-destructively after this core lands.
