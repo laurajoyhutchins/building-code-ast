@@ -14,7 +14,7 @@ REGISTER_PATH = ROOT / "corpora/asce-7-22/asce-7-22-source-register.json"
 SCHEMA_PATH = ROOT / "schemas/source-register.schema.json"
 DIGEST = "522d341d8ab21eb254c8af2d853910633233285eb3704933729e0aeefdc88eb0"
 PUBLICATION_STATE_ID = (
-    "publication:f83874da470a117b932998d3167b5b65099a60a2253452a43b55ca975ae840bf"
+    "publication:2e70e34ecbea96f39455a759f3e5b8d853ce02f9cc50e4c99c2c29c94aabcc03"
 )
 
 
@@ -58,12 +58,8 @@ class Asce722SourceRegisterTests(unittest.TestCase):
         self.assertIsNone(publication["printing"])
         self.assertIsNone(publication["digital_revision"])
         self.assertEqual(
-            publication["addenda_set"],
-            "unresolved:retained-artifact-does-not-identify-incorporated-addenda-set",
-        )
-        self.assertEqual(
             publication["correction_set"],
-            "unresolved:retained-artifact-does-not-identify-incorporated-correction-set",
+            "unresolved:retained-artifact-correction-and-addenda-state",
         )
         self.assertIsNone(publication["published_on"])
         self.assertIsNone(publication["effective_on"])
