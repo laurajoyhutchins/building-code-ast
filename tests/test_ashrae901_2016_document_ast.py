@@ -3,101 +3,148 @@ from __future__ import annotations
 import unittest
 
 from building_code_ast.document_model import DocumentNodeType
-from building_code_ast.document_validation import validate_document_ast
+from building_code_ast.evidence.model import publication_state_id
 from building_code_ast.ingest.ashrae901_2016 import (
-    ASHRAE_90_1_2016_ARTIFACT_ID,
-    ASHRAE_90_1_2016_EDITION_ID,
-    Ashrae901Appendix,
-    Ashrae901Region,
-    Ashrae901Section,
-    Ashrae901Structure,
-    build_ashrae901_document_ast,
+    ASHRAE_90_1_2016_ARTIFACT,
+    ASHRAE_90_1_2016_PUBLICATION,
+    Ashrae901Observation,
+    parse_ashrae901_2016_observations,
 )
+from building_code_ast.ingest.pdf_layout import PdfBlock
+
+
+def _observation(
+    text: str,
+    *,
+    page: int,
+    printed_page: str,
+    block_number: int,
+    y: float,
+    hint: str | None = None,
+    locator: str | None = None,
+) -> Ashrae901Observation:
+    return Ashrae901Observation(
+        block=PdfBlock(
+            page_number=page,
+            bbox=(72.0, y, 540.0, y + 18.0),
+            text=text,
+            block_number=block_number,
+        ),
+        printed_page=printed_page,
+        structure_hint=hint,
+        native_locator=locator,
+    )
 
 
 class Ashrae901DocumentAstTests(unittest.TestCase):
-    def test_publication_identity_is_exact_source_scoped(self) -> None:
+    def test_exact_artifact_and_publication_state_include_addenda_and_correction_state(self) -> None:
         self.assertEqual(
-            ASHRAE_90_1_2016_ARTIFACT_ID,
+            ASHRAE_90_1_2016_ARTIFACT.artifact_id,
             "sha256:275a343724fce483fc3038b261fb00c0c4a3360d3a54078b92a433aba56ec162",
         )
-        self.assertTrue(ASHRAE_90_1_2016_EDITION_ID.startswith("publication:"))
-
-    def test_structural_slice_preserves_hierarchy_role_coordinates_and_table(self) -> None:
-        source = (
-            "6 Systems\n"
-            "6.1 General\n"
-            "Synthetic mandatory prose.\n"
-            "Table 6.1-A Synthetic Limits\n"
-            "A Normative Appendix\n"
-            "Synthetic appendix prose.\n"
+        self.assertEqual(
+            ASHRAE_90_1_2016_PUBLICATION.addenda_set,
+            "ashrae-90.1-2013:addenda-enumerated-in-90.1-2016-appendix-h",
         )
-        table_start = source.index("Table 6.1-A")
-        appendix_start = source.index("A Normative Appendix")
-        structure = Ashrae901Structure(
-            source_text=source,
-            sections=(
-                Ashrae901Section("6", 0, appendix_start, 12, 8, (72, 90, 540, 700)),
-                Ashrae901Section("6.1", source.index("6.1"), appendix_start, 12, 8, (72, 110, 540, 700)),
-            ),
-            tables=(
-                Ashrae901Region("Table 6.1-A", table_start, appendix_start, 12, 8, (72, 220, 540, 360)),
-            ),
-            appendices=(
-                Ashrae901Appendix("A", appendix_start, len(source), 300, 296, (72, 90, 540, 700)),
-            ),
-            unsupported=(
-                Ashrae901Region("figure:synthetic", source.index("Synthetic mandatory prose."), table_start, 12, 8, (72, 180, 540, 210)),
-            ),
+        self.assertEqual(
+            ASHRAE_90_1_2016_PUBLICATION.correction_set,
+            "unresolved:no-incorporated-post-publication-correction-established",
+        )
+        self.assertEqual(
+            ASHRAE_90_1_2016_ARTIFACT.edition_id,
+            publication_state_id(ASHRAE_90_1_2016_PUBLICATION),
         )
 
-        ast = build_ashrae901_document_ast(structure)
-        validate_document_ast(ast)
+    def test_structural_slice_preserves_hierarchy_role_coordinates_table_and_unsupported(self) -> None:
+        observations = (
+            _observation("6. SYNTHETIC SYSTEMS", page=12, printed_page="8", block_number=1, y=80),
+            _observation("6.1 Synthetic Scope", page=12, printed_page="8", block_number=2, y=110),
+            _observation("6.1.1 Synthetic Subsection", page=12, printed_page="8", block_number=3, y=140),
+            _observation("Synthetic mandatory prose.", page=12, printed_page="8", block_number=4, y=170),
+            _observation("Table 6.1.1-1 Synthetic Limits", page=12, printed_page="8", block_number=5, y=200),
+            _observation(
+                "Synthetic graphical region",
+                page=12,
+                printed_page="8",
+                block_number=6,
+                y=230,
+                hint="graphical_region",
+            ),
+        )
 
+        ast = parse_ashrae901_2016_observations(observations)
         section = ast.root.children[0]
         subsection = section.children[0]
-        table = subsection.children[0]
-        unsupported = subsection.children[1]
-        appendix = ast.root.children[1]
+        nested = subsection.children[0]
+        table = next(child for child in nested.children if child.node_type is DocumentNodeType.TABLE)
+        graphical = next(
+            child for child in nested.children if child.node_type is DocumentNodeType.GRAPHICAL_REGION
+        )
 
-        self.assertEqual(section.node_type, DocumentNodeType.SECTION)
-        self.assertEqual(subsection.node_type, DocumentNodeType.SUBSECTION)
-        self.assertEqual(table.node_type, DocumentNodeType.TABLE)
-        self.assertEqual(unsupported.node_type, DocumentNodeType.UNSUPPORTED)
-        self.assertEqual(dict(subsection.attributes)["source_role"], "mandatory")
-        self.assertEqual(dict(appendix.attributes)["source_role"], "mandatory")
+        self.assertEqual(section.locator, "section:6")
+        self.assertEqual(subsection.locator, "section:6.1")
+        self.assertEqual(nested.locator, "section:6.1.1")
+        self.assertEqual(dict(nested.attributes)["source_role"], "mandatory")
+        self.assertEqual(table.locator, "table:6.1.1-1")
         self.assertEqual(dict(table.attributes)["coordinate_space"], "pdf_points")
         self.assertEqual(dict(table.attributes)["pdf_page"], "12")
         self.assertEqual(dict(table.attributes)["printed_page"], "8")
-        self.assertEqual(dict(table.attributes)["bbox"], "72,220,540,360")
-        self.assertTrue(ast.diagnostics)
+        self.assertEqual(dict(table.attributes)["bbox_pdf_points"], "72.000,200.000,540.000,218.000")
+        self.assertEqual(graphical.node_type, DocumentNodeType.GRAPHICAL_REGION)
+        self.assertEqual(ast.diagnostics[0].code, "unsupported-ashrae901-graphical-semantics")
 
-    def test_informative_appendix_role_is_source_backed(self) -> None:
-        source = "B Informative Appendix\nSynthetic explanatory material.\n"
-        ast = build_ashrae901_document_ast(
-            Ashrae901Structure(
-                source_text=source,
-                appendices=(
-                    Ashrae901Appendix("B", 0, len(source), 301, 297, (72, 90, 540, 700)),
+    def test_appendix_role_comes_from_retained_publication_classification(self) -> None:
+        mandatory = parse_ashrae901_2016_observations(
+            (
+                _observation(
+                    "NORMATIVE APPENDIX A SYNTHETIC MATERIAL",
+                    page=300,
+                    printed_page="296",
+                    block_number=1,
+                    y=80,
                 ),
+                _observation("Synthetic appendix prose.", page=300, printed_page="296", block_number=2, y=110),
+            )
+        )
+        informative = parse_ashrae901_2016_observations(
+            (
+                _observation(
+                    "INFORMATIVE APPENDIX E SYNTHETIC MATERIAL",
+                    page=302,
+                    printed_page="298",
+                    block_number=1,
+                    y=80,
+                ),
+                _observation("Synthetic explanatory prose.", page=302, printed_page="298", block_number=2, y=110),
             )
         )
 
-        appendix = ast.root.children[0]
-        self.assertEqual(dict(appendix.attributes)["source_role"], "informative")
+        self.assertEqual(dict(mandatory.root.children[0].attributes)["source_role"], "mandatory")
+        self.assertEqual(dict(informative.root.children[0].attributes)["source_role"], "informative")
 
-    def test_deterministic_rerun_is_byte_stable(self) -> None:
-        source = "6 Systems\n6.1 General\nSynthetic mandatory prose.\n"
-        structure = Ashrae901Structure(
-            source_text=source,
-            sections=(
-                Ashrae901Section("6", 0, len(source), 12, 8, (72, 90, 540, 700)),
-                Ashrae901Section("6.1", source.index("6.1"), len(source), 12, 8, (72, 110, 540, 700)),
-            ),
+    def test_appendix_heading_that_conflicts_with_profile_is_rejected(self) -> None:
+        with self.assertRaisesRegex(ValueError, "appendix A is mandatory in the retained publication"):
+            parse_ashrae901_2016_observations(
+                (
+                    _observation(
+                        "INFORMATIVE APPENDIX A SYNTHETIC MATERIAL",
+                        page=300,
+                        printed_page="296",
+                        block_number=1,
+                        y=80,
+                    ),
+                )
+            )
+
+    def test_discovery_order_does_not_change_output_or_ids(self) -> None:
+        observations = (
+            _observation("6. SYNTHETIC SYSTEMS", page=12, printed_page="8", block_number=1, y=80),
+            _observation("6.1 Synthetic Scope", page=12, printed_page="8", block_number=2, y=110),
+            _observation("Synthetic mandatory prose.", page=12, printed_page="8", block_number=3, y=140),
         )
         self.assertEqual(
-            build_ashrae901_document_ast(structure).to_dict(),
-            build_ashrae901_document_ast(structure).to_dict(),
+            parse_ashrae901_2016_observations(observations).to_dict(),
+            parse_ashrae901_2016_observations(reversed(observations)).to_dict(),
         )
 
 
