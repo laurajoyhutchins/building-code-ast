@@ -110,6 +110,28 @@ class Aci318DocumentAstTests(unittest.TestCase):
         )
         validate_document_ast(ast)
 
+    def test_duplicate_locator_only_glyph_fragment_is_not_a_second_structure(self) -> None:
+        page = _page(
+            _block(325, 565, 235, "R4.2—Synthetic materials", 1),
+            _block(348, 369, 386, "R4.2", 2),
+        )
+
+        ast = parse_aci318_page(page, source_artifact=ARTIFACT, printed_page=51)
+        matches = [
+            node
+            for node in _flatten(ast.root)
+            if node.locator == "aci-318-19:commentary:R4.2"
+        ]
+
+        self.assertEqual(len(matches), 1)
+        self.assertTrue(
+            any(
+                diagnostic.code == "aci318_duplicate_locator_fragment"
+                for diagnostic in ast.diagnostics
+            )
+        )
+        validate_document_ast(ast)
+
 
 if __name__ == "__main__":
     unittest.main()
