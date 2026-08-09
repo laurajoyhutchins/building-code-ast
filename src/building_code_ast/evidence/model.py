@@ -102,6 +102,7 @@ class PublicationIdentity:
     edition: str
     printing: str | None = None
     digital_revision: str | None = None
+    addenda_set: str | None = None
     correction_set: str | None = None
     published_on: str | None = None
     effective_on: str | None = None
@@ -111,12 +112,13 @@ class PublicationIdentity:
         _require_text(self.edition, "edition")
         _require_optional_text(self.printing, "printing")
         _require_optional_text(self.digital_revision, "digital_revision")
+        _require_optional_text(self.addenda_set, "addenda_set")
         _require_optional_text(self.correction_set, "correction_set")
         _require_date(self.published_on, "published_on")
         _require_date(self.effective_on, "effective_on")
 
     def identity_dict(self) -> dict[str, str | None]:
-        return {
+        identity: dict[str, str | None] = {
             "publication_family": self.publication_family,
             "edition": self.edition,
             "printing": self.printing,
@@ -125,6 +127,11 @@ class PublicationIdentity:
             "published_on": self.published_on,
             "effective_on": self.effective_on,
         }
+        # Preserve all existing publication-state IDs when no addenda state was
+        # modeled. Once an addenda set is explicit it becomes part of identity.
+        if self.addenda_set is not None:
+            identity["addenda_set"] = self.addenda_set
+        return identity
 
     def to_dict(self) -> dict[str, str | None]:
         return {
