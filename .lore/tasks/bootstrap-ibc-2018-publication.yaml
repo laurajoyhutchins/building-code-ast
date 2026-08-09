@@ -1,0 +1,19 @@
+schema_version: 1
+id: bootstrap-ibc-2018-publication
+title: Bootstrap IBC 2018 publication knowledge
+description: Capture the IBC 2018 publication root, private-source boundary, and code-family ownership from exact repository evidence after this root is integrated. Preserve the existing IBC corpus as the source of current implementation claims.
+paths:
+- docs/codebooks/ibc-2018/README.md
+components:
+- component.document-structure
+- component.validation
+tags:
+- codebook
+- ibc-2018
+- source-family
+- provenance
+audiences:
+- maintainers
+- contributors
+- integrators
+history: false
