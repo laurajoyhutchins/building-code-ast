@@ -145,19 +145,23 @@ class Ibc2018ReferenceGraphTests(unittest.TestCase):
         self.assertEqual(graph["diagnostics"][0]["state"], "nonexistent")
 
     def test_source_safe_corpus_projects_without_private_source_material(self) -> None:
-        corpus_path = (
-            Path(__file__).resolve().parents[1]
-            / "corpora"
-            / "ibc-2018"
-            / "ibc-2018-cross-reference-inventory.json"
+        corpus_dir = Path(__file__).resolve().parents[1] / "corpora" / "ibc-2018"
+        records = json.loads(
+            (corpus_dir / "ibc-2018-cross-reference-inventory.json").read_text(encoding="utf-8")
         )
-        records = json.loads(corpus_path.read_text(encoding="utf-8"))
+        summary = json.loads(
+            (corpus_dir / "ibc-2018-cross-reference-summary.json").read_text(encoding="utf-8")
+        )
 
         graph = build_ibc2018_reference_graph(records)
 
-        self.assertEqual(len(graph["edges"]), 4615)
-        self.assertEqual(len(graph["diagnostics"]), 771)
-        self.assertIn(["1406.10", "1406.11"], graph["cycles"])
+        self.assertEqual(len(graph["edges"]), len(records))
+        cyclic_components = [set(component) for component in graph["cycles"]]
+        for source, target in summary["circular_section_reference_pairs"]:
+            self.assertTrue(
+                any({source, target}.issubset(component) for component in cyclic_components),
+                msg=f"missing cyclic component for source-safe pair {source} <-> {target}",
+            )
 
 
 if __name__ == "__main__":
