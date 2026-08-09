@@ -20,6 +20,7 @@ from ..model import Diagnostic, DiagnosticSeverity, SourceSpan
 from .pdf_layout import PdfBlock, PdfPage, normalize_block_text
 
 
+_CHAPTER_RE = re.compile(r"^CHAPTER\s+(?P<chapter>\d+)\b", re.IGNORECASE)
 _TABLE_RE = re.compile(r"^Table\s+(?P<locator>R?\d+(?:\.\d+)+)\b", re.IGNORECASE)
 _LOCATOR_RE = re.compile(r"^(?P<locator>R?\d+(?:\.\d+)+)\b")
 
@@ -139,10 +140,14 @@ def _nest_publication_hierarchy(
     source_artifact: DocumentSourceArtifact,
     source_text: str,
 ) -> list[DocumentNode]:
-    """Nest numbered ACI structures under the nearest present numbered parent."""
+    """Nest ACI numbered structures under present numbered and chapter parents."""
 
     structural: dict[tuple[str, str], DocumentNode] = {}
+    chapters: dict[str, DocumentNode] = {}
     for node in nodes:
+        if node.node_type is DocumentNodeType.CHAPTER:
+            chapters[node.locator.rsplit(":", 1)[-1]] = node
+            continue
         if node.node_type not in {DocumentNodeType.SECTION, DocumentNodeType.SUBSECTION}:
             continue
         role = dict(node.attributes).get("source_role")
@@ -160,13 +165,18 @@ def _nest_publication_hierarchy(
         stem = native.removeprefix("R")
         parts = stem.split(".")
         prefix_marker = "R" if native.startswith("R") else ""
+        parent: DocumentNode | None = None
         for size in range(len(parts) - 1, 1, -1):
             candidate = prefix_marker + ".".join(parts[:size])
-            parent = structural.get((role, candidate))
-            if parent is not None and parent.locator != node.locator:
-                parent_of[node.node_id] = parent.node_id
-                children_of.setdefault(parent.node_id, []).append(node)
+            candidate_parent = structural.get((role, candidate))
+            if candidate_parent is not None and candidate_parent.locator != node.locator:
+                parent = candidate_parent
                 break
+        if parent is None:
+            parent = chapters.get(parts[0])
+        if parent is not None:
+            parent_of[node.node_id] = parent.node_id
+            children_of.setdefault(parent.node_id, []).append(node)
 
     node_by_id = {node.node_id: node for node in nodes}
 
@@ -199,9 +209,10 @@ def parse_aci318_page(
 ) -> DocumentAst:
     """Parse one ACI 318-19 PDF page into source-role-aware Document AST nodes.
 
-    This first structural slice recognizes numbered Code/Commentary locators and
-    numbered table regions. It intentionally leaves table cells, equations,
-    references, definitions, and engineering semantics to later reviewed gates.
+    This first structural slice recognizes shared chapter headings, numbered
+    Code/Commentary locators, and numbered table regions. It intentionally
+    leaves table cells, equations, references, definitions, and engineering
+    semantics to later reviewed gates.
     """
 
     source_text, prepared = _prepare_blocks(page)
@@ -221,6 +232,22 @@ def parse_aci318_page(
     for item in prepared:
         span = SourceSpan(start=item.start, end=item.end, text=item.text)
         attributes = _attributes(item, printed_page)
+
+        chapter_match = _CHAPTER_RE.match(item.text)
+        if chapter_match:
+            chapter = chapter_match.group("chapter")
+            attributes["source_role"] = "publication_structure"
+            nodes.append(
+                make_document_node(
+                    source_artifact=source_artifact,
+                    node_type=DocumentNodeType.CHAPTER,
+                    locator=f"aci-318-19:publication-structure:chapter:{chapter}",
+                    span=span,
+                    label=chapter,
+                    attributes=attributes,
+                )
+            )
+            continue
 
         if item.role == "unresolved":
             locator = (
