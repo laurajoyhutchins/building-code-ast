@@ -52,6 +52,10 @@
         "edition_id": {
           "type": "string",
           "minLength": 1
+        },
+        "publication_component_id": {
+          "type": "string",
+          "minLength": 1
         }
       }
     },
@@ -98,6 +102,7 @@
           "enum": [
             "document",
             "chapter",
+            "appendix",
             "section",
             "subsection",
             "paragraph",

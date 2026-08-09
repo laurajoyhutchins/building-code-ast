@@ -21,6 +21,7 @@ DOCUMENT_AST_VERSION = "0.1.0"
 class DocumentNodeType(StrEnum):
     DOCUMENT = "document"
     CHAPTER = "chapter"
+    APPENDIX = "appendix"
     SECTION = "section"
     SUBSECTION = "subsection"
     PARAGRAPH = "paragraph"
@@ -44,12 +45,16 @@ class DocumentNodeType(StrEnum):
 class DocumentSourceArtifact:
     artifact_id: str
     edition_id: str
+    publication_component_id: str | None = None
 
     def to_dict(self) -> dict[str, str]:
-        return {
+        result = {
             "artifact_id": self.artifact_id,
             "edition_id": self.edition_id,
         }
+        if self.publication_component_id is not None:
+            result["publication_component_id"] = self.publication_component_id
+        return result
 
 
 @dataclass(frozen=True, slots=True)
@@ -99,29 +104,35 @@ def document_node_id(
     edition_id: str,
     node_type: DocumentNodeType | str,
     locator: str,
+    publication_component_id: str | None = None,
 ) -> str:
     """Return the deterministic identity for one structural node.
 
     The canonical input deliberately excludes source text and character offsets.
-    A node remains stable when the same edition is reparsed, while an edition
-    change produces a different identity even when the locator is unchanged.
+    A node remains stable when the same edition and publication component are
+    reparsed. Existing identities remain stable when no component is supplied.
     """
 
     if not artifact_id.strip():
         raise ValueError("artifact_id must not be empty")
     if not edition_id.strip():
         raise ValueError("edition_id must not be empty")
+    if publication_component_id is not None and not publication_component_id.strip():
+        raise ValueError("publication_component_id must not be empty")
     if not locator.strip():
         raise ValueError("locator must not be empty")
 
     normalized_type = DocumentNodeType(node_type).value
+    canonical_fields = {
+        "artifact_id": artifact_id,
+        "edition_id": edition_id,
+        "locator": locator,
+        "node_type": normalized_type,
+    }
+    if publication_component_id is not None:
+        canonical_fields["publication_component_id"] = publication_component_id
     canonical = json.dumps(
-        {
-            "artifact_id": artifact_id,
-            "edition_id": edition_id,
-            "locator": locator,
-            "node_type": normalized_type,
-        },
+        canonical_fields,
         sort_keys=True,
         separators=(",", ":"),
     )
@@ -147,6 +158,7 @@ def make_document_node(
         node_id=document_node_id(
             artifact_id=source_artifact.artifact_id,
             edition_id=source_artifact.edition_id,
+            publication_component_id=source_artifact.publication_component_id,
             node_type=normalized_type,
             locator=locator,
         ),
