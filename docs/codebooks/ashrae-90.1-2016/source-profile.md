@@ -29,3 +29,19 @@ Before claiming durable ASHRAE 90.1 ingestion coverage, verify and record:
 A descendant document-AST PR should preserve mandatory/informative publication distinctions, establish deterministic locators and exact source coordinates, and keep table/equation structure explicit before provision semantics are attempted.
 
 No protected source prose, tables, figures, or page images belong in public Git.
+
+## Knowledge bootstrap
+
+LORE source-profile bootstrap starts from `.lore/tasks/bootstrap-ashrae-90.1-2016-source-profile.yaml`.
+
+Deciduous handoff metadata:
+
+- semantic ID: `action.characterize-ashrae90-1-2016-source`
+- node type: `action`
+- arc: `parser-families`
+- lifecycle while branch-only: `proposed`
+- current architecture: `false`
+- evidence path: `docs/codebooks/ashrae-90.1-2016/source-profile.md`
+- requires: `action.establish-ashrae90-1-2016-publication-root`
+
+This remains noncanonical handoff metadata until the profile work is integrated and exact merge evidence is available.
