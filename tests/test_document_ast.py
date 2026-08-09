@@ -126,6 +126,51 @@ class DocumentAstTests(unittest.TestCase):
         self.assertNotEqual(first, later_edition)
         self.assertRegex(first, r"^docnode:[0-9a-f]{64}$")
 
+    def test_node_identity_is_publication_component_scoped(self) -> None:
+        tms_402 = document_node_id(
+            artifact_id="sha256:combined-tms-artifact",
+            edition_id="2016",
+            publication_component_id="tms-402-16",
+            node_type=DocumentNodeType.SECTION,
+            locator="section:1.1",
+        )
+        tms_602 = document_node_id(
+            artifact_id="sha256:combined-tms-artifact",
+            edition_id="2016",
+            publication_component_id="tms-602-16",
+            node_type=DocumentNodeType.SECTION,
+            locator="section:1.1",
+        )
+
+        self.assertNotEqual(tms_402, tms_602)
+
+    def test_source_artifact_round_trips_publication_component_identity(self) -> None:
+        source = "Heading"
+        artifact = DocumentSourceArtifact(
+            artifact_id="sha256:combined-tms-artifact",
+            edition_id="2016",
+            publication_component_id="tms-402-16",
+        )
+        root = make_document_node(
+            source_artifact=artifact,
+            node_type=DocumentNodeType.DOCUMENT,
+            locator="document",
+            span=SourceSpan(start=0, end=len(source), text=source),
+        )
+        payload = {
+            "ast_version": DOCUMENT_AST_VERSION,
+            "type": "document_tree",
+            "source_text": source,
+            "source_artifact": artifact.to_dict(),
+            "root": root.to_dict(),
+            "diagnostics": [],
+        }
+
+        ast = document_ast_from_dict(payload)
+
+        self.assertEqual(ast.source_artifact.publication_component_id, "tms-402-16")
+        self.assertEqual(ast.to_dict(), payload)
+
     def test_tampered_span_text_is_rejected(self) -> None:
         payload = _load_fixture("document-definitions")
         payload["root"]["children"][0]["children"][1]["span"]["text"] = "tampered"
