@@ -1,0 +1,118 @@
+disclosure:
+  audiences:
+    - maintainers
+    - contributors
+    - integrators
+  tags:
+    - relationship
+    - codebook
+    - source-family
+    - stacked-prs
+    - provenance
+  weight: 85
+evidence:
+  - path: docs/codebooks/ibc-2018/README.md
+    revision: 0e290d55ee47700e61f23715b63446f32228ff55
+  - path: docs/codebooks/nec-2017/README.md
+    revision: 0e290d55ee47700e61f23715b63446f32228ff55
+  - path: docs/codebooks/nfpa-13-2019/README.md
+    revision: 0e290d55ee47700e61f23715b63446f32228ff55
+  - path: docs/codebooks/nds-2018/README.md
+    revision: 0e290d55ee47700e61f23715b63446f32228ff55
+  - path: docs/codebooks/aisc-scm-15/README.md
+    revision: 0e290d55ee47700e61f23715b63446f32228ff55
+  - path: docs/codebooks/asce-7-22/README.md
+    revision: 0e290d55ee47700e61f23715b63446f32228ff55
+  - path: docs/codebooks/tms-402-602-16/README.md
+    revision: 0e290d55ee47700e61f23715b63446f32228ff55
+  - path: docs/codebooks/aci-318-19/README.md
+    revision: 0e290d55ee47700e61f23715b63446f32228ff55
+  - path: docs/codebooks/ashrae-90.1-2016/README.md
+    revision: 0e290d55ee47700e61f23715b63446f32228ff55
+  - path: docs/codebooks/ashrae-62.1-2016/README.md
+    revision: 0e290d55ee47700e61f23715b63446f32228ff55
+id: relationship.codebook-publication-root-forest
+kind: relationship
+payload:
+  consequences:
+    - Publication-specific follow-up work stays scoped to its codebook family.
+    - Generic compiler changes remain independent when they apply across publication families.
+    - A publication root records ownership and provenance; it does not create parser or semantic support by itself.
+    - Source-profile PRs may become independent main-based descendants after their publication root is integrated.
+  relationship: publication-specific work descends from a durable publication-family root
+  roots:
+    - merge_commit: b90e7f56c7c167ed69690210fca5bbe6601214d6
+      publication_key: ibc-2018
+      root_branch: root/ibc-2018
+      root_head: f63405cd93ee7e7a0d47638a1cdd4bcc5ba0baba
+      root_pull_request: 41
+      support_state: existing-support
+    - merge_commit: 5fbab62fc92a98a75cfd60c7d602e57b7636fdfe
+      publication_key: nec-2017
+      root_branch: root/nec-2017
+      root_head: b34b3fe74a0b03c4cb16f86071096ea5dcc4c2b0
+      root_pull_request: 42
+      support_state: existing-support
+    - merge_commit: 8ceefbf12cacbb230c9613cc2f72ca77c49ab98d
+      publication_key: nfpa-13-2019
+      root_branch: root/nfpa-13-2019
+      root_head: 000f4d3e41eb805b223bbd7221944316bae96c8a
+      root_pull_request: 43
+      support_state: existing-support
+    - merge_commit: af6ceb1041401ddee984fed49a8f46346067747e
+      publication_key: nds-2018
+      root_branch: root/nds-2018
+      root_head: 2e2c4f5a7f1c3f47f525cc373d1ddd5a5ee33588
+      root_pull_request: 44
+      support_state: organizational-root-only
+    - merge_commit: 0585cae1f5c959edfff2128fe82ad6cd1f8b8df8
+      publication_key: aisc-scm-15
+      root_branch: root/aisc-scm-15
+      root_head: 7726b215cc131ad8ded4ded23833cb3ca4599a3b
+      root_pull_request: 45
+      support_state: organizational-root-only
+    - merge_commit: e5dd2eefdba45303a73a79ee163abe9eeeed6216
+      publication_key: asce-7-22
+      root_branch: root/asce-7-22
+      root_head: 21b988ad5115708f503a0181fe9b892bf7a10bd0
+      root_pull_request: 46
+      support_state: organizational-root-only
+    - merge_commit: 5de6da43d63129091656f98e6f14a8d10d5b54ff
+      publication_key: tms-402-602-16
+      root_branch: root/tms-402-602-16
+      root_head: 896123844cfbcb7e7dc5120d453173ed56360e7a
+      root_pull_request: 47
+      support_state: organizational-root-only
+    - merge_commit: 946c5667abf6410ee894c3b6df07c4052b421ace
+      publication_key: aci-318-19
+      root_branch: root/aci-318-19
+      root_head: 9aeb89a332e3d163137bae8cd6c70696743dbda1
+      root_pull_request: 48
+      support_state: organizational-root-only
+    - merge_commit: cc50933272fba3a95b95a8a3879006b31394c929
+      publication_key: ashrae-90.1-2016
+      root_branch: root/ashrae-90.1-2016
+      root_head: 6b0d28af48996c7c0106135a5798a6e052adccd6
+      root_pull_request: 49
+      support_state: organizational-root-only
+    - merge_commit: 0e290d55ee47700e61f23715b63446f32228ff55
+      publication_key: ashrae-62.1-2016
+      root_branch: root/ashrae-62.1-2016
+      root_head: 4563e0d3cf608e1cbae006c7dbfc48c7aad6f65a
+      root_pull_request: 50
+      support_state: organizational-root-only
+provenance:
+  producer: GPT-5.6 Sol
+  source: proposal
+  transaction: tx-91d508b24acd05e3bc6de2c5
+revision: 1
+schema_version: 1
+scope:
+  components:
+    - component.document-structure
+    - component.validation
+  repository: building-code-ast
+status: active
+summary: Each retained codebook family has a durable publication root on main that owns publication-specific descendant work without implying parser, corpus, semantic, publication-safety, or legal completeness.
+supersedes: null
+title: Route codebook work through publication roots

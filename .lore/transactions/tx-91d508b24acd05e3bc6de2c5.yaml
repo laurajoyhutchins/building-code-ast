@@ -1,0 +1,13 @@
+accepted_at: 2026-08-08T22:00:12-06:00
+base_revision: 0e290d55ee47700e61f23715b63446f32228ff55
+outputs:
+  - docs/generated/architecture.md
+  - docs/generated/component-catalog.md
+  - docs/generated/current-decisions.md
+  - docs/generated/maintainer-guide.md
+  - docs/generated/repository-card.md
+proposal_id: codebook.publication-root-forest
+records:
+  - .lore/records/relationship/relationship.codebook-publication-root-forest/1.yaml
+schema_version: 1
+transaction_id: tx-91d508b24acd05e3bc6de2c5
