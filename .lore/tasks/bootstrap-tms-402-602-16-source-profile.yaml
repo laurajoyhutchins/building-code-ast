@@ -1,7 +1,7 @@
 schema_version: 1
 id: bootstrap-tms-402-602-16-source-profile
 title: Bootstrap TMS 402/602-16 source-profile knowledge
-description: Capture verified retained-file facts, unresolved exact-byte characterization gates, and the requirement to preserve TMS 402 and TMS 602 as distinct publication components from the source profile.
+description: Capture exact retained-artifact characterization, remaining descendant compiler questions, and the requirement to preserve TMS 402 and TMS 602 as distinct publication components from the source profile.
 paths:
 - docs/codebooks/tms-402-602-16/README.md
 - docs/codebooks/tms-402-602-16/source-profile.md
