@@ -21,3 +21,19 @@ Descendant pull requests may own TMS-specific source characterization, document 
 This is an organizational root only. It does not claim parser support, corpus completeness, semantic correctness, publication safety, or legal interpretation.
 
 While this root PR is open, new TMS-specific work should branch from `root/tms-402-602-16`. After it lands, descendants may be rebased or retargeted onto the merged root.
+
+## Knowledge bootstrap
+
+LORE bootstrap starts from `.lore/tasks/bootstrap-tms-402-602-16-publication.yaml`. Accepted LORE records remain deferred until durable merge evidence exists.
+
+Deciduous handoff metadata:
+
+- semantic ID: `action.establish-tms402-602-16-publication-root`
+- node type: `action`
+- arc: `parser-families`
+- lifecycle while branch-only: `proposed`
+- current architecture: `false`
+- evidence path: `docs/codebooks/tms-402-602-16/README.md`
+- causal context: `decision.family-grammar-boundary`
+
+This is handoff metadata, not a canonical Deciduous patch. Materialize it into `.deciduous/patches/` and regenerate the shared archaeology projections only after integration evidence is available.
