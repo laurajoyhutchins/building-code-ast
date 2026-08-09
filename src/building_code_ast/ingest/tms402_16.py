@@ -271,6 +271,7 @@ def parse_tms402_16_observations(
                 (current_part or root).children.append(chapter)
                 current_chapter = chapter
                 section_stack = []
+                extend_ancestors(current_part or root, end)
                 continue
 
             if match := _SECTION_RE.match(text):
