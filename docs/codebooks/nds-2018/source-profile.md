@@ -32,3 +32,19 @@ Before claiming durable NDS ingestion coverage, verify and record:
 A descendant document-AST PR should identify its exact source artifact and coordinate space, show representative structural fixtures, preserve unsupported structures as diagnostics, and avoid source-family completeness claims until the whole-document structure has been measured.
 
 No protected source prose, tables, figures, or page images belong in public Git.
+
+## Knowledge bootstrap
+
+LORE source-profile bootstrap starts from `.lore/tasks/bootstrap-nds-2018-source-profile.yaml`.
+
+Deciduous handoff metadata:
+
+- semantic ID: `action.characterize-nds2018-source`
+- node type: `action`
+- arc: `parser-families`
+- lifecycle while branch-only: `proposed`
+- current architecture: `false`
+- evidence path: `docs/codebooks/nds-2018/source-profile.md`
+- requires: `action.establish-nds2018-publication-root`
+
+This remains noncanonical handoff metadata until the profile work is integrated and exact merge evidence is available.
