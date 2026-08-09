@@ -43,13 +43,21 @@ class Aci318DocumentAstTests(unittest.TestCase):
         first = parse_aci318_page(page, source_artifact=ARTIFACT, printed_page=9)
         second = parse_aci318_page(page, source_artifact=ARTIFACT, printed_page=9)
         nodes = list(_flatten(first.root))
+        normative_section = next(
+            node for node in nodes if node.locator == "aci-318-19:normative:1.1"
+        )
         normative = next(
             node for node in nodes if node.locator == "aci-318-19:normative:1.1.1"
+        )
+        commentary_section = next(
+            node for node in nodes if node.locator == "aci-318-19:commentary:R1.1"
         )
         commentary = next(
             node for node in nodes if node.locator == "aci-318-19:commentary:R1.1.1"
         )
 
+        self.assertIn(normative, normative_section.children)
+        self.assertIn(commentary, commentary_section.children)
         self.assertEqual(dict(normative.attributes)["source_role"], "normative")
         self.assertEqual(dict(commentary.attributes)["source_role"], "commentary")
         self.assertNotEqual(normative.node_id, commentary.node_id)
