@@ -1,0 +1,21 @@
+schema_version: 1
+id: bootstrap-ashrae-62.1-2016-source-profile
+title: Bootstrap ASHRAE 62.1-2016 source-profile knowledge
+description: Capture exact retained-artifact identity, publication and included-addenda state, unresolved correction-state evidence, mandatory-versus-informative publication boundaries, page mapping, extraction behavior, and structural grammar from the ASHRAE 62.1-2016 source profile.
+paths:
+- docs/codebooks/ashrae-62.1-2016/README.md
+- docs/codebooks/ashrae-62.1-2016/source-profile.md
+components:
+- component.document-structure
+- component.validation
+tags:
+- codebook
+- ashrae-62.1-2016
+- source-profile
+- provenance
+- verification
+audiences:
+- maintainers
+- contributors
+- integrators
+history: false
