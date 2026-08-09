@@ -35,6 +35,10 @@ _SECTION_RE = re.compile(
     r"^(?P<section>\d{2,3}\.\d+[A-Za-z]?(?:\([A-Za-z0-9]+\))*)\s+"
     r"(?P<title>[^.]+\.)?",
 )
+_TABLE_ANCHOR_RE = re.compile(
+    r"^Table\s+\d{2,3}\.\d+[A-Za-z]?(?:\([A-Za-z0-9]+\))*\b",
+    re.IGNORECASE,
+)
 _DEFINITION_RE = re.compile(r"^(?P<term>[A-Z][^.]{1,180})\.\s+\S")
 _HEX_64_RE = re.compile(r"^[0-9a-f]{64}$")
 
@@ -236,14 +240,38 @@ def _looks_table_like(text: str, block: PdfBlock) -> bool:
     return (numeric_tokens >= 10 and width >= 400.0) or (" | " in text and width >= 350.0)
 
 
+def _announced_table_regions(blocks: Iterable[PdfBlock]) -> frozenset[tuple[int, int]]:
+    """Return page-local geometric regions backed by visible table announcements."""
+
+    return frozenset(
+        (block.page_number, block.table_region_id)
+        for block in blocks
+        if block.table_region_id is not None
+        and _TABLE_ANCHOR_RE.match(normalize_block_text(block.text)) is not None
+    )
+
+
 def _classify_block(
     article_number: str,
     text: str,
     block: PdfBlock,
+    *,
+    announced_table_region: bool = False,
 ) -> tuple[DocumentNodeType, str | None, dict[str, str], str | None]:
     anchor = _ARTICLE_ANCHOR_RE.match(text)
     if anchor is not None:
         return DocumentNodeType.HEADING, f"Article {anchor.group('number')}", {}, None
+
+    if announced_table_region:
+        return (
+            DocumentNodeType.UNSUPPORTED,
+            None,
+            {
+                "structure_hint": "table_like_layout",
+                "table_evidence": "announced_geometric_region",
+            },
+            "unsupported-table-layout",
+        )
 
     if text.startswith("Informational Note"):
         return DocumentNodeType.NOTE, "Informational Note", {}, None
@@ -334,6 +362,7 @@ def build_article_seed(
 
     article_range = _range_for(layout, article_number)
     selected = select_article_blocks(layout, article_range.number)
+    announced_table_regions = _announced_table_regions(selected)
     source_text, source_map = _build_text_and_map(selected)
     if not source_text:
         raise ValueError(f"article {article_range.number} produced empty normalized text")
@@ -345,10 +374,16 @@ def build_article_seed(
     diagnostics: list[Diagnostic] = []
     block_nodes: list[DocumentNode] = []
     for index, (block, entry) in enumerate(zip(selected, source_map, strict=True), start=1):
+        table_region_key = (
+            None
+            if block.table_region_id is None
+            else (block.page_number, block.table_region_id)
+        )
         node_type, label, attributes, diagnostic_code = _classify_block(
             article_range.number,
             entry.normalized_text,
             block,
+            announced_table_region=table_region_key in announced_table_regions,
         )
         span = SourceSpan(
             start=entry.normalized_start,
