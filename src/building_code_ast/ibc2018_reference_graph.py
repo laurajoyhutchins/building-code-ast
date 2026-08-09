@@ -114,8 +114,8 @@ def build_ibc2018_reference_graph(
             raise ValueError("IBC reference graph accepts internal_cross_reference records only")
 
         source_record_id = str(record.get("id", "")).strip()
-        if not source_record_id.startswith("ibc2018:internal-cross-reference:"):
-            raise ValueError("IBC reference graph requires an IBC 2018 inventory record ID")
+        if not source_record_id.startswith("ibc2018:cross-reference:"):
+            raise ValueError("IBC reference graph requires an IBC 2018 cross-reference record ID")
 
         source_locator = str(record.get("source_section", "")).strip()
         target_kind = str(record.get("target_kind", "")).strip()
