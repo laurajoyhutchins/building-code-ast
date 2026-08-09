@@ -34,53 +34,59 @@ def _edge_id(record: Mapping[str, Any]) -> str:
 
 
 def _cyclic_components(adjacency: Mapping[str, set[str]]) -> list[list[str]]:
-    """Return deterministic cyclic strongly connected components as locators."""
+    """Return deterministic cyclic strongly connected components as locators.
 
-    index = 0
-    indices: dict[str, int] = {}
-    lowlinks: dict[str, int] = {}
-    stack: list[str] = []
-    on_stack: set[str] = set()
-    components: list[list[str]] = []
+    The traversal is iterative so the complete IBC reference inventory cannot
+    exceed Python's recursion limit merely because it contains a long path.
+    """
 
-    def visit(node: str) -> None:
-        nonlocal index
-        indices[node] = index
-        lowlinks[node] = index
-        index += 1
-        stack.append(node)
-        on_stack.add(node)
+    all_nodes = set(adjacency)
+    reverse_adjacency: dict[str, set[str]] = {}
+    for source, targets in adjacency.items():
+        for target in targets:
+            all_nodes.add(target)
+            reverse_adjacency.setdefault(target, set()).add(source)
 
-        for target in sorted(adjacency.get(node, set())):
-            if target not in indices:
-                visit(target)
-                lowlinks[node] = min(lowlinks[node], lowlinks[target])
-            elif target in on_stack:
-                lowlinks[node] = min(lowlinks[node], indices[target])
-
-        if lowlinks[node] != indices[node]:
-            return
-
-        component: list[str] = []
+    visited: set[str] = set()
+    finish_order: list[str] = []
+    for start in sorted(all_nodes):
+        if start in visited:
+            continue
+        stack: list[tuple[str, bool]] = [(start, False)]
         while stack:
-            member = stack.pop()
-            on_stack.remove(member)
-            component.append(member)
-            if member == node:
-                break
+            node, expanded = stack.pop()
+            if expanded:
+                finish_order.append(node)
+                continue
+            if node in visited:
+                continue
+            visited.add(node)
+            stack.append((node, True))
+            for target in reversed(sorted(adjacency.get(node, set()))):
+                if target not in visited:
+                    stack.append((target, False))
+
+    assigned: set[str] = set()
+    components: list[list[str]] = []
+    for start in reversed(finish_order):
+        if start in assigned:
+            continue
+        component: list[str] = []
+        stack = [start]
+        assigned.add(start)
+        while stack:
+            node = stack.pop()
+            component.append(node)
+            for source in reversed(sorted(reverse_adjacency.get(node, set()))):
+                if source not in assigned:
+                    assigned.add(source)
+                    stack.append(source)
 
         component.sort()
         if len(component) > 1:
             components.append(component)
         elif component and component[0] in adjacency.get(component[0], set()):
             components.append(component)
-
-    all_nodes = set(adjacency)
-    for targets in adjacency.values():
-        all_nodes.update(targets)
-    for node in sorted(all_nodes):
-        if node not in indices:
-            visit(node)
 
     components.sort()
     return components
