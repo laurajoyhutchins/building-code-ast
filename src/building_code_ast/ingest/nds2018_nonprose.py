@@ -24,6 +24,7 @@ _FIGURE_RE = re.compile(r"^Figure\s+(?P<id>\d+[A-Z])\s+\S", re.IGNORECASE)
 _TABLE_RE = re.compile(r"^Table\s+(?P<id>\d+[A-Z])\s+\S", re.IGNORECASE)
 _FOOTNOTE_RE = re.compile(r"^(?P<number>\d+)\.\s+\S")
 _PRIVATE_USE_RE = re.compile(r"[\ue000-\uf8ff]")
+_SHORT_INLINE_EQUATION_PREFIX_MAX = 40
 _STRUCTURAL = {
     DocumentNodeType.DOCUMENT,
     DocumentNodeType.CHAPTER,
@@ -126,9 +127,20 @@ def _equation_regions(
                 attrs["glyph_state"] = "private_use_text_layer"
         else:
             prefix = observation.text[: match.start()].rstrip()
-            if not prefix or ("=" not in prefix and _PRIVATE_USE_RE.search(prefix) is None):
+            private_use = _PRIVATE_USE_RE.search(prefix) is not None
+            if not prefix:
                 continue
-            if _PRIVATE_USE_RE.search(prefix) is not None:
+            # Exact-source measurement found a bounded family of short inline
+            # equation blocks whose text layer loses both '=' and private-use
+            # glyphs. Keep that shape narrow so ordinary prose ending in a
+            # parenthesized locator is not promoted.
+            if (
+                "=" not in prefix
+                and not private_use
+                and len(prefix) > _SHORT_INLINE_EQUATION_PREFIX_MAX
+            ):
+                continue
+            if private_use:
                 attrs["glyph_state"] = "private_use_text_layer"
 
         node = make_document_node(
