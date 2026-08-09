@@ -29,3 +29,19 @@ Before claiming durable ACI ingestion coverage, verify and record:
 A descendant document-AST PR must preserve any normative/commentary distinction and establish deterministic structural locators and exact source coordinates before provision semantics are attempted.
 
 No protected source prose, tables, figures, or page images belong in public Git.
+
+## Knowledge bootstrap
+
+LORE source-profile bootstrap starts from `.lore/tasks/bootstrap-aci-318-19-source-profile.yaml`.
+
+Deciduous handoff metadata:
+
+- semantic ID: `action.characterize-aci318-19-source`
+- node type: `action`
+- arc: `parser-families`
+- lifecycle while branch-only: `proposed`
+- current architecture: `false`
+- evidence path: `docs/codebooks/aci-318-19/source-profile.md`
+- requires: `action.establish-aci318-19-publication-root`
+
+This remains noncanonical handoff metadata until the profile work is integrated and exact merge evidence is available.
