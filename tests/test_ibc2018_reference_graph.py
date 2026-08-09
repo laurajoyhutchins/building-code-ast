@@ -21,7 +21,7 @@ class Ibc2018ReferenceGraphTests(unittest.TestCase):
         graph = build_ibc2018_reference_graph(
             [
                 {
-                    "id": "ibc2018:internal-cross-reference:" + "1" * 24,
+                    "id": "ibc2018:cross-reference:" + "1" * 24,
                     "record_type": "internal_cross_reference",
                     "review_state": "verified",
                     "source_section": "2702.1",
@@ -44,7 +44,7 @@ class Ibc2018ReferenceGraphTests(unittest.TestCase):
         edge = graph["edges"][0]
         self.assertEqual(edge["source"], "ibc-2018:section:2702.1")
         self.assertEqual(edge["target"], "ibc-2018:section:403.4")
-        self.assertEqual(edge["source_record_id"], "ibc2018:internal-cross-reference:" + "1" * 24)
+        self.assertEqual(edge["source_record_id"], "ibc2018:cross-reference:" + "1" * 24)
         self.assertEqual(edge["source_anchor"], anchor)
         self.assertNotIn("text", edge)
         self.assertEqual(graph["diagnostics"], [])
@@ -52,7 +52,7 @@ class Ibc2018ReferenceGraphTests(unittest.TestCase):
     def test_unresolved_and_ambiguous_references_remain_visible(self) -> None:
         records = [
             {
-                "id": "ibc2018:internal-cross-reference:" + "2" * 24,
+                "id": "ibc2018:cross-reference:" + "2" * 24,
                 "record_type": "internal_cross_reference",
                 "review_state": "provisional",
                 "source_section": "101.2",
@@ -63,7 +63,7 @@ class Ibc2018ReferenceGraphTests(unittest.TestCase):
                 "resolution_reason": "section_target_not_indexed",
             },
             {
-                "id": "ibc2018:internal-cross-reference:" + "3" * 24,
+                "id": "ibc2018:cross-reference:" + "3" * 24,
                 "record_type": "internal_cross_reference",
                 "review_state": "disputed",
                 "source_section": "102.3",
@@ -90,7 +90,7 @@ class Ibc2018ReferenceGraphTests(unittest.TestCase):
     def test_graph_serialization_is_deterministic_independent_of_record_order(self) -> None:
         records = [
             {
-                "id": "ibc2018:internal-cross-reference:" + "4" * 24,
+                "id": "ibc2018:cross-reference:" + "4" * 24,
                 "record_type": "internal_cross_reference",
                 "review_state": "verified",
                 "source_section": "1406.10",
@@ -101,7 +101,7 @@ class Ibc2018ReferenceGraphTests(unittest.TestCase):
                 "resolution_reason": "preserved_resolved_target",
             },
             {
-                "id": "ibc2018:internal-cross-reference:" + "5" * 24,
+                "id": "ibc2018:cross-reference:" + "5" * 24,
                 "record_type": "internal_cross_reference",
                 "review_state": "verified",
                 "source_section": "1406.11",
@@ -126,7 +126,7 @@ class Ibc2018ReferenceGraphTests(unittest.TestCase):
         graph = build_ibc2018_reference_graph(
             [
                 {
-                    "id": "ibc2018:internal-cross-reference:" + "6" * 24,
+                    "id": "ibc2018:cross-reference:" + "6" * 24,
                     "record_type": "internal_cross_reference",
                     "review_state": "verified",
                     "source_section": "2308.6.1",
