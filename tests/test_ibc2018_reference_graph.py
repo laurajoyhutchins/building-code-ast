@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import json
+from pathlib import Path
 import unittest
 
 from building_code_ast.ibc2018_reference_graph import build_ibc2018_reference_graph
@@ -142,6 +143,21 @@ class Ibc2018ReferenceGraphTests(unittest.TestCase):
         self.assertIsNone(graph["edges"][0]["target"])
         self.assertEqual(graph["edges"][0]["target_kind"], "table")
         self.assertEqual(graph["diagnostics"][0]["state"], "nonexistent")
+
+    def test_source_safe_corpus_projects_without_private_source_material(self) -> None:
+        corpus_path = (
+            Path(__file__).resolve().parents[1]
+            / "corpora"
+            / "ibc-2018"
+            / "ibc-2018-cross-reference-inventory.json"
+        )
+        records = json.loads(corpus_path.read_text(encoding="utf-8"))
+
+        graph = build_ibc2018_reference_graph(records)
+
+        self.assertEqual(len(graph["edges"]), 4615)
+        self.assertEqual(len(graph["diagnostics"]), 771)
+        self.assertIn(["1406.10", "1406.11"], graph["cycles"])
 
 
 if __name__ == "__main__":
