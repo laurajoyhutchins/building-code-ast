@@ -1,3 +1,5 @@
+import unittest
+
 from building_code_ast.document_model import DocumentNodeType, DocumentSourceArtifact
 from building_code_ast.document_validation import validate_document_ast
 from building_code_ast.ingest.aci318 import parse_aci318_page
@@ -29,62 +31,85 @@ def _flatten(node):
         yield from _flatten(child)
 
 
-def test_preserves_normative_and_commentary_as_distinct_source_roles():
-    page = _page(
-        _block(60, 270, 90, "1.1 Synthetic scope", 1),
-        _block(60, 270, 120, "1.1.1 Synthetic normative provision", 2),
-        _block(325, 565, 90, "R1.1 Synthetic explanation", 3),
-        _block(325, 565, 120, "R1.1.1 Synthetic commentary", 4),
-    )
+class Aci318DocumentAstTests(unittest.TestCase):
+    def test_preserves_normative_and_commentary_as_distinct_source_roles(self) -> None:
+        page = _page(
+            _block(60, 270, 90, "1.1 Synthetic scope", 1),
+            _block(60, 270, 120, "1.1.1 Synthetic normative provision", 2),
+            _block(325, 565, 90, "R1.1 Synthetic explanation", 3),
+            _block(325, 565, 120, "R1.1.1 Synthetic commentary", 4),
+        )
 
-    first = parse_aci318_page(page, source_artifact=ARTIFACT, printed_page=9)
-    second = parse_aci318_page(page, source_artifact=ARTIFACT, printed_page=9)
-    nodes = list(_flatten(first.root))
-    normative = next(node for node in nodes if node.locator == "aci-318-19:normative:1.1.1")
-    commentary = next(node for node in nodes if node.locator == "aci-318-19:commentary:R1.1.1")
+        first = parse_aci318_page(page, source_artifact=ARTIFACT, printed_page=9)
+        second = parse_aci318_page(page, source_artifact=ARTIFACT, printed_page=9)
+        nodes = list(_flatten(first.root))
+        normative = next(
+            node for node in nodes if node.locator == "aci-318-19:normative:1.1.1"
+        )
+        commentary = next(
+            node for node in nodes if node.locator == "aci-318-19:commentary:R1.1.1"
+        )
 
-    assert dict(normative.attributes)["source_role"] == "normative"
-    assert dict(commentary.attributes)["source_role"] == "commentary"
-    assert normative.node_id != commentary.node_id
-    assert dict(commentary.attributes)["corresponds_to"] == normative.locator
-    assert dict(normative.attributes)["pdf_page"] == "11"
-    assert dict(normative.attributes)["printed_page"] == "9"
-    assert dict(normative.attributes)["bbox"] == "60.000,120.000,270.000,140.000"
-    assert first.to_dict() == second.to_dict()
-    validate_document_ast(first)
+        self.assertEqual(dict(normative.attributes)["source_role"], "normative")
+        self.assertEqual(dict(commentary.attributes)["source_role"], "commentary")
+        self.assertNotEqual(normative.node_id, commentary.node_id)
+        self.assertEqual(dict(commentary.attributes)["corresponds_to"], normative.locator)
+        self.assertEqual(dict(normative.attributes)["pdf_page"], "11")
+        self.assertEqual(dict(normative.attributes)["printed_page"], "9")
+        self.assertEqual(
+            dict(normative.attributes)["bbox"],
+            "60.000,120.000,270.000,140.000",
+        )
+        self.assertEqual(first.to_dict(), second.to_dict())
+        validate_document_ast(first)
+
+    def test_table_keeps_source_role_without_reconstructing_cells(self) -> None:
+        page = _page(
+            _block(60, 275, 90, "5.3 Synthetic loads", 1),
+            _block(60, 285, 130, "Table 5.3.1—Synthetic matrix", 2),
+            _block(325, 565, 90, "R5.3 Synthetic explanation", 3),
+            _block(325, 565, 130, "Table R5.3.1—Synthetic commentary matrix", 4),
+        )
+
+        ast = parse_aci318_page(page, source_artifact=ARTIFACT, printed_page=51)
+        tables = [node for node in _flatten(ast.root) if node.node_type is DocumentNodeType.TABLE]
+
+        normative = next(
+            node for node in tables if node.locator == "aci-318-19:normative:table:5.3.1"
+        )
+        commentary = next(
+            node
+            for node in tables
+            if node.locator == "aci-318-19:commentary:table:R5.3.1"
+        )
+        self.assertEqual(dict(normative.attributes)["source_role"], "normative")
+        self.assertEqual(dict(commentary.attributes)["source_role"], "commentary")
+        self.assertEqual(normative.children, ())
+        self.assertEqual(commentary.children, ())
+        validate_document_ast(ast)
+
+    def test_midline_source_role_marker_is_not_promoted(self) -> None:
+        page = _page(
+            _block(60, 270, 130, "1.1 Synthetic scope", 1),
+            _block(165, 485, 105, "CODE COMMENTARY", 2),
+        )
+
+        ast = parse_aci318_page(page, source_artifact=ARTIFACT, printed_page=9)
+        unsupported = next(
+            node
+            for node in _flatten(ast.root)
+            if node.node_type is DocumentNodeType.UNSUPPORTED
+        )
+
+        self.assertEqual(dict(unsupported.attributes)["source_role"], "unresolved")
+        self.assertTrue(
+            any(
+                diagnostic.code == "aci318_ambiguous_source_role"
+                for diagnostic in ast.diagnostics
+            )
+        )
+        validate_document_ast(ast)
 
 
-def test_table_keeps_source_role_without_reconstructing_cells():
-    page = _page(
-        _block(60, 275, 90, "5.3 Synthetic loads", 1),
-        _block(60, 285, 130, "Table 5.3.1—Synthetic matrix", 2),
-        _block(325, 565, 90, "R5.3 Synthetic explanation", 3),
-        _block(325, 565, 130, "Table R5.3.1—Synthetic commentary matrix", 4),
-    )
-
-    ast = parse_aci318_page(page, source_artifact=ARTIFACT, printed_page=51)
-    tables = [node for node in _flatten(ast.root) if node.node_type is DocumentNodeType.TABLE]
-
-    normative = next(node for node in tables if node.locator == "aci-318-19:normative:table:5.3.1")
-    commentary = next(node for node in tables if node.locator == "aci-318-19:commentary:table:R5.3.1")
-    assert dict(normative.attributes)["source_role"] == "normative"
-    assert dict(commentary.attributes)["source_role"] == "commentary"
-    assert normative.children == ()
-    assert commentary.children == ()
-    validate_document_ast(ast)
-
-
-def test_midline_source_role_marker_is_not_promoted_to_normative_or_commentary():
-    page = _page(
-        _block(60, 270, 130, "1.1 Synthetic scope", 1),
-        _block(165, 485, 105, "CODE COMMENTARY", 2),
-    )
-
-    ast = parse_aci318_page(page, source_artifact=ARTIFACT, printed_page=9)
-    unsupported = next(
-        node for node in _flatten(ast.root) if node.node_type is DocumentNodeType.UNSUPPORTED
-    )
-
-    assert dict(unsupported.attributes)["source_role"] == "unresolved"
-    assert any(diagnostic.code == "aci318_ambiguous_source_role" for diagnostic in ast.diagnostics)
-    validate_document_ast(ast)
+if __name__ == "__main__":
+    unittest.main()
