@@ -1,6 +1,6 @@
 # Source structural metadata
 
-Status: implemented on this branch.
+Status: implemented and converged with the landed context-navigation sibling.
 
 ## Purpose
 
@@ -50,6 +50,10 @@ Fresh checks on that exact head:
 
 Behavioral coverage includes observed-versus-derived separation, font-relative heading candidates, table/figure/equation candidates, all-caps heading candidates without font data, rejection of arbitrary equation-like prose, identity stability, and fail-closed geometry/font/metadata conflicts.
 
+## Parallel convergence
+
+PR #92 (`feature/source-context-navigation`) and this branch were independent children of lexical search. After #92 landed, this branch was converged explicitly with current `main` rather than serializing structural metadata through context-navigation ancestry. The retrieval package export surface preserves both sibling capabilities.
+
 ## Excludes
 
 - provision semantics
@@ -61,6 +65,8 @@ Behavioral coverage includes observed-versus-derived separation, font-relative h
 
 ## Stack
 
-Predecessor: `feature/source-lexical-search` / PR #91.
+Real predecessor: merged PR #91, lexical source search.
+
+Parallel sibling already landed: PR #92, deterministic source context navigation.
 
 Successor: `feature/source-structural-search` / PR #96.
