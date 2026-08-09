@@ -27,7 +27,7 @@ Implemented boundary:
 
 Verification:
 - TDD RED head: `f16f8a584fb149844183c991131fbf8a1261ca64`, where the repository test check failed before the production module existed;
-- GREEN implementation head before this documentation update: `ca6bbdea0ff0b65a59f6d41455916115772986f4`, where repository test, verification, and archaeology checks passed;
+- GREEN implementation head: `ca6bbdea0ff0b65a59f6d41455916115772986f4`, where repository test, verification, and archaeology checks passed;
 - synthetic fixtures cover resolved, unresolved, ambiguous, duplicate, unknown-target, deterministic-order, source-text-boundary, and cyclic cases;
 - no private source replay is claimed by this implementation increment because it adds no new source recognition rule.
 
