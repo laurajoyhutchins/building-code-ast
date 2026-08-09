@@ -10,12 +10,20 @@ from .model import (
     SourceEvidence,
     source_evidence_id,
 )
+from .store import (
+    SOURCE_EVIDENCE_STORE_VERSION,
+    read_evidence_store,
+    rebuild_evidence_store,
+)
 
 __all__ = [
     "SOURCE_EVIDENCE_IDENTITY_VERSION",
+    "SOURCE_EVIDENCE_STORE_VERSION",
     "SourceArtifactIdentity",
     "SourceEvidence",
     "extract_layout_evidence",
+    "read_evidence_store",
+    "rebuild_evidence_store",
     "source_evidence_id",
     "verify_source_artifact",
 ]
