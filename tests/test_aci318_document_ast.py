@@ -34,6 +34,7 @@ def _flatten(node):
 class Aci318DocumentAstTests(unittest.TestCase):
     def test_preserves_normative_and_commentary_as_distinct_source_roles(self) -> None:
         page = _page(
+            _block(165, 485, 60, "CHAPTER 1—SYNTHETIC GENERAL", 0),
             _block(60, 270, 90, "1.1 Synthetic scope", 1),
             _block(60, 270, 120, "1.1.1 Synthetic normative provision", 2),
             _block(325, 565, 90, "R1.1 Synthetic explanation", 3),
@@ -43,6 +44,11 @@ class Aci318DocumentAstTests(unittest.TestCase):
         first = parse_aci318_page(page, source_artifact=ARTIFACT, printed_page=9)
         second = parse_aci318_page(page, source_artifact=ARTIFACT, printed_page=9)
         nodes = list(_flatten(first.root))
+        chapter = next(
+            node
+            for node in nodes
+            if node.locator == "aci-318-19:publication-structure:chapter:1"
+        )
         normative_section = next(
             node for node in nodes if node.locator == "aci-318-19:normative:1.1"
         )
@@ -56,6 +62,9 @@ class Aci318DocumentAstTests(unittest.TestCase):
             node for node in nodes if node.locator == "aci-318-19:commentary:R1.1.1"
         )
 
+        self.assertEqual(dict(chapter.attributes)["source_role"], "publication_structure")
+        self.assertIn(normative_section, chapter.children)
+        self.assertIn(commentary_section, chapter.children)
         self.assertIn(normative, normative_section.children)
         self.assertIn(commentary, commentary_section.children)
         self.assertEqual(dict(normative.attributes)["source_role"], "normative")
