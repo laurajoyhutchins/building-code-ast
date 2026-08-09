@@ -142,14 +142,26 @@ def document_ast_from_dict(value: Mapping[str, Any]) -> DocumentAst:
         raise ValueError("document AST type must be 'document_tree'")
 
     artifact_obj = _object(obj["source_artifact"], "source_artifact")
-    _exact_keys(
-        artifact_obj,
-        {"artifact_id", "edition_id"},
-        "source_artifact",
-    )
+    required_artifact_keys = {"artifact_id", "edition_id"}
+    actual_artifact_keys = set(artifact_obj)
+    missing = required_artifact_keys - actual_artifact_keys
+    extra = actual_artifact_keys - required_artifact_keys - {"publication_component_id"}
+    if missing:
+        raise ValueError(f"source_artifact is missing required fields: {sorted(missing)}")
+    if extra:
+        raise ValueError(f"source_artifact has unsupported fields: {sorted(extra)}")
+
     source_artifact = DocumentSourceArtifact(
         artifact_id=_string(artifact_obj["artifact_id"], "source_artifact.artifact_id"),
         edition_id=_string(artifact_obj["edition_id"], "source_artifact.edition_id"),
+        publication_component_id=(
+            _string(
+                artifact_obj["publication_component_id"],
+                "source_artifact.publication_component_id",
+            )
+            if "publication_component_id" in artifact_obj
+            else None
+        ),
     )
 
     diagnostics_value = obj["diagnostics"]

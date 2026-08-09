@@ -10,6 +10,7 @@ from typing import Iterable
 
 _BROKEN_WORD_RE = re.compile(r"(?<=[A-Za-z])[\u00ad\u2010-]\n(?=[a-z])")
 _WHITESPACE_RE = re.compile(r"\s+")
+_TABLE_ANNOUNCEMENT_RE = re.compile(r"^\s*Table\s+\d", re.IGNORECASE)
 
 
 @dataclass(frozen=True, slots=True)
@@ -17,21 +18,26 @@ class PdfBlock:
     """One text block extracted from one PDF page.
 
     Page numbers are one-based. Bounding boxes use PDF points in
-    ``(x0, y0, x1, y1)`` order.
+    ``(x0, y0, x1, y1)`` order. ``table_region_id`` is page-local geometric
+    evidence only; it does not assign table semantics to the block.
     """
 
     page_number: int
     bbox: tuple[float, float, float, float]
     text: str
     block_number: int = 0
+    table_region_id: int | None = None
 
     def to_dict(self) -> dict[str, object]:
-        return {
+        payload: dict[str, object] = {
             "page_number": self.page_number,
             "bbox": [round(value, 3) for value in self.bbox],
             "text": self.text,
             "block_number": self.block_number,
         }
+        if self.table_region_id is not None:
+            payload["table_region_id"] = self.table_region_id
+        return payload
 
 
 @dataclass(frozen=True, slots=True)
@@ -105,11 +111,47 @@ def order_content_blocks(
     return tuple(sorted(retained, key=sort_key))
 
 
+def _table_region_bboxes(page: object, block_texts: Iterable[str]) -> tuple[tuple[float, float, float, float], ...]:
+    """Return page-local geometric table candidates when a table is announced.
+
+    Detection is intentionally gated by visible table-announcement text so the
+    legacy layout adapter does not run a table finder on every page or promote
+    unannounced geometric coincidences into structural evidence.
+    """
+
+    if not any(_TABLE_ANNOUNCEMENT_RE.match(normalize_block_text(text)) for text in block_texts):
+        return ()
+    finder = getattr(page, "find_tables", None)
+    if finder is None:
+        return ()
+    found = finder()
+    tables = getattr(found, "tables", ())
+    return tuple(
+        tuple(float(value) for value in table.bbox)
+        for table in tables
+    )
+
+
+def _table_region_id(
+    bbox: tuple[float, float, float, float],
+    regions: tuple[tuple[float, float, float, float], ...],
+) -> int | None:
+    """Return the one-based candidate region containing a block center."""
+
+    center_x = (bbox[0] + bbox[2]) / 2.0
+    center_y = (bbox[1] + bbox[3]) / 2.0
+    for index, (x0, y0, x1, y1) in enumerate(regions, start=1):
+        if x0 <= center_x <= x1 and y0 <= center_y <= y1:
+            return index
+    return None
+
+
 def extract_pdf_layout(path: Path | str) -> PdfLayoutDocument:
-    """Extract PDF pages, text blocks, and outline through PyMuPDF.
+    """Extract PDF pages, text blocks, outline, and bounded table geometry.
 
     PyMuPDF is intentionally optional so importing the core package retains an
-    empty dependency set.
+    empty dependency set. Table-region IDs are geometric candidates only and
+    do not imply header roles, cell semantics, or rule interpretation.
     """
 
     try:
@@ -133,19 +175,26 @@ def extract_pdf_layout(path: Path | str) -> PdfLayoutDocument:
         pages: list[PdfPage] = []
         for page_index in range(document.page_count):
             page = document[page_index]
+            raw_blocks = tuple(page.get_text("blocks", sort=False))
+            table_regions = _table_region_bboxes(
+                page,
+                (str(block[4]) for block in raw_blocks if len(block) > 4),
+            )
             blocks: list[PdfBlock] = []
-            for block in page.get_text("blocks", sort=False):
+            for block in raw_blocks:
                 x0, y0, x1, y1, text = block[:5]
                 block_number = int(block[5]) if len(block) > 5 else len(blocks)
                 block_type = int(block[6]) if len(block) > 6 else 0
                 if block_type != 0:
                     continue
+                bbox = (float(x0), float(y0), float(x1), float(y1))
                 blocks.append(
                     PdfBlock(
                         page_number=page_index + 1,
-                        bbox=(float(x0), float(y0), float(x1), float(y1)),
+                        bbox=bbox,
                         text=str(text),
                         block_number=block_number,
+                        table_region_id=_table_region_id(bbox, table_regions),
                     )
                 )
             pages.append(
