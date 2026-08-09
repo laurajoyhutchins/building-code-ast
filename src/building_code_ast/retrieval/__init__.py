@@ -22,6 +22,7 @@ from .store import (
     read_evidence_store,
     rebuild_evidence_store,
 )
+from .structural import annotate_structural_metadata
 
 __all__ = [
     "SOURCE_EVIDENCE_IDENTITY_VERSION",
@@ -31,6 +32,7 @@ __all__ = [
     "LexicalSearchResult",
     "SourceArtifactIdentity",
     "SourceEvidence",
+    "annotate_structural_metadata",
     "expand_evidence_context",
     "extract_layout_evidence",
     "get_evidence_by_id",
