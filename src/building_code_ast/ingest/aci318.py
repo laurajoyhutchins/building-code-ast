@@ -123,6 +123,74 @@ def _preferred_locator_blocks(
     return preferred
 
 
+def _native_locator(node: DocumentNode) -> str | None:
+    if node.node_type not in {
+        DocumentNodeType.SECTION,
+        DocumentNodeType.SUBSECTION,
+        DocumentNodeType.TABLE,
+    }:
+        return None
+    return node.locator.rsplit(":", 1)[-1]
+
+
+def _nest_publication_hierarchy(
+    nodes: list[DocumentNode],
+    *,
+    source_artifact: DocumentSourceArtifact,
+    source_text: str,
+) -> list[DocumentNode]:
+    """Nest numbered ACI structures under the nearest present numbered parent."""
+
+    structural: dict[tuple[str, str], DocumentNode] = {}
+    for node in nodes:
+        if node.node_type not in {DocumentNodeType.SECTION, DocumentNodeType.SUBSECTION}:
+            continue
+        role = dict(node.attributes).get("source_role")
+        native = _native_locator(node)
+        if role and native:
+            structural[(role, native)] = node
+
+    parent_of: dict[str, str] = {}
+    children_of: dict[str, list[DocumentNode]] = {}
+    for node in nodes:
+        role = dict(node.attributes).get("source_role")
+        native = _native_locator(node)
+        if role not in {"normative", "commentary"} or native is None:
+            continue
+        stem = native.removeprefix("R")
+        parts = stem.split(".")
+        prefix_marker = "R" if native.startswith("R") else ""
+        for size in range(len(parts) - 1, 1, -1):
+            candidate = prefix_marker + ".".join(parts[:size])
+            parent = structural.get((role, candidate))
+            if parent is not None and parent.locator != node.locator:
+                parent_of[node.node_id] = parent.node_id
+                children_of.setdefault(parent.node_id, []).append(node)
+                break
+
+    node_by_id = {node.node_id: node for node in nodes}
+
+    def rebuild(node: DocumentNode) -> DocumentNode:
+        direct = sorted(children_of.get(node.node_id, ()), key=lambda child: child.span.start)
+        children = [rebuild(child) for child in direct]
+        if not children:
+            return node
+        start = min([node.span.start, *(child.span.start for child in children)])
+        end = max([node.span.end, *(child.span.end for child in children)])
+        return make_document_node(
+            source_artifact=source_artifact,
+            node_type=node.node_type,
+            locator=node.locator,
+            span=SourceSpan(start=start, end=end, text=source_text[start:end]),
+            label=node.label,
+            attributes=dict(node.attributes),
+            children=children,
+        )
+
+    roots = [node for node in nodes if node.node_id not in parent_of]
+    return [rebuild(node_by_id[node.node_id]) for node in roots]
+
+
 def parse_aci318_page(
     page: PdfPage,
     *,
@@ -227,6 +295,11 @@ def parse_aci318_page(
             )
         )
 
+    nested_nodes = _nest_publication_hierarchy(
+        nodes,
+        source_artifact=source_artifact,
+        source_text=source_text,
+    )
     root_span = SourceSpan(start=0, end=len(source_text), text=source_text)
     root = make_document_node(
         source_artifact=source_artifact,
@@ -238,7 +311,7 @@ def parse_aci318_page(
             "printed_page": str(printed_page),
             "source_scope": "page_slice",
         },
-        children=nodes,
+        children=nested_nodes,
     )
     return DocumentAst(
         source_text=source_text,
