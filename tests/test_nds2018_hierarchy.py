@@ -40,8 +40,9 @@ def _pages(*, reverse_blocks: bool = False) -> tuple[PdfPage, ...]:
                 4,
             ),
             _block(14, 260.0, "1.2 Materials", 5),
-            _block(14, 295.0, "(a) First synthetic item", 6),
-            _block(14, 330.0, "\ue000 + x = y", 7),
+            _block(14, 285.0, "1.2.1 Resistance Factor, \ue001", 6),
+            _block(14, 310.0, "(a) First synthetic item", 7),
+            _block(14, 340.0, "\ue000 + x = y", 8),
         ],
         135: [
             _block(135, 120.0, "A B C D A B C D", 1, x0=150.0, x1=462.0),
@@ -117,6 +118,13 @@ class Nds2018HierarchyTests(unittest.TestCase):
         self.assertEqual(by_locator["section:1.1.1"].node_type, DocumentNodeType.SUBSECTION)
         self.assertEqual(by_locator["definition:1.1.1.1"].node_type, DocumentNodeType.DEFINITION_ENTRY)
         self.assertEqual(by_locator["definition:1.1.1.2"].node_type, DocumentNodeType.DEFINITION_ENTRY)
+        self.assertEqual(by_locator["section:1.2.1"].node_type, DocumentNodeType.SUBSECTION)
+        self.assertTrue(
+            any(
+                child.node_type is DocumentNodeType.UNSUPPORTED and "\ue001" in child.span.text
+                for child in by_locator["section:1.2.1"].children
+            )
+        )
 
         list_items = [node for node in nodes if node.node_type is DocumentNodeType.LIST_ITEM]
         self.assertEqual(len(list_items), 1)
