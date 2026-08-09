@@ -104,6 +104,25 @@ def _attributes(item: _PreparedBlock, printed_page: int) -> dict[str, str]:
     }
 
 
+def _preferred_locator_blocks(
+    prepared: tuple[_PreparedBlock, ...],
+) -> dict[tuple[str, str], _PreparedBlock]:
+    """Choose the richest block for duplicate ordinary locator fragments."""
+
+    preferred: dict[tuple[str, str], _PreparedBlock] = {}
+    for item in prepared:
+        if item.role == "unresolved" or _TABLE_RE.match(item.text):
+            continue
+        match = _LOCATOR_RE.match(item.text)
+        if not match:
+            continue
+        key = (item.role, match.group("locator"))
+        current = preferred.get(key)
+        if current is None or len(item.text) > len(current.text):
+            preferred[key] = item
+    return preferred
+
+
 def parse_aci318_page(
     page: PdfPage,
     *,
@@ -121,13 +140,12 @@ def parse_aci318_page(
     if not source_text:
         raise ValueError("ACI 318-19 page has no extractable text blocks")
 
-    normative_locators: set[str] = set()
-    for item in prepared:
-        if item.role != "normative":
-            continue
-        match = _LOCATOR_RE.match(item.text)
-        if match and not match.group("locator").startswith("R"):
-            normative_locators.add(match.group("locator"))
+    preferred = _preferred_locator_blocks(prepared)
+    normative_locators = {
+        native
+        for (role, native), item in preferred.items()
+        if role == "normative" and not native.startswith("R") and item.text
+    }
 
     nodes: list[DocumentNode] = []
     diagnostics: list[Diagnostic] = []
@@ -181,6 +199,17 @@ def parse_aci318_page(
             continue
 
         native = match.group("locator")
+        if preferred[(item.role, native)] is not item:
+            diagnostics.append(
+                Diagnostic(
+                    code="aci318_duplicate_locator_fragment",
+                    severity=DiagnosticSeverity.WARNING,
+                    message="Duplicate locator-only extraction fragment was not promoted to structure",
+                    span=span,
+                )
+            )
+            continue
+
         locator = f"aci-318-19:{item.role}:{native}"
         if item.role == "commentary" and native.startswith("R"):
             stem = native[1:]
