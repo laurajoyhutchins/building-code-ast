@@ -87,7 +87,7 @@ class NFPA13ReferenceGraphTests(unittest.TestCase):
         self.assertEqual("A.4.1", explains[0]["source_locator"])
         self.assertFalse(any(node["locator"] == "A.5.2" for node in graph["nodes"]))
 
-    def test_cycles_are_representable(self) -> None:
+    def test_cycles_are_representable_with_shared_internal_nodes(self) -> None:
         cycle = [
             {
                 "type": "references_clause",
@@ -109,7 +109,11 @@ class NFPA13ReferenceGraphTests(unittest.TestCase):
             },
         ]
         graph = self.project(cycle)
+        self.assertEqual(2, len(graph["nodes"]))
         self.assertEqual(2, len(graph["edges"]))
+        by_source = {edge["source_locator"]: edge for edge in graph["edges"]}
+        self.assertEqual(by_source["4.1"]["target_node_id"], by_source["5.2"]["source_node_id"])
+        self.assertEqual(by_source["5.2"]["target_node_id"], by_source["4.1"]["source_node_id"])
         self.assertEqual([], graph["diagnostics"])
 
     def test_invalid_domain_state_combinations_fail_closed(self) -> None:
