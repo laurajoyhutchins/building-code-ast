@@ -4,6 +4,7 @@ import json
 import unittest
 from pathlib import Path
 
+from building_code_ast import DocumentSourceArtifact
 from building_code_ast.evidence import source_register_from_dict
 from building_code_ast.json_schema_validation import validate_instances
 
@@ -37,6 +38,12 @@ class Nds2018SourceRegisterTests(unittest.TestCase):
         self.assertIsNone(entry.source_url)
         self.assertIsNone(entry.jurisdiction)
         self.assertIsNotNone(entry.rights_note)
+
+        document_source = DocumentSourceArtifact(
+            artifact_id=entry.ast_source.artifact_id,
+            edition_id=entry.ast_source.edition_id,
+        )
+        self.assertEqual(document_source.to_dict(), entry.ast_source.to_dict())
 
         publication = entry.publication.to_dict()
         self.assertEqual(publication["state_id"], PUBLICATION_STATE_ID)
