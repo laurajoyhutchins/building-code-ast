@@ -12,13 +12,12 @@
       "issuing_body": "American Society of Civil Engineers",
       "evidence_role": "normative_text",
       "publication": {
-        "state_id": "publication:f83874da470a117b932998d3167b5b65099a60a2253452a43b55ca975ae840bf",
+        "state_id": "publication:2e70e34ecbea96f39455a759f3e5b8d853ce02f9cc50e4c99c2c29c94aabcc03",
         "publication_family": "Minimum Design Loads and Associated Criteria for Buildings and Other Structures",
         "edition": "2022",
         "printing": null,
         "digital_revision": null,
-        "addenda_set": "unresolved:retained-artifact-does-not-identify-incorporated-addenda-set",
-        "correction_set": "unresolved:retained-artifact-does-not-identify-incorporated-correction-set",
+        "correction_set": "unresolved:retained-artifact-correction-and-addenda-state",
         "published_on": null,
         "effective_on": null
       },
