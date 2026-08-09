@@ -1,0 +1,21 @@
+schema_version: 1
+id: bootstrap-aci-318-19-source-profile
+title: Bootstrap ACI 318-19 source-profile knowledge
+description: Capture the exact retained-artifact identity, source-backed normative-code versus commentary boundary, parser hazards, and explicitly unresolved correction and correspondence questions from the ACI 318-19 source profile.
+paths:
+- docs/codebooks/aci-318-19/README.md
+- docs/codebooks/aci-318-19/source-profile.md
+components:
+- component.document-structure
+- component.validation
+tags:
+- codebook
+- aci-318-19
+- source-profile
+- provenance
+- verification
+audiences:
+- maintainers
+- contributors
+- integrators
+history: false

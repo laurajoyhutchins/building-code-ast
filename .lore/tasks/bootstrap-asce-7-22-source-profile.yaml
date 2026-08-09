@@ -1,0 +1,21 @@
+schema_version: 1
+id: bootstrap-asce-7-22-source-profile
+title: Bootstrap ASCE 7-22 source-profile knowledge
+description: Capture exact retained-artifact identity, source-backed pagination and publication-grammar observations, unresolved publication-state facts, and the document-AST entry criteria from the ASCE 7-22 source profile. Preserve equations, tables, figures, maps, commentary, graphical material, and page-label ambiguity as explicit structure or diagnostics rather than flattening them into prose.
+paths:
+- docs/codebooks/asce-7-22/README.md
+- docs/codebooks/asce-7-22/source-profile.md
+components:
+- component.document-structure
+- component.validation
+tags:
+- codebook
+- asce-7-22
+- source-profile
+- provenance
+- verification
+audiences:
+- maintainers
+- contributors
+- integrators
+history: false
