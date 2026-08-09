@@ -36,7 +36,7 @@ _APPENDIX_RE = re.compile(
     re.IGNORECASE,
 )
 _AMBIGUOUS_APPENDIX_RE = re.compile(
-    r"^Appendix\s+\((?:Non-mandatory|Mandatory)\)\b",
+    r"^Appendix\s+\((?:Non-mandatory|Mandatory)\)",
     re.IGNORECASE,
 )
 _NUMERIC_TOKEN_RE = re.compile(r"(?<![\w.])(?P<locator>\d{1,2}(?:\.\d+){1,3})(?![\d.])")
@@ -447,7 +447,6 @@ def parse_nds2018_hierarchy(evidence: NdsLayoutEvidence) -> DocumentAst:
             active_definition = None
             ambiguous_appendix = False
             in_references = True
-            segment = _Segment(observation, observation.start, observation.end, text)
             heading = _Draft(
                 DocumentNodeType.HEADING,
                 _coordinate_locator("references", observation, text),
