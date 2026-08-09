@@ -21,6 +21,7 @@ DOCUMENT_AST_VERSION = "0.1.0"
 class DocumentNodeType(StrEnum):
     DOCUMENT = "document"
     CHAPTER = "chapter"
+    APPENDIX = "appendix"
     SECTION = "section"
     SUBSECTION = "subsection"
     PARAGRAPH = "paragraph"
