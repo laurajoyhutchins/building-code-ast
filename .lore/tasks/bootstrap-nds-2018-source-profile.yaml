@@ -1,0 +1,21 @@
+schema_version: 1
+id: bootstrap-nds-2018-source-profile
+title: Bootstrap NDS 2018 source-profile knowledge
+description: Capture verified retained-file facts, unresolved exact-byte characterization gates, and the document-AST entry criteria from the NDS 2018 source profile. Preserve unresolved source identity, rights, structure, and OCR questions as uncertainty rather than inferred support.
+paths:
+- docs/codebooks/nds-2018/README.md
+- docs/codebooks/nds-2018/source-profile.md
+components:
+- component.document-structure
+- component.validation
+tags:
+- codebook
+- nds-2018
+- source-profile
+- provenance
+- verification
+audiences:
+- maintainers
+- contributors
+- integrators
+history: false
