@@ -44,7 +44,7 @@ class Ibc2018DefinitionGraphTests(unittest.TestCase):
         self.assertEqual(node["scope"], "code_wide_unless_context_limits")
         self.assertEqual(node["definition_text_sha256"], "a" * 64)
         self.assertEqual(node["source_anchor"], record["source_anchor"])
-        self.assertNotIn("definition_text", json.dumps(graph, sort_keys=True))
+        self.assertNotIn("definition_text", node)
 
     def test_definition_uses_preserve_resolved_unresolved_and_ambiguous_states(self) -> None:
         first = _definition("a", "Height")
