@@ -2,12 +2,13 @@ from __future__ import annotations
 
 import unittest
 
-from building_code_ast.source_evidence import SourceArtifactIdentity, SourceEvidence
+from building_code_ast.retrieval import SourceArtifactIdentity, SourceEvidence
 
 
 class SourceRetrievalEvidenceContractTests(unittest.TestCase):
     def setUp(self) -> None:
         self.artifact = SourceArtifactIdentity(
+            source_id="synthetic:standard:2026",
             publication_key="synthetic-2026",
             sha256="a" * 64,
             size=12345,
@@ -37,6 +38,7 @@ class SourceRetrievalEvidenceContractTests(unittest.TestCase):
 
     def test_different_artifact_identity_changes_evidence_identity(self) -> None:
         other_artifact = SourceArtifactIdentity(
+            source_id="synthetic:standard:2026:other-copy",
             publication_key="synthetic-2026",
             sha256="b" * 64,
             size=12345,
@@ -55,7 +57,7 @@ class SourceRetrievalEvidenceContractTests(unittest.TestCase):
 
         self.assertNotEqual(first.evidence_id, second.evidence_id)
 
-    def test_serialization_keeps_observed_and_derived_metadata_separate(self) -> None:
+    def test_serialization_keeps_registration_and_metadata_boundaries_explicit(self) -> None:
         evidence = SourceEvidence.create(
             artifact=self.artifact,
             pdf_page=3,
@@ -70,6 +72,7 @@ class SourceRetrievalEvidenceContractTests(unittest.TestCase):
 
         payload = evidence.to_dict()
 
+        self.assertEqual(payload["source_id"], "synthetic:standard:2026")
         self.assertEqual(payload["publication_key"], "synthetic-2026")
         self.assertEqual(payload["source_sha256"], "a" * 64)
         self.assertEqual(payload["pdf_page"], 3)
@@ -82,6 +85,7 @@ class SourceRetrievalEvidenceContractTests(unittest.TestCase):
     def test_invalid_artifact_and_coordinates_fail_closed(self) -> None:
         with self.assertRaises(ValueError):
             SourceArtifactIdentity(
+                source_id="synthetic:standard:2026",
                 publication_key="synthetic-2026",
                 sha256="not-a-digest",
                 size=12345,
