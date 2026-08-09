@@ -117,16 +117,16 @@ def _validate_relation(raw: Mapping[str, Any], index: int) -> dict[str, Any]:
     }
 
 
-def _source_node(locator: str) -> dict[str, Any]:
+def _internal_node(locator: str) -> dict[str, Any]:
     identity = {
-        "role": "source",
         "artifact_id": ARTIFACT_ID,
         "edition_id": EDITION_ID,
         "locator": locator,
+        "target_domain": "internal",
     }
     return {
         "id": _stable_id("nfpa13-node", identity),
-        "kind": "source_locator",
+        "kind": "internal_locator",
         "artifact_id": ARTIFACT_ID,
         "edition_id": EDITION_ID,
         "locator": locator,
@@ -139,19 +139,15 @@ def _target_node(relation: Mapping[str, Any]) -> dict[str, Any]:
     artifact_id = relation["target_artifact_id"]
     locator = str(relation["target_locator"])
     if domain == "internal":
-        kind = "internal_locator"
-        edition_id: str | None = EDITION_ID
-    elif domain == "external_standard":
+        return _internal_node(locator)
+    if domain == "external_standard":
         kind = "external_standard"
-        edition_id = None
     else:
         kind = "unresolved_target"
-        edition_id = None
 
     identity = {
-        "role": "target",
         "artifact_id": artifact_id,
-        "edition_id": edition_id,
+        "edition_id": None,
         "locator": locator,
         "target_domain": domain,
     }
@@ -159,7 +155,7 @@ def _target_node(relation: Mapping[str, Any]) -> dict[str, Any]:
         "id": _stable_id("nfpa13-node", identity),
         "kind": kind,
         "artifact_id": artifact_id,
-        "edition_id": edition_id,
+        "edition_id": None,
         "locator": locator,
         "target_domain": domain,
     }
@@ -178,7 +174,7 @@ def project_nfpa13_relations(relations: Iterable[Mapping[str, Any]]) -> dict[str
     edges_by_id: dict[str, dict[str, Any]] = {}
 
     for relation in validated:
-        source = _source_node(str(relation["source_locator"]))
+        source = _internal_node(str(relation["source_locator"]))
         target = _target_node(relation)
         nodes_by_id[source["id"]] = source
         nodes_by_id[target["id"]] = target
