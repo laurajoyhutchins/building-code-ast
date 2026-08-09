@@ -109,6 +109,9 @@ def _is_upper_title(text: str, block: PdfBlock, page: NdsLayoutPage) -> bool:
         return False
     if text.casefold().startswith("appendix") or _REFERENCES_RE.match(text):
         return False
+    words = re.findall(r"[A-Za-z]+", text)
+    if not words or max(len(word) for word in words) < 4:
+        return False
     letters = [character for character in text if character.isalpha()]
     if len(letters) < 5:
         return False
@@ -344,6 +347,23 @@ def parse_nds2018_hierarchy(evidence: NdsLayoutEvidence) -> DocumentAst:
         extend_context(segment.end)
         return node
 
+    def defer_nonprose(segment: _Segment, *, parent: _Draft | None = None) -> _Draft:
+        node = add_leaf(
+            DocumentNodeType.UNSUPPORTED,
+            segment,
+            parent=parent,
+            locator_kind="unsupported-nonprose",
+        )
+        diagnostics.append(
+            Diagnostic(
+                code="nds-nonprose-structure-deferred",
+                severity=DiagnosticSeverity.WARNING,
+                message="Extracted private-use glyphs indicate non-prose structure whose faithful representation is deferred.",
+                span=SourceSpan(start=node.start, end=node.end, text=source_text[node.start : node.end]),
+            )
+        )
+        return node
+
     opener_by_block: dict[tuple[int, int], tuple[str, str]] = {}
     opener_pages: set[int] = set()
     for page_number, (chapter, block, title) in openers.items():
@@ -480,19 +500,6 @@ def parse_nds2018_hierarchy(evidence: NdsLayoutEvidence) -> DocumentAst:
             )
             continue
 
-        if _PRIVATE_USE_RE.search(text):
-            segment = _Segment(observation, observation.start, observation.end, text)
-            node = add_leaf(DocumentNodeType.UNSUPPORTED, segment, locator_kind="unsupported-nonprose")
-            diagnostics.append(
-                Diagnostic(
-                    code="nds-nonprose-structure-deferred",
-                    severity=DiagnosticSeverity.WARNING,
-                    message="Extracted private-use glyphs indicate non-prose structure whose faithful representation is deferred.",
-                    span=SourceSpan(start=node.start, end=node.end, text=source_text[node.start : node.end]),
-                )
-            )
-            continue
-
         segments = _segments_for_block(
             observation,
             chapter=current_chapter_number,
@@ -500,7 +507,9 @@ def parse_nds2018_hierarchy(evidence: NdsLayoutEvidence) -> DocumentAst:
         )
         for segment in segments:
             if segment.locator is None:
-                if _LIST_RE.match(segment.text):
+                if _PRIVATE_USE_RE.search(segment.text):
+                    defer_nonprose(segment)
+                elif _LIST_RE.match(segment.text):
                     add_leaf(DocumentNodeType.LIST_ITEM, segment)
                 else:
                     add_leaf(DocumentNodeType.PARAGRAPH, segment)
@@ -513,6 +522,14 @@ def parse_nds2018_hierarchy(evidence: NdsLayoutEvidence) -> DocumentAst:
             active_definition = None
             parent = section_stack[-1] if section_stack else (current_appendix or current_chapter or root)
             body = segment.text[len(locator) :].lstrip()
+            body_local_start = segment.text.find(body) if body else len(segment.text)
+            body_start = segment.start + body_local_start
+            body_segment = _Segment(
+                segment.observation,
+                body_start,
+                segment.end,
+                source_text[body_start : segment.end],
+            )
 
             definition_owner = (
                 parent.node_type in {DocumentNodeType.SECTION, DocumentNodeType.SUBSECTION}
@@ -531,10 +548,13 @@ def parse_nds2018_hierarchy(evidence: NdsLayoutEvidence) -> DocumentAst:
                 parent.children.append(definition)
                 active_definition = definition
                 extend_context(segment.end)
+                if body and _PRIVATE_USE_RE.search(body):
+                    defer_nonprose(body_segment, parent=definition)
                 continue
 
+            has_unsafe_glyphs = _PRIVATE_USE_RE.search(body) is not None
             node_type = DocumentNodeType.SECTION if depth == 1 else DocumentNodeType.SUBSECTION
-            label = body if _looks_like_heading(body) else None
+            label = body if body and not has_unsafe_glyphs and _looks_like_heading(body) else None
             section = _Draft(
                 node_type,
                 f"section:{locator}",
@@ -548,15 +568,9 @@ def parse_nds2018_hierarchy(evidence: NdsLayoutEvidence) -> DocumentAst:
             section_stack.append(section)
             extend_context(segment.end)
 
-            if body and label is None:
-                body_local_start = segment.text.find(body)
-                body_start = segment.start + body_local_start
-                body_segment = _Segment(
-                    segment.observation,
-                    body_start,
-                    segment.end,
-                    source_text[body_start : segment.end],
-                )
+            if body and has_unsafe_glyphs:
+                defer_nonprose(body_segment, parent=section)
+            elif body and label is None:
                 add_leaf(
                     DocumentNodeType.PARAGRAPH,
                     body_segment,
