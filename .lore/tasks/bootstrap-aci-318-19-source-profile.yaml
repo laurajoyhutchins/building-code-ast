@@ -1,0 +1,21 @@
+schema_version: 1
+id: bootstrap-aci-318-19-source-profile
+title: Bootstrap ACI 318-19 source-profile knowledge
+description: Capture verified retained-file facts, unresolved exact-byte characterization gates, and the requirement to preserve normative-code versus commentary or explanatory boundaries from the ACI 318-19 source profile.
+paths:
+- docs/codebooks/aci-318-19/README.md
+- docs/codebooks/aci-318-19/source-profile.md
+components:
+- component.document-structure
+- component.validation
+tags:
+- codebook
+- aci-318-19
+- source-profile
+- provenance
+- verification
+audiences:
+- maintainers
+- contributors
+- integrators
+history: false
