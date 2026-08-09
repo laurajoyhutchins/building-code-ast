@@ -43,6 +43,10 @@ def _pages(*, reverse_blocks: bool = False) -> tuple[PdfPage, ...]:
             _block(14, 295.0, "(a) First synthetic item", 6),
             _block(14, 330.0, "\ue000 + x = y", 7),
         ],
+        135: [
+            _block(135, 120.0, "A B C D A B C D", 1, x0=150.0, x1=462.0),
+            _block(135, 220.0, "11.1 Synthetic reference 2   11.2 Another reference 3", 2),
+        ],
         170: [
             _block(170, 100.0, "Appendix A (Non-mandatory) SYNTHETIC PRACTICES", 1),
             _block(170, 145.0, "A.1 Purpose", 2),
@@ -107,6 +111,7 @@ class Nds2018HierarchyTests(unittest.TestCase):
         self.assertEqual(chapter.node_type, DocumentNodeType.CHAPTER)
         self.assertEqual(chapter.label, "SYNTHETIC DESIGN REQUIREMENTS")
         self.assertEqual(dict(chapter.attributes)["source_role"], "mandatory")
+        self.assertNotIn("chapter:11", by_locator)
 
         self.assertEqual(by_locator["section:1.1"].node_type, DocumentNodeType.SECTION)
         self.assertEqual(by_locator["section:1.1.1"].node_type, DocumentNodeType.SUBSECTION)
