@@ -108,11 +108,14 @@ class Nec11026TableEvidenceTests(unittest.TestCase):
 
         self.assertEqual(len(unsupported), 3)
         self.assertTrue(
-            all(node.attributes["structure_hint"] == "table_like_layout" for node in unsupported)
+            all(
+                dict(node.attributes)["structure_hint"] == "table_like_layout"
+                for node in unsupported
+            )
         )
         self.assertTrue(
             all(
-                node.attributes["table_evidence"] == "announced_geometric_region"
+                dict(node.attributes)["table_evidence"] == "announced_geometric_region"
                 for node in unsupported
             )
         )
