@@ -21,3 +21,19 @@ Descendant pull requests may own NEC-specific source characterization, hierarchy
 This is an organizational root only. It does not claim new parser coverage, corpus completeness, semantic correctness, publication safety, or legal interpretation.
 
 While this root PR is open, new NEC-specific work should branch from `root/nec-2017`. After it lands, descendants may be rebased or retargeted onto the merged root.
+
+## Knowledge bootstrap
+
+LORE bootstrap starts from `.lore/tasks/bootstrap-nec-2017-publication.yaml`. Accepted LORE records remain deferred until durable merge evidence exists.
+
+Deciduous handoff metadata:
+
+- semantic ID: `action.establish-nec2017-publication-root`
+- node type: `action`
+- arc: `nec-ingestion`
+- lifecycle while branch-only: `proposed`
+- current architecture: `false`
+- evidence path: `docs/codebooks/nec-2017/README.md`
+- causal context: `decision.family-grammar-boundary`
+
+This is handoff metadata, not a canonical Deciduous patch. Materialize it into `.deciduous/patches/` and regenerate the shared archaeology projections only after integration evidence is available.
