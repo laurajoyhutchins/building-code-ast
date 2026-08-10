@@ -14,6 +14,9 @@ from .retrieval import (
     SOURCE_EVIDENCE_STORE_VERSION,
     LexicalSearchMode,
     SourceArtifactIdentity,
+    StructuralCandidate,
+    StructuralSearchFilters,
+    build_grounding_packet,
     expand_evidence_context,
     extract_layout_evidence,
     get_page_evidence,
@@ -121,6 +124,31 @@ def build_parser() -> argparse.ArgumentParser:
     )
     search_command.add_argument("--limit", type=int, default=20)
 
+    rag_command = source_subcommands.add_parser(
+        "rag",
+        help="build a local grounding packet for caller-controlled generation",
+    )
+    rag_command.add_argument("query", help="literal, phrase, or token grounding query")
+    _add_store_and_artifact_arguments(rag_command)
+    rag_command.add_argument(
+        "--mode",
+        choices=[mode.value for mode in LexicalSearchMode],
+        default=LexicalSearchMode.TOKEN.value,
+    )
+    rag_command.add_argument("--limit", type=int, default=5)
+    rag_command.add_argument("--before", type=int, default=1)
+    rag_command.add_argument("--after", type=int, default=1)
+    rag_command.add_argument(
+        "--cross-page",
+        action="store_true",
+        help="allow neighboring grounding context to cross physical PDF pages",
+    )
+    rag_command.add_argument(
+        "--candidate",
+        choices=[candidate.value for candidate in StructuralCandidate],
+        help="optionally require one publication-neutral structural candidate",
+    )
+
     show_command = source_subcommands.add_parser("show", help="show one evidence record with context")
     show_command.add_argument("evidence_id", help="durable retrieval evidence ID")
     _add_store_and_artifact_arguments(show_command)
@@ -184,6 +212,34 @@ def _run_source(args: argparse.Namespace) -> int:
                 "query": args.query,
                 "mode": args.mode,
                 "results": [result.to_dict() for result in results],
+            },
+            compact=args.compact,
+        )
+        return 0
+
+    if args.source_command == "rag":
+        filters = (
+            StructuralSearchFilters(candidate=args.candidate)
+            if args.candidate is not None
+            else None
+        )
+        packet = build_grounding_packet(
+            args.store,
+            artifact=artifact,
+            query=args.query,
+            mode=args.mode,
+            filters=filters,
+            limit=args.limit,
+            before=args.before,
+            after=args.after,
+            page_local=not args.cross_page,
+        )
+        _emit_json(
+            {
+                "command": "source.rag",
+                "artifact": artifact.to_dict(),
+                "packet": packet.to_dict(),
+                "generation": "not_invoked",
             },
             compact=args.compact,
         )
