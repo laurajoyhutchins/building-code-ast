@@ -2,7 +2,7 @@ from __future__ import annotations
 
 import unittest
 
-from building_code_ast.ingest.pdf_layout import project_bbox_to_writing_frame
+from building_code_ast.ingest.writing_frame import project_bbox_to_writing_frame
 
 
 class PdfWritingFrameGeometryTests(unittest.TestCase):
