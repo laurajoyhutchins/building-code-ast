@@ -170,6 +170,18 @@ def _appendix_locator_depth(locator: str) -> int:
     return locator[1:].count(".")
 
 
+def _appendix_section_match(text: str) -> re.Match[str] | None:
+    match = _APPENDIX_SECTION_RE.match(text)
+    if match is None:
+        return None
+    locator = match.group("locator").upper()
+    if _appendix_locator_depth(locator) == 0:
+        letters = [character for character in match.group("title") if character.isalpha()]
+        if not letters or not all(character.isupper() for character in letters):
+            return None
+    return match
+
+
 def _numbered_nonprose(
     observation: Ashrae621Observation,
     text: str,
@@ -354,7 +366,7 @@ def parse_ashrae621_2016_observations(
             continue
 
         appendix_match = (
-            _APPENDIX_SECTION_RE.match(text)
+            _appendix_section_match(text)
             if observation.structure_hint is None and current_appendix is not None
             else None
         )
