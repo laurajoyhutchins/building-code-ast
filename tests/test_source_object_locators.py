@@ -84,6 +84,35 @@ class SourceObjectLocatorTests(unittest.TestCase):
         with self.assertRaisesRegex(ValueError, "sha256"):
             validate_source_object_catalog(bad, register)
 
+    def test_multiple_source_identities_can_share_one_exact_logical_object(self) -> None:
+        commentary = SourceObjectRequirement(
+            source_id="source:synthetic:2026:pdf:aaaa1111:commentary",
+            object_key=self.requirement.object_key,
+            sha256=self.requirement.sha256,
+            size=self.requirement.size,
+            media_type=self.requirement.media_type,
+        )
+
+        catalog = SourceObjectCatalog(entries=(self.requirement, commentary))
+
+        self.assertEqual(len(catalog.entries), 2)
+        self.assertEqual(
+            {entry.object_key for entry in catalog.entries},
+            {self.requirement.object_key},
+        )
+
+    def test_shared_logical_object_rejects_conflicting_byte_identity(self) -> None:
+        conflict = SourceObjectRequirement(
+            source_id="source:synthetic:2026:pdf:bbbb2222",
+            object_key=self.requirement.object_key,
+            sha256="b" * 64,
+            size=self.requirement.size,
+            media_type=self.requirement.media_type,
+        )
+
+        with self.assertRaisesRegex(ValueError, "conflicting identity"):
+            SourceObjectCatalog(entries=(self.requirement, conflict))
+
     def test_private_locator_is_keyed_by_logical_object_key_not_source_identity(self) -> None:
         locator = PrivateSourceObjectLocator(
             object_key=self.requirement.object_key,
@@ -129,7 +158,7 @@ class SourceObjectLocatorTests(unittest.TestCase):
         payload = json.loads((root / "corpora" / "source-object-catalog.json").read_text())
         catalog = source_object_catalog_from_dict(payload)
 
-        self.assertEqual(len(catalog.entries), 3)
+        self.assertEqual(len(catalog.entries), 13)
         for entry in payload["entries"]:
             self.assertEqual(
                 set(entry),
