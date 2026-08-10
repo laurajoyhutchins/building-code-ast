@@ -172,7 +172,10 @@ def _table_region_bboxes(page: object, block_texts: Iterable[str]) -> tuple[tupl
     if finder is None:
         return ()
     found = finder()
-    tables = getattr(found, "tables", ())
+    tables = tuple(getattr(found, "tables", ()))
+    if not tables:
+        found = finder(strategy="text")
+        tables = tuple(getattr(found, "tables", ()))
     return tuple(
         tuple(float(value) for value in table.bbox)
         for table in tables
