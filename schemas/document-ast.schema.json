@@ -56,6 +56,10 @@
         "publication_component_id": {
           "type": "string",
           "minLength": 1
+        },
+        "publication_state_id": {
+          "type": "string",
+          "pattern": "^publication:[0-9a-f]{64}$"
         }
       }
     },

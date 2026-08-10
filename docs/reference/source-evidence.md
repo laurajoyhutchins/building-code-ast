@@ -22,7 +22,7 @@ A `SourceRegister` contains one or more unique `SourceRegisterEntry` values. Eve
 - the exact `artifact_id` and `edition_id` used by related AST output;
 - title and issuing body;
 - one primary evidence role;
-- publication family, edition, printing, digital revision, correction set, publication date, and effective date;
+- publication family, edition, printing, digital revision, correction set, publication date, and optional issuer-defined effective date;
 - retrieval timestamp with timezone;
 - lowercase SHA-256 and media type;
 - access scope and rights status;
@@ -63,11 +63,18 @@ The digest is calculated from canonical JSON containing:
 - digital revision;
 - correction set;
 - publication date;
-- effective date.
+- issuer-defined effective date, when the publication itself establishes one;
+- an explicit addenda set when one is modeled.
 
-Reprocessing the same state produces the same identifier. A change to printing, correction set, digital revision, or effective date produces a different state identifier even when the nominal edition remains unchanged.
+Reprocessing the same publication state produces the same identifier. A change to printing, correction set, digital revision, incorporated addenda, or intrinsic publication timing can therefore produce a different state identifier even when the nominal edition remains unchanged.
 
-This permits the system to distinguish, for example, an original 2021 printing from a later corrected digital publication without changing existing `DocumentAst` contracts.
+Publication-state identity is deliberately independent of the bytes of any one evidence artifact. A PDF, HTML rendition, or other exact source artifact has its own source identity and SHA-256 and may evidence a publication state without becoming that state. This allows multiple exact artifacts to support one issued state while retaining byte-level provenance for each artifact.
+
+A `DocumentAst` may bind its `source_artifact` directly to a known `publication_state_id`. That binding does not participate in structural `docnode:*` identity, so attaching publication-state provenance to an existing exact artifact does not renumber its nodes.
+
+`PublicationIdentity.effective_on` must not be used for jurisdiction adoption timing. It is reserved for an effective date intrinsic to the issued publication state itself. State, municipal, or other jurisdiction adoption/effective intervals belong to a separate jurisdiction/adoption layer that references the immutable publication state. Different jurisdictions making the same model-code state effective on different dates must not create different publisher publication-state identities.
+
+This permits the system to distinguish, for example, an original 2021 printing from a later corrected digital publication while keeping jurisdiction-specific adoption history outside the publisher-state identity.
 
 ## Access and rights
 
@@ -157,4 +164,4 @@ Those adapters are not implemented by this scaffold. Their records, extraction l
 
 The NEC expected-changelog work already has NEC-specific development-record and reconciliation contracts. It may later map its source manifests to this register, but this scaffold does not require or perform that migration.
 
-The local IBC ingestion pipeline may use `AstSourceIdentity` to connect supplementary records to the exact AST artifact and edition it parsed. Errata, development events, and amendments remain separate evidence graphs rather than fields inserted into structural document nodes.
+The local IBC ingestion pipeline may use `AstSourceIdentity` to connect supplementary records to the exact AST artifact and edition it parsed. Errata, development events, amendments, jurisdiction adoptions, and effective-code projections remain separate evidence or provenance graphs rather than fields inserted into structural document nodes.

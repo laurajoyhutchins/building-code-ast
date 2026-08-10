@@ -11,11 +11,13 @@ A document AST contains:
 - `ast_version`: exactly `0.1.0`;
 - `type`: exactly `document_tree`;
 - `source_text`: the exact original source string;
-- `source_artifact`: artifact and edition identity;
+- `source_artifact`: artifact, edition, optional publication-component identity, and optional publication-state binding;
 - `root`: the recursive publication-structure node;
 - `diagnostics`: document-structure diagnostics with optional exact source spans.
 
-`source_artifact.artifact_id` identifies the publication family or durable source artifact. `source_artifact.edition_id` identifies the exact edition, release, or snapshot being represented.
+`source_artifact.artifact_id` identifies the durable source artifact consumed by the AST. `source_artifact.edition_id` identifies the edition, release, or snapshot being represented. `source_artifact.publication_component_id`, when present, distinguishes separately modeled publications or components that share one physical artifact. `source_artifact.publication_state_id`, when known, binds the AST directly to the deterministic `publication:<sha256>` identity registered by the source-evidence layer.
+
+The publication-state binding is provenance, not a replacement for exact artifact identity. Multiple source artifacts may evidence the same issued publication state, and one source artifact may contain multiple explicitly identified publication components.
 
 ## Structural nodes
 
@@ -63,9 +65,11 @@ The node ID input is canonical JSON with sorted keys and compact separators:
 }
 ```
 
-The UTF-8 bytes of that canonical JSON are hashed with SHA-256. The lowercase hexadecimal digest is prefixed with `docnode:`.
+When a publication component is present, `publication_component_id` is also an identity input. The UTF-8 bytes of that canonical JSON are hashed with SHA-256. The lowercase hexadecimal digest is prefixed with `docnode:`.
 
-Source text and offsets are not identity inputs. Reprocessing the same edition and locator therefore retains the same node ID even when a parser implementation changes. A corrected publication snapshot should receive a new `edition_id`.
+Source text, offsets, and `publication_state_id` are not node-identity inputs. Binding an existing AST source to its publication state therefore does not renumber its structural nodes. Reprocessing the same artifact, edition, component, and locator retains the same node ID even when parser implementation or publication-state metadata changes.
+
+Cross-edition continuity is a relationship between distinct nodes, not node-ID reuse. A later compiler stage may record explicit predecessor/successor or equivalent lineage edges, but a node from a new edition or exact source artifact receives the identity warranted by that source state.
 
 ## Validation invariants
 
@@ -78,7 +82,8 @@ Runtime validation requires:
 - every child span to remain within its parent span;
 - every locator and node ID to be unique;
 - every node ID to match the deterministic identity function;
-- every attribute name and value to be a string.
+- every attribute name and value to be a string;
+- any supplied `publication_state_id` to match the deterministic publication-state identifier shape.
 
 Table columns may overlap row and cell spans because columns are cross-cutting structural identities anchored to their source headings. Containment, not sibling non-overlap, is the required tree invariant.
 
@@ -91,7 +96,8 @@ The document AST records publication structure only. It does not represent:
 - actions or exceptions;
 - definition resolution;
 - amendments;
+- jurisdiction adoption or effective-code selection;
 - compliance conclusions;
 - professional or authority interpretation.
 
-Those concerns belong to later compiler stages. Keeping the document tree separate allows semantic parsers to be replaced or reviewed without erasing the publication structure or source evidence.
+Those concerns belong to later compiler stages. Keeping the document tree separate allows semantic parsers, amendment projections, and jurisdiction-aware selection to be replaced or reviewed without erasing the publication structure or source evidence.
