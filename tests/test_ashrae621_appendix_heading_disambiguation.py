@@ -48,13 +48,14 @@ class Ashrae621AppendixHeadingDisambiguationTests(unittest.TestCase):
         )
 
         appendix = ast.root.children[0]
-        self.assertEqual(
-            [child.locator for child in appendix.children],
-            ["section:C1", appendix.children[1].locator],
-        )
-        self.assertEqual(appendix.children[0].node_type, DocumentNodeType.SUBSECTION)
-        self.assertEqual(appendix.children[1].node_type, DocumentNodeType.PARAGRAPH)
-        self.assertTrue(appendix.children[1].locator.startswith("paragraph:"))
+        self.assertEqual(len(appendix.children), 1)
+        section = appendix.children[0]
+        self.assertEqual(section.locator, "section:C1")
+        self.assertEqual(section.node_type, DocumentNodeType.SUBSECTION)
+        self.assertEqual(len(section.children), 1)
+        paragraph = section.children[0]
+        self.assertEqual(paragraph.node_type, DocumentNodeType.PARAGRAPH)
+        self.assertTrue(paragraph.locator.startswith("paragraph:"))
 
     def test_numbered_reference_entry_is_not_promoted_to_top_level_appendix_section(self) -> None:
         ast = parse_ashrae621_2016_observations(
