@@ -24,6 +24,7 @@ from ..document_validation import validate_document_ast
 from ..evidence.model import PublicationIdentity, publication_state_id
 from ..model import Diagnostic, DiagnosticSeverity, SourceSpan
 from .pdf_layout import PdfBlock, normalize_block_text
+from .structural_occurrences import LocatorOccurrence, group_locator_occurrences
 
 
 ASHRAE_62_1_2016_PUBLICATION = PublicationIdentity(
@@ -230,6 +231,36 @@ def _materialize(
     )
 
 
+def _table_occurrence_metadata(
+    spans: tuple[tuple[Ashrae621Observation, int, int, str], ...],
+) -> dict[int, tuple[object, int]]:
+    occurrences: list[LocatorOccurrence] = []
+    for source_order, (observation, _, _, text) in enumerate(spans):
+        match = _TABLE_RE.match(text)
+        native_locator: str | None = None
+        if observation.structure_hint == "table":
+            if observation.native_locator is not None:
+                native_locator = observation.native_locator.strip()
+            elif match is not None:
+                native_locator = match.group("locator")
+        elif observation.structure_hint is None and match is not None:
+            native_locator = match.group("locator")
+        if native_locator:
+            occurrences.append(
+                LocatorOccurrence(
+                    native_locator=native_locator,
+                    pdf_page=observation.block.page_number,
+                    source_order=source_order,
+                )
+            )
+
+    metadata: dict[int, tuple[object, int]] = {}
+    for group in group_locator_occurrences(occurrences):
+        for occurrence_index, occurrence in enumerate(group.occurrences):
+            metadata[occurrence.source_order] = (group, occurrence_index)
+    return metadata
+
+
 def parse_ashrae621_2016_observations(
     observations: Iterable[Ashrae621Observation],
     *,
@@ -242,7 +273,7 @@ def parse_ashrae621_2016_observations(
         raise ValueError("ASHRAE 62.1-2016 observations must contain body-content regions")
 
     pieces: list[str] = []
-    spans: list[tuple[Ashrae621Observation, int, int, str]] = []
+    span_items: list[tuple[Ashrae621Observation, int, int, str]] = []
     cursor = 0
     for observation in ordered:
         text = normalize_block_text(observation.block.text)
@@ -254,11 +285,13 @@ def parse_ashrae621_2016_observations(
         start = cursor
         pieces.append(text)
         cursor += len(text)
-        spans.append((observation, start, cursor, text))
+        span_items.append((observation, start, cursor, text))
 
     source_text = "".join(pieces)
     if not source_text:
         raise ValueError("ASHRAE 62.1-2016 observations contain no readable text")
+    spans = tuple(span_items)
+    table_metadata = _table_occurrence_metadata(spans)
 
     root = _Draft(DocumentNodeType.DOCUMENT, "document", 0, len(source_text))
     section_stack: list[_Draft] = []
@@ -285,7 +318,7 @@ def parse_ashrae621_2016_observations(
         for section in section_stack:
             section.extend_to(end)
 
-    for observation, start, end, text in spans:
+    for source_order, (observation, start, end, text) in enumerate(spans):
         if _FOREWORD_RE.fullmatch(text):
             foreword = _Draft(
                 DocumentNodeType.SECTION,
@@ -392,7 +425,40 @@ def parse_ashrae621_2016_observations(
         numbered = _numbered_nonprose(observation, text)
         if numbered is not None:
             node_type, native_locator = numbered
-            locator = f"{node_type.value}:{native_locator}"
+            if node_type is DocumentNodeType.TABLE and source_order in table_metadata:
+                group, occurrence_index = table_metadata[source_order]
+                attrs["native_locator"] = native_locator
+                attrs["occurrence_count"] = str(len(group.occurrences))
+                attrs["occurrence_pattern"] = group.pattern.value
+                attrs["occurrence_index"] = str(occurrence_index)
+                if occurrence_index == 0:
+                    locator = f"table:{native_locator}"
+                    if len(group.occurrences) > 1:
+                        diagnostics.append(
+                            Diagnostic(
+                                code="ashrae621-repeated-table-structure-deferred",
+                                severity=DiagnosticSeverity.WARNING,
+                                message=(
+                                    "Repeated native table observations are preserved without "
+                                    "asserting continuation or table-body semantics."
+                                ),
+                                span=SourceSpan(start=start, end=end, text=text),
+                            )
+                        )
+                else:
+                    node_type = DocumentNodeType.TABLE_HEADING
+                    same_page_index = 1 + sum(
+                        1
+                        for prior in group.occurrences[:occurrence_index]
+                        if prior.pdf_page == observation.block.page_number
+                    )
+                    locator = (
+                        f"table-heading:{native_locator}:"
+                        f"pdf-page-{observation.block.page_number}:"
+                        f"occurrence-{same_page_index}"
+                    )
+            else:
+                locator = f"{node_type.value}:{native_locator}"
         elif observation.structure_hint == "graphical_region":
             node_type = DocumentNodeType.GRAPHICAL_REGION
             locator = _coordinate_locator("graphical", observation, text)
