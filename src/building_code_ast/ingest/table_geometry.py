@@ -107,10 +107,12 @@ def detect_table_rows(page: CleanedPage, profile: PageOrderProfile) -> tuple[Tab
         row_bbox = _bbox(fragments)
         row_center_x = (row_bbox[0] + row_bbox[2]) / 2.0
         row_center_y = (row_bbox[1] + row_bbox[3]) / 2.0
-        inside_rule_region = any(
-            x0 - 3.0 <= row_center_x <= x1 + 3.0 and y0 - 3.0 <= row_center_y <= y1 + 3.0
+        matching_rule_regions = tuple(
+            (x0, y0, x1, y1)
             for x0, y0, x1, y1 in rule_regions
+            if x0 - 3.0 <= row_center_x <= x1 + 3.0 and y0 - 3.0 <= row_center_y <= y1 + 3.0
         )
+        inside_rule_region = bool(matching_rule_regions)
         row_font = max(statistics.median([item.font_size for item in fragments if item.font_size > 0.0] or [_height(item) for item in fragments]), 1.0)
         cell_gap = max(18.0, row_font * 1.8)
         cells: list[list[SourceFragment]] = [[]]
@@ -143,13 +145,61 @@ def detect_table_rows(page: CleanedPage, profile: PageOrderProfile) -> tuple[Tab
             local_cursor += len(text)
             cell_records.append(TableCellCandidate(text, tuple(cell_fragments), start, local_cursor))
         source_line_ids = tuple(dict.fromkeys(item[1] for item in group))
-        rows.append(TableRowCandidate(page.page_number, source_line_ids, tuple(cell_records), row_bbox, tuple(cell[0].bbox[0] for cell in cells), tuple(fragments), round(row_font, 3), 0.82, ("geometry_cells", f"cells:{len(cell_records)}", f"fragments:{len(fragments)}")))
+        rows.append(
+            TableRowCandidate(
+                page.page_number,
+                source_line_ids,
+                tuple(cell_records),
+                row_bbox,
+                tuple(cell[0].bbox[0] for cell in cells),
+                tuple(fragments),
+                round(row_font, 3),
+                0.82,
+                (
+                    "geometry_cells",
+                    f"cells:{len(cell_records)}",
+                    f"fragments:{len(fragments)}",
+                    *(
+                        f"rule_region:{x0:.3f},{y0:.3f},{x1:.3f},{y1:.3f}"
+                        for x0, y0, x1, y1 in matching_rule_regions
+                    ),
+                ),
+            )
+        )
     return tuple(sorted(rows, key=lambda row: (row.page_number, row.bbox[1], row.bbox[0])))
 
 
 def _aligned_columns(left: TableRowCandidate, right: TableRowCandidate) -> int:
     tolerance = max(12.0, statistics.median((left.font_size, right.font_size)) * 1.5)
-    return sum(1 for left_start, right_start in zip(left.cell_starts, right.cell_starts) if abs(left_start - right_start) <= tolerance)
+    positional_matches = sum(
+        1
+        for left_start, right_start in zip(left.cell_starts, right.cell_starts)
+        if abs(left_start - right_start) <= tolerance
+    )
+    if positional_matches >= 2:
+        return positional_matches
+
+    left_regions = {item for item in left.evidence if item.startswith("rule_region:")}
+    right_regions = {item for item in right.evidence if item.startswith("rule_region:")}
+    if not left_regions.intersection(right_regions):
+        return positional_matches
+
+    left_starts = sorted(left.cell_starts)
+    right_starts = sorted(right.cell_starts)
+    left_index = 0
+    right_index = 0
+    matches = 0
+    while left_index < len(left_starts) and right_index < len(right_starts):
+        delta = left_starts[left_index] - right_starts[right_index]
+        if abs(delta) <= tolerance:
+            matches += 1
+            left_index += 1
+            right_index += 1
+        elif delta < 0.0:
+            left_index += 1
+        else:
+            right_index += 1
+    return matches
 
 
 def _compatible(left: TableRowCandidate, right: TableRowCandidate) -> bool:
