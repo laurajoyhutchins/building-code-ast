@@ -11,6 +11,7 @@ from typing import Iterable
 _BROKEN_WORD_RE = re.compile(r"(?<=[A-Za-z])[\u00ad\u2010-]\n(?=[a-z])")
 _WHITESPACE_RE = re.compile(r"\s+")
 _TABLE_ANNOUNCEMENT_RE = re.compile(r"^\s*Table\s+\d", re.IGNORECASE)
+_HORIZONTAL_DIRECTION = (1.0, 0.0)
 
 
 @dataclass(frozen=True, slots=True)
@@ -35,20 +36,24 @@ class PdfSpan:
 
 @dataclass(frozen=True, slots=True)
 class PdfLine:
-    """One visual text line with ordered source spans."""
+    """One visual text line with ordered source spans and writing direction."""
 
     bbox: tuple[float, float, float, float]
     spans: tuple[PdfSpan, ...]
+    direction: tuple[float, float] = _HORIZONTAL_DIRECTION
 
     @property
     def text(self) -> str:
         return "".join(span.text for span in self.spans)
 
     def to_dict(self) -> dict[str, object]:
-        return {
+        payload: dict[str, object] = {
             "bbox": [round(value, 3) for value in self.bbox],
             "spans": [span.to_dict() for span in self.spans],
         }
+        if self.direction != _HORIZONTAL_DIRECTION:
+            payload["direction"] = [round(value, 6) for value in self.direction]
+        return payload
 
 
 @dataclass(frozen=True, slots=True)
@@ -188,6 +193,19 @@ def _table_region_id(
     return None
 
 
+def _line_direction(raw_line: object) -> tuple[float, float]:
+    """Return PyMuPDF writing direction, defaulting to legacy horizontal text."""
+
+    if not isinstance(raw_line, dict):
+        return _HORIZONTAL_DIRECTION
+    raw_direction = raw_line.get("dir", _HORIZONTAL_DIRECTION)
+    try:
+        x, y = raw_direction
+        return (float(x), float(y))
+    except (TypeError, ValueError):
+        return _HORIZONTAL_DIRECTION
+
+
 def _line_evidence_by_block(page: object) -> dict[int, tuple[PdfLine, ...]]:
     """Return visual line/span evidence keyed by PyMuPDF block number."""
 
@@ -214,7 +232,13 @@ def _line_evidence_by_block(page: object) -> dict[int, tuple[PdfLine, ...]]:
                     )
                 )
             line_bbox = tuple(float(value) for value in raw_line.get("bbox", (0, 0, 0, 0)))
-            lines.append(PdfLine(bbox=line_bbox, spans=tuple(spans)))
+            lines.append(
+                PdfLine(
+                    bbox=line_bbox,
+                    spans=tuple(spans),
+                    direction=_line_direction(raw_line),
+                )
+            )
         result[block_number] = tuple(lines)
     return result
 
