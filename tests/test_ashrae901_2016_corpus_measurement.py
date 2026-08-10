@@ -11,27 +11,82 @@ from building_code_ast.ashrae901_2016_corpus import (
 from building_code_ast.ingest.pdf_layout import (
     PdfBlock,
     PdfLayoutDocument,
+    PdfLine,
     PdfOutlineItem,
     PdfPage,
+    PdfSpan,
 )
 
 
-def _block(text: str, *, page: int, block_number: int = 1) -> PdfBlock:
+def _block(
+    text: str,
+    *,
+    page: int,
+    block_number: int = 1,
+    font: str | None = None,
+    size: float | None = None,
+) -> PdfBlock:
+    lines = ()
+    if font is not None and size is not None:
+        span = PdfSpan(
+            bbox=(72.0, 100.0, 540.0, 100.0 + size),
+            text=text,
+            font=font,
+            size=size,
+            flags=0,
+        )
+        lines = (PdfLine(bbox=span.bbox, spans=(span,)),)
     return PdfBlock(
         page_number=page,
         bbox=(72.0, 100.0, 540.0, 118.0),
         text=text,
         block_number=block_number,
+        lines=lines,
     )
 
 
 def _layout(*, page_count: int = 388) -> PdfLayoutDocument:
     blocks = {
-        7: (_block("1. SYNTHETIC LIST ITEM MUST_NOT_LEAK", page=7),),
-        8: (_block("1. ANOTHER SYNTHETIC LIST ITEM MUST_NOT_LEAK", page=8),),
-        9: (_block("1 SYNTHETIC PURPOSE MUST_NOT_LEAK", page=9),),
-        10: (_block("1.1 SYNTHETIC SCOPE MUST_NOT_LEAK", page=10),),
-        191: (_block("NORMATIVE APPENDIX A SYNTHETIC MATERIAL MUST_NOT_LEAK", page=191),),
+        7: (
+            _block(
+                "1. SYNTHETIC LIST ITEM MUST_NOT_LEAK",
+                page=7,
+                font="Helvetica",
+                size=8.5,
+            ),
+        ),
+        8: (
+            _block(
+                "1. ANOTHER SYNTHETIC LIST ITEM MUST_NOT_LEAK",
+                page=8,
+                font="Helvetica",
+                size=8.5,
+            ),
+        ),
+        9: (
+            _block(
+                "1 SYNTHETIC PURPOSE MUST_NOT_LEAK",
+                page=9,
+                font="Helvetica-Bold",
+                size=11.0,
+            ),
+        ),
+        10: (
+            _block(
+                "1.1 SYNTHETIC SCOPE MUST_NOT_LEAK",
+                page=10,
+                font="Helvetica-Bold",
+                size=10.0,
+            ),
+        ),
+        191: (
+            _block(
+                "NORMATIVE APPENDIX A SYNTHETIC MATERIAL MUST_NOT_LEAK",
+                page=191,
+                font="Helvetica-Bold",
+                size=11.0,
+            ),
+        ),
     }
     pages = tuple(
         PdfPage(
@@ -57,7 +112,7 @@ def _layout(*, page_count: int = 388) -> PdfLayoutDocument:
 
 
 class Ashrae901CorpusMeasurementTests(unittest.TestCase):
-    def test_measurement_exposes_current_locator_failure_without_source_expression(self) -> None:
+    def test_measurement_tracks_typography_gated_locator_behavior_without_source_expression(self) -> None:
         measurement = measure_ashrae901_2016_corpus(
             _layout(),
             source_sha256=ASHRAE_90_1_2016_SOURCE_SHA256,
@@ -71,8 +126,8 @@ class Ashrae901CorpusMeasurementTests(unittest.TestCase):
                 "appendix": 1,
                 "equation": 0,
                 "figure": 0,
-                "paragraph": 1,
-                "section": 2,
+                "paragraph": 2,
+                "section": 1,
                 "subsection": 1,
                 "table": 0,
             },
@@ -81,20 +136,16 @@ class Ashrae901CorpusMeasurementTests(unittest.TestCase):
             measurement["numeric_hierarchy"],
             {
                 "outline_unique_locators": 3,
-                "candidate_occurrences": 3,
+                "candidate_occurrences": 2,
                 "candidate_unique_locators": 2,
-                "duplicate_candidate_occurrences": 1,
+                "duplicate_candidate_occurrences": 0,
                 "matched_unique_locators": 2,
                 "missing_outline_locators": 1,
                 "unexpected_candidate_locators": 0,
-                "exact_outline_page_matches": 1,
-                "near_outline_page_matches": 1,
+                "exact_outline_page_matches": 2,
+                "near_outline_page_matches": 0,
                 "far_only_outline_matches": 0,
-                "first_duplicate": {
-                    "locator": "section:1",
-                    "first_pdf_page": 7,
-                    "repeated_pdf_page": 8,
-                },
+                "first_duplicate": None,
             },
         )
         self.assertEqual(
@@ -109,9 +160,9 @@ class Ashrae901CorpusMeasurementTests(unittest.TestCase):
         self.assertEqual(
             measurement["whole_document_status"],
             {
-                "validatable": False,
-                "blocker": "duplicate_document_locator",
-                "locator": "section:1",
+                "validatable": True,
+                "blocker": None,
+                "locator": None,
             },
         )
         self.assertNotIn("MUST_NOT_LEAK", json.dumps(measurement, sort_keys=True))
