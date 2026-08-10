@@ -10,7 +10,7 @@ from __future__ import annotations
 from dataclasses import dataclass
 import re
 
-from .pdf_layout import PdfLayoutDocument, normalize_block_text
+from .pdf_layout import PdfBlock, PdfLayoutDocument, normalize_block_text
 
 
 _TABLE_RE = re.compile(
@@ -57,6 +57,21 @@ class Ashrae621TableGeometryMeasurement:
         }
 
 
+def _caption_match(block: PdfBlock) -> re.Match[str] | None:
+    match = _TABLE_RE.match(normalize_block_text(block.text))
+    if match is None:
+        return None
+    if not block.lines:
+        return match
+    first_line = next(
+        (normalize_block_text(line.text) for line in block.lines if line.text.strip()),
+        "",
+    )
+    if not first_line.startswith("TABLE "):
+        return None
+    return match
+
+
 def measure_ashrae621_table_geometry(
     document: PdfLayoutDocument,
 ) -> Ashrae621TableGeometryMeasurement:
@@ -73,7 +88,7 @@ def measure_ashrae621_table_geometry(
         }
         page_region_counts[page.page_number] = len(region_ids)
         for block in page.blocks:
-            match = _TABLE_RE.match(normalize_block_text(block.text))
+            match = _caption_match(block)
             if match is None:
                 continue
             caption_records.append(
