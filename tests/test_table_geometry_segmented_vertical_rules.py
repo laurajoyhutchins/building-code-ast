@@ -71,6 +71,7 @@ class TableGeometrySegmentedVerticalRuleTests(unittest.TestCase):
         self.assertEqual(len(tables), 1)
         self.assertEqual(tables[0].normalized_text, "A\tB\nC\tD\nE\tF")
         self.assertIn("vector_rule_grid", tables[0].evidence)
+        self.assertIn("segmented_vertical_rules", tables[0].evidence)
 
     def test_unaligned_short_vertical_segments_do_not_establish_grid_columns(self) -> None:
         vertical_rules = tuple(
