@@ -12,6 +12,7 @@ from building_code_ast.evidence import (
     RightsStatus,
     SourceRegister,
     SourceRegisterEntry,
+    source_register_from_dict,
 )
 from building_code_ast.evidence.source_objects import (
     ObjectProvider,
@@ -84,6 +85,35 @@ class SourceObjectLocatorTests(unittest.TestCase):
         with self.assertRaisesRegex(ValueError, "sha256"):
             validate_source_object_catalog(bad, register)
 
+    def test_multiple_source_identities_can_share_one_exact_logical_object(self) -> None:
+        commentary = SourceObjectRequirement(
+            source_id="source:synthetic:2026:pdf:aaaa1111:commentary",
+            object_key=self.requirement.object_key,
+            sha256=self.requirement.sha256,
+            size=self.requirement.size,
+            media_type=self.requirement.media_type,
+        )
+
+        catalog = SourceObjectCatalog(entries=(self.requirement, commentary))
+
+        self.assertEqual(len(catalog.entries), 2)
+        self.assertEqual(
+            {entry.object_key for entry in catalog.entries},
+            {self.requirement.object_key},
+        )
+
+    def test_shared_logical_object_rejects_conflicting_byte_identity(self) -> None:
+        conflict = SourceObjectRequirement(
+            source_id="source:synthetic:2026:pdf:bbbb2222",
+            object_key=self.requirement.object_key,
+            sha256="b" * 64,
+            size=self.requirement.size,
+            media_type=self.requirement.media_type,
+        )
+
+        with self.assertRaisesRegex(ValueError, "conflicting identity"):
+            SourceObjectCatalog(entries=(self.requirement, conflict))
+
     def test_private_locator_is_keyed_by_logical_object_key_not_source_identity(self) -> None:
         locator = PrivateSourceObjectLocator(
             object_key=self.requirement.object_key,
@@ -129,7 +159,7 @@ class SourceObjectLocatorTests(unittest.TestCase):
         payload = json.loads((root / "corpora" / "source-object-catalog.json").read_text())
         catalog = source_object_catalog_from_dict(payload)
 
-        self.assertEqual(len(catalog.entries), 3)
+        self.assertEqual(len(catalog.entries), 13)
         for entry in payload["entries"]:
             self.assertEqual(
                 set(entry),
@@ -139,6 +169,36 @@ class SourceObjectLocatorTests(unittest.TestCase):
         self.assertNotIn("google_drive", rendered)
         self.assertNotIn("object_id", rendered)
         self.assertNotIn("drive.google.com", rendered)
+
+    def test_repository_catalog_cross_validates_all_durable_source_registers(self) -> None:
+        root = Path(__file__).resolve().parents[1]
+        register_paths = (
+            "corpora/aci-318-19/aci-318-19-source-register.json",
+            "corpora/asce-7-22/asce-7-22-source-register.json",
+            "corpora/ashrae-62.1-2016/ashrae-62.1-2016-source-register.json",
+            "corpora/ashrae-90.1-2016/ashrae-90.1-2016-source-register.json",
+            "corpora/ibc-2018/ibc-2018-source-register.json",
+            "corpora/nds-2018/nds-2018-source-register.json",
+            "corpora/nec-2017/nec-2017-source-register.json",
+            "corpora/nfpa-13-2019/nfpa-13-2019-source-register.json",
+            "corpora/tms-402-602-16/tms-402-602-16-source-register.json",
+        )
+        authoritative_entries = []
+        for path in register_paths:
+            payload = json.loads((root / path).read_text())
+            authoritative_entries.extend(source_register_from_dict(payload).entries)
+        source_register = SourceRegister(entries=tuple(authoritative_entries))
+
+        catalog_payload = json.loads(
+            (root / "corpora" / "source-object-catalog.json").read_text()
+        )
+        catalog = source_object_catalog_from_dict(catalog_payload)
+
+        self.assertEqual(
+            {entry.source_id for entry in catalog.entries},
+            {entry.source_id for entry in source_register.entries},
+        )
+        validate_source_object_catalog(catalog, source_register)
 
 
 if __name__ == "__main__":
