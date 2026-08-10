@@ -1,0 +1,27 @@
+{
+  "catalog_version": "0.1.0",
+  "type": "source_object_catalog",
+  "entries": [
+    {
+      "source_id": "source:asce:7:2022:pdf:522d341d",
+      "object_key": "building-code-ast/asce-7-22/source",
+      "sha256": "522d341d8ab21eb254c8af2d853910633233285eb3704933729e0aeefdc88eb0",
+      "size": 55404349,
+      "media_type": "application/pdf"
+    },
+    {
+      "source_id": "source:icc:ibc:2018:pdf:c8f0b755",
+      "object_key": "building-code-ast/ibc-2018/source",
+      "sha256": "c8f0b75522707a39daf5202edee25d7fdce6c177c382f828a6dc1dfd5cc0b18d",
+      "size": 32608171,
+      "media_type": "application/pdf"
+    },
+    {
+      "source_id": "source:awc:nds:2018:pdf:581353da",
+      "object_key": "building-code-ast/nds-2018/source",
+      "sha256": "581353dab836de933546bc93b8265674dabb08d1073da04d660cf894250b48b4",
+      "size": 6791825,
+      "media_type": "application/pdf"
+    }
+  ]
+}
