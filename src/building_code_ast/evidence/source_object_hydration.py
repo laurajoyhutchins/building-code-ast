@@ -260,11 +260,6 @@ def hydrate_source_object(
         _validate_destination(destination_path)
         os.replace(temporary_path, destination_path)
     finally:
-        try:
-            temporary_path.unlink(missing_ok=True)
-        except OSError:
-            # The primary fetch/verification exception remains authoritative;
-            # callers can inspect the private workspace if cleanup itself fails.
-            pass
+        temporary_path.unlink(missing_ok=True)
 
     return _receipt(requirement)
