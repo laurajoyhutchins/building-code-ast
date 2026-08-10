@@ -1,0 +1,26 @@
+{
+  "$id": "private-source-object-locators",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "properties": {
+    "locator_version": {"const": "0.1.0"},
+    "type": {"const": "private_source_object_locators"},
+    "locators": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["object_key", "provider", "object_id", "path_hint"],
+        "properties": {
+          "object_key": {"type": "string", "pattern": "^[A-Za-z0-9][A-Za-z0-9._/-]*$"},
+          "provider": {"enum": ["google_drive"]},
+          "object_id": {"type": "string", "minLength": 1},
+          "path_hint": {"type": ["string", "null"]}
+        }
+      }
+    }
+  },
+  "required": ["locator_version", "type", "locators"],
+  "type": "object"
+}
