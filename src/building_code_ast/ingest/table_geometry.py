@@ -48,7 +48,9 @@ def _center_y(fragment: SourceFragment) -> float:
 
 
 def _estimated_end(fragment: SourceFragment) -> float:
-    return max(fragment.bbox[2], fragment.bbox[0] + len(fragment.raw_text) * max(fragment.font_size, 8.0) * 0.45)
+    if fragment.bbox[2] > fragment.bbox[0]:
+        return fragment.bbox[2]
+    return fragment.bbox[0] + len(fragment.raw_text) * max(fragment.font_size, 8.0) * 0.45
 
 
 def _join_cell(parts: Sequence[SourceFragment]) -> str:
