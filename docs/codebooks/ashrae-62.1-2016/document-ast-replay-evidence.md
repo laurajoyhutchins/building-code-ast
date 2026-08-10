@@ -61,18 +61,38 @@ Exact-source coordinate and font inspection established that the second `C1` can
 
 The same recognition rule also promoted a numbered Appendix J bibliography entry as a top-level appendix section.
 
-#222 encodes those two source shapes as RED tests and tightens only top-level appendix-section recognition: a top-level appendix locator requires heading-style uppercase title evidence. Deeper appendix subsection recognition is deliberately unchanged because its remaining failure family is different.
+#222 encoded those two source shapes as RED tests and tightened only top-level appendix-section recognition: a top-level appendix locator requires heading-style uppercase title evidence. Deeper appendix subsection recognition remained deliberately unchanged.
 
-The correction does not special-case `C1`, weaken locator uniqueness, or assign equation or bibliography semantics.
+After #222, the 60-page block-level projection contained 1,110 AST nodes, including 110 subsections, and passed generic validation. That validator pass did not establish structural completeness.
+
+## Compound-block line/span evidence
+
+Exact span-level inspection then found four PDF text blocks containing multiple real bold appendix locator-bearing heading lines:
+
+- 4 compound blocks;
+- 12 true bold locator-bearing headings;
+- only 3 represented by the block-level adapter;
+- therefore **9 missing headings** before finer-grained recovery;
+- 1 of the 4 blocks begins with continuation prose before its first heading.
+
+The earlier count of eight missing headings was an undercount because it assumed each compound block contributed one already-recognized heading. The prefix-prose block contributed none.
+
+For all four exact blocks, normalized legacy block text equals normalized reconstruction from PyMuPDF visual-line/span text. This establishes a lossless source-evidence seam rather than permission to replace source text heuristically.
+
+#223 adds optional publication-neutral `PdfLine` / `PdfSpan` evidence while preserving legacy `PdfBlock.text` and legacy serialization when no line evidence exists. The generic PDF layer records geometry and font observations only; it does not decide what constitutes a heading.
+
+ASHRAE 62.1 is the first consumer. It splits only blocks with at least two bold appendix-heading candidates and only when line reconstruction is text-lossless. Prefix prose and between-heading body text remain explicit observations.
 
 ## Current exact whole-document replay
 
-A fresh replay against the exact 60-page artifact after the heading correction produced:
+A fresh replay against the exact retained artifact with the #223 implementation produced:
 
-- 1,164 retained PDF block observations supplied to the adapter;
-- 1,110 Document AST nodes;
+- 1,164 extracted PDF block observations before publication-specific splitting;
+- 1,110 retained block-level observations before splitting;
+- normalized AST source text exactly equal to the normalized pre-split retained source text;
+- 1,119 Document AST nodes;
 - 21 `section` nodes;
-- 110 `subsection` nodes;
+- 119 `subsection` nodes;
 - 917 `paragraph` nodes;
 - 17 `table` nodes;
 - 11 `table_heading` nodes;
@@ -81,15 +101,24 @@ A fresh replay against the exact 60-page artifact after the heading correction p
 - 1 `document` node;
 - 6 `ashrae621-repeated-table-structure-deferred` diagnostics.
 
-The resulting AST passes generic `validate_document_ast` validation across all 60 physical pages.
+All nine headings missing from the measured four-block compound family are now represented. The resulting AST passes generic `validate_document_ast` validation across all 60 physical pages.
 
-This validator pass is not a structural-completeness claim.
+The six repeated-table diagnostics are unchanged, confirming that this structural correction did not silently promote deferred table semantics.
 
-## Measured remaining compound-block gap
+## Next measured counterexample
 
-Exact span-level inspection finds four PDF text blocks containing more than one bold appendix locator span. Across those four blocks there are 12 bold structural locator spans, so eight locator-bearing headings occur beyond each block's first heading and are not independently represented by the current block-level adapter.
+Whole-artifact bold-locator-line comparison after the compound-block recovery finds one remaining source-backed appendix heading identity not represented in the AST:
 
-This is now the next measured structural gap. It is separate from the resolved top-level `C1` false-positive family and should not be hidden merely because the current whole-document AST satisfies generic invariants.
+`A1.2.2`
+
+Its source shape is different from the #223 compound family:
+
+- one bold locator-bearing heading line in its PDF block;
+- two prefix lines before that heading;
+- 11 total visual lines in the block;
+- line/span reconstruction is text-lossless.
+
+Because there is only one heading candidate in that block, #223 intentionally does not split it. This is the next executable structural evidence gate rather than a reason to broaden the compound-block PR after its measured nine-heading target is satisfied.
 
 ## Support boundary after replay
 
@@ -98,15 +127,16 @@ The evidence establishes:
 - exact retained artifact identity verified;
 - deterministic exact-source replay across all 60 physical pages;
 - generic Document AST validation passes on the current whole-document projection;
-- publication-native appendix role and hierarchy are preserved where block-level recognition supports them;
-- repeated table observations remain explicit without duplicate locators or semantic overclaiming;
-- top-level appendix headings are disambiguated from the measured displayed-math and bibliography false-positive shapes;
+- optional shared line/span evidence preserves legacy PDF block text;
+- all nine headings from the measured four-block compound family are recovered;
+- prefix prose in the compound family is retained rather than swallowed;
+- repeated table observations remain explicit without semantic overclaiming;
 - remaining structural loss is explicitly measured rather than normalized away.
 
 It does **not** establish:
 
 - whole-document structural completeness;
-- complete compound-block heading segmentation;
+- recovery of the measured single embedded `A1.2.2` heading;
 - semantic multi-page table continuation;
 - table body/header/cell reconstruction or lookup meaning;
 - mathematical semantics;
@@ -116,4 +146,4 @@ It does **not** establish:
 
 ## Next executable evidence
 
-The next ASHRAE 62.1 structural gate is compound-block heading segmentation: four exact-source blocks contain 12 bold locator spans with eight headings beyond the first currently unrepresented. Inspect existing shared visual-line, glyph, font, and structural-metadata infrastructure before adding publication-specific splitting. Prefer a shared layout correction only if cross-publication evidence supports the abstraction.
+After #223 lands, investigate the single embedded-heading family represented by `A1.2.2`: a text-lossless block with prefix prose and one bold appendix heading candidate. Reuse the same shared line/span evidence, but encode the source-backed distinction from ordinary bold inline text before broadening the ASHRAE splitter. Do not infer that every single bold locator-like line is structural without a measured negative corpus.
