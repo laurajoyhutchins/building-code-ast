@@ -140,6 +140,30 @@ class ArticleSeed:
         }
 
 
+def _final_article_scan_end(layout: PdfLayoutDocument, article_number: str) -> int:
+    """Return the first following same-or-shallower non-article outline page."""
+
+    article_index: int | None = None
+    article_level: int | None = None
+    for index, item in enumerate(layout.outline):
+        title = " ".join(item.title.split())
+        match = _ARTICLE_BOOKMARK_RE.match(title)
+        if match is not None and match.group("number") == article_number:
+            article_index = index
+            article_level = item.level
+
+    if article_index is None or article_level is None:
+        return layout.page_count
+
+    for item in layout.outline[article_index + 1 :]:
+        if item.level > article_level:
+            continue
+        title = " ".join(item.title.split())
+        if _ARTICLE_BOOKMARK_RE.match(title) is None:
+            return item.page_number
+    return layout.page_count
+
+
 def discover_article_ranges(layout: PdfLayoutDocument) -> tuple[ArticleRange, ...]:
     """Return numeric NEC article bookmarks with inclusive scan ranges."""
 
@@ -161,7 +185,7 @@ def discover_article_ranges(layout: PdfLayoutDocument) -> tuple[ArticleRange, ..
             scan_end_page = next_page
         else:
             next_number = None
-            scan_end_page = layout.page_count
+            scan_end_page = _final_article_scan_end(layout, number)
         ranges.append(
             ArticleRange(
                 number=number,
@@ -210,19 +234,21 @@ def select_article_blocks(
         )
 
     end_index = len(ordered)
-    if article_range.next_number is not None:
-        for index in range(start_index + 1, len(ordered)):
-            candidate = ordered[index]
-            candidate_text = normalize_block_text(candidate.text)
-            if (
-                candidate.page_number == article_range.scan_end_page
-                and re.match(r"^Chapter\s+\d+\b", candidate_text)
-            ):
-                end_index = index
-                break
-            if _visible_article_number(candidate) == article_range.next_number:
-                end_index = index
-                break
+    for index in range(start_index + 1, len(ordered)):
+        candidate = ordered[index]
+        candidate_text = normalize_block_text(candidate.text)
+        if (
+            candidate.page_number == article_range.scan_end_page
+            and re.match(r"^Chapter\s+\d+\b", candidate_text)
+        ):
+            end_index = index
+            break
+        if (
+            article_range.next_number is not None
+            and _visible_article_number(candidate) == article_range.next_number
+        ):
+            end_index = index
+            break
 
     selected = tuple(
         block
