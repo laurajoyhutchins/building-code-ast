@@ -115,16 +115,20 @@ class SourceObjectCatalog:
         if not self.entries:
             raise ValueError("entries must not be empty")
         source_ids: set[str] = set()
-        object_keys: set[str] = set()
+        object_identities: dict[str, tuple[str, int, str]] = {}
         for entry in self.entries:
             if not isinstance(entry, SourceObjectRequirement):
                 raise ValueError("entries must contain SourceObjectRequirement values")
             if entry.source_id in source_ids:
                 raise ValueError(f"duplicate source_id: {entry.source_id}")
-            if entry.object_key in object_keys:
-                raise ValueError(f"duplicate object_key: {entry.object_key}")
+            identity = (entry.sha256, entry.size, entry.media_type)
+            existing_identity = object_identities.get(entry.object_key)
+            if existing_identity is not None and existing_identity != identity:
+                raise ValueError(
+                    f"conflicting identity for object_key: {entry.object_key}"
+                )
             source_ids.add(entry.source_id)
-            object_keys.add(entry.object_key)
+            object_identities[entry.object_key] = identity
 
     def to_dict(self) -> dict[str, Any]:
         return {
