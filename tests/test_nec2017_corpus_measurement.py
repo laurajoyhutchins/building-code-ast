@@ -23,7 +23,7 @@ def _page(number: int, *texts: str) -> PdfPage:
 
 
 class Nec2017CorpusMeasurementTests(unittest.TestCase):
-    def test_measurement_reuses_current_classifier_and_reports_last_article_overrun(self) -> None:
+    def test_measurement_reuses_current_classifier_after_final_article_fix(self) -> None:
         layout = PdfLayoutDocument(
             file_name="nec-2017.pdf",
             pages=(
@@ -49,12 +49,8 @@ class Nec2017CorpusMeasurementTests(unittest.TestCase):
         self.assertEqual(report["source"]["page_count"], 3)
         self.assertEqual(report["outline_counts"], {"numeric_articles": 1, "chapters": 1, "informative_annexes": 1})
         self.assertEqual(report["article_counts"]["observed"], 1)
-        self.assertEqual(report["article_counts"]["boundary_issues"], 1)
-        self.assertEqual(report["boundary_issues"][0]["article_number"], "840")
-        self.assertEqual(report["boundary_issues"][0]["current_scan_end_page"], 3)
-        self.assertEqual(report["boundary_issues"][0]["next_outline_page"], 2)
-        self.assertEqual(report["boundary_issues"][0]["next_outline_kind"], "chapter")
-        self.assertNotIn("next_outline_title", report["boundary_issues"][0])
+        self.assertEqual(report["article_counts"]["boundary_issues"], 0)
+        self.assertEqual(report["boundary_issues"], [])
 
         self.assertEqual(report["classifier_counts"]["heading"], 1)
         self.assertEqual(report["classifier_counts"]["section"], 1)
