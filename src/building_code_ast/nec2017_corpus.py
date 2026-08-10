@@ -78,6 +78,22 @@ def _successor_anchor(kind: str, text: str) -> bool:
     return False
 
 
+def _contains_successor_material(
+    blocks: tuple[PdfBlock, ...],
+    successor: PdfOutlineItem,
+    kind: str,
+) -> bool:
+    for block in blocks:
+        if block.page_number > successor.page_number:
+            return True
+        if (
+            block.page_number == successor.page_number
+            and _successor_anchor(kind, normalize_block_text(block.text))
+        ):
+            return True
+    return False
+
+
 def _trim_at_successor(
     blocks: tuple[PdfBlock, ...],
     successor: PdfOutlineItem,
@@ -129,7 +145,7 @@ def measure_nec2017_corpus(
         )
         if successor is not None and successor.page_number <= article_range.scan_end_page:
             kind = _outline_kind(successor.title)
-            if kind is not None:
+            if kind is not None and _contains_successor_material(blocks, successor, kind):
                 boundary_issues.append(
                     {
                         "article_number": article_range.number,
@@ -162,6 +178,8 @@ def measure_nec2017_corpus(
         1 for item in layout.outline if _outline_kind(item.title) == "informative_annex"
     )
     unsupported = classifier_counts.get("unsupported", 0)
+    serialized_counts = dict(sorted(classifier_counts.items()))
+    serialized_counts.setdefault("unsupported", 0)
 
     return {
         "measurement_version": MEASUREMENT_VERSION,
@@ -182,7 +200,7 @@ def measure_nec2017_corpus(
             "boundary_issues": len(boundary_issues),
         },
         "source_block_count": retained_blocks,
-        "classifier_counts": dict(sorted(classifier_counts.items())),
+        "classifier_counts": serialized_counts,
         "status_counts": {
             "recognized": retained_blocks - unsupported,
             "unsupported": unsupported,
