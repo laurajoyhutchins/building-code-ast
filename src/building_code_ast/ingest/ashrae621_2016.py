@@ -23,7 +23,7 @@ from ..document_model import (
 from ..document_validation import validate_document_ast
 from ..evidence.model import PublicationIdentity, publication_state_id
 from ..model import Diagnostic, DiagnosticSeverity, SourceSpan
-from .pdf_layout import PdfBlock, normalize_block_text
+from .pdf_layout import PdfBlock, PdfLine, normalize_block_text
 from .structural_occurrences import LocatorOccurrence, group_locator_occurrences
 
 
@@ -62,8 +62,6 @@ _EQUATION_RE = re.compile(
 )
 _SUPPORTED_HINTS = {"equation", "table", "figure", "graphical_region"}
 _BODY_MIDPOINT = 306.0
-# Exact-source replay shows normative appendix headings and table content beginning
-# above the generic 65-point cutoff, while source content also extends below 730.
 _TOP_CONTENT_Y = 30.0
 _BOTTOM_CONTENT_Y = 750.0
 
@@ -182,6 +180,65 @@ def _appendix_section_match(text: str) -> re.Match[str] | None:
     return match
 
 
+def _line_is_bold(line: PdfLine) -> bool:
+    return any((span.flags & 16) != 0 or "bold" in span.font.lower() for span in line.spans)
+
+
+def _line_is_appendix_heading(line: PdfLine) -> bool:
+    return _line_is_bold(line) and _appendix_section_match(normalize_block_text(line.text)) is not None
+
+
+def _derived_block(block: PdfBlock, lines: tuple[PdfLine, ...]) -> PdfBlock:
+    return PdfBlock(
+        page_number=block.page_number,
+        bbox=(
+            min(line.bbox[0] for line in lines),
+            min(line.bbox[1] for line in lines),
+            max(line.bbox[2] for line in lines),
+            max(line.bbox[3] for line in lines),
+        ),
+        text="\n".join(line.text for line in lines),
+        block_number=block.block_number,
+        table_region_id=block.table_region_id,
+        lines=lines,
+    )
+
+
+def _expand_compound_appendix_observation(
+    observation: Ashrae621Observation,
+) -> tuple[Ashrae621Observation, ...]:
+    block = observation.block
+    if observation.structure_hint is not None or len(block.lines) < 2:
+        return (observation,)
+
+    heading_indexes = tuple(
+        index for index, line in enumerate(block.lines) if _line_is_appendix_heading(line)
+    )
+    if len(heading_indexes) < 2:
+        return (observation,)
+
+    reconstructed = "\n".join(line.text for line in block.lines)
+    if normalize_block_text(reconstructed) != normalize_block_text(block.text):
+        return (observation,)
+
+    ranges: list[tuple[int, int]] = []
+    if heading_indexes[0] > 0:
+        ranges.append((0, heading_indexes[0]))
+    for position, start in enumerate(heading_indexes):
+        end = heading_indexes[position + 1] if position + 1 < len(heading_indexes) else len(block.lines)
+        ranges.append((start, end))
+
+    return tuple(
+        Ashrae621Observation(
+            block=_derived_block(block, block.lines[start:end]),
+            printed_page=observation.printed_page,
+            structure_hint=observation.structure_hint,
+            native_locator=observation.native_locator,
+        )
+        for start, end in ranges
+    )
+
+
 def _numbered_nonprose(
     observation: Ashrae621Observation,
     text: str,
@@ -198,9 +255,6 @@ def _numbered_nonprose(
     elif match := _FIGURE_RE.match(text):
         detected = (DocumentNodeType.FIGURE, match.group("locator"))
     elif "=" in text and (match := _EQUATION_RE.search(text)):
-        # Exact-source replay showed many non-equation blocks ending in parenthesized
-        # numbers. Require equation-like syntax unless the observation is explicitly
-        # hinted as an equation.
         detected = (DocumentNodeType.EQUATION, match.group("locator"))
 
     if hint in {"equation", "table", "figure"}:
@@ -280,7 +334,12 @@ def parse_ashrae621_2016_observations(
 ) -> DocumentAst:
     """Build a deterministic ASHRAE 62.1-2016 structural AST from PDF observations."""
 
-    ordered = tuple(sorted((item for item in observations if _is_content(item)), key=_observation_key))
+    expanded = tuple(
+        piece
+        for observation in observations
+        for piece in _expand_compound_appendix_observation(observation)
+    )
+    ordered = tuple(sorted((item for item in expanded if _is_content(item)), key=_observation_key))
     if not ordered:
         raise ValueError("ASHRAE 62.1-2016 observations must contain body-content regions")
 
