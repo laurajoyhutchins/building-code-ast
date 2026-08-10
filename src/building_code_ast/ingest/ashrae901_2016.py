@@ -46,8 +46,14 @@ _APPENDIX_RE = re.compile(
     r"^(?P<role>NORMATIVE|INFORMATIVE)\s+APPENDIX\s+(?P<letter>[A-H])\b(?:\s+(?P<title>.*))?$",
     re.IGNORECASE,
 )
-_TABLE_RE = re.compile(r"^Table\s+(?P<locator>[A-Za-z0-9.]+(?:-[A-Za-z0-9.]+)*)\b", re.IGNORECASE)
-_FIGURE_RE = re.compile(r"^Figure\s+(?P<locator>[A-Za-z0-9.]+(?:-[A-Za-z0-9.]+)*)\b", re.IGNORECASE)
+_TABLE_RE = re.compile(
+    r"^Table\s+(?P<locator>[A-Za-z0-9.]+(?:-[A-Za-z0-9.]+)*)\b",
+    re.IGNORECASE,
+)
+_FIGURE_RE = re.compile(
+    r"^Figure\s+(?P<locator>[A-Za-z0-9.]+(?:-[A-Za-z0-9.]+)*)\b",
+    re.IGNORECASE,
+)
 _EQUATION_RE = re.compile(r"\((?P<locator>\d+(?:\.\d+)*-\d+)\)\s*$")
 _SUPPORTED_HINTS = {"equation", "table", "figure", "graphical_region"}
 _BODY_MIDPOINT = 306.0
@@ -57,6 +63,9 @@ _HEADING_FONT = "Helvetica-Bold"
 _TOP_HEADING_SIZE = 11.0
 _SUBSECTION_HEADING_SIZE = 10.0
 _HEADING_SIZE_TOLERANCE = 0.05
+_FIGURE_CAPTION_FONT = "Helvetica-Bold"
+_FIGURE_CAPTION_SIZE = 8.5
+_FIGURE_CAPTION_SIZE_TOLERANCE = 0.05
 
 
 @dataclass(frozen=True, slots=True)
@@ -184,6 +193,25 @@ def _numeric_heading(
     return locator, title
 
 
+def _automatic_figure_locator(
+    observation: Ashrae901Observation,
+    text: str,
+) -> str | None:
+    """Recognize automatic figure captions from retained source typography."""
+
+    if observation.structure_hint is not None:
+        return None
+    match = _FIGURE_RE.match(text)
+    if match is None:
+        return None
+    span = _first_text_span(observation.block)
+    if span is None or span.font != _FIGURE_CAPTION_FONT:
+        return None
+    if abs(span.size - _FIGURE_CAPTION_SIZE) > _FIGURE_CAPTION_SIZE_TOLERANCE:
+        return None
+    return match.group("locator")
+
+
 def _numbered_nonprose(
     observation: Ashrae901Observation,
     text: str,
@@ -194,11 +222,12 @@ def _numbered_nonprose(
     if hint == "graphical_region":
         return None
 
+    figure_match = _FIGURE_RE.match(text)
     detected: tuple[DocumentNodeType, str] | None = None
     if match := _TABLE_RE.match(text):
         detected = (DocumentNodeType.TABLE, match.group("locator"))
-    elif match := _FIGURE_RE.match(text):
-        detected = (DocumentNodeType.FIGURE, match.group("locator"))
+    elif figure_locator := _automatic_figure_locator(observation, text):
+        detected = (DocumentNodeType.FIGURE, figure_locator)
     elif match := _EQUATION_RE.search(text):
         detected = (DocumentNodeType.EQUATION, match.group("locator"))
 
@@ -209,6 +238,8 @@ def _numbered_nonprose(
             "figure": DocumentNodeType.FIGURE,
         }[hint]
         locator = native_locator
+        if locator is None and hint == "figure" and figure_match is not None:
+            locator = figure_match.group("locator")
         if locator is None and detected is not None and detected[0] is node_type:
             locator = detected[1]
         if locator is None:
