@@ -334,6 +334,7 @@ def detect_ruled_tables(page: CleanedPage) -> tuple[TableCandidate, ...]:
     fragment_lines = _line_for_fragment(page)
     tables: list[TableCandidate] = []
     for x0, y0, x1, y1 in _rule_regions(page):
+        segmented_grid = False
         vertical = [
             rule
             for rule in page.rules
@@ -356,8 +357,14 @@ def detect_ruled_tables(page: CleanedPage) -> tuple[TableCandidate, ...]:
         )
         if len(xs) < 3 or len(ys) < 3:
             xs, ys = _segmented_rule_grid(page, x0, y0, x1, y1)
+            segmented_grid = len(xs) >= 3 and len(ys) >= 3
         if len(xs) < 3 or len(ys) < 3:
             continue
+        grid_evidence = (
+            ("vector_rule_grid", "segmented_vertical_rules")
+            if segmented_grid
+            else ("vector_rule_grid",)
+        )
 
         region_fragments = [
             fragment
@@ -404,7 +411,7 @@ def detect_ruled_tables(page: CleanedPage) -> tuple[TableCandidate, ...]:
                     ),
                     confidence=0.96,
                     evidence=(
-                        "vector_rule_grid",
+                        *grid_evidence,
                         f"row_index:{row_index}",
                         f"columns:{len(cells)}",
                     ),
@@ -420,7 +427,7 @@ def detect_ruled_tables(page: CleanedPage) -> tuple[TableCandidate, ...]:
                 normalized_text=normalized_text,
                 confidence=0.97,
                 evidence=(
-                    "vector_rule_grid",
+                    *grid_evidence,
                     f"rows:{len(normalized_rows)}",
                     f"columns:{len(xs) - 1}",
                 ),
