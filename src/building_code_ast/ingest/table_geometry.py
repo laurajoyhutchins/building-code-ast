@@ -77,6 +77,7 @@ def _bbox(fragments: Sequence[SourceFragment]) -> tuple[float, float, float, flo
 def detect_table_rows(page: CleanedPage, profile: PageOrderProfile) -> tuple[TableRowCandidate, ...]:
     if profile.page_number != page.page_number:
         raise ValueError("page profile does not match cleaned page")
+    rule_regions = _rule_regions(page)
     owned: list[tuple[SourceFragment, str]] = []
     for line in page.retained:
         owned.extend((fragment, line.line_id) for fragment in line.fragments)
@@ -101,6 +102,13 @@ def detect_table_rows(page: CleanedPage, profile: PageOrderProfile) -> tuple[Tab
         fragments = [item[0] for item in group]
         if len(fragments) < 2:
             continue
+        row_bbox = _bbox(fragments)
+        row_center_x = (row_bbox[0] + row_bbox[2]) / 2.0
+        row_center_y = (row_bbox[1] + row_bbox[3]) / 2.0
+        inside_rule_region = any(
+            x0 - 3.0 <= row_center_x <= x1 + 3.0 and y0 - 3.0 <= row_center_y <= y1 + 3.0
+            for x0, y0, x1, y1 in rule_regions
+        )
         row_font = max(statistics.median([item.font_size for item in fragments if item.font_size > 0.0] or [_height(item) for item in fragments]), 1.0)
         cell_gap = max(18.0, row_font * 1.8)
         cells: list[list[SourceFragment]] = [[]]
@@ -118,7 +126,8 @@ def detect_table_rows(page: CleanedPage, profile: PageOrderProfile) -> tuple[Tab
         largest_gap, gap_left, gap_right = max(separators, key=lambda item: item[0])
         if profile.mode is ReadingOrderMode.TWO_COLUMN:
             straddles_split = profile.split_x is not None and gap_left < profile.split_x < gap_right
-            if straddles_split or (page.width > 0.0 and largest_gap > page.width * 0.18):
+            page_column_shape = straddles_split or (page.width > 0.0 and largest_gap > page.width * 0.18)
+            if page_column_shape and not inside_rule_region:
                 continue
         text_cells = [_join_cell(cell) for cell in cells]
         if sum(bool(value) for value in text_cells) < 2:
@@ -132,7 +141,7 @@ def detect_table_rows(page: CleanedPage, profile: PageOrderProfile) -> tuple[Tab
             local_cursor += len(text)
             cell_records.append(TableCellCandidate(text, tuple(cell_fragments), start, local_cursor))
         source_line_ids = tuple(dict.fromkeys(item[1] for item in group))
-        rows.append(TableRowCandidate(page.page_number, source_line_ids, tuple(cell_records), _bbox(fragments), tuple(cell[0].bbox[0] for cell in cells), tuple(fragments), round(row_font, 3), 0.82, ("geometry_cells", f"cells:{len(cell_records)}", f"fragments:{len(fragments)}")))
+        rows.append(TableRowCandidate(page.page_number, source_line_ids, tuple(cell_records), row_bbox, tuple(cell[0].bbox[0] for cell in cells), tuple(fragments), round(row_font, 3), 0.82, ("geometry_cells", f"cells:{len(cell_records)}", f"fragments:{len(fragments)}")))
     return tuple(sorted(rows, key=lambda row: (row.page_number, row.bbox[1], row.bbox[0])))
 
 
