@@ -56,10 +56,28 @@ class Nec2017CorpusMeasurementTests(unittest.TestCase):
         self.assertEqual(report["boundary_issues"][0]["next_outline_kind"], "chapter")
         self.assertNotIn("next_outline_title", report["boundary_issues"][0])
 
-        # Counts describe current classifier output, not semantic coverage.
         self.assertEqual(report["classifier_counts"]["heading"], 1)
         self.assertEqual(report["classifier_counts"]["section"], 1)
         self.assertEqual(report["classifier_counts"]["unsupported"], 0)
+
+    def test_same_page_chapter_transition_already_trimmed_by_selector_is_not_an_issue(self) -> None:
+        layout = PdfLayoutDocument(
+            file_name="nec-2017.pdf",
+            pages=(
+                _page(1, "ARTICLE 110 Requirements", "110.1 Scope."),
+                _page(2, "Chapter 2 Wiring", "ARTICLE 200 Conductors", "200.1 Scope."),
+            ),
+            outline=(
+                PdfOutlineItem(level=2, title="110 Requirements", page_number=1),
+                PdfOutlineItem(level=1, title="Chapter 2 Wiring", page_number=2),
+                PdfOutlineItem(level=2, title="200 Conductors", page_number=2),
+            ),
+        )
+
+        report = measure_nec2017_corpus(layout, source_sha256=DIGEST, source_size=7_422_245)
+        self.assertEqual(report["article_counts"]["observed"], 2)
+        self.assertEqual(report["article_counts"]["boundary_issues"], 0)
+        self.assertEqual(report["boundary_issues"], [])
 
     def test_measurement_is_order_stable_and_fails_closed_on_bad_identity(self) -> None:
         layout = PdfLayoutDocument(
