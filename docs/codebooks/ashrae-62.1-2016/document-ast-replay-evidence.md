@@ -23,7 +23,7 @@ Private inspection of the exact artifact exposed source-backed defects in the fi
 4. Parenthesized numeric endings occur in ordinary source blocks and are not sufficient evidence of an equation. Unhinted equation recognition now requires equation-like syntax plus a publication-native trailing identifier.
 5. Top-level Section recognition is restricted to the publication's Sections 1 through 9 and source-heading evidence, reducing promotion of numbered non-heading material.
 
-These defects were first encoded as failing tests at RED head `d1dfddab7df401c7d61c3524c05f32d32eac3d27`. The corrected implementation is head `974e23f640061fb29cfea9ec2e167443f5a08fa4`.
+These defects were first encoded as failing tests at RED head `d1dfddab7df401c7d61c3524c05f32d32eac3d27`. The corrected bounded-foundation implementation is head `974e23f640061fb29cfea9ec2e167443f5a08fa4` and landed through #181.
 
 ## Bounded exact-source replay
 
@@ -39,35 +39,63 @@ Source-safe aggregate results:
 
 Each bounded replay passed generic `validate_document_ast` validation. The page-26 replay exercised normative Appendix A source role, appendix-native hierarchy, equations, a figure, and printed-page provenance. The pages-29-30 replay exercised normative Appendix B hierarchy, tables, equations, a figure, and printed-page provenance. These are structural claims only.
 
-## Whole-document stress result
+## Initial whole-document stress result
 
-A 60-page replay was also attempted as a stress measurement. It intentionally failed closed on a repeated native table locator:
+The first 60-page replay intentionally failed closed on a repeated native table locator:
 
 `duplicate document locator: table:6.2.2.1`
 
-This is not treated as a parser success or silently normalized away. The exact source contains repeated table-caption observations associated with multi-page continuation structure. The current bounded foundation does not yet model continuation occurrences without colliding deterministic locators.
+This was not treated as a parser success or silently normalized away. Whole-artifact source-safe observation found 28 table-caption blocks representing 17 native table identifiers. Six identifiers repeat, accounting for 17 observations across those repeated groups:
 
-Additional whole-artifact source-safe observation found repeated table-caption identities beyond this first failing case, so fixing one literal locator would not constitute whole-document support.
+- four repeated groups occupy adjacent physical pages;
+- two repeated groups contain more than one observation on the same physical page;
+- 11 observations are therefore additional occurrences beyond the six primary native identifiers.
 
-The replay also showed compound PDF text blocks in which multiple nested subsection headings share one extraction block. The current adapter can preserve a meaningful bounded hierarchy, but whole-document structural completeness requires measured handling of those compound blocks rather than claiming one-heading-per-block behavior.
+The same-page cases matter: repeated native identity alone is not sufficient evidence that every repeated extraction block is a semantic continuation.
+
+## Shared repeated-locator replay progression
+
+PR #220 introduces a publication-neutral occurrence classifier that groups observations by native locator and deterministic source order while keeping these source shapes distinct:
+
+- single occurrence;
+- adjacent-page repetition;
+- same-page duplicate observation;
+- discontiguous-page repetition.
+
+The ASHRAE adapter uses this classification only to preserve identity without collision. The first occurrence retains the native `table:<locator>` identity. Additional observations remain explicit page-scoped `TABLE_HEADING` nodes with the same native locator recorded as metadata. The adapter emits a deferred-structure diagnostic and does not claim table-body, lookup, or continuation semantics from repetition alone.
+
+Replaying the exact 60-page artifact with that implementation advances past every repeated table-locator collision. The next fail-closed validator result is:
+
+`duplicate document locator: section:C1`
+
+Private coordinate review shows two `C1` heading candidates on the same physical page with different geometry and text-layer shape. That is now the next independent structural ambiguity. It must be resolved from heading/layout evidence rather than by weakening global locator uniqueness.
+
+This progression is the intended whole-document measurement behavior: fix one proven structural family, rerun, and expose the next real counterexample.
+
+## Additional measured boundary
+
+The replay also shows compound PDF text blocks in which multiple nested subsection headings can share one extraction block. The current adapter can preserve meaningful bounded hierarchy, but whole-document structural completeness requires measured handling of those compound blocks rather than claiming one-heading-per-block behavior.
 
 ## Support boundary after replay
 
-This evidence establishes the completion gate for the bounded Document AST foundation:
+The evidence establishes:
 
 - exact retained artifact identity verified;
-- real-source structural slices replayed deterministically;
-- generic validation passed on representative mandatory body and normative appendix slices;
-- publication-native appendix hierarchy and non-prose identity exercised;
-- source-role and coordinate provenance retained;
+- real-source structural slices replay deterministically;
+- generic validation passes on representative mandatory body and normative appendix slices;
+- publication-native appendix hierarchy and non-prose identity are exercised;
+- source-role and coordinate provenance are retained;
+- repeated table observations can be preserved without duplicate AST locators or semantic overclaiming;
 - unsupported whole-document behavior remains visible.
 
 It does **not** establish:
 
 - whole-document structural completeness;
-- complete multi-page table continuation support;
+- semantic multi-page table continuation;
+- table body/header/cell reconstruction;
 - complete compound-block heading segmentation;
-- table cell or lookup semantics;
+- resolution of the duplicate `C1` heading candidate family;
+- table lookup semantics;
 - mathematical semantics;
 - reference resolution;
 - reviewed provision semantics;
@@ -75,4 +103,4 @@ It does **not** establish:
 
 ## Next executable evidence
 
-The next ASHRAE 62.1 implementation should be selected from the measured whole-document failures. Before adding publication-specific continuation logic, inspect and reuse existing shared table-continuation / layout infrastructure where it can preserve the same exact-source evidence. Compound-block heading segmentation should likewise be treated as a shared layout problem when cross-publication evidence supports that abstraction.
+After the repeated-table occurrence work lands, the next ASHRAE structural gate is the measured duplicate `C1` / compound-heading family. Inspect its geometry and neighboring heading evidence and prefer a shared heading-segmentation rule only if cross-publication evidence supports one. Do not weaken locator uniqueness or add publication semantics merely to make the whole-document run green.
