@@ -22,7 +22,7 @@ from ..document_model import (
 from ..document_validation import validate_document_ast
 from ..evidence.model import PublicationIdentity, publication_state_id
 from ..model import Diagnostic, DiagnosticSeverity, SourceSpan
-from .pdf_layout import PdfBlock, normalize_block_text
+from .pdf_layout import PdfBlock, PdfSpan, normalize_block_text
 
 
 ASHRAE_90_1_2016_PUBLICATION = PublicationIdentity(
@@ -39,8 +39,9 @@ ASHRAE_90_1_2016_ARTIFACT = DocumentSourceArtifact(
 
 _MANDATORY_APPENDICES = frozenset({"A", "C", "G"})
 _INFORMATIVE_APPENDICES = frozenset({"B", "D", "E", "F", "H"})
-_TOP_SECTION_RE = re.compile(r"^(?P<locator>\d{1,2})\.\s+(?P<title>\S.*)$")
-_SUBSECTION_RE = re.compile(r"^(?P<locator>\d+(?:\.\d+)+)\s+(?P<title>\S.*)$")
+_NUMERIC_HEADING_RE = re.compile(
+    r"^(?P<locator>\d+(?:\.\d+)*)(?:\.)?(?:\s+(?P<title>\S.*))?$"
+)
 _APPENDIX_RE = re.compile(
     r"^(?P<role>NORMATIVE|INFORMATIVE)\s+APPENDIX\s+(?P<letter>[A-H])\b(?:\s+(?P<title>.*))?$",
     re.IGNORECASE,
@@ -52,6 +53,10 @@ _SUPPORTED_HINTS = {"equation", "table", "figure", "graphical_region"}
 _BODY_MIDPOINT = 306.0
 _TOP_CONTENT_Y = 65.0
 _BOTTOM_CONTENT_Y = 730.0
+_HEADING_FONT = "Helvetica-Bold"
+_TOP_HEADING_SIZE = 11.0
+_SUBSECTION_HEADING_SIZE = 10.0
+_HEADING_SIZE_TOLERANCE = 0.05
 
 
 @dataclass(frozen=True, slots=True)
@@ -140,6 +145,43 @@ def _appendix_role(letter: str, declared_role: str) -> str:
     if declared != expected:
         raise ValueError(f"appendix {letter} is {expected} in the retained publication")
     return expected
+
+
+def _first_text_span(block: PdfBlock) -> PdfSpan | None:
+    for line in block.lines:
+        for span in line.spans:
+            if span.text.strip():
+                return span
+    return None
+
+
+def _numeric_heading(
+    observation: Ashrae901Observation,
+    text: str,
+    *,
+    inside_appendix: bool,
+) -> tuple[str, str | None] | None:
+    """Recognize body hierarchy only from exact-source heading typography."""
+
+    if inside_appendix or observation.structure_hint is not None:
+        return None
+    match = _NUMERIC_HEADING_RE.fullmatch(text)
+    if match is None:
+        return None
+
+    span = _first_text_span(observation.block)
+    if span is None or span.font != _HEADING_FONT:
+        return None
+
+    locator = match.group("locator")
+    title = match.group("title")
+    depth = locator.count(".")
+    expected_size = _TOP_HEADING_SIZE if depth == 0 else _SUBSECTION_HEADING_SIZE
+    if abs(span.size - expected_size) > _HEADING_SIZE_TOLERANCE:
+        return None
+    if depth == 0 and title is None:
+        return None
+    return locator, title
 
 
 def _numbered_nonprose(
@@ -268,14 +310,15 @@ def parse_ashrae901_2016_observations(
             current_role = role
             continue
 
-        top_match = _TOP_SECTION_RE.match(text) if observation.structure_hint is None else None
-        sub_match = _SUBSECTION_RE.match(text) if observation.structure_hint is None else None
-        match = sub_match or top_match
-        if match is not None:
-            locator = match.group("locator")
+        heading = _numeric_heading(
+            observation,
+            text,
+            inside_appendix=current_appendix is not None,
+        )
+        if heading is not None:
+            locator, title = heading
             depth = locator.count(".")
             if depth == 0:
-                current_appendix = None
                 section_stack = []
                 current_role = "mandatory"
                 node_type = DocumentNodeType.SECTION
@@ -288,10 +331,10 @@ def parse_ashrae901_2016_observations(
                 f"section:{locator}",
                 start,
                 end,
-                label=match.group("title"),
+                label=title,
                 attributes=_attributes(observation, source_role=current_role),
             )
-            parent = section_stack[-1] if section_stack else (current_appendix or root)
+            parent = section_stack[-1] if section_stack else root
             parent.children.append(section)
             section_stack.append(section)
             extend_open(end)

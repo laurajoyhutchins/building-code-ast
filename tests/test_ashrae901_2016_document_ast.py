@@ -10,7 +10,7 @@ from building_code_ast.ingest.ashrae901_2016 import (
     Ashrae901Observation,
     parse_ashrae901_2016_observations,
 )
-from building_code_ast.ingest.pdf_layout import PdfBlock
+from building_code_ast.ingest.pdf_layout import PdfBlock, PdfLine, PdfSpan
 
 
 def _observation(
@@ -22,13 +22,26 @@ def _observation(
     y: float,
     hint: str | None = None,
     locator: str | None = None,
+    font: str | None = None,
+    size: float | None = None,
 ) -> Ashrae901Observation:
+    lines = ()
+    if font is not None and size is not None:
+        span = PdfSpan(
+            bbox=(72.0, y, 540.0, y + size),
+            text=text,
+            font=font,
+            size=size,
+            flags=0,
+        )
+        lines = (PdfLine(bbox=span.bbox, spans=(span,)),)
     return Ashrae901Observation(
         block=PdfBlock(
             page_number=page,
             bbox=(72.0, y, 540.0, y + 18.0),
             text=text,
             block_number=block_number,
+            lines=lines,
         ),
         printed_page=printed_page,
         structure_hint=hint,
@@ -57,9 +70,33 @@ class Ashrae901DocumentAstTests(unittest.TestCase):
 
     def test_structural_slice_preserves_hierarchy_role_coordinates_table_and_unsupported(self) -> None:
         observations = (
-            _observation("6. SYNTHETIC SYSTEMS", page=12, printed_page="8", block_number=1, y=80),
-            _observation("6.1 Synthetic Scope", page=12, printed_page="8", block_number=2, y=110),
-            _observation("6.1.1 Synthetic Subsection", page=12, printed_page="8", block_number=3, y=140),
+            _observation(
+                "6 SYNTHETIC SYSTEMS",
+                page=12,
+                printed_page="8",
+                block_number=1,
+                y=80,
+                font="Helvetica-Bold",
+                size=11.0,
+            ),
+            _observation(
+                "6.1 Synthetic Scope",
+                page=12,
+                printed_page="8",
+                block_number=2,
+                y=110,
+                font="Helvetica-Bold",
+                size=10.0,
+            ),
+            _observation(
+                "6.1.1 Synthetic Subsection",
+                page=12,
+                printed_page="8",
+                block_number=3,
+                y=140,
+                font="Helvetica-Bold",
+                size=10.0,
+            ),
             _observation("Synthetic mandatory prose.", page=12, printed_page="8", block_number=4, y=170),
             _observation("Table 6.1.1-1 Synthetic Limits", page=12, printed_page="8", block_number=5, y=200),
             _observation(
@@ -138,8 +175,24 @@ class Ashrae901DocumentAstTests(unittest.TestCase):
 
     def test_discovery_order_does_not_change_output_or_ids(self) -> None:
         observations = (
-            _observation("6. SYNTHETIC SYSTEMS", page=12, printed_page="8", block_number=1, y=80),
-            _observation("6.1 Synthetic Scope", page=12, printed_page="8", block_number=2, y=110),
+            _observation(
+                "6 SYNTHETIC SYSTEMS",
+                page=12,
+                printed_page="8",
+                block_number=1,
+                y=80,
+                font="Helvetica-Bold",
+                size=11.0,
+            ),
+            _observation(
+                "6.1 Synthetic Scope",
+                page=12,
+                printed_page="8",
+                block_number=2,
+                y=110,
+                font="Helvetica-Bold",
+                size=10.0,
+            ),
             _observation("Synthetic mandatory prose.", page=12, printed_page="8", block_number=3, y=140),
         )
         self.assertEqual(

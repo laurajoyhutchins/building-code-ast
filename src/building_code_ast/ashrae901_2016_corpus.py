@@ -16,10 +16,9 @@ from .ingest.ashrae901_2016 import (
     _APPENDIX_RE,
     _EQUATION_RE,
     _FIGURE_RE,
-    _SUBSECTION_RE,
     _TABLE_RE,
-    _TOP_SECTION_RE,
     _is_content,
+    _numeric_heading,
     _observation_key,
 )
 from .ingest.pdf_layout import PdfLayoutDocument, normalize_block_text
@@ -66,18 +65,24 @@ def _ordered_observations(layout: PdfLayoutDocument) -> tuple[Ashrae901Observati
     )
 
 
-def _classify(observation: Ashrae901Observation) -> tuple[str, str | None]:
+def _classify(
+    observation: Ashrae901Observation,
+    *,
+    inside_appendix: bool,
+) -> tuple[str, str | None]:
     """Mirror current adapter classification without materializing source text."""
 
     text = normalize_block_text(observation.block.text)
     if match := _APPENDIX_RE.match(text):
         return "appendix", f"appendix:{match.group('letter').upper()}"
 
-    top_match = _TOP_SECTION_RE.match(text)
-    sub_match = _SUBSECTION_RE.match(text)
-    match = sub_match or top_match
-    if match is not None:
-        locator = match.group("locator")
+    heading = _numeric_heading(
+        observation,
+        text,
+        inside_appendix=inside_appendix,
+    )
+    if heading is not None:
+        locator, _ = heading
         kind = "section" if locator.count(".") == 0 else "subsection"
         return kind, f"section:{locator}"
 
@@ -120,14 +125,22 @@ def measure_ashrae901_2016_corpus(
     observations = _ordered_observations(layout)
     classifier_counts: Counter[str] = Counter()
     numeric_pages: dict[str, list[int]] = defaultdict(list)
+    numeric_first_seen: dict[str, int] = {}
+    numeric_first_duplicate: dict[str, Any] | None = None
     structural_first_seen: dict[str, int] = {}
-    first_duplicate: dict[str, Any] | None = None
+    structural_first_duplicate: dict[str, Any] | None = None
     recognized_appendices: set[str] = set()
     current_appendix_sublocators: set[str] = set()
+    inside_appendix = False
 
     for observation in observations:
-        kind, locator = _classify(observation)
+        kind, locator = _classify(
+            observation,
+            inside_appendix=inside_appendix,
+        )
         classifier_counts[kind] += 1
+        if kind == "appendix":
+            inside_appendix = True
         if locator is None:
             continue
 
@@ -136,6 +149,15 @@ def measure_ashrae901_2016_corpus(
             native = locator.removeprefix("section:")
             if native and native[0].isdigit():
                 numeric_pages[native].append(page_number)
+                first_numeric_page = numeric_first_seen.get(locator)
+                if first_numeric_page is None:
+                    numeric_first_seen[locator] = page_number
+                elif numeric_first_duplicate is None:
+                    numeric_first_duplicate = {
+                        "locator": locator,
+                        "first_pdf_page": first_numeric_page,
+                        "repeated_pdf_page": page_number,
+                    }
             elif _APPENDIX_NATIVE_OUTLINE_RE.match(native):
                 current_appendix_sublocators.add(native)
         elif locator.startswith("appendix:"):
@@ -144,8 +166,8 @@ def measure_ashrae901_2016_corpus(
         first_page = structural_first_seen.get(locator)
         if first_page is None:
             structural_first_seen[locator] = page_number
-        elif first_duplicate is None:
-            first_duplicate = {
+        elif structural_first_duplicate is None:
+            structural_first_duplicate = {
                 "locator": locator,
                 "first_pdf_page": first_page,
                 "repeated_pdf_page": page_number,
@@ -191,11 +213,19 @@ def measure_ashrae901_2016_corpus(
         )
     }
 
-    blocker = None if first_duplicate is None else "duplicate_document_locator"
+    blocker = (
+        None
+        if structural_first_duplicate is None
+        else "duplicate_document_locator"
+    )
     status = {
-        "validatable": first_duplicate is None,
+        "validatable": structural_first_duplicate is None,
         "blocker": blocker,
-        "locator": None if first_duplicate is None else first_duplicate["locator"],
+        "locator": (
+            None
+            if structural_first_duplicate is None
+            else structural_first_duplicate["locator"]
+        ),
     }
 
     return {
@@ -220,7 +250,7 @@ def measure_ashrae901_2016_corpus(
             "exact_outline_page_matches": exact_page_matches,
             "near_outline_page_matches": near_page_matches,
             "far_only_outline_matches": far_only_matches,
-            "first_duplicate": first_duplicate,
+            "first_duplicate": numeric_first_duplicate,
         },
         "appendix_hierarchy": {
             "outline_top_level_appendices": len(top_level_outline_appendices),
