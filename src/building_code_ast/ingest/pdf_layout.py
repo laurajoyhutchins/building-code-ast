@@ -14,12 +14,51 @@ _TABLE_ANNOUNCEMENT_RE = re.compile(r"^\s*Table\s+\d", re.IGNORECASE)
 
 
 @dataclass(frozen=True, slots=True)
+class PdfSpan:
+    """One source text span within a PDF visual line."""
+
+    bbox: tuple[float, float, float, float]
+    text: str
+    font: str
+    size: float
+    flags: int
+
+    def to_dict(self) -> dict[str, object]:
+        return {
+            "bbox": [round(value, 3) for value in self.bbox],
+            "text": self.text,
+            "font": self.font,
+            "size": round(self.size, 3),
+            "flags": self.flags,
+        }
+
+
+@dataclass(frozen=True, slots=True)
+class PdfLine:
+    """One visual text line with ordered source spans."""
+
+    bbox: tuple[float, float, float, float]
+    spans: tuple[PdfSpan, ...]
+
+    @property
+    def text(self) -> str:
+        return "".join(span.text for span in self.spans)
+
+    def to_dict(self) -> dict[str, object]:
+        return {
+            "bbox": [round(value, 3) for value in self.bbox],
+            "spans": [span.to_dict() for span in self.spans],
+        }
+
+
+@dataclass(frozen=True, slots=True)
 class PdfBlock:
     """One text block extracted from one PDF page.
 
     Page numbers are one-based. Bounding boxes use PDF points in
     ``(x0, y0, x1, y1)`` order. ``table_region_id`` is page-local geometric
-    evidence only; it does not assign table semantics to the block.
+    evidence only; it does not assign table semantics to the block. ``lines``
+    retains optional visual-line/font evidence without replacing ``text``.
     """
 
     page_number: int
@@ -27,6 +66,7 @@ class PdfBlock:
     text: str
     block_number: int = 0
     table_region_id: int | None = None
+    lines: tuple[PdfLine, ...] = ()
 
     def to_dict(self) -> dict[str, object]:
         payload: dict[str, object] = {
@@ -37,6 +77,8 @@ class PdfBlock:
         }
         if self.table_region_id is not None:
             payload["table_region_id"] = self.table_region_id
+        if self.lines:
+            payload["lines"] = [line.to_dict() for line in self.lines]
         return payload
 
 
@@ -146,12 +188,44 @@ def _table_region_id(
     return None
 
 
+def _line_evidence_by_block(page: object) -> dict[int, tuple[PdfLine, ...]]:
+    """Return visual line/span evidence keyed by PyMuPDF block number."""
+
+    raw = page.get_text("dict", sort=False)
+    result: dict[int, tuple[PdfLine, ...]] = {}
+    for raw_block in raw.get("blocks", ()):
+        if int(raw_block.get("type", 0)) != 0:
+            continue
+        block_number = int(raw_block.get("number", -1))
+        if block_number < 0:
+            continue
+        lines: list[PdfLine] = []
+        for raw_line in raw_block.get("lines", ()):
+            spans: list[PdfSpan] = []
+            for raw_span in raw_line.get("spans", ()):
+                bbox = tuple(float(value) for value in raw_span.get("bbox", (0, 0, 0, 0)))
+                spans.append(
+                    PdfSpan(
+                        bbox=bbox,
+                        text=str(raw_span.get("text", "")),
+                        font=str(raw_span.get("font", "")),
+                        size=float(raw_span.get("size", 0.0)),
+                        flags=int(raw_span.get("flags", 0)),
+                    )
+                )
+            line_bbox = tuple(float(value) for value in raw_line.get("bbox", (0, 0, 0, 0)))
+            lines.append(PdfLine(bbox=line_bbox, spans=tuple(spans)))
+        result[block_number] = tuple(lines)
+    return result
+
+
 def extract_pdf_layout(path: Path | str) -> PdfLayoutDocument:
     """Extract PDF pages, text blocks, outline, and bounded table geometry.
 
     PyMuPDF is intentionally optional so importing the core package retains an
     empty dependency set. Table-region IDs are geometric candidates only and
-    do not imply header roles, cell semantics, or rule interpretation.
+    do not imply header roles, cell semantics, or rule interpretation. Visual
+    line/span evidence is additive and never replaces legacy block text.
     """
 
     try:
@@ -176,6 +250,7 @@ def extract_pdf_layout(path: Path | str) -> PdfLayoutDocument:
         for page_index in range(document.page_count):
             page = document[page_index]
             raw_blocks = tuple(page.get_text("blocks", sort=False))
+            line_evidence = _line_evidence_by_block(page)
             table_regions = _table_region_bboxes(
                 page,
                 (str(block[4]) for block in raw_blocks if len(block) > 4),
@@ -195,6 +270,7 @@ def extract_pdf_layout(path: Path | str) -> PdfLayoutDocument:
                         text=str(text),
                         block_number=block_number,
                         table_region_id=_table_region_id(bbox, table_regions),
+                        lines=line_evidence.get(block_number, ()),
                     )
                 )
             pages.append(
