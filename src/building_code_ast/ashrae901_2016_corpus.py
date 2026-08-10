@@ -1,16 +1,19 @@
 """Source-safe whole-document measurement for retained ASHRAE 90.1-2016.
 
 This module measures the current ASHRAE 90.1 observation adapter against PDF
-layout and outline evidence. It does not add recognition rules, use the outline
-as parser truth, or claim semantic, reviewed, or structural completeness.
+layout and outline evidence. It also provides a source-safe materialization
+receipt that runs the real publication adapter and generic Document AST
+validator without serializing the private AST or source expression.
 """
 
 from __future__ import annotations
 
 from collections import Counter, defaultdict
 import re
-from typing import Any
+from typing import Any, Iterator
 
+from .document_model import DocumentNode
+from .document_validation import validate_document_ast
 from .ingest.ashrae901_2016 import (
     Ashrae901Observation,
     _APPENDIX_RE,
@@ -20,11 +23,13 @@ from .ingest.ashrae901_2016 import (
     _is_content,
     _numeric_heading,
     _observation_key,
+    parse_ashrae901_2016_observations,
 )
 from .ingest.pdf_layout import PdfLayoutDocument, normalize_block_text
 
 
 MEASUREMENT_VERSION = "0.2.0"
+MATERIALIZATION_RECEIPT_VERSION = "0.1.0"
 ASHRAE_90_1_2016_SOURCE_SHA256 = (
     "275a343724fce483fc3038b261fb00c0c4a3360d3a54078b92a433aba56ec162"
 )
@@ -63,6 +68,48 @@ def _ordered_observations(layout: PdfLayoutDocument) -> tuple[Ashrae901Observati
             key=_observation_key,
         )
     )
+
+
+def _walk_document(node: DocumentNode) -> Iterator[DocumentNode]:
+    yield node
+    for child in node.children:
+        yield from _walk_document(child)
+
+
+def materialize_ashrae901_2016_document_receipt(
+    layout: PdfLayoutDocument,
+    *,
+    source_sha256: str,
+    source_size: int,
+) -> dict[str, Any]:
+    """Materialize and validate privately, returning only source-safe aggregates."""
+
+    _verify_exact_source(
+        layout,
+        source_sha256=source_sha256,
+        source_size=source_size,
+    )
+    observations = _ordered_observations(layout)
+    ast = parse_ashrae901_2016_observations(observations)
+    validate_document_ast(ast)
+
+    nodes = tuple(_walk_document(ast.root))
+    node_type_counts = Counter(node.node_type.value for node in nodes)
+    diagnostic_counts = Counter(diagnostic.code for diagnostic in ast.diagnostics)
+    return {
+        "receipt_version": MATERIALIZATION_RECEIPT_VERSION,
+        "status": "validated",
+        "source": {
+            "file_name": layout.file_name,
+            "sha256": source_sha256,
+            "size_bytes": source_size,
+            "page_count": layout.page_count,
+        },
+        "source_block_count": len(observations),
+        "node_count": len(nodes),
+        "node_type_counts": dict(sorted(node_type_counts.items())),
+        "diagnostic_counts": dict(sorted(diagnostic_counts.items())),
+    }
 
 
 def _classify(
