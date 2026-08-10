@@ -214,7 +214,7 @@ def _expand_compound_appendix_observation(
     heading_indexes = tuple(
         index for index, line in enumerate(block.lines) if _line_is_appendix_heading(line)
     )
-    if len(heading_indexes) < 2:
+    if not heading_indexes or (len(heading_indexes) == 1 and heading_indexes[0] == 0):
         return (observation,)
 
     reconstructed = "\n".join(line.text for line in block.lines)
