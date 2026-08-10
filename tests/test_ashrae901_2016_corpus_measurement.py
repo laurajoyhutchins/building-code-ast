@@ -88,8 +88,8 @@ class Ashrae901CorpusMeasurementTests(unittest.TestCase):
                 "missing_outline_locators": 1,
                 "unexpected_candidate_locators": 0,
                 "exact_outline_page_matches": 1,
-                "near_outline_page_matches": 0,
-                "far_only_outline_matches": 1,
+                "near_outline_page_matches": 1,
+                "far_only_outline_matches": 0,
                 "first_duplicate": {
                     "locator": "section:1",
                     "first_pdf_page": 7,
