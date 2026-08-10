@@ -12,6 +12,7 @@ from building_code_ast.evidence import (
     RightsStatus,
     SourceRegister,
     SourceRegisterEntry,
+    source_register_from_dict,
 )
 from building_code_ast.evidence.source_objects import (
     ObjectProvider,
@@ -168,6 +169,36 @@ class SourceObjectLocatorTests(unittest.TestCase):
         self.assertNotIn("google_drive", rendered)
         self.assertNotIn("object_id", rendered)
         self.assertNotIn("drive.google.com", rendered)
+
+    def test_repository_catalog_cross_validates_all_durable_source_registers(self) -> None:
+        root = Path(__file__).resolve().parents[1]
+        register_paths = (
+            "corpora/aci-318-19/aci-318-19-source-register.json",
+            "corpora/asce-7-22/asce-7-22-source-register.json",
+            "corpora/ashrae-62.1-2016/ashrae-62.1-2016-source-register.json",
+            "corpora/ashrae-90.1-2016/ashrae-90.1-2016-source-register.json",
+            "corpora/ibc-2018/ibc-2018-source-register.json",
+            "corpora/nds-2018/nds-2018-source-register.json",
+            "corpora/nec-2017/nec-2017-source-register.json",
+            "corpora/nfpa-13-2019/nfpa-13-2019-source-register.json",
+            "corpora/tms-402-602-16/tms-402-602-16-source-register.json",
+        )
+        authoritative_entries = []
+        for path in register_paths:
+            payload = json.loads((root / path).read_text())
+            authoritative_entries.extend(source_register_from_dict(payload).entries)
+        source_register = SourceRegister(entries=tuple(authoritative_entries))
+
+        catalog_payload = json.loads(
+            (root / "corpora" / "source-object-catalog.json").read_text()
+        )
+        catalog = source_object_catalog_from_dict(catalog_payload)
+
+        self.assertEqual(
+            {entry.source_id for entry in catalog.entries},
+            {entry.source_id for entry in source_register.entries},
+        )
+        validate_source_object_catalog(catalog, source_register)
 
 
 if __name__ == "__main__":
