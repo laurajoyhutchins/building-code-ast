@@ -184,8 +184,11 @@ def _line_is_bold(line: PdfLine) -> bool:
     return any((span.flags & 16) != 0 or "bold" in span.font.lower() for span in line.spans)
 
 
-def _line_is_appendix_heading(line: PdfLine) -> bool:
-    return _line_is_bold(line) and _appendix_section_match(normalize_block_text(line.text)) is not None
+def _line_is_structural_heading(line: PdfLine) -> bool:
+    text = normalize_block_text(line.text)
+    return _line_is_bold(line) and (
+        _appendix_section_match(text) is not None or _SUBSECTION_RE.match(text) is not None
+    )
 
 
 def _derived_block(block: PdfBlock, lines: tuple[PdfLine, ...]) -> PdfBlock:
@@ -204,7 +207,7 @@ def _derived_block(block: PdfBlock, lines: tuple[PdfLine, ...]) -> PdfBlock:
     )
 
 
-def _expand_compound_appendix_observation(
+def _expand_embedded_heading_observation(
     observation: Ashrae621Observation,
 ) -> tuple[Ashrae621Observation, ...]:
     block = observation.block
@@ -212,7 +215,7 @@ def _expand_compound_appendix_observation(
         return (observation,)
 
     heading_indexes = tuple(
-        index for index, line in enumerate(block.lines) if _line_is_appendix_heading(line)
+        index for index, line in enumerate(block.lines) if _line_is_structural_heading(line)
     )
     if not heading_indexes or (len(heading_indexes) == 1 and heading_indexes[0] == 0):
         return (observation,)
@@ -337,7 +340,7 @@ def parse_ashrae621_2016_observations(
     expanded = tuple(
         piece
         for observation in observations
-        for piece in _expand_compound_appendix_observation(observation)
+        for piece in _expand_embedded_heading_observation(observation)
     )
     ordered = tuple(sorted((item for item in expanded if _is_content(item)), key=_observation_key))
     if not ordered:
