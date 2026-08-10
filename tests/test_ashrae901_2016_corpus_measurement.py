@@ -87,6 +87,22 @@ def _layout(*, page_count: int = 388) -> PdfLayoutDocument:
                 size=11.0,
             ),
         ),
+        192: (
+            _block(
+                "Figure Annex1-2 SYNTHETIC LISTING MUST_NOT_LEAK",
+                page=192,
+                font="Helvetica",
+                size=8.5,
+            ),
+        ),
+        193: (
+            _block(
+                "Figure Annex1-2 SYNTHETIC CAPTION MUST_NOT_LEAK",
+                page=193,
+                font="Helvetica-Bold",
+                size=8.5,
+            ),
+        ),
     }
     pages = tuple(
         PdfPage(
@@ -112,21 +128,22 @@ def _layout(*, page_count: int = 388) -> PdfLayoutDocument:
 
 
 class Ashrae901CorpusMeasurementTests(unittest.TestCase):
-    def test_measurement_tracks_typography_gated_locator_behavior_without_source_expression(self) -> None:
+    def test_measurement_tracks_typography_gated_structure_without_source_expression(self) -> None:
         measurement = measure_ashrae901_2016_corpus(
             _layout(),
             source_sha256=ASHRAE_90_1_2016_SOURCE_SHA256,
             source_size=ASHRAE_90_1_2016_SOURCE_SIZE,
         )
 
-        self.assertEqual(measurement["source_block_count"], 5)
+        self.assertEqual(measurement["measurement_version"], "0.2.0")
+        self.assertEqual(measurement["source_block_count"], 7)
         self.assertEqual(
             measurement["classifier_counts"],
             {
                 "appendix": 1,
                 "equation": 0,
-                "figure": 0,
-                "paragraph": 2,
+                "figure": 1,
+                "paragraph": 3,
                 "section": 1,
                 "subsection": 1,
                 "table": 0,
@@ -160,7 +177,7 @@ class Ashrae901CorpusMeasurementTests(unittest.TestCase):
         self.assertEqual(
             measurement["whole_document_status"],
             {
-                "validatable": True,
+                "duplicate_locator_free": True,
                 "blocker": None,
                 "locator": None,
             },

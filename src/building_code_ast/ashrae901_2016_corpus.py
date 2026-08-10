@@ -15,8 +15,8 @@ from .ingest.ashrae901_2016 import (
     Ashrae901Observation,
     _APPENDIX_RE,
     _EQUATION_RE,
-    _FIGURE_RE,
     _TABLE_RE,
+    _automatic_figure_locator,
     _is_content,
     _numeric_heading,
     _observation_key,
@@ -24,7 +24,7 @@ from .ingest.ashrae901_2016 import (
 from .ingest.pdf_layout import PdfLayoutDocument, normalize_block_text
 
 
-MEASUREMENT_VERSION = "0.1.0"
+MEASUREMENT_VERSION = "0.2.0"
 ASHRAE_90_1_2016_SOURCE_SHA256 = (
     "275a343724fce483fc3038b261fb00c0c4a3360d3a54078b92a433aba56ec162"
 )
@@ -88,8 +88,9 @@ def _classify(
 
     if match := _TABLE_RE.match(text):
         return "table", f"table:{match.group('locator')}"
-    if match := _FIGURE_RE.match(text):
-        return "figure", f"figure:{match.group('locator')}"
+    figure_locator = _automatic_figure_locator(observation, text)
+    if figure_locator is not None:
+        return "figure", f"figure:{figure_locator}"
     if match := _EQUATION_RE.search(text):
         return "equation", f"equation:{match.group('locator')}"
     return "paragraph", None
@@ -219,7 +220,7 @@ def measure_ashrae901_2016_corpus(
         else "duplicate_document_locator"
     )
     status = {
-        "validatable": structural_first_duplicate is None,
+        "duplicate_locator_free": structural_first_duplicate is None,
         "blocker": blocker,
         "locator": (
             None
@@ -263,6 +264,6 @@ def measure_ashrae901_2016_corpus(
             "outline locators are used only as a source-safe measurement oracle, not parser input",
             "candidate counts describe current block recognition and do not establish reviewed structural correctness",
             "table, figure, and equation counts are caption or identifier recognition only, not reconstruction or semantics",
-            "a duplicate-locator blocker means current whole-document output cannot satisfy generic Document AST identity validation",
+            "duplicate_locator_free records only the observed locator-collision gate and does not establish successful whole-document Document AST materialization, validation, or completeness",
         ],
     }
