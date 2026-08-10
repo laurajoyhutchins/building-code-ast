@@ -34,6 +34,21 @@ def _exact_keys(value: Mapping[str, Any], required: set[str], label: str) -> Non
         raise ValueError(f"{label} has unsupported fields: {sorted(extra)}")
 
 
+def _keys_with_optional(
+    value: Mapping[str, Any],
+    required: set[str],
+    optional: set[str],
+    label: str,
+) -> None:
+    actual = set(value)
+    missing = required - actual
+    extra = actual - required - optional
+    if missing:
+        raise ValueError(f"{label} is missing required fields: {sorted(missing)}")
+    if extra:
+        raise ValueError(f"{label} has unsupported fields: {sorted(extra)}")
+
+
 def _string(value: Any, label: str) -> str:
     if not isinstance(value, str):
         raise ValueError(f"{label} must be a string")
@@ -64,7 +79,7 @@ def _ast_source(value: Any, label: str) -> AstSourceIdentity:
 
 def _publication(value: Any, label: str) -> PublicationIdentity:
     obj = _object(value, label)
-    _exact_keys(
+    _keys_with_optional(
         obj,
         {
             "state_id",
@@ -76,6 +91,7 @@ def _publication(value: Any, label: str) -> PublicationIdentity:
             "published_on",
             "effective_on",
         },
+        {"addenda_set"},
         label,
     )
     publication = PublicationIdentity(
@@ -87,6 +103,7 @@ def _publication(value: Any, label: str) -> PublicationIdentity:
         digital_revision=_optional_string(
             obj["digital_revision"], f"{label}.digital_revision"
         ),
+        addenda_set=_optional_string(obj.get("addenda_set"), f"{label}.addenda_set"),
         correction_set=_optional_string(
             obj["correction_set"], f"{label}.correction_set"
         ),
