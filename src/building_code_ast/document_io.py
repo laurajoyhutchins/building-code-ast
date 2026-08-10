@@ -145,7 +145,10 @@ def document_ast_from_dict(value: Mapping[str, Any]) -> DocumentAst:
     required_artifact_keys = {"artifact_id", "edition_id"}
     actual_artifact_keys = set(artifact_obj)
     missing = required_artifact_keys - actual_artifact_keys
-    extra = actual_artifact_keys - required_artifact_keys - {"publication_component_id"}
+    extra = actual_artifact_keys - required_artifact_keys - {
+        "publication_component_id",
+        "publication_state_id",
+    }
     if missing:
         raise ValueError(f"source_artifact is missing required fields: {sorted(missing)}")
     if extra:
@@ -160,6 +163,14 @@ def document_ast_from_dict(value: Mapping[str, Any]) -> DocumentAst:
                 "source_artifact.publication_component_id",
             )
             if "publication_component_id" in artifact_obj
+            else None
+        ),
+        publication_state_id=(
+            _string(
+                artifact_obj["publication_state_id"],
+                "source_artifact.publication_state_id",
+            )
+            if "publication_state_id" in artifact_obj
             else None
         ),
     )
