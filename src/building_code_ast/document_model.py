@@ -10,12 +10,14 @@ from dataclasses import dataclass, field
 from enum import StrEnum
 import hashlib
 import json
+import re
 from typing import Any, Mapping, Sequence
 
 from .model import Diagnostic, SourceSpan
 
 
 DOCUMENT_AST_VERSION = "0.1.0"
+_PUBLICATION_STATE_RE = re.compile(r"^publication:[0-9a-f]{64}$")
 
 
 class DocumentNodeType(StrEnum):
@@ -46,6 +48,13 @@ class DocumentSourceArtifact:
     artifact_id: str
     edition_id: str
     publication_component_id: str | None = None
+    publication_state_id: str | None = None
+
+    def __post_init__(self) -> None:
+        if self.publication_state_id is not None and _PUBLICATION_STATE_RE.fullmatch(
+            self.publication_state_id
+        ) is None:
+            raise ValueError("publication_state_id must be a publication state identifier")
 
     def to_dict(self) -> dict[str, str]:
         result = {
@@ -54,6 +63,8 @@ class DocumentSourceArtifact:
         }
         if self.publication_component_id is not None:
             result["publication_component_id"] = self.publication_component_id
+        if self.publication_state_id is not None:
+            result["publication_state_id"] = self.publication_state_id
         return result
 
 
@@ -108,9 +119,11 @@ def document_node_id(
 ) -> str:
     """Return the deterministic identity for one structural node.
 
-    The canonical input deliberately excludes source text and character offsets.
-    A node remains stable when the same edition and publication component are
-    reparsed. Existing identities remain stable when no component is supplied.
+    The canonical input deliberately excludes source text, character offsets,
+    and publication-state ancestry. A node remains stable when the same source
+    artifact, edition, and publication component are reparsed or gain a direct
+    publication-state binding. Existing identities remain stable when no
+    component is supplied.
     """
 
     if not artifact_id.strip():
