@@ -10,7 +10,7 @@ from typing import Iterable
 
 _BROKEN_WORD_RE = re.compile(r"(?<=[A-Za-z])[\u00ad\u2010-]\n(?=[a-z])")
 _WHITESPACE_RE = re.compile(r"\s+")
-_TABLE_ANNOUNCEMENT_RE = re.compile(r"^\s*Table\s+\d", re.IGNORECASE)
+_TABLE_ANNOUNCEMENT_RE = re.compile(r"^\s*Table\s+(?:\d|[A-Z]+-\d)", re.IGNORECASE)
 _HORIZONTAL_DIRECTION = (1.0, 0.0)
 
 
