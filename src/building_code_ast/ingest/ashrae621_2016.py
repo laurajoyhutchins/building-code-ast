@@ -1,0 +1,361 @@
+"""ASHRAE 62.1-2016 layout observations to generic Document AST.
+
+This adapter begins after PDF region observation. It preserves the exact
+retained publication identity, publication-native hierarchy, source roles,
+coordinates, explicitly identified nonprose structures, and unsupported
+graphical evidence without interpreting ventilation or compliance semantics.
+"""
+
+from __future__ import annotations
+
+from dataclasses import dataclass, field
+import hashlib
+import re
+from typing import Iterable
+
+from ..document_model import (
+    DocumentAst,
+    DocumentNode,
+    DocumentNodeType,
+    DocumentSourceArtifact,
+    make_document_node,
+)
+from ..document_validation import validate_document_ast
+from ..evidence.model import PublicationIdentity, publication_state_id
+from ..model import Diagnostic, DiagnosticSeverity, SourceSpan
+from .pdf_layout import PdfBlock, normalize_block_text
+
+
+ASHRAE_62_1_2016_PUBLICATION = PublicationIdentity(
+    publication_family="ashrae-62.1",
+    edition="2016",
+    printing="artifact-mark:3/16;numbered-printing:unresolved",
+    addenda_set="ashrae-62.1-2013:addenda-a,c,d,e,f,g,h,i,j,k,p,q,r,s",
+    correction_set="unresolved:no-incorporated-correction-layer-established",
+)
+ASHRAE_62_1_2016_ARTIFACT = DocumentSourceArtifact(
+    artifact_id="sha256:a751d154a734a6fb2f04ea2b6878d39a1878d270da49686d179e4e627808b759",
+    edition_id=publication_state_id(ASHRAE_62_1_2016_PUBLICATION),
+)
+
+_MANDATORY_APPENDICES = frozenset({"A", "B"})
+_INFORMATIVE_APPENDICES = frozenset("CDEFGHIJK")
+_TOP_SECTION_RE = re.compile(r"^(?P<locator>\d{1,2})\.\s+(?P<title>\S.*)$")
+_SUBSECTION_RE = re.compile(r"^(?P<locator>\d+(?:\.\d+)+)\s+(?P<title>\S.*)$")
+_APPENDIX_RE = re.compile(
+    r"^(?P<role>NORMATIVE|INFORMATIVE)\s+APPENDIX\s+(?P<letter>[A-K])\b(?:\s+(?P<title>.*))?$",
+    re.IGNORECASE,
+)
+_FOREWORD_RE = re.compile(r"^FOREWORD\b(?:\s+(?P<title>.*))?$", re.IGNORECASE)
+_TABLE_RE = re.compile(r"^Table\s+(?P<locator>[A-Za-z0-9.]+(?:-[A-Za-z0-9.]+)*)\b", re.IGNORECASE)
+_FIGURE_RE = re.compile(r"^Figure\s+(?P<locator>[A-Za-z0-9.]+(?:-[A-Za-z0-9.]+)*)\b", re.IGNORECASE)
+_EQUATION_RE = re.compile(r"\((?P<locator>(?:[A-K]-)?\d+(?:\.\d+)*(?:-\d+)?)\)\s*$")
+_SUPPORTED_HINTS = {"equation", "table", "figure", "graphical_region"}
+_BODY_MIDPOINT = 306.0
+_TOP_CONTENT_Y = 65.0
+_BOTTOM_CONTENT_Y = 730.0
+
+
+@dataclass(frozen=True, slots=True)
+class Ashrae621Observation:
+    block: PdfBlock
+    printed_page: str | None = None
+    structure_hint: str | None = None
+    native_locator: str | None = None
+
+    def __post_init__(self) -> None:
+        if self.structure_hint is not None and self.structure_hint not in _SUPPORTED_HINTS:
+            raise ValueError(f"unsupported ASHRAE 62.1 observation hint: {self.structure_hint}")
+
+
+@dataclass(slots=True)
+class _Draft:
+    node_type: DocumentNodeType
+    locator: str
+    start: int
+    end: int
+    label: str | None = None
+    attributes: dict[str, str] = field(default_factory=dict)
+    children: list["_Draft"] = field(default_factory=list)
+
+    def extend_to(self, end: int) -> None:
+        self.end = max(self.end, end)
+
+
+def _is_content(observation: Ashrae621Observation) -> bool:
+    _, y0, _, y1 = observation.block.bbox
+    return y0 >= _TOP_CONTENT_Y and y1 <= _BOTTOM_CONTENT_Y
+
+
+def _column(block: PdfBlock) -> int:
+    x0, _, x1, _ = block.bbox
+    if x0 < _BODY_MIDPOINT < x1:
+        return 0
+    if x0 < _BODY_MIDPOINT:
+        return 1
+    return 2
+
+
+def _observation_key(observation: Ashrae621Observation) -> tuple[object, ...]:
+    block = observation.block
+    return (
+        block.page_number,
+        _column(block),
+        block.bbox[1],
+        block.bbox[0],
+        block.bbox[3],
+        block.bbox[2],
+        normalize_block_text(block.text),
+    )
+
+
+def _attributes(observation: Ashrae621Observation, *, source_role: str) -> dict[str, str]:
+    block = observation.block
+    attrs = {
+        "coordinate_space": "pdf_points",
+        "text_coordinate_space": "normalized_observation_text",
+        "pdf_page": str(block.page_number),
+        "bbox_pdf_points": ",".join(f"{value:.3f}" for value in block.bbox),
+        "extraction_block": str(block.block_number),
+        "source_role": source_role,
+    }
+    if observation.printed_page is not None:
+        attrs["printed_page"] = observation.printed_page
+    if observation.structure_hint == "graphical_region":
+        attrs["semantic_status"] = "unsupported"
+    return attrs
+
+
+def _coordinate_locator(kind: str, observation: Ashrae621Observation, text: str) -> str:
+    block = observation.block
+    bbox = "-".join(f"{value:.3f}" for value in block.bbox)
+    digest = hashlib.sha256(text.encode("utf-8")).hexdigest()[:16]
+    return f"{kind}:pdf-page-{block.page_number}:bbox-{bbox}:sha256-{digest}"
+
+
+def _appendix_role(letter: str, declared_role: str) -> str:
+    normalized = declared_role.lower()
+    expected = "mandatory" if letter in _MANDATORY_APPENDICES else "informative"
+    if letter not in _MANDATORY_APPENDICES | _INFORMATIVE_APPENDICES:
+        return "unresolved"
+    declared = "mandatory" if normalized == "normative" else "informative"
+    if declared != expected:
+        raise ValueError(f"appendix {letter} is {expected} in the retained publication")
+    return expected
+
+
+def _numbered_nonprose(
+    observation: Ashrae621Observation,
+    text: str,
+) -> tuple[DocumentNodeType, str] | None:
+    hint = observation.structure_hint
+    native_locator = observation.native_locator.strip() if observation.native_locator else None
+
+    if hint == "graphical_region":
+        return None
+
+    detected: tuple[DocumentNodeType, str] | None = None
+    if match := _TABLE_RE.match(text):
+        detected = (DocumentNodeType.TABLE, match.group("locator"))
+    elif match := _FIGURE_RE.match(text):
+        detected = (DocumentNodeType.FIGURE, match.group("locator"))
+    elif match := _EQUATION_RE.search(text):
+        detected = (DocumentNodeType.EQUATION, match.group("locator"))
+
+    if hint in {"equation", "table", "figure"}:
+        node_type = {
+            "equation": DocumentNodeType.EQUATION,
+            "table": DocumentNodeType.TABLE,
+            "figure": DocumentNodeType.FIGURE,
+        }[hint]
+        locator = native_locator
+        if locator is None and detected is not None and detected[0] is node_type:
+            locator = detected[1]
+        if locator is None:
+            raise ValueError(f"{hint} observations require a publication-native locator")
+        return node_type, locator
+
+    return detected
+
+
+def _materialize(
+    draft: _Draft,
+    *,
+    source_text: str,
+    source_artifact: DocumentSourceArtifact,
+) -> DocumentNode:
+    return make_document_node(
+        source_artifact=source_artifact,
+        node_type=draft.node_type,
+        locator=draft.locator,
+        span=SourceSpan(
+            start=draft.start,
+            end=draft.end,
+            text=source_text[draft.start : draft.end],
+        ),
+        label=draft.label,
+        attributes=draft.attributes,
+        children=tuple(
+            _materialize(child, source_text=source_text, source_artifact=source_artifact)
+            for child in draft.children
+        ),
+    )
+
+
+def parse_ashrae621_2016_observations(
+    observations: Iterable[Ashrae621Observation],
+    *,
+    source_artifact: DocumentSourceArtifact = ASHRAE_62_1_2016_ARTIFACT,
+) -> DocumentAst:
+    """Build a deterministic ASHRAE 62.1-2016 structural AST from PDF observations."""
+
+    ordered = tuple(sorted((item for item in observations if _is_content(item)), key=_observation_key))
+    if not ordered:
+        raise ValueError("ASHRAE 62.1-2016 observations must contain body-content regions")
+
+    pieces: list[str] = []
+    spans: list[tuple[Ashrae621Observation, int, int, str]] = []
+    cursor = 0
+    for observation in ordered:
+        text = normalize_block_text(observation.block.text)
+        if not text:
+            continue
+        if pieces:
+            pieces.append("\n")
+            cursor += 1
+        start = cursor
+        pieces.append(text)
+        cursor += len(text)
+        spans.append((observation, start, cursor, text))
+
+    source_text = "".join(pieces)
+    if not source_text:
+        raise ValueError("ASHRAE 62.1-2016 observations contain no readable text")
+
+    root = _Draft(DocumentNodeType.DOCUMENT, "document", 0, len(source_text))
+    section_stack: list[_Draft] = []
+    current_appendix: _Draft | None = None
+    current_foreword: _Draft | None = None
+    current_role = "mandatory"
+    diagnostics: list[Diagnostic] = []
+
+    def current_parent() -> _Draft:
+        if section_stack:
+            return section_stack[-1]
+        if current_appendix is not None:
+            return current_appendix
+        if current_foreword is not None:
+            return current_foreword
+        return root
+
+    def extend_open(end: int) -> None:
+        root.extend_to(end)
+        if current_appendix is not None:
+            current_appendix.extend_to(end)
+        if current_foreword is not None:
+            current_foreword.extend_to(end)
+        for section in section_stack:
+            section.extend_to(end)
+
+    for observation, start, end, text in spans:
+        if match := _FOREWORD_RE.match(text):
+            foreword = _Draft(
+                DocumentNodeType.SECTION,
+                "foreword",
+                start,
+                end,
+                label=(match.group("title") or "Foreword"),
+                attributes=_attributes(observation, source_role="informative"),
+            )
+            root.children.append(foreword)
+            current_foreword = foreword
+            current_appendix = None
+            section_stack = []
+            current_role = "informative"
+            continue
+
+        if match := _APPENDIX_RE.match(text):
+            letter = match.group("letter").upper()
+            role = _appendix_role(letter, match.group("role"))
+            appendix = _Draft(
+                DocumentNodeType.SECTION,
+                f"appendix:{letter}",
+                start,
+                end,
+                label=(match.group("title") or None),
+                attributes=_attributes(observation, source_role=role),
+            )
+            root.children.append(appendix)
+            current_appendix = appendix
+            current_foreword = None
+            section_stack = []
+            current_role = role
+            continue
+
+        top_match = _TOP_SECTION_RE.match(text) if observation.structure_hint is None else None
+        sub_match = _SUBSECTION_RE.match(text) if observation.structure_hint is None else None
+        match = sub_match or top_match
+        if match is not None:
+            locator = match.group("locator")
+            depth = locator.count(".")
+            if depth == 0:
+                current_appendix = None
+                current_foreword = None
+                section_stack = []
+                current_role = "mandatory"
+                node_type = DocumentNodeType.SECTION
+            else:
+                while section_stack and section_stack[-1].locator.removeprefix("section:").count(".") >= depth:
+                    section_stack.pop()
+                node_type = DocumentNodeType.SUBSECTION
+            section = _Draft(
+                node_type,
+                f"section:{locator}",
+                start,
+                end,
+                label=match.group("title"),
+                attributes=_attributes(observation, source_role=current_role),
+            )
+            parent = section_stack[-1] if section_stack else (current_appendix or root)
+            parent.children.append(section)
+            section_stack.append(section)
+            extend_open(end)
+            continue
+
+        attrs = _attributes(observation, source_role=current_role)
+        numbered = _numbered_nonprose(observation, text)
+        if numbered is not None:
+            node_type, native_locator = numbered
+            locator = f"{node_type.value}:{native_locator}"
+        elif observation.structure_hint == "graphical_region":
+            node_type = DocumentNodeType.GRAPHICAL_REGION
+            locator = _coordinate_locator("graphical", observation, text)
+        else:
+            node_type = DocumentNodeType.PARAGRAPH
+            locator = _coordinate_locator("paragraph", observation, text)
+
+        leaf = _Draft(node_type, locator, start, end, attributes=attrs)
+        current_parent().children.append(leaf)
+        extend_open(end)
+
+        if node_type is DocumentNodeType.GRAPHICAL_REGION:
+            diagnostics.append(
+                Diagnostic(
+                    code="unsupported-ashrae621-graphical-semantics",
+                    severity=DiagnosticSeverity.WARNING,
+                    message=(
+                        "Graphical source evidence is preserved, but its ventilation-standard "
+                        "semantics have not been interpreted."
+                    ),
+                    span=SourceSpan(start=start, end=end, text=text),
+                )
+            )
+
+    ast = DocumentAst(
+        source_text=source_text,
+        source_artifact=source_artifact,
+        root=_materialize(root, source_text=source_text, source_artifact=source_artifact),
+        diagnostics=tuple(diagnostics),
+    )
+    validate_document_ast(ast)
+    return ast
