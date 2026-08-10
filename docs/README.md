@@ -43,6 +43,7 @@ Current reference material:
 - [`corpus-policy.md`](corpus-policy.md): source inclusion and redistribution rules;
 - [`reference/document-ast.md`](reference/document-ast.md): document AST fields, identity algorithm, and validation invariants;
 - [`reference/source-evidence.md`](reference/source-evidence.md): publication-state identity, source registration, rights handling, and guarded evidence-adapter execution;
+- [`reference/source-grounded-rag.md`](reference/source-grounded-rag.md): deterministic grounding packets, caller-controlled generation, evidence-ID citation validation, and the generated-output safety boundary;
 - [`reference/ibc-2018-corpus-contract.md`](reference/ibc-2018-corpus-contract.md): exact source identity, five-layer evidence model, counting policies, inventory contracts, correction workflow, and edition-extension rules;
 - [`reference/icc-errata.md`](reference/icc-errata.md): printing-sensitive erratum records, bounded ICC PDF extraction, and unsupported-directive handling;
 - [`reference/icc-development-lineage.md`](reference/icc-development-lineage.md): proposal and action records, lineage validation, controlling-action rules, and non-normative process boundaries;

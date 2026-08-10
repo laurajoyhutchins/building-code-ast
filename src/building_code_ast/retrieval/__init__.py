@@ -16,6 +16,15 @@ from .model import (
     SourceEvidence,
     source_evidence_id,
 )
+from .rag import (
+    GeneratedDraft,
+    GroundedAnswerStatus,
+    GroundedGenerationResult,
+    GroundingChunk,
+    GroundingPacket,
+    build_grounding_packet,
+    run_grounded_generation,
+)
 from .search import LexicalSearchMode, LexicalSearchResult, search_evidence_store
 from .store import (
     SOURCE_EVIDENCE_STORE_VERSION,
@@ -23,23 +32,38 @@ from .store import (
     rebuild_evidence_store,
 )
 from .structural import annotate_structural_metadata
+from .structural_search import (
+    StructuralCandidate,
+    StructuralSearchFilters,
+    structural_search_evidence_store,
+)
 
 __all__ = [
     "SOURCE_EVIDENCE_IDENTITY_VERSION",
     "SOURCE_EVIDENCE_STORE_VERSION",
     "EvidenceContext",
+    "GeneratedDraft",
+    "GroundedAnswerStatus",
+    "GroundedGenerationResult",
+    "GroundingChunk",
+    "GroundingPacket",
     "LexicalSearchMode",
     "LexicalSearchResult",
     "SourceArtifactIdentity",
     "SourceEvidence",
+    "StructuralCandidate",
+    "StructuralSearchFilters",
     "annotate_structural_metadata",
+    "build_grounding_packet",
     "expand_evidence_context",
     "extract_layout_evidence",
     "get_evidence_by_id",
     "get_page_evidence",
     "read_evidence_store",
     "rebuild_evidence_store",
+    "run_grounded_generation",
     "search_evidence_store",
     "source_evidence_id",
+    "structural_search_evidence_store",
     "verify_source_artifact",
 ]
