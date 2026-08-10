@@ -1,6 +1,8 @@
 from __future__ import annotations
 
+import json
 import unittest
+from pathlib import Path
 
 from building_code_ast import (
     DOCUMENT_AST_VERSION,
@@ -13,6 +15,7 @@ from building_code_ast import (
 from building_code_ast.model import SourceSpan
 
 
+ROOT = Path(__file__).resolve().parents[1]
 PUBLICATION_STATE_ID = "publication:" + "a" * 64
 
 
@@ -78,6 +81,16 @@ class RegulatoryPublicationStateBindingTests(unittest.TestCase):
                 edition_id="ibc-2021",
                 publication_state_id="ibc-2021",
             )
+
+    def test_document_schema_exposes_optional_publication_state_binding(self) -> None:
+        schema = json.loads((ROOT / "schemas/document-ast.schema.json").read_text(encoding="utf-8"))
+        source_artifact = schema["$defs"]["sourceArtifact"]
+
+        self.assertNotIn("publication_state_id", source_artifact["required"])
+        self.assertEqual(
+            source_artifact["properties"]["publication_state_id"]["pattern"],
+            r"^publication:[0-9a-f]{64}$",
+        )
 
 
 if __name__ == "__main__":
