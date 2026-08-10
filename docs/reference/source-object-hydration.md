@@ -43,7 +43,7 @@ class SourceObjectFetcher(Protocol):
 
 The provider implementation owns authentication, SDK/API behavior, and network access. The Building Code AST core does not contain Google OAuth code, credentials, refresh tokens, service-account material, signed URLs, or a required Google client dependency.
 
-A ChatGPT-connected Drive adapter, a Jupiter-local script, Factory Floor, or another trusted environment can implement the protocol independently. The compiler sees the resulting temporary bytes only through the verification boundary.
+A connected storage adapter, local workstation script, or trusted execution host can implement the protocol independently. The compiler sees the resulting temporary bytes only through the verification boundary.
 
 ## Publication-scoped source authority
 
