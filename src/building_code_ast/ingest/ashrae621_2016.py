@@ -30,8 +30,10 @@ ASHRAE_62_1_2016_PUBLICATION = PublicationIdentity(
     publication_family="ashrae-62.1",
     edition="2016",
     printing="artifact-mark:3/16;numbered-printing:unresolved",
-    addenda_set="ashrae-62.1-2013:addenda-a,c,d,e,f,g,h,i,j,k,p,q,r,s",
-    correction_set="unresolved:no-incorporated-correction-layer-established",
+    correction_set=(
+        "incorporated-addenda:ashrae-62.1-2013:a,c,d,e,f,g,h,i,j,k,p,q,r,s;"
+        "correction-layer:unresolved:no-incorporated-correction-layer-established"
+    ),
 )
 ASHRAE_62_1_2016_ARTIFACT = DocumentSourceArtifact(
     artifact_id="sha256:a751d154a734a6fb2f04ea2b6878d39a1878d270da49686d179e4e627808b759",
@@ -40,20 +42,29 @@ ASHRAE_62_1_2016_ARTIFACT = DocumentSourceArtifact(
 
 _MANDATORY_APPENDICES = frozenset({"A", "B"})
 _INFORMATIVE_APPENDICES = frozenset("CDEFGHIJK")
-_TOP_SECTION_RE = re.compile(r"^(?P<locator>\d{1,2})\.\s+(?P<title>\S.*)$")
+_TOP_SECTION_RE = re.compile(r"^(?P<locator>[1-9])\.\s+(?P<title>\S.*)$")
 _SUBSECTION_RE = re.compile(r"^(?P<locator>\d+(?:\.\d+)+)\s+(?P<title>\S.*)$")
+_APPENDIX_SECTION_RE = re.compile(
+    r"^(?P<locator>[A-K]\d+(?:\.\d+)*)(?:\.)?\s+(?P<title>\S.*)$",
+    re.IGNORECASE,
+)
 _APPENDIX_RE = re.compile(
     r"^(?P<role>NORMATIVE|INFORMATIVE)\s+APPENDIX\s+(?P<letter>[A-K])\b(?:\s+(?P<title>.*))?$",
     re.IGNORECASE,
 )
-_FOREWORD_RE = re.compile(r"^FOREWORD\b(?:\s+(?P<title>.*))?$", re.IGNORECASE)
+_FOREWORD_RE = re.compile(r"^FOREWORD$", re.IGNORECASE)
 _TABLE_RE = re.compile(r"^Table\s+(?P<locator>[A-Za-z0-9.]+(?:-[A-Za-z0-9.]+)*)\b", re.IGNORECASE)
 _FIGURE_RE = re.compile(r"^Figure\s+(?P<locator>[A-Za-z0-9.]+(?:-[A-Za-z0-9.]+)*)\b", re.IGNORECASE)
-_EQUATION_RE = re.compile(r"\((?P<locator>(?:[A-K]-)?\d+(?:\.\d+)*(?:-\d+)?)\)\s*$")
+_EQUATION_RE = re.compile(
+    r"\((?P<locator>(?:[A-K]\d+(?:\.\d+)*(?:-\d+)?|[A-K]-\d+(?:-\d+)?|\d+(?:\.\d+)*(?:-\d+)?))\)\s*$",
+    re.IGNORECASE,
+)
 _SUPPORTED_HINTS = {"equation", "table", "figure", "graphical_region"}
 _BODY_MIDPOINT = 306.0
-_TOP_CONTENT_Y = 65.0
-_BOTTOM_CONTENT_Y = 730.0
+# Exact-source replay shows normative appendix headings and table content beginning
+# above the generic 65-point cutoff, while source content also extends below 730.
+_TOP_CONTENT_Y = 30.0
+_BOTTOM_CONTENT_Y = 750.0
 
 
 @dataclass(frozen=True, slots=True)
@@ -144,6 +155,20 @@ def _appendix_role(letter: str, declared_role: str) -> str:
     return expected
 
 
+def _top_section_match(text: str) -> re.Match[str] | None:
+    match = _TOP_SECTION_RE.match(text)
+    if match is None:
+        return None
+    letters = [character for character in match.group("title") if character.isalpha()]
+    if not letters or not all(character.isupper() for character in letters):
+        return None
+    return match
+
+
+def _appendix_locator_depth(locator: str) -> int:
+    return locator[1:].count(".")
+
+
 def _numbered_nonprose(
     observation: Ashrae621Observation,
     text: str,
@@ -159,7 +184,10 @@ def _numbered_nonprose(
         detected = (DocumentNodeType.TABLE, match.group("locator"))
     elif match := _FIGURE_RE.match(text):
         detected = (DocumentNodeType.FIGURE, match.group("locator"))
-    elif match := _EQUATION_RE.search(text):
+    elif "=" in text and (match := _EQUATION_RE.search(text)):
+        # Exact-source replay showed many non-equation blocks ending in parenthesized
+        # numbers. Require equation-like syntax unless the observation is explicitly
+        # hinted as an equation.
         detected = (DocumentNodeType.EQUATION, match.group("locator"))
 
     if hint in {"equation", "table", "figure"}:
@@ -258,13 +286,13 @@ def parse_ashrae621_2016_observations(
             section.extend_to(end)
 
     for observation, start, end, text in spans:
-        if match := _FOREWORD_RE.match(text):
+        if _FOREWORD_RE.fullmatch(text):
             foreword = _Draft(
                 DocumentNodeType.SECTION,
                 "foreword",
                 start,
                 end,
-                label=(match.group("title") or "Foreword"),
+                label="Foreword",
                 attributes=_attributes(observation, source_role="informative"),
             )
             root.children.append(foreword)
@@ -292,8 +320,46 @@ def parse_ashrae621_2016_observations(
             current_role = role
             continue
 
-        top_match = _TOP_SECTION_RE.match(text) if observation.structure_hint is None else None
-        sub_match = _SUBSECTION_RE.match(text) if observation.structure_hint is None else None
+        appendix_match = (
+            _APPENDIX_SECTION_RE.match(text)
+            if observation.structure_hint is None and current_appendix is not None
+            else None
+        )
+        if appendix_match is not None:
+            locator = appendix_match.group("locator").upper()
+            appendix_letter = current_appendix.locator.removeprefix("appendix:")
+            if locator.startswith(appendix_letter):
+                depth = _appendix_locator_depth(locator)
+                while (
+                    section_stack
+                    and _appendix_locator_depth(section_stack[-1].locator.removeprefix("section:"))
+                    >= depth
+                ):
+                    section_stack.pop()
+                section = _Draft(
+                    DocumentNodeType.SUBSECTION,
+                    f"section:{locator}",
+                    start,
+                    end,
+                    label=appendix_match.group("title"),
+                    attributes=_attributes(observation, source_role=current_role),
+                )
+                parent = section_stack[-1] if section_stack else current_appendix
+                parent.children.append(section)
+                section_stack.append(section)
+                extend_open(end)
+                continue
+
+        top_match = (
+            _top_section_match(text)
+            if observation.structure_hint is None and current_appendix is None
+            else None
+        )
+        sub_match = (
+            _SUBSECTION_RE.match(text)
+            if observation.structure_hint is None and current_appendix is None
+            else None
+        )
         match = sub_match or top_match
         if match is not None:
             locator = match.group("locator")
@@ -316,7 +382,7 @@ def parse_ashrae621_2016_observations(
                 label=match.group("title"),
                 attributes=_attributes(observation, source_role=current_role),
             )
-            parent = section_stack[-1] if section_stack else (current_appendix or root)
+            parent = section_stack[-1] if section_stack else root
             parent.children.append(section)
             section_stack.append(section)
             extend_open(end)
