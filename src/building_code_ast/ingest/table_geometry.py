@@ -149,7 +149,22 @@ def detect_table_rows(page: CleanedPage, profile: PageOrderProfile) -> tuple[Tab
 
 def _aligned_columns(left: TableRowCandidate, right: TableRowCandidate) -> int:
     tolerance = max(12.0, statistics.median((left.font_size, right.font_size)) * 1.5)
-    return sum(1 for left_start, right_start in zip(left.cell_starts, right.cell_starts) if abs(left_start - right_start) <= tolerance)
+    left_starts = sorted(left.cell_starts)
+    right_starts = sorted(right.cell_starts)
+    left_index = 0
+    right_index = 0
+    matches = 0
+    while left_index < len(left_starts) and right_index < len(right_starts):
+        delta = left_starts[left_index] - right_starts[right_index]
+        if abs(delta) <= tolerance:
+            matches += 1
+            left_index += 1
+            right_index += 1
+        elif delta < 0.0:
+            left_index += 1
+        else:
+            right_index += 1
+    return matches
 
 
 def _compatible(left: TableRowCandidate, right: TableRowCandidate) -> bool:
