@@ -6,6 +6,7 @@ import os
 import tempfile
 import unittest
 from pathlib import Path
+from unittest.mock import patch
 
 from building_code_ast.evidence import (
     AccessScope,
@@ -173,6 +174,31 @@ class SourceObjectHydrationTests(unittest.TestCase):
 
             self.assertEqual(destination.read_bytes(), b"old verified object")
             self.assertEqual(list(Path(directory).iterdir()), [destination])
+
+    def test_cleanup_failure_for_rejected_private_bytes_is_not_hidden(self) -> None:
+        corrupted = bytes([self.payload[0] ^ 1]) + self.payload[1:]
+        fetcher = RecordingFetcher(corrupted)
+        original_unlink = Path.unlink
+
+        def fail_partial_unlink(path: Path, missing_ok: bool = False) -> None:
+            if path.name.endswith(".partial"):
+                raise OSError("synthetic private cleanup failure")
+            original_unlink(path, missing_ok=missing_ok)
+
+        with tempfile.TemporaryDirectory() as directory:
+            destination = Path(directory) / "source.pdf"
+            destination.write_bytes(b"old verified object")
+            with patch.object(Path, "unlink", autospec=True, side_effect=fail_partial_unlink):
+                with self.assertRaisesRegex(OSError, "synthetic private cleanup failure"):
+                    hydrate_source_object(
+                        self.catalog,
+                        self.register,
+                        self.locators,
+                        source_id=self.source.source_id,
+                        destination=destination,
+                        fetcher=fetcher,
+                    )
+            self.assertEqual(destination.read_bytes(), b"old verified object")
 
     def test_selected_requirement_is_validated_before_private_fetch(self) -> None:
         bad_requirement = SourceObjectRequirement(
