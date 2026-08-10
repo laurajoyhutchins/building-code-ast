@@ -20,13 +20,14 @@ def _observation(
     printed_page: str | None,
     block_number: int,
     y: float,
+    height: float = 18.0,
     hint: str | None = None,
     locator: str | None = None,
 ) -> Ashrae621Observation:
     return Ashrae621Observation(
         block=PdfBlock(
             page_number=page,
-            bbox=(72.0, y, 540.0, y + 18.0),
+            bbox=(72.0, y, 540.0, y + height),
             text=text,
             block_number=block_number,
         ),
@@ -43,12 +44,9 @@ class Ashrae621DocumentAstTests(unittest.TestCase):
             "sha256:a751d154a734a6fb2f04ea2b6878d39a1878d270da49686d179e4e627808b759",
         )
         self.assertEqual(
-            ASHRAE_62_1_2016_PUBLICATION.addenda_set,
-            "ashrae-62.1-2013:addenda-a,c,d,e,f,g,h,i,j,k,p,q,r,s",
-        )
-        self.assertEqual(
             ASHRAE_62_1_2016_PUBLICATION.correction_set,
-            "unresolved:no-incorporated-correction-layer-established",
+            "incorporated-addenda:ashrae-62.1-2013:a,c,d,e,f,g,h,i,j,k,p,q,r,s;"
+            "correction-layer:unresolved:no-incorporated-correction-layer-established",
         )
         self.assertEqual(
             ASHRAE_62_1_2016_ARTIFACT.edition_id,
@@ -149,14 +147,67 @@ class Ashrae621DocumentAstTests(unittest.TestCase):
                 )
             )
 
+    def test_exact_source_layout_bounds_and_appendix_native_hierarchy_are_preserved(self) -> None:
+        ast = parse_ashrae621_2016_observations(
+            (
+                _observation(
+                    "NORMATIVE APPENDIX A SYNTHETIC SYSTEMS",
+                    page=26,
+                    printed_page="24",
+                    block_number=1,
+                    y=61,
+                    height=22,
+                ),
+                _observation("A1. SYNTHETIC EFFICIENCY", page=26, printed_page="24", block_number=2, y=208),
+                _observation(
+                    "A1.1 Synthetic Fraction",
+                    page=26,
+                    printed_page="24",
+                    block_number=3,
+                    y=271,
+                ),
+                _observation(
+                    "Xs = Vou/Vps (A1.1)",
+                    page=26,
+                    printed_page="24",
+                    block_number=4,
+                    y=316,
+                ),
+                _observation(
+                    "FIGURE A-1 Synthetic schematic.",
+                    page=26,
+                    printed_page="24",
+                    block_number=5,
+                    y=720,
+                    height=12,
+                ),
+            )
+        )
+
+        appendix = ast.root.children[0]
+        a1 = appendix.children[0]
+        a11 = a1.children[0]
+        equation = next(child for child in a11.children if child.node_type is DocumentNodeType.EQUATION)
+        figure = next(child for child in a11.children if child.node_type is DocumentNodeType.FIGURE)
+
+        self.assertEqual(appendix.locator, "appendix:A")
+        self.assertEqual(a1.locator, "section:A1")
+        self.assertEqual(a11.locator, "section:A1.1")
+        self.assertEqual(equation.locator, "equation:A1.1")
+        self.assertEqual(figure.locator, "figure:A-1")
+        self.assertEqual(dict(appendix.attributes)["source_role"], "mandatory")
+        self.assertEqual(dict(figure.attributes)["printed_page"], "24")
+
     def test_unresolved_unhinted_math_stays_prose_instead_of_becoming_executable_semantics(self) -> None:
         ast = parse_ashrae621_2016_observations(
             (
                 _observation("6. PROCEDURES", page=20, printed_page="18", block_number=1, y=80),
                 _observation("Synthetic x = y / z expression", page=20, printed_page="18", block_number=2, y=110),
+                _observation("Synthetic class value 15 (5)", page=20, printed_page="18", block_number=3, y=140),
             )
         )
         self.assertEqual(ast.root.children[0].children[0].node_type, DocumentNodeType.PARAGRAPH)
+        self.assertEqual(ast.root.children[0].children[1].node_type, DocumentNodeType.PARAGRAPH)
 
     def test_discovery_order_does_not_change_output_or_ids(self) -> None:
         observations = (
