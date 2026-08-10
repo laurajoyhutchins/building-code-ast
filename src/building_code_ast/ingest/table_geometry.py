@@ -307,6 +307,73 @@ def _cell_text(parts: Sequence[SourceFragment]) -> str:
     return " ".join(value for value in text_rows if value).strip()
 
 
+def _rule_overlap(start: float, end: float, lower: float, upper: float) -> float:
+    return max(0.0, min(max(start, end), upper) - max(min(start, end), lower))
+
+
+def _nearest_grid_position(value: float, positions: Sequence[float], tolerance: float = 3.0) -> float | None:
+    candidates = [position for position in positions if abs(position - value) <= tolerance]
+    if not candidates:
+        return None
+    return min(candidates, key=lambda position: abs(position - value))
+
+
+def _segmented_rule_grid(
+    page: CleanedPage,
+    x0: float,
+    y0: float,
+    x1: float,
+    y1: float,
+) -> tuple[tuple[float, ...], tuple[float, ...]]:
+    """Return a grid only when repeated short verticals join observed horizontals."""
+
+    horizontal = [
+        rule
+        for rule in page.rules
+        if rule.horizontal
+        and abs(rule.x1 - rule.x0) >= max(40.0, page.width * 0.20)
+        and _rule_overlap(rule.x0, rule.x1, x0, x1) > 0.0
+        and y0 - 3.0 <= (rule.y0 + rule.y1) / 2.0 <= y1 + 3.0
+    ]
+    ys = _cluster_positions(
+        [y0, y1] + [(rule.y0 + rule.y1) / 2.0 for rule in horizontal]
+    )
+    if len(ys) < 3:
+        return (), ()
+
+    vertical = [
+        rule
+        for rule in page.rules
+        if rule.vertical
+        and x0 - 3.0 <= (rule.x0 + rule.x1) / 2.0 <= x1 + 3.0
+        and _rule_overlap(rule.y0, rule.y1, y0, y1) > 0.0
+    ]
+    positions = _cluster_positions([(rule.x0 + rule.x1) / 2.0 for rule in vertical])
+    repeated_positions: list[float] = []
+    for position in positions:
+        segments: set[tuple[float, float]] = set()
+        for rule in vertical:
+            rule_x = (rule.x0 + rule.x1) / 2.0
+            if abs(rule_x - position) > 2.0:
+                continue
+            top = max(min(rule.y0, rule.y1), y0)
+            bottom = min(max(rule.y0, rule.y1), y1)
+            if bottom - top <= 3.0:
+                continue
+            top_anchor = _nearest_grid_position(top, ys)
+            bottom_anchor = _nearest_grid_position(bottom, ys)
+            if top_anchor is None or bottom_anchor is None or top_anchor == bottom_anchor:
+                continue
+            segments.add((top_anchor, bottom_anchor))
+        if len(segments) >= 2:
+            repeated_positions.append(position)
+
+    xs = _cluster_positions([x0, x1] + repeated_positions)
+    if len(xs) < 3:
+        return (), ()
+    return xs, ys
+
+
 def detect_ruled_tables(page: CleanedPage) -> tuple[TableCandidate, ...]:
     """Reconstruct base-grid cells from vector rule boundaries.
 
@@ -317,15 +384,13 @@ def detect_ruled_tables(page: CleanedPage) -> tuple[TableCandidate, ...]:
     fragment_lines = _line_for_fragment(page)
     tables: list[TableCandidate] = []
     for x0, y0, x1, y1 in _rule_regions(page):
+        segmented_grid = False
         vertical = [
             rule
             for rule in page.rules
             if rule.vertical
             and x0 - 3.0 <= (rule.x0 + rule.x1) / 2.0 <= x1 + 3.0
-            and (
-                min(max(rule.y0, rule.y1), y1)
-                - max(min(rule.y0, rule.y1), y0)
-            ) >= (y1 - y0) * 0.50
+            and _rule_overlap(rule.y0, rule.y1, y0, y1) >= (y1 - y0) * 0.50
         ]
         xs = _cluster_positions(
             [x0, x1] + [(rule.x0 + rule.x1) / 2.0 for rule in vertical]
@@ -334,17 +399,22 @@ def detect_ruled_tables(page: CleanedPage) -> tuple[TableCandidate, ...]:
             rule
             for rule in page.rules
             if rule.horizontal
-            and (
-                min(max(rule.x0, rule.x1), x1)
-                - max(min(rule.x0, rule.x1), x0)
-            ) >= (x1 - x0) * 0.50
+            and _rule_overlap(rule.x0, rule.x1, x0, x1) >= (x1 - x0) * 0.50
             and y0 - 3.0 <= (rule.y0 + rule.y1) / 2.0 <= y1 + 3.0
         ]
         ys = _cluster_positions(
             [y0, y1] + [(rule.y0 + rule.y1) / 2.0 for rule in horizontal]
         )
         if len(xs) < 3 or len(ys) < 3:
+            xs, ys = _segmented_rule_grid(page, x0, y0, x1, y1)
+            segmented_grid = len(xs) >= 3 and len(ys) >= 3
+        if len(xs) < 3 or len(ys) < 3:
             continue
+        grid_evidence = (
+            ("vector_rule_grid", "segmented_vertical_rules")
+            if segmented_grid
+            else ("vector_rule_grid",)
+        )
 
         region_fragments = [
             fragment
@@ -391,7 +461,7 @@ def detect_ruled_tables(page: CleanedPage) -> tuple[TableCandidate, ...]:
                     ),
                     confidence=0.96,
                     evidence=(
-                        "vector_rule_grid",
+                        *grid_evidence,
                         f"row_index:{row_index}",
                         f"columns:{len(cells)}",
                     ),
@@ -407,7 +477,7 @@ def detect_ruled_tables(page: CleanedPage) -> tuple[TableCandidate, ...]:
                 normalized_text=normalized_text,
                 confidence=0.97,
                 evidence=(
-                    "vector_rule_grid",
+                    *grid_evidence,
                     f"rows:{len(normalized_rows)}",
                     f"columns:{len(xs) - 1}",
                 ),
