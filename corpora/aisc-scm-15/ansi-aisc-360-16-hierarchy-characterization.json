@@ -1,0 +1,52 @@
+{
+  "schema": "aisc360-hierarchy-characterization-v1",
+  "component": "ansi-aisc-360-16",
+  "source_derivative": {
+    "byte_count": 64464266,
+    "sha256": "6ba073e6549e0c7408909cde2261f2bc393c7e6bfc63392268bd51399338e126"
+  },
+  "page_measurement": {
+    "page_count": 674,
+    "embedded_text_page_count": 561,
+    "image_only_page_count": 113
+  },
+  "embedded_text_top_level_anchors": {
+    "chapters": [
+      {"page": 57, "identifier": "A"}, {"page": 67, "identifier": "B"},
+      {"page": 78, "identifier": "C"}, {"page": 84, "identifier": "D"},
+      {"page": 89, "identifier": "E"}, {"page": 100, "identifier": "F"},
+      {"page": 126, "identifier": "G"}, {"page": 133, "identifier": "H"},
+      {"page": 142, "identifier": "I"}, {"page": 169, "identifier": "J"},
+      {"page": 205, "identifier": "K"}, {"page": 221, "identifier": "L"},
+      {"page": 223, "identifier": "M"}, {"page": 228, "identifier": "N"},
+      {"page": 313, "identifier": "A"}, {"page": 322, "identifier": "B"},
+      {"page": 342, "identifier": "C"}, {"page": 354, "identifier": "D"},
+      {"page": 362, "identifier": "E"}, {"page": 378, "identifier": "F"},
+      {"page": 405, "identifier": "G"}, {"page": 411, "identifier": "H"},
+      {"page": 425, "identifier": "I"}, {"page": 470, "identifier": "J"},
+      {"page": 517, "identifier": "K"}, {"page": 532, "identifier": "L"},
+      {"page": 538, "identifier": "M"}, {"page": 543, "identifier": "N"}
+    ],
+    "appendices": [
+      {"page": 241, "identifier": 1}, {"page": 252, "identifier": 3},
+      {"page": 289, "identifier": 5}, {"page": 293, "identifier": 6},
+      {"page": 305, "identifier": 8}, {"page": 559, "identifier": 1},
+      {"page": 578, "identifier": 3}, {"page": 604, "identifier": 5},
+      {"page": 608, "identifier": 6}, {"page": 634, "identifier": 8}
+    ]
+  },
+  "raster_hierarchy_evidence": [
+    {"page": 243, "observation": "numbered_hierarchy_heading_present"},
+    {"page": 285, "observation": "numbered_hierarchy_heading_present"}
+  ],
+  "claims": {
+    "embedded_text_only_hierarchy_complete": false,
+    "missing_appendix_markers_may_be_raster_or_extraction_gaps": true
+  },
+  "next_parser_boundary": "raster_text_recovery_before_hierarchy_parse",
+  "provenance": {
+    "source_text_retained": false,
+    "ocr_performed": false,
+    "visual_review_is_independent_source_observation": true
+  }
+}
