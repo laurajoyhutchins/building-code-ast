@@ -17,6 +17,13 @@
       "media_type": "application/pdf"
     },
     {
+      "source_id": "source:aisc:scm:15:pdf:c5fbe648",
+      "object_key": "building-code-ast/aisc-scm-15/source",
+      "sha256": "c5fbe648fd81a7ecda10df115393bbb9492924c8ce22167fc6d86c8b87fd8e7f",
+      "size": 221820282,
+      "media_type": "application/pdf"
+    },
+    {
       "source_id": "source:asce:7:2022:pdf:522d341d",
       "object_key": "building-code-ast/asce-7-22/source",
       "sha256": "522d341d8ab21eb254c8af2d853910633233285eb3704933729e0aeefdc88eb0",
