@@ -1,0 +1,59 @@
+{
+  "schema": "asce-7-22-whole-document-replay-measurement/v1",
+  "source": {
+    "sha256": "522d341d8ab21eb254c8af2d853910633233285eb3704933729e0aeefdc88eb0",
+    "bytes": 55404349,
+    "pdf_pages": 1047
+  },
+  "layout": {
+    "body_pages_with_text_blocks": 1035,
+    "body_text_blocks": 18063
+  },
+  "current_adapter_recognition": {
+    "chapter": {
+      "occurrences": 41,
+      "unique_locators": 32,
+      "colliding_locators": 8,
+      "colliding_occurrences": 17
+    },
+    "section": {
+      "occurrences": 1550,
+      "unique_locators": 1445,
+      "colliding_locators": 59,
+      "colliding_occurrences": 164
+    },
+    "equation": {
+      "occurrences": 417,
+      "unique_locators": 404,
+      "colliding_locators": 12,
+      "colliding_occurrences": 25
+    },
+    "table": {
+      "occurrences": 85,
+      "unique_locators": 60,
+      "colliding_locators": 14,
+      "colliding_occurrences": 39
+    },
+    "figure": {
+      "occurrences": 155,
+      "unique_locators": 110,
+      "colliding_locators": 34,
+      "colliding_occurrences": 79
+    }
+  },
+  "unsupported_or_ambiguous_candidates": {
+    "commentary_chapters": 32,
+    "commentary_sections": 859,
+    "appendix_headings": 43,
+    "appendix_or_commentary_appendix_sections": 919
+  },
+  "replay": {
+    "status": "validation_failed",
+    "reason_family": "duplicate_publication_locator"
+  },
+  "determinism": {
+    "repeated_measurements_equal": true,
+    "canonical_core_measurement_sha256": "cab3a2463cfdb20546b05d2000ad81976c0b7a208c33928464fdc31371a1bf18",
+    "digest_scope": "canonical JSON excluding this determinism object"
+  }
+}
