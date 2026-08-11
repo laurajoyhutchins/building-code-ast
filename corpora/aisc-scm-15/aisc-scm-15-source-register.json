@@ -1,0 +1,34 @@
+{
+  "register_version": "0.1.0",
+  "type": "source_register",
+  "entries": [
+    {
+      "source_id": "source:aisc:scm:15:pdf:c5fbe648",
+      "ast_source": {
+        "artifact_id": "sha256:c5fbe648fd81a7ecda10df115393bbb9492924c8ce22167fc6d86c8b87fd8e7f",
+        "edition_id": "aisc-scm-15"
+      },
+      "title": "Steel Construction Manual",
+      "issuing_body": "American Institute of Steel Construction",
+      "evidence_role": "secondary_analysis",
+      "publication": {
+        "state_id": "publication:8d437e9cada7c5a90893cd3bccbbae72dddfc090df1e8f01d8f040cf80a92584",
+        "publication_family": "Steel Construction Manual",
+        "edition": "Fifteenth Edition",
+        "printing": "Second Printing, June 2018",
+        "digital_revision": null,
+        "correction_set": null,
+        "published_on": null,
+        "effective_on": null
+      },
+      "retrieved_at": "2026-08-10T17:59:41-06:00",
+      "sha256": "c5fbe648fd81a7ecda10df115393bbb9492924c8ce22167fc6d86c8b87fd8e7f",
+      "media_type": "application/pdf",
+      "access_scope": "licensed_local",
+      "rights_status": "licensed",
+      "source_url": null,
+      "jurisdiction": null,
+      "rights_note": "Copyrighted AISC Steel Construction Manual compilation retained privately under licensed local access. Embedded independently issued standards remain distinct future component sources; protected source expression and reconstructive extracts remain outside Git."
+    }
+  ]
+}

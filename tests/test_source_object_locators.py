@@ -159,7 +159,7 @@ class SourceObjectLocatorTests(unittest.TestCase):
         payload = json.loads((root / "corpora" / "source-object-catalog.json").read_text())
         catalog = source_object_catalog_from_dict(payload)
 
-        self.assertEqual(len(catalog.entries), 13)
+        self.assertEqual(len(catalog.entries), 14)
         for entry in payload["entries"]:
             self.assertEqual(
                 set(entry),
@@ -174,6 +174,7 @@ class SourceObjectLocatorTests(unittest.TestCase):
         root = Path(__file__).resolve().parents[1]
         register_paths = (
             "corpora/aci-318-19/aci-318-19-source-register.json",
+            "corpora/aisc-scm-15/aisc-scm-15-source-register.json",
             "corpora/asce-7-22/asce-7-22-source-register.json",
             "corpora/ashrae-62.1-2016/ashrae-62.1-2016-source-register.json",
             "corpora/ashrae-90.1-2016/ashrae-90.1-2016-source-register.json",
