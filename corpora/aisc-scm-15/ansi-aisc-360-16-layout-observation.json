@@ -1,0 +1,39 @@
+{
+  "receipt_version": "0.1.0",
+  "type": "component_layout_observation",
+  "component_id": "ansi-aisc-360-16",
+  "parent_artifact_sha256": "c5fbe648fd81a7ecda10df115393bbb9492924c8ce22167fc6d86c8b87fd8e7f",
+  "parent_pdf_pages": [1376, 2049],
+  "derivative_filename": "03-ansi-aisc-360-16.pdf",
+  "derivative_sha256": "6ba073e6549e0c7408909cde2261f2bc393c7e6bfc63392268bd51399338e126",
+  "derivative_size_bytes": 64464266,
+  "media_type": "application/pdf",
+  "page_count": 674,
+  "pdf_format_observed": "PDF 1.7",
+  "rotation_counts": {
+    "0": 674
+  },
+  "page_geometry": {
+    "width_points": 130.35,
+    "height_points": 195.3,
+    "page_count": 674
+  },
+  "pages_with_one_image_reference": 674,
+  "outline_entry_count": 0,
+  "outline_note": "derivative-production-omits-source-outline",
+  "text_layer": {
+    "pages_with_embedded_text": 561,
+    "pages_without_embedded_text": 113,
+    "missing_text_run_count": 95,
+    "maximum_missing_text_run_length": 3,
+    "text_only_replay_complete": false
+  },
+  "observation": {
+    "tool": "PyMuPDF",
+    "tool_version": "1.26.7",
+    "source_expression_committed": false,
+    "page_images_committed": false,
+    "ocr_performed": false
+  },
+  "claim_boundary": "The verified derivative is suitable for exact component-local analysis, but embedded-text-only replay cannot be structurally complete because 113 ordinary source pages have no embedded text layer. This receipt does not establish OCR support, hierarchy support, table semantics, equation semantics, or normative interpretation."
+}
