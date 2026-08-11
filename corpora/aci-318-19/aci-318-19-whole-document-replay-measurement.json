@@ -1,0 +1,40 @@
+{
+  "measurement_version": "0.1.0",
+  "publication": "ACI 318-19 / ACI 318R-19",
+  "source_sha256": "7b6b572e9e6532e0da1678080f63cb6b7a233f96caf2fc5a45350a056e18c53c",
+  "source_size_bytes": 10010981,
+  "source_pdf_pages": 628,
+  "repository_base": "2b4509299a172ee0911279a1defe82b9e8a45c4d",
+  "method": "Run the current ACI page adapter recognition rules across every page extracted with the repository PyMuPDF layout contract; aggregate source-safe locator and diagnostic counts without retaining protected prose.",
+  "recognized": {
+    "total_occurrences": 4181,
+    "unique_locators": 3952,
+    "pages_with_recognized_structure": 492,
+    "by_type": {
+      "chapter": 58,
+      "section": 592,
+      "subsection": 3411,
+      "table": 120
+    }
+  },
+  "collisions": {
+    "unique_locator_families_with_collisions": 173,
+    "duplicate_occurrences_beyond_first": 229,
+    "representative_patterns": [
+      "chapter headings repeat in front matter, contents, and body contexts",
+      "numeric locator-like material such as decimal values is promoted by the current numeric-only grammar",
+      "some normative and commentary locators repeat across extracted page regions"
+    ]
+  },
+  "diagnostics": {
+    "unresolved_cross_gutter_blocks": 2481,
+    "duplicate_locator_fragments_suppressed": 141
+  },
+  "claims": {
+    "whole_document_replay_executed": true,
+    "current_recognition_is_collision_free": false,
+    "semantic_completeness_established": false,
+    "reviewed_semantic_coverage_established": false
+  },
+  "next_gate": "Use representative exact-source observations to discriminate true structural declarations from front-matter, contents, numeric-value, and repeated extraction contexts before broadening grammar or claiming whole-document hierarchy completeness."
+}
