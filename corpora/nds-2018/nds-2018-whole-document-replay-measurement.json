@@ -1,0 +1,70 @@
+{
+  "schema": "nds-2018-whole-document-replay-measurement/v1",
+  "source": {
+    "sha256": "581353dab836de933546bc93b8265674dabb08d1073da04d660cf894250b48b4",
+    "bytes": 6791825,
+    "pdf_pages": 206
+  },
+  "layout": {
+    "pages_with_extracted_text": 206,
+    "retained_text_blocks": 4510,
+    "recurring_furniture_keys": 11
+  },
+  "current_recognition": {
+    "chapter": {
+      "occurrences": 16,
+      "unique_locators": 16,
+      "colliding_locators": 0,
+      "colliding_occurrences": 0
+    },
+    "section": {
+      "occurrences": 704,
+      "unique_locators": 704,
+      "colliding_locators": 0,
+      "colliding_occurrences": 0
+    },
+    "appendix": {
+      "occurrences": 13,
+      "unique_locators": 13,
+      "colliding_locators": 0,
+      "colliding_occurrences": 0
+    },
+    "equation": {
+      "occurrences": 79,
+      "unique_locators": 79,
+      "colliding_locators": 0,
+      "colliding_occurrences": 0
+    },
+    "figure": {
+      "occurrences": 39,
+      "unique_locators": 39,
+      "colliding_locators": 0,
+      "colliding_occurrences": 0
+    },
+    "table_caption": {
+      "occurrences": 24,
+      "unique_locators": 20,
+      "colliding_locators": 4,
+      "colliding_occurrences": 8
+    }
+  },
+  "measured_unsupported_or_ambiguous_families": {
+    "appendix_equation_labels_outside_current_numeric_equation_grammar": 13,
+    "content_table_caption_observations_outside_current_alphanumeric_table_grammar": 85,
+    "content_figure_caption_observations_outside_current_numeric_letter_figure_grammar": 11,
+    "unresolved_appendix_heading_occurrences": 1,
+    "private_use_text_blocks_requiring_nonsemantic_evidence_preservation": 542
+  },
+  "claim_boundary": {
+    "structural_measurement": "measured",
+    "generated_semantic_coverage": "not_claimed",
+    "parsed_semantic_coverage": "not_claimed",
+    "reviewed_semantic_coverage": "not_claimed",
+    "executable_engineering_capability": "not_claimed"
+  },
+  "determinism": {
+    "repeated_measurements_equal": true,
+    "canonical_core_measurement_sha256": "8220ac4af0145f2e44e93df82f948298a3d5860f094d06e3b29a8a0fed46223c",
+    "digest_scope": "canonical JSON excluding this determinism object"
+  }
+}
