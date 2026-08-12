@@ -56,13 +56,14 @@ class Tms402SourceRoleProducerTests(unittest.TestCase):
             [Tms402SourceRole.NORMATIVE, Tms402SourceRole.COMMENTARY],
         )
         self.assertEqual(
+            [item.recovery_origin for item in production.classified_regions],
+            ["ocr:test-fixture", "ocr:test-fixture"],
+        )
+        self.assertEqual(
             [observation.source_role for observation in production.observations],
             ["normative", "commentary"],
         )
-        self.assertEqual(
-            [observation.recovery_origin for observation in production.observations],
-            ["ocr:test-fixture", "ocr:test-fixture"],
-        )
+        self.assertEqual(production.observations[0].text_origin, "ocr")
         self.assertEqual(production.observations[0].block.bbox, (72.0, 100.0, 280.0, 118.0))
         self.assertEqual(production.observations[0].block.page_number, 67)
 
