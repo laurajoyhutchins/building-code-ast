@@ -6,6 +6,7 @@ from building_code_ast.aisc360_hierarchy_characterization import HierarchyPageOb
 from building_code_ast.aisc360_hierarchy_promotion import promote_aisc360_hierarchy
 from building_code_ast.aisc360_raster_hierarchy_observation import (
     AISC360_DERIVATIVE_SHA256,
+    AISC360_REPRESENTATIVE_RENDER_RECIPE,
     RasterHierarchyPageObservation,
     summarize_raster_hierarchy_observations,
 )
@@ -27,6 +28,35 @@ def _raster_summary(*, page: int, text: str) -> dict[str, object]:
             )
         ]
     )
+
+
+def _durable_raster_receipt(*, page: int, locator: str) -> dict[str, object]:
+    return {
+        "schema": "aisc360-raster-hierarchy-observation-v1",
+        "component": "ansi-aisc-360-16",
+        "source_derivative": {
+            "sha256": AISC360_DERIVATIVE_SHA256,
+            "byte_count": 1,
+            "page_count": 2,
+        },
+        "observation_boundary": {
+            "source_kind": "raster_recovery",
+            "render_recipe": AISC360_REPRESENTATIVE_RENDER_RECIPE,
+            "recovery_backend": "source-safe-test",
+            "protected_source_text_retained": False,
+            "parser_promotion_performed": False,
+        },
+        "representative_observations": [
+            {
+                "page": page,
+                "render_sha256": "a" * 64,
+                "recovered_text_sha256": "b" * 64,
+                "dotted_hierarchy_locators": [locator],
+            }
+        ],
+        "claim": "synthetic source-safe receipt",
+        "next_boundary": "synthetic-next-boundary",
+    }
 
 
 class Aisc360HierarchyPromotionTests(unittest.TestCase):
@@ -87,6 +117,41 @@ class Aisc360HierarchyPromotionTests(unittest.TestCase):
         self.assertNotIn("SYNTHETIC RASTER HEADING", rendered)
         self.assertNotIn("synthetic embedded body", rendered)
         self.assertNotIn("synthetic appendix body", rendered)
+
+    def test_promotes_the_durable_raster_receipt_shape_used_by_the_repository(self) -> None:
+        receipt = _durable_raster_receipt(page=2, locator="1.3")
+
+        result = promote_aisc360_hierarchy(
+            [
+                HierarchyPageObservation(1, "CHAPTER A"),
+                HierarchyPageObservation(2, None),
+            ],
+            raster_summary=receipt,
+            expected_page_count=2,
+        )
+
+        self.assertEqual(
+            result["candidates"],
+            [
+                {
+                    "page": 1,
+                    "kind": "chapter",
+                    "locator": "A",
+                    "source_kind": "embedded_text",
+                },
+                {
+                    "page": 2,
+                    "kind": "numbered_hierarchy",
+                    "locator": "1.3",
+                    "source_kind": "raster_recovery",
+                    "render_sha256": "a" * 64,
+                    "recovered_text_sha256": "b" * 64,
+                    "recovery_backend": "source-safe-test",
+                },
+            ],
+        )
+        self.assertNotIn("claim", repr(result))
+        self.assertNotIn("next_boundary", repr(result))
 
     def test_raster_candidate_must_reference_an_image_only_page(self) -> None:
         raster_summary = _raster_summary(page=1, text="1.3. SYNTHETIC")
