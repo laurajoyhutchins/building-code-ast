@@ -25,6 +25,7 @@ from .aisc360_raster_hierarchy_observation import (
 _SHA256_RE = re.compile(r"^[0-9a-f]{64}$")
 _DOTTED_LOCATOR_RE = re.compile(r"^\d+(?:\.\d+)+$")
 _RASTER_SCHEMA = "aisc360-raster-hierarchy-observation-v1"
+_AISC360_COMPONENT = "ansi-aisc-360-16"
 
 
 def _require_pages(
@@ -39,6 +40,77 @@ def _require_pages(
     if tuple(item.page_number for item in ordered) != expected:
         raise ValueError("observations must cover each one-based component page exactly once")
     return ordered
+
+
+def _durable_receipt_as_summary(
+    raster_evidence: Mapping[str, object],
+    *,
+    expected_page_count: int,
+) -> Mapping[str, object]:
+    """Normalize the committed source-safe receipt to the in-memory summary shape."""
+
+    if "observations" in raster_evidence:
+        return raster_evidence
+    if raster_evidence.get("schema") != _RASTER_SCHEMA:
+        raise ValueError("unsupported raster hierarchy observation schema")
+    if raster_evidence.get("component") != _AISC360_COMPONENT:
+        raise ValueError("raster hierarchy receipt references the wrong component")
+
+    source = raster_evidence.get("source_derivative")
+    if not isinstance(source, Mapping):
+        raise ValueError("raster hierarchy receipt requires source derivative identity")
+    if source.get("sha256") != AISC360_DERIVATIVE_SHA256:
+        raise ValueError("raster hierarchy receipt references the wrong source derivative")
+    byte_count = source.get("byte_count")
+    if not isinstance(byte_count, int) or byte_count < 1:
+        raise ValueError("raster hierarchy receipt byte count must be positive")
+    if source.get("page_count") != expected_page_count:
+        raise ValueError("raster hierarchy receipt page count does not match component coverage")
+
+    boundary = raster_evidence.get("observation_boundary")
+    if not isinstance(boundary, Mapping):
+        raise ValueError("raster hierarchy receipt requires an observation boundary")
+    if boundary.get("source_kind") != "raster_recovery":
+        raise ValueError("raster hierarchy receipt source kind must remain explicit")
+    if boundary.get("render_recipe") != AISC360_REPRESENTATIVE_RENDER_RECIPE:
+        raise ValueError("raster hierarchy receipt does not match the declared render recipe")
+    backend = boundary.get("recovery_backend")
+    if not isinstance(backend, str) or not backend.strip():
+        raise ValueError("raster hierarchy receipt recovery backend must be non-empty")
+    if boundary.get("protected_source_text_retained") is not False:
+        raise ValueError("raster hierarchy receipt must not retain protected source text")
+    if boundary.get("parser_promotion_performed") is not False:
+        raise ValueError("raster hierarchy receipt must be the unpromoted observation boundary")
+
+    raw_items = raster_evidence.get("representative_observations")
+    if not isinstance(raw_items, list):
+        raise ValueError("raster hierarchy receipt observations must be a list")
+
+    observations: list[dict[str, object]] = []
+    for raw in raw_items:
+        if not isinstance(raw, Mapping):
+            raise ValueError("raster hierarchy receipt observations must be mappings")
+        if "recovered_text" in raw:
+            raise ValueError("raster hierarchy receipt must not retain recovered source text")
+        observations.append(
+            {
+                "page": raw.get("page"),
+                "source_kind": "raster_recovery",
+                "render_sha256": raw.get("render_sha256"),
+                "render_recipe": dict(AISC360_REPRESENTATIVE_RENDER_RECIPE),
+                "recovery_backend": backend,
+                "recovered_text_sha256": raw.get("recovered_text_sha256"),
+                "dotted_hierarchy_locators": raw.get("dotted_hierarchy_locators"),
+            }
+        )
+
+    return {
+        "schema": _RASTER_SCHEMA,
+        "source_derivative_sha256": AISC360_DERIVATIVE_SHA256,
+        "render_recipe": dict(AISC360_REPRESENTATIVE_RENDER_RECIPE),
+        "observations": observations,
+        "parser_promotion_performed": False,
+    }
 
 
 def _raster_items(
@@ -112,6 +184,10 @@ def promote_aisc360_hierarchy(
 ) -> dict[str, object]:
     """Promote source-safe hierarchy candidates across both evidence paths.
 
+    ``raster_summary`` may be either the direct source-safe summary emitted by
+    ``summarize_raster_hierarchy_observations`` or the durable repository receipt
+    shape committed for the same observation boundary.
+
     Embedded text contributes only the already-characterized top-level chapter
     and appendix anchors. Raster recovery contributes only durable dotted
     locator candidates plus provenance hashes. Recovered raster prose and
@@ -126,7 +202,14 @@ def promote_aisc360_hierarchy(
     image_only_pages = {
         item.page_number for item in ordered if item.embedded_text is None
     }
-    raster_items = _raster_items(raster_summary, image_only_pages=image_only_pages)
+    normalized_raster_summary = _durable_receipt_as_summary(
+        raster_summary,
+        expected_page_count=expected_page_count,
+    )
+    raster_items = _raster_items(
+        normalized_raster_summary,
+        image_only_pages=image_only_pages,
+    )
     raster_pages = {int(item["page"]) for item in raster_items}
 
     characterization = characterize_hierarchy(
