@@ -125,7 +125,7 @@ class Asce722SourceRoleTests(unittest.TestCase):
         chapter = _qualified(
             _observation(
                 "CHAPTER 7 SYNTHETIC",
-                178,
+                177,
                 font="Synthetic.B",
                 block_number=1,
                 x0=274.0,
