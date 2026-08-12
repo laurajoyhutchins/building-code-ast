@@ -9,7 +9,14 @@
   },
   "observation_boundary": {
     "source_kind": "raster_recovery",
-    "render_dpi": 600,
+    "render_recipe": {
+      "renderer": "pdftoppm",
+      "renderer_version": "25.06.0",
+      "dpi": 600,
+      "output_format": "png",
+      "page_selection": "-f <page> -singlefile",
+      "command_shape": "pdftoppm -f <page> -singlefile -r 600 -png <source.pdf> <output-prefix>"
+    },
     "recovery_backend": "visual_transcription_from_exact_render",
     "protected_source_text_retained": false,
     "parser_promotion_performed": false
@@ -17,13 +24,13 @@
   "representative_observations": [
     {
       "page": 243,
-      "render_sha256": "68a6c9c1f7ee2c148c06754da0beec4d3d16ab5f9d7a16b57959464b8da9fa92",
+      "render_sha256": "d8713ae2ff9f53e1373b55cdbbde03276c8a681e58bb5d00cc4f0792790e9b58",
       "recovered_text_sha256": "d2d162d9a930f208f1fc4130ab829502ec642be250675509409046281a24ab4f",
       "dotted_hierarchy_locators": ["1.3"]
     },
     {
       "page": 285,
-      "render_sha256": "27314dba79dc47c97f6d2cb46a815317e480db6d86c89fabae901a5ac1a5696b",
+      "render_sha256": "21d815df3e2aab29ee67a013bc492b475130519ec0ccbda946191539c91784fc",
       "recovered_text_sha256": "eeb1bc96b6901f7347c604283a9c450a1fe06084dbde9f1ae0b7e2e60310db68",
       "dotted_hierarchy_locators": ["4.2"]
     }
