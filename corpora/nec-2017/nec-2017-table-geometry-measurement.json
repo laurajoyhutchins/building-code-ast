@@ -1,0 +1,74 @@
+{
+  "artifact": "nec-2017-table-geometry-measurement",
+  "measurement": {
+    "candidate_family": {
+      "ambiguous_candidate_ownership": 26,
+      "candidate_envelopes_total": 1250,
+      "grouped_geometry_candidates": 1032,
+      "recognized_owned_candidates": 337,
+      "unsupported_unresolved_candidates": 887,
+      "vector_rule_candidates": 218
+    },
+    "caption_ownership": {
+      "ambiguous_caption_with_multiple_candidates": 90,
+      "recognized_caption_with_candidate": 154,
+      "unsupported_caption_without_candidate": 68
+    },
+    "denominators": {
+      "candidate_envelopes": 1250,
+      "detected_geometry_rows": 10235,
+      "horizontal_caption_occurrences": 222,
+      "publication_pages": 881,
+      "rule_regions": 757,
+      "table_caption_occurrences": 222
+    },
+    "implementation": {
+      "base_commit": "b195c7a695b9e00ef8993fa1a4a23f8be60b5abb",
+      "candidate_ownership_blob": "bca59beea96a23743cef9f5d89b5999d75036a1f",
+      "layout_analysis_blob": "69c9d139fa0c3272122331eda3be1a3e7181e352",
+      "table_geometry_blob": "6549710d958ff5ea6b0a782496ca15d8acbe20f0"
+    },
+    "limitations": [
+      "geometry evidence only; no table semantics or protected table reconstruction",
+      "grouped-row and vector-rule candidate families are reported separately and are not semantically deduplicated",
+      "caption-to-candidate ownership assigns geometry only and does not infer continuation, headers, cells, lookup meaning, or compliance semantics"
+    ],
+    "measurement_sha256": "56c362545289c1bfce5ac15ba92074aef2aa861e3f4701ed5ea95bf45872ba12",
+    "measurement_version": "0.1.0",
+    "page_measurement": {
+      "caption_pages": 173,
+      "pages_completed_geometry": 881,
+      "pages_detector_error": 0,
+      "pages_detector_timeout": 0,
+      "pages_scanned": 881,
+      "pages_with_detected_rows": 462,
+      "two_column_pages_completed": 693
+    },
+    "parser_promotion_performed": false,
+    "private_source_locator_retained": false,
+    "protected_source_expression_retained": false,
+    "row_family": {
+      "ambiguous_ungrouped_rows": 2249,
+      "recognized_geometry_rows": 10235,
+      "rows_promoted_into_grouped_candidates": 7986
+    },
+    "rule_family": {
+      "observed_rule_regions": 757,
+      "recognized_ruled_candidates": 218,
+      "recognized_ruled_rows": 3048,
+      "unsupported_rule_regions_without_reconstruction": 539
+    },
+    "source": {
+      "file_name": "nec-2017.pdf",
+      "page_count": 881,
+      "sha256": "603ef5c461247bacd716e3953222bfb227f1ddc780fffdbfcb90756b02c237c7",
+      "size_bytes": 7422245
+    },
+    "table_start_family": {
+      "recognized_caption_starts": 222,
+      "unsupported_nonhorizontal_caption_starts": 0
+    }
+  },
+  "measurement_repetitions": 2,
+  "repetitions_identical": true
+}
