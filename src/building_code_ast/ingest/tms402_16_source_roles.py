@@ -4,8 +4,8 @@ The retained TMS 402/602-16 artifact is image-based and presents normative
 code beside informational commentary on many, but not all, TMS 402 pages.
 This module consumes coordinate-bearing OCR/recovery regions and requires
 explicit page-layout evidence before assigning normative authority. Unsupported
-layouts, front matter, and regions crossing the code/commentary boundary remain
-explicitly ambiguous and are not emitted as parser inputs.
+layouts, page furniture, front matter, and regions crossing the code/commentary
+boundary remain explicitly ambiguous and are not emitted as parser inputs.
 """
 
 from __future__ import annotations
@@ -26,6 +26,8 @@ _TMS402_COMPONENT_ID = "tms-402-16"
 _TMS402_FIRST_PAGE = 57
 _TMS402_FIRST_CODE_PAGE = 67
 _TMS402_LAST_PAGE = 320
+_TOP_CONTENT_Y = 65.0
+_BOTTOM_CONTENT_Y = 750.0
 _BODY_MIDPOINT = 306.0
 _SUPPORTED_TEXT_ORIGINS = {"ocr"}
 
@@ -149,6 +151,14 @@ def _classify_region(region: Tms402RecoveredRegion) -> RoleQualifiedTms402Region
             role_evidence="component front matter precedes the canonical C-1 code page",
         )
 
+    _, y0, _, y1 = region.block.bbox
+    if y0 < _TOP_CONTENT_Y or y1 > _BOTTOM_CONTENT_Y:
+        return RoleQualifiedTms402Region(
+            region=region,
+            source_role=Tms402SourceRole.AMBIGUOUS,
+            role_evidence="region lies outside the canonical TMS 402 body-content bounds",
+        )
+
     if region.page_layout is not Tms402PageLayout.PARALLEL_CODE_COMMENTARY:
         return RoleQualifiedTms402Region(
             region=region,
@@ -185,9 +195,10 @@ def produce_tms402_16_observations(
 
     The producer is intentionally bounded to the canonical TMS 402 component in
     the exact retained artifact. A region becomes normative or commentary only
-    when recovery has explicitly established the parallel code/commentary page
-    layout and the region lies wholly on one side of the artifact-local 306 pt
-    boundary. All other in-range regions remain explicit ambiguous evidence.
+    when it lies within body-content bounds, recovery has explicitly established
+    the parallel code/commentary page layout, and the region lies wholly on one
+    side of the artifact-local 306 pt boundary. All other in-range regions remain
+    explicit ambiguous evidence.
     """
 
     _validate_source_artifact(source_artifact)
