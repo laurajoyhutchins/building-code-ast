@@ -1,0 +1,46 @@
+{
+  "schema": "tms402-whole-component-replay-v1",
+  "component": "tms-402-16",
+  "source": {
+    "drive_object_id": "196AOKw29ahOiQMhyqQJge1DaS_BlTXzd",
+    "sha256": "947476cf326fef261cb6af581565c8089945c6651eb054d791b5c910431f8e1d",
+    "byte_count": 53081346,
+    "pdf_page_count": 430,
+    "canonical_pdf_pages": [57, 320]
+  },
+  "recovery": {
+    "renderer": "pdftoppm 25.06.0",
+    "render_scale": 2.0,
+    "render_dpi": 144,
+    "render_mode": "grayscale PGM",
+    "ocr": "tesseract 5.5.0",
+    "tesseract_psm": 6,
+    "omp_thread_limit": 1,
+    "text_origin": "ocr",
+    "recovery_origin": "ephemeral:tesseract-5.5.0:tsv-line-aggregation",
+    "coordinate_space": "pdf_points",
+    "recovered_text_retained": false
+  },
+  "layout_evidence": {
+    "parallel_page_rule": "PDF page 67, or pages 67-299 whose recovered running header explicitly contains both CODE and COMMENTARY; all other pages fail closed as unsupported",
+    "parallel_code_commentary_pages": 196,
+    "unsupported_pages": 68,
+    "unsupported_page_ranges": "57-66, 78, 94-95, 106, 112, 118, 124, 126, 128, 140, 144, 146, 150, 171, 174, 176, 186, 188, 201, 212, 214, 228, 244, 262, 272, 274, 276, 280, 286-288, 290, 293, 295-298, 300-320"
+  },
+  "measurement": {
+    "recovered_lines": 10089,
+    "recognized_observations": 4356,
+    "normative": 2197,
+    "commentary": 2159,
+    "ambiguous": 5733,
+    "duplicate_digest_families": 78,
+    "duplicate_occurrences_beyond_first": 95,
+    "cross_role_duplicate_digest_families": 5
+  },
+  "interpretation": [
+    "The replay uses the landed producer boundaries: canonical pages 57-320, first code page 67, body y bounds 65-750 pt, and 306 pt authority boundary.",
+    "Only explicitly recovered parallel CODE/COMMENTARY layouts permit normative/commentary assignment; unsupported layouts, page furniture, cross-boundary lines, and front matter remain ambiguous.",
+    "Duplicate metrics use SHA-256 of ephemeral normalized recovered line text; recovered source expression is not retained.",
+    "The large ambiguous population is a source-grounded deficiency, not coerced into authority roles. The next implementation should improve explicit page-layout recovery before attempting broader AST promotion."
+  ]
+}
