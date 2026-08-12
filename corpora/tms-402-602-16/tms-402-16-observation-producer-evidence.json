@@ -1,0 +1,87 @@
+{
+  "evidence_version": "0.1.0",
+  "type": "tms402_observation_producer_focused_replay",
+  "source": {
+    "artifact_id": "sha256:947476cf326fef261cb6af581565c8089945c6651eb054d791b5c910431f8e1d",
+    "byte_size": 53081346,
+    "pdf_pages": 430,
+    "canonical_tms402_pdf_pages": [57, 320]
+  },
+  "recovery": {
+    "text_origin": "ocr",
+    "recovery_origin": "ephemeral:tesseract-5.5.0:tsv-line-aggregation",
+    "render_scale": 2.0,
+    "tesseract_psm": 6,
+    "coordinate_space": "pdf_points",
+    "recovered_text_retained": false
+  },
+  "role_policy": {
+    "first_code_pdf_page": 67,
+    "body_y_bounds_pdf_points": [65.0, 750.0],
+    "parallel_authority_boundary_x_pdf_points": 306.0,
+    "unsupported_layout_role": "ambiguous",
+    "cross_boundary_role": "ambiguous",
+    "page_furniture_role": "ambiguous"
+  },
+  "representative_pages": [
+    {
+      "pdf_page": 60,
+      "layout_evidence": "unsupported",
+      "recovered_lines": 30,
+      "body_lines": 27,
+      "normative": 0,
+      "commentary": 0,
+      "ambiguous": 30
+    },
+    {
+      "pdf_page": 67,
+      "layout_evidence": "parallel_code_commentary",
+      "recovered_lines": 40,
+      "body_lines": 37,
+      "normative": 8,
+      "commentary": 16,
+      "ambiguous": 16
+    },
+    {
+      "pdf_page": 68,
+      "layout_evidence": "parallel_code_commentary",
+      "recovered_lines": 54,
+      "body_lines": 51,
+      "normative": 17,
+      "commentary": 12,
+      "ambiguous": 25
+    },
+    {
+      "pdf_page": 300,
+      "layout_evidence": "unsupported",
+      "recovered_lines": 53,
+      "body_lines": 50,
+      "normative": 0,
+      "commentary": 0,
+      "ambiguous": 53
+    },
+    {
+      "pdf_page": 310,
+      "layout_evidence": "unsupported",
+      "recovered_lines": 7,
+      "body_lines": 4,
+      "normative": 0,
+      "commentary": 0,
+      "ambiguous": 7
+    },
+    {
+      "pdf_page": 320,
+      "layout_evidence": "unsupported",
+      "recovered_lines": 30,
+      "body_lines": 28,
+      "normative": 0,
+      "commentary": 0,
+      "ambiguous": 30
+    }
+  ],
+  "notes": [
+    "OCR text was used only ephemerally to obtain recovery line boxes; no recovered source text or page image is retained in Git.",
+    "This is focused producer evidence, not the whole-component replay owned by the separate verification gate.",
+    "Unsupported page layouts remain explicit ambiguous evidence rather than being inferred normative from column position alone."
+  ]
+}
