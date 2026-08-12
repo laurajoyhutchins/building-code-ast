@@ -1,0 +1,42 @@
+{
+  "schema": "asce-7-22-source-role-evidence/v1",
+  "source": {
+    "sha256": "522d341d8ab21eb254c8af2d853910633233285eb3704933729e0aeefdc88eb0",
+    "bytes": 55404349,
+    "pdf_pages": 1047
+  },
+  "repository_base": "e3595695f5e9eb63fd8294706ee1332270b0f5c1",
+  "observed_role_families": [
+    {
+      "role": "normative",
+      "structural_promotion": "eligible_when_declaration_context_is_explicit",
+      "evidence": "numbered body declarations occur in the standard body"
+    },
+    {
+      "role": "commentary",
+      "structural_promotion": "not_as_normative",
+      "evidence": "the retained artifact contains a separately identified COMMENTARY TO STANDARD ASCE/SEI 7-22 region with C-prefixed locator-shaped headings"
+    },
+    {
+      "role": "reference",
+      "structural_promotion": "not_as_declaration",
+      "evidence": "contents/reference regions repeat locator-shaped labels with page references"
+    },
+    {
+      "role": "appendix",
+      "structural_promotion": "preserve_separately",
+      "evidence": "appendix and commentary-appendix heading families are measured outside the current numeric-only grammar"
+    },
+    {
+      "role": "ambiguous",
+      "structural_promotion": "fail_closed",
+      "evidence": "locator-shaped text without sufficient declaration context remains unpromoted"
+    }
+  ],
+  "policy": "Only explicitly normative observations may enter the current numeric structural promotion path. Other roles remain first-class role-qualified evidence rather than being discarded or silently normalized into normative locators.",
+  "claims": {
+    "role_discrimination_contract_established": true,
+    "whole_document_role_classification_complete": false,
+    "semantic_completeness_established": false
+  }
+}
