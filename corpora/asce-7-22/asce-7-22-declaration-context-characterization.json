@@ -1,0 +1,39 @@
+{
+  "schema_version": 1,
+  "publication": "ASCE/SEI 7-22",
+  "source": {
+    "object_id": "engineering-sources/asce-7-2022",
+    "sha256": "522d341d8ab21eb254c8af2d853910633233285eb3704933729e0aeefdc88eb0",
+    "size_bytes": 206265816,
+    "pdf_pages": 1046
+  },
+  "method": {
+    "scope": "all embedded-text blocks inside the repository ASCE body-content y-band",
+    "candidate_rule": "existing ASCE section regex applied to normalized block text",
+    "collision_definition": "same numeric locator recognized from more than one source block",
+    "typography_observation": "first source span font family/style and size retained from PyMuPDF block dictionaries",
+    "interpretation_boundary": "typography is measured evidence for declaration/source-role discrimination; it is not itself an authority classification"
+  },
+  "baseline": {
+    "numeric_section_candidates": 1550,
+    "duplicate_locator_families": 59,
+    "duplicate_style_family_counts": {
+      "bold+regular": 23,
+      "regular_only": 22,
+      "bold_italic+regular": 7,
+      "bold+bold_italic": 4,
+      "italic+regular": 1,
+      "bold_italic_only": 1,
+      "bold_only": 1
+    }
+  },
+  "representative_collision_evidence": [
+    {"locator": "1.1", "observations": [{"pdf_page": 63, "font_style": "bold", "font_size_pt": 9.5}, {"pdf_page": 178, "font_style": "regular", "font_size_pt": 9.5}]},
+    {"locator": "2.3.6", "observations": [{"pdf_page": 65, "font_style": "regular", "font_size_pt": 8.0}, {"pdf_page": 70, "font_style": "bold", "font_size_pt": 9.5}]},
+    {"locator": "4.10", "observations": [{"pdf_page": 76, "font_style": "regular", "font_size_pt": 8.0}, {"pdf_page": 81, "font_style": "bold", "font_size_pt": 9.5}]},
+    {"locator": "7.1.2", "observations": [{"pdf_page": 117, "font_style": "bold", "font_size_pt": 9.5}, {"pdf_page": 235, "font_style": "bold_italic", "font_size_pt": 9.5}]},
+    {"locator": "7.5.1", "observations": [{"pdf_page": 125, "font_style": "bold", "font_size_pt": 9.5}, {"pdf_page": 227, "font_style": "bold_italic", "font_size_pt": 9.5}]}
+  ],
+  "finding": "The measured collision family is not safely resolvable from numeric locator text alone. Regular numeric-leading prose/table/graph blocks and bold-italic source-role material can collide with bold provision declarations. The existing PdfBlock line/span model already carries the typography needed for a bounded declaration-context/source-role discriminator.",
+  "next_gate": "Use preserved PdfLine/PdfSpan typography to classify ASCE declaration candidates conservatively before section promotion, with representative exact-source regression cases for bold provision declarations, regular numeric-leading references/data, and bold-italic role-distinct material. Re-run whole-document replay and require the targeted collision families to resolve without promoting ambiguous material."
+}
