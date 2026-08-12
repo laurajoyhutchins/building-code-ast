@@ -31,7 +31,7 @@ def test_raster_observation_emits_source_safe_locator_evidence() -> None:
                 "render_sha256": "a" * 64,
                 "render_dpi": 600,
                 "recovery_backend": "source-safe-test",
-                "recovered_text_sha256": "5f8a13e84f6e45e73ab29af86804a5b66594056538aff0324b456d308981def5",
+                "recovered_text_sha256": "3d727c41e458c3a07cad471106bf66e37916644d9ac5a72ceab65f9fc3628e24",
                 "dotted_hierarchy_locators": ["1.3"],
             }
         ],
