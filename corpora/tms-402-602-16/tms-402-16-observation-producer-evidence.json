@@ -1,6 +1,12 @@
 {
   "evidence_version": "0.1.0",
   "type": "tms402_observation_producer_focused_replay",
+  "implementation": {
+    "verified_code_head": "d8b807f69853dee2d2ccf195873e268e98080f25",
+    "ci_run": 1008,
+    "archaeology_run": 682,
+    "lore_run": 1929
+  },
   "source": {
     "artifact_id": "sha256:947476cf326fef261cb6af581565c8089945c6651eb054d791b5c910431f8e1d",
     "byte_size": 53081346,
