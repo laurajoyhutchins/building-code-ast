@@ -1,0 +1,55 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/laurajoyhutchins/building-code-ast/schemas/visual-memory-package-manifest.schema.json",
+  "title": "Engineering Visual Memory Private Package Manifest",
+  "type": "object",
+  "required": [
+    "schema",
+    "clip_model",
+    "clip_model_sha256",
+    "source_artifacts",
+    "source_images_included",
+    "source_pdfs_included",
+    "capability_contract"
+  ],
+  "properties": {
+    "schema": {"const": "engineering-visual-memory-package/0.4.0"},
+    "clip_model": {"type": "string", "minLength": 1},
+    "clip_model_sha256": {"type": "string", "pattern": "^[0-9a-fA-F]{64}$"},
+    "figure_index": {
+      "type": "object",
+      "properties": {
+        "objects": {"type": "integer", "minimum": 0},
+        "views": {"type": "integer", "minimum": 0},
+        "corpora": {"type": "integer", "minimum": 0}
+      },
+      "additionalProperties": false
+    },
+    "page_indexes": {
+      "type": "object",
+      "additionalProperties": {"type": "integer", "minimum": 0}
+    },
+    "source_artifacts": {
+      "type": "object",
+      "additionalProperties": {
+        "type": "object",
+        "required": ["sha256", "size_bytes"],
+        "properties": {
+          "sha256": {"type": "string", "pattern": "^[0-9a-fA-F]{64}$"},
+          "size_bytes": {"type": "integer", "minimum": 0}
+        },
+        "additionalProperties": true
+      }
+    },
+    "source_images_included": {"const": false},
+    "source_pdfs_included": {"const": false},
+    "capability_contract": {
+      "type": "array",
+      "items": {"type": "string", "minLength": 1},
+      "minItems": 1,
+      "uniqueItems": true
+    },
+    "runtime_dependency": {"type": "string"}
+  },
+  "additionalProperties": true
+}
