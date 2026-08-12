@@ -49,7 +49,7 @@
     }
   },
   "measured_unsupported_or_ambiguous_families": {
-    "appendix_equation_labels_outside_current_numeric_equation_grammar": 13,
+    "appendix_equation_labels_outside_current_numeric_equation_grammar": 18,
     "content_table_caption_observations_outside_current_alphanumeric_table_grammar": 85,
     "content_figure_caption_observations_outside_current_numeric_letter_figure_grammar": 11,
     "unresolved_appendix_heading_occurrences": 1,
@@ -64,7 +64,7 @@
   },
   "determinism": {
     "repeated_measurements_equal": true,
-    "canonical_core_measurement_sha256": "8220ac4af0145f2e44e93df82f948298a3d5860f094d06e3b29a8a0fed46223c",
+    "canonical_core_measurement_sha256": "7dc08b76fe40a3653ea3bfd60d7654f7a894fce375ec747191d60747d7507e11",
     "digest_scope": "canonical JSON excluding this determinism object"
   }
 }
