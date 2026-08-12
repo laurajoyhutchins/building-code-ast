@@ -1,0 +1,36 @@
+{
+  "schema_version": 1,
+  "publication": "ACI 318-19",
+  "source": {
+    "drive_object_id": "1JBQpBXNqkcR1zDxTiPHg1G_hsfqzqIkK",
+    "byte_size": 18643577,
+    "page_count": 680,
+    "sha256": "7b6b572e9e65cf9c32dcf7fc594266a062b21bc02b2f645f08e646e28e41668e"
+  },
+  "measurement": {
+    "candidate_grammar": "ordinary locator candidates matching ^R?\\d+(?:\\.\\d+)+\\b after source-role classification and table exclusion",
+    "selected_collision_family": "locator stem has chapter component 0",
+    "rationale": "ACI structural locators are chapter-qualified; chapter 0 is not a publication chapter, while decimal engineering expressions beginning with 0 repeatedly collide with the permissive locator grammar.",
+    "preferred_zero_chapter_candidate_occurrences": 105,
+    "pages_with_preferred_zero_chapter_candidates": 40,
+    "unique_source_role_locator_pairs": 63,
+    "representative_families": [
+      {"source_role": "normative", "locator": "0.2", "occurrences": 5},
+      {"source_role": "normative", "locator": "0.09", "occurrences": 5},
+      {"source_role": "normative", "locator": "0.45", "occurrences": 5},
+      {"source_role": "normative", "locator": "0.3", "occurrences": 4},
+      {"source_role": "normative", "locator": "0.8", "occurrences": 4},
+      {"source_role": "commentary", "locator": "0.6", "occurrences": 4}
+    ]
+  },
+  "proposed_discriminator": {
+    "rule": "For ordinary Code/Commentary locator promotion, reject candidates whose chapter component is 0 before duplicate selection and structural-node construction.",
+    "scope": "ordinary locator promotion only; table recognition is unchanged",
+    "expected_effect": "Remove this measured false-positive family without title inference or engineering-semantic reconstruction."
+  },
+  "provenance": {
+    "source_text_retained": false,
+    "measurement_only": true,
+    "independent_verification_performed": false
+  }
+}
