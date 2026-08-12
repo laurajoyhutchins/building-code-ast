@@ -3,9 +3,9 @@
   "publication": "ACI 318-19",
   "source": {
     "drive_object_id": "1JBQpBXNqkcR1zDxTiPHg1G_hsfqzqIkK",
-    "byte_size": 18643577,
-    "page_count": 680,
-    "sha256": "7b6b572e9e65cf9c32dcf7fc594266a062b21bc02b2f645f08e646e28e41668e"
+    "byte_size": 10010981,
+    "page_count": 628,
+    "sha256": "7b6b572e9e6532e0da1678080f63cb6b7a233f96caf2fc5a45350a056e18c53c"
   },
   "measurement": {
     "candidate_grammar": "ordinary locator candidates matching ^R?\\d+(?:\\.\\d+)+\\b after source-role classification and table exclusion",
@@ -23,14 +23,41 @@
       {"source_role": "commentary", "locator": "0.6", "occurrences": 4}
     ]
   },
-  "proposed_discriminator": {
+  "implemented_discriminator": {
     "rule": "For ordinary Code/Commentary locator promotion, reject candidates whose chapter component is 0 before duplicate selection and structural-node construction.",
-    "scope": "ordinary locator promotion only; table recognition is unchanged",
-    "expected_effect": "Remove this measured false-positive family without title inference or engineering-semantic reconstruction."
+    "scope": "ordinary locator promotion only; table recognition is unchanged"
+  },
+  "whole_document_replay": {
+    "method": "Run the PR #267 ACI page-adapter recognition rules across all 628 pages extracted with the repository PyMuPDF layout contract; aggregate source-safe locator and diagnostic counts without retaining protected prose.",
+    "baseline_reproduced": {
+      "total_occurrences": 4181,
+      "unique_locators": 3952,
+      "pages_with_recognized_structure": 492,
+      "collision_families": 173,
+      "duplicate_occurrences_beyond_first": 229,
+      "unresolved_cross_gutter_blocks": 2481,
+      "duplicate_locator_fragments_suppressed": 141
+    },
+    "after_discriminator": {
+      "total_occurrences": 4076,
+      "unique_locators": 3889,
+      "pages_with_recognized_structure": 490,
+      "by_type": {
+        "chapter": 58,
+        "section": 487,
+        "subsection": 3411,
+        "table": 120
+      },
+      "collision_families": 154,
+      "duplicate_occurrences_beyond_first": 187,
+      "unresolved_cross_gutter_blocks": 2481,
+      "duplicate_locator_fragments_suppressed": 113,
+      "zero_chapter_candidate_diagnostics": 133
+    }
   },
   "provenance": {
     "source_text_retained": false,
-    "measurement_only": true,
+    "whole_document_replay_executed": true,
     "independent_verification_performed": false
   }
 }
