@@ -1,0 +1,56 @@
+{
+  "schema_version": 1,
+  "publication": "ASCE/SEI 7-22",
+  "source": {
+    "object_id": "engineering-sources/asce-7-2022",
+    "sha256": "522d341d8ab21eb254c8af2d853910633233285eb3704933729e0aeefdc88eb0",
+    "size_bytes": 55404349,
+    "pdf_pages": 1047
+  },
+  "method": {
+    "scope": "all embedded-text blocks inside the repository ASCE body-content y-band",
+    "candidate_rule": "existing ASCE section regex applied to normalized block text",
+    "collision_definition": "same numeric locator recognized from more than one source block",
+    "typography_observation": "first source span font family/style and size retained from PyMuPDF block dictionaries",
+    "interpretation_boundary": "typography is measured evidence for declaration/source-role discrimination; it is not itself an authority classification"
+  },
+  "baseline": {
+    "numeric_section_candidates": 1550,
+    "duplicate_locator_families": 59,
+    "duplicate_style_family_counts": {
+      "bold+regular": 23,
+      "regular_only": 22,
+      "bold_italic+regular": 7,
+      "bold+bold_italic": 4,
+      "italic+regular": 1,
+      "bold_italic_only": 1,
+      "bold_only": 1
+    }
+  },
+  "representative_collision_evidence": [
+    {"locator": "1.1", "observations": [{"pdf_page": 63, "font_style": "bold", "font_size_pt": 9.5}, {"pdf_page": 178, "font_style": "regular", "font_size_pt": 9.5}]},
+    {"locator": "2.3.6", "observations": [{"pdf_page": 65, "font_style": "regular", "font_size_pt": 8.0}, {"pdf_page": 70, "font_style": "bold", "font_size_pt": 9.5}]},
+    {"locator": "4.10", "observations": [{"pdf_page": 76, "font_style": "regular", "font_size_pt": 8.0}, {"pdf_page": 81, "font_style": "bold", "font_size_pt": 9.5}]},
+    {"locator": "7.1.2", "observations": [{"pdf_page": 117, "font_style": "bold", "font_size_pt": 9.5}, {"pdf_page": 235, "font_style": "bold_italic", "font_size_pt": 9.5}]},
+    {"locator": "7.5.1", "observations": [{"pdf_page": 125, "font_style": "bold", "font_size_pt": 9.5}, {"pdf_page": 227, "font_style": "bold_italic", "font_size_pt": 9.5}]}
+  ],
+  "post_discriminator_replay": {
+    "scope": "explicit normative body source role, retained PDF pages 63 through 542 inclusive, inside the repository ASCE body-content y-band",
+    "declaration_rule": "after explicit normative role qualification, numeric section candidates require first nonempty source span font suffix .B at 9.5 pt within 0.05 pt tolerance",
+    "numeric_section_candidates": 1497,
+    "declaration_candidates": 808,
+    "declaration_unique_locators": 808,
+    "duplicate_declaration_locator_families": 0,
+    "duplicate_declaration_occurrences": 0,
+    "candidate_typography_counts": {
+      "bold_9.5": 808,
+      "bold_italic_9.5": 437,
+      "italic_9.5": 140,
+      "regular_8.0": 57,
+      "regular_9.5": 28,
+      "other_regular_sizes": 27
+    }
+  },
+  "finding": "Numeric locator text alone is unsafe, but explicit normative source-role qualification followed by preserved first-span declaration typography resolves the measured declaration collision family conservatively. On the exact retained normative body replay, all 808 promoted declarations have unique locators and no duplicate declaration family remains; regular, italic, bold-italic, missing, and size-mismatched candidates fail closed.",
+  "next_gate": "Keep source-role authority separate from declaration typography. Any future expansion must add exact-source evidence and regressions before widening the accepted declaration family."
+}

@@ -41,6 +41,7 @@ class Asce7Observation:
     printed_page: str | None = None
     structure_hint: str | None = None
     native_locator: str | None = None
+    section_declaration: bool | None = None
 
     def __post_init__(self) -> None:
         if self.structure_hint is not None and self.structure_hint not in _SUPPORTED_HINTS:
@@ -254,7 +255,11 @@ def parse_asce7_22_observations(
             section_stack = []
             continue
 
-        section_match = _SECTION_RE.match(text) if observation.structure_hint is None else None
+        section_match = (
+            _SECTION_RE.match(text)
+            if observation.structure_hint is None and observation.section_declaration is not False
+            else None
+        )
         if section_match:
             locator = section_match.group("locator")
             depth = locator.count(".")
