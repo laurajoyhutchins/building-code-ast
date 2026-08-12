@@ -24,13 +24,15 @@ def _region(
     page: int = 67,
     x0: float = 72.0,
     x1: float = 280.0,
+    y0: float = 100.0,
+    y1: float = 118.0,
     layout: Tms402PageLayout = Tms402PageLayout.PARALLEL_CODE_COMMENTARY,
     recovery_origin: str = "ocr:test-fixture",
 ) -> Tms402RecoveredRegion:
     return Tms402RecoveredRegion(
         block=PdfBlock(
             page_number=page,
-            bbox=(x0, 100.0, x1, 118.0),
+            bbox=(x0, y0, x1, y1),
             text="Synthetic source-safe observation.",
             block_number=1,
         ),
@@ -98,6 +100,24 @@ class Tms402SourceRoleProducerTests(unittest.TestCase):
         self.assertEqual(
             [item.source_role for item in production.classified_regions],
             [Tms402SourceRole.AMBIGUOUS, Tms402SourceRole.AMBIGUOUS],
+        )
+        self.assertEqual(production.observations, ())
+
+    def test_header_and_footer_regions_fail_closed(self) -> None:
+        production = produce_tms402_16_observations(
+            [
+                _region(y0=20.0, y1=40.0),
+                _region(y0=760.0, y1=780.0),
+            ],
+            source_artifact=ARTIFACT,
+        )
+
+        self.assertEqual(
+            [item.source_role for item in production.classified_regions],
+            [Tms402SourceRole.AMBIGUOUS, Tms402SourceRole.AMBIGUOUS],
+        )
+        self.assertTrue(
+            all("body" in item.role_evidence for item in production.classified_regions)
         )
         self.assertEqual(production.observations, ())
 
