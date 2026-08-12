@@ -13,13 +13,14 @@ import re
 from ..document_model import DocumentAst, DocumentNode, DocumentNodeType, make_document_node
 from ..document_validation import validate_document_ast
 from ..model import Diagnostic, DiagnosticSeverity, SourceSpan
+from .nds2018_equation_locators import normalize_nds2018_equation_locator
 from .nds2018_hierarchy import parse_nds2018_hierarchy
 from .nds2018_layout import NdsLayoutEvidence, NdsLayoutPage
 from .pdf_layout import PdfBlock, normalize_block_text
 
 
-_EQUATION_RE = re.compile(r"\((?P<id>\d+(?:\.\d+)+-\d+)\)\s*$")
-_EQUATION_ONLY_RE = re.compile(r"^\((?P<id>\d+(?:\.\d+)+-\d+)\)$")
+_EQUATION_RE = re.compile(r"\((?P<id>[^()\s]+)\)\s*$")
+_EQUATION_ONLY_RE = re.compile(r"^\((?P<id>[^()\s]+)\)$")
 _FIGURE_RE = re.compile(r"^Figure\s+(?P<id>\d+[A-Z])\s+\S", re.IGNORECASE)
 _TABLE_RE = re.compile(r"^Table\s+(?P<id>\d+[A-Z])\s+\S", re.IGNORECASE)
 _FOOTNOTE_RE = re.compile(r"^(?P<number>\d+)\.\s+\S")
@@ -108,7 +109,9 @@ def _equation_regions(
         match = _EQUATION_RE.search(observation.text)
         if match is None:
             continue
-        equation_id = match.group("id")
+        equation_id = normalize_nds2018_equation_locator(match.group("id"))
+        if equation_id is None:
+            continue
         start = observation.start
         attrs = _attributes(observation)
         attrs["equation_id"] = equation_id
