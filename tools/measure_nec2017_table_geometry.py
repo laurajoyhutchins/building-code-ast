@@ -64,7 +64,10 @@ def _extract(path: Path) -> tuple[tuple[PageLines, ...], tuple[TableCaptionAncho
                 if int(raw_block.get("type", 0)) != 0:
                     continue
                 block_number = int(raw_block.get("number", -1))
-                for line_index, raw_line in enumerate(raw_block.get("lines", ())):
+                block_parts: list[str] = []
+                block_direction = (1.0, 0.0)
+                direction_set = False
+                for raw_line in raw_block.get("lines", ()):
                     fragments: list[SourceFragment] = []
                     for raw_span in raw_line.get("spans", ()):
                         text = str(raw_span.get("text", ""))
@@ -83,6 +86,11 @@ def _extract(path: Path) -> tuple[tuple[PageLines, ...], tuple[TableCaptionAncho
                     if not fragments:
                         continue
                     text = "".join(fragment.raw_text for fragment in fragments)
+                    block_parts.append(text)
+                    if not direction_set and text.strip():
+                        direction = raw_line.get("dir", (1.0, 0.0))
+                        block_direction = (float(direction[0]), float(direction[1]))
+                        direction_set = True
                     bbox = tuple(float(value) for value in raw_line.get("bbox", (0, 0, 0, 0)))
                     font_size = statistics.median(
                         [fragment.font_size for fragment in fragments if fragment.font_size > 0.0]
@@ -98,16 +106,19 @@ def _extract(path: Path) -> tuple[tuple[PageLines, ...], tuple[TableCaptionAncho
                             font_name=fragments[0].font_name,
                         )
                     )
-                    if not _TABLE_RE.match(_normalize(text)):
-                        continue
-                    direction = raw_line.get("dir", (1.0, 0.0))
-                    dx, dy = float(direction[0]), float(direction[1])
+
+                block_text = _normalize(" ".join(block_parts))
+                if _TABLE_RE.match(block_text):
+                    dx, dy = block_direction
+                    block_bbox = tuple(
+                        float(value) for value in raw_block.get("bbox", (0, 0, 0, 0))
+                    )
                     if abs(dy) <= 1e-9 and dx > 0.0:
                         captions.append(
                             TableCaptionAnchor(
-                                caption_id=f"p{page_number}:b{block_number}:l{line_index}",
+                                caption_id=f"p{page_number}:b{block_number}",
                                 page_number=page_number,
-                                bbox=bbox,
+                                bbox=block_bbox,
                             )
                         )
                     else:
