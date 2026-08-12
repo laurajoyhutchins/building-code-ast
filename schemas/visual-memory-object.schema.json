@@ -1,0 +1,45 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/laurajoyhutchins/building-code-ast/schemas/visual-memory-object.schema.json",
+  "title": "Engineering Visual Memory Object",
+  "type": "object",
+  "required": [
+    "corpus_id",
+    "kind",
+    "occurrence_id",
+    "logical_visual_id",
+    "label",
+    "page",
+    "source_sha256",
+    "caption_text_quality"
+  ],
+  "properties": {
+    "corpus_id": {"type": "string", "minLength": 1},
+    "kind": {"type": "string", "enum": ["figure", "page", "region"]},
+    "occurrence_id": {"type": "string", "minLength": 1},
+    "logical_visual_id": {"type": "string", "minLength": 1},
+    "label": {"type": "string"},
+    "title": {"type": "string"},
+    "structural_context": {"type": "string"},
+    "page": {"type": "integer", "minimum": 1},
+    "source_sha256": {"type": "string", "pattern": "^[0-9a-fA-F]{64}$"},
+    "caption_text_quality": {
+      "type": "string",
+      "enum": ["usable", "degraded", "unavailable"]
+    },
+    "render_sha256": {"type": "string", "pattern": "^[0-9a-fA-F]{64}$"},
+    "visual_bbox_pdf": {
+      "type": "array",
+      "items": {"type": "number"},
+      "minItems": 4,
+      "maxItems": 4
+    },
+    "caption_bbox_pdf": {
+      "type": "array",
+      "items": {"type": "number"},
+      "minItems": 4,
+      "maxItems": 4
+    }
+  },
+  "additionalProperties": true
+}
