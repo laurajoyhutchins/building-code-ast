@@ -1,46 +1,70 @@
 {
-  "schema": "tms402-whole-component-replay-v1",
+  "schema": "tms402-whole-component-replay-v2",
   "component": "tms-402-16",
   "source": {
     "drive_object_id": "196AOKw29ahOiQMhyqQJge1DaS_BlTXzd",
     "sha256": "947476cf326fef261cb6af581565c8089945c6651eb054d791b5c910431f8e1d",
     "byte_count": 53081346,
     "pdf_page_count": 430,
-    "canonical_pdf_pages": [57, 320]
+    "canonical_pdf_pages": [
+      57,
+      320
+    ]
   },
   "recovery": {
-    "renderer": "pdftoppm 25.06.0",
-    "render_scale": 2.0,
-    "render_dpi": 144,
-    "render_mode": "grayscale PGM",
+    "renderer": "PyMuPDF 1.26.7",
+    "render_matrix": [
+      2.0,
+      2.0
+    ],
+    "render_mode": "8-bit grayscale PNG",
+    "encoded_dpi": 96,
     "ocr": "tesseract 5.5.0",
     "tesseract_psm": 6,
     "omp_thread_limit": 1,
-    "text_origin": "ocr",
-    "recovery_origin": "ephemeral:tesseract-5.5.0:tsv-line-aggregation",
-    "coordinate_space": "pdf_points",
+    "ocr_invocation": "one isolated Tesseract process per PDF page",
+    "tsv_aggregation": "non-empty level-5 words grouped by (block_num, par_num, line_num); bbox is word-bbox union",
+    "coordinate_space": "pdf_points via raster coordinates / 2.0",
     "recovered_text_retained": false
   },
   "layout_evidence": {
-    "parallel_page_rule": "PDF page 67, or pages 67-299 whose recovered running header explicitly contains both CODE and COMMENTARY; all other pages fail closed as unsupported",
-    "parallel_code_commentary_pages": 196,
-    "unsupported_pages": 68,
-    "unsupported_page_ranges": "57-66, 78, 94-95, 106, 112, 118, 124, 126, 128, 140, 144, 146, 150, 171, 174, 176, 186, 188, 201, 212, 214, 228, 244, 262, 272, 274, 276, 280, 286-288, 290, 293, 295-298, 300-320"
+    "parallel_page_rule": "PDF page 67, or PDF pages 68-299 with at least one recovered line above 100 PDF points containing whole-word CODE and COMMENTARY; all other pages fail closed as unsupported",
+    "parallel_code_commentary_pages": 209,
+    "unsupported_pages": 55,
+    "unsupported_page_ranges": "57-66, 78, 94, 106, 112, 118, 124, 126, 128, 140, 144, 146, 150, 174, 176, 186, 188, 214, 244, 262, 272, 274, 276, 286, 298, 300-320",
+    "body_y_bounds_pdf_points": [
+      65.0,
+      750.0
+    ],
+    "parallel_authority_boundary_x_pdf_points": 306.0
   },
   "measurement": {
-    "recovered_lines": 10089,
-    "recognized_observations": 4356,
-    "normative": 2197,
-    "commentary": 2159,
-    "ambiguous": 5733,
-    "duplicate_digest_families": 78,
-    "duplicate_occurrences_beyond_first": 95,
-    "cross_role_duplicate_digest_families": 5
+    "recovered_lines": 10904,
+    "recognized_observations": 4576,
+    "normative": 2296,
+    "commentary": 2280,
+    "ambiguous": 6328,
+    "duplicate_digest_families": 89,
+    "duplicate_occurrences_beyond_first": 107,
+    "cross_role_duplicate_digest_families": 8
+  },
+  "representative_recovered_line_counts": {
+    "60": 30,
+    "67": 40,
+    "68": 54,
+    "300": 53,
+    "310": 7,
+    "320": 30
+  },
+  "duplicate_policy": {
+    "population": "recognized normative/commentary observations only",
+    "normalization": "Unicode casefold after whitespace collapse and strip",
+    "retained_values": "aggregate counts only; line text and digests are ephemeral"
   },
   "interpretation": [
-    "The replay uses the landed producer boundaries: canonical pages 57-320, first code page 67, body y bounds 65-750 pt, and 306 pt authority boundary.",
-    "Only explicitly recovered parallel CODE/COMMENTARY layouts permit normative/commentary assignment; unsupported layouts, page furniture, cross-boundary lines, and front matter remain ambiguous.",
-    "Duplicate metrics use SHA-256 of ephemeral normalized recovered line text; recovered source expression is not retained.",
-    "The large ambiguous population is a source-grounded deficiency, not coerced into authority roles. The next implementation should improve explicit page-layout recovery before attempting broader AST promotion."
+    "This v2 replay replaces the irreproducible v1 measurement with a fully executable exact-source recipe.",
+    "Only explicit recovered CODE/COMMENTARY running-header evidence permits parallel-layout authority assignment; unsupported layouts remain ambiguous.",
+    "Recovered OCR expression, page images, TSV rows, and duplicate digests are not retained in Git.",
+    "The ambiguous population is measured evidence and is not coerced into normative or commentary roles."
   ]
 }
