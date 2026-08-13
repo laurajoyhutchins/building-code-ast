@@ -72,7 +72,7 @@ A rebuild must record at least:
 
 Large builds must be resumable/content-addressed. The generic builder caches each object by render hash, model hash, view policy, and packed text context so an interrupted run can reuse completed embedding work. Completed projection or embedding slices should not be recomputed solely because a later slice is interrupted.
 
-## Validation
+## Verification
 
 Run the source-safe unit tests and package verifier:
 
