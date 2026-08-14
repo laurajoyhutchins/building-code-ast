@@ -1,6 +1,8 @@
 from __future__ import annotations
 
 import hashlib
+import json
+from pathlib import Path
 import unittest
 
 from building_code_ast.recovery_observation import (
@@ -59,7 +61,8 @@ class RecoveryObservationContractTests(unittest.TestCase):
         self.assertEqual(durable["payload_state"], "digest_only")
         self.assertEqual(durable["source_kind"], "raster_recovery")
         self.assertEqual(durable["region"]["coordinate_space"], "pdf_points")
-        self.assertNotIn("recovered_text", repr(durable))
+        self.assertNotIn("recovered_text", durable)
+        self.assertNotIn("synthetic private recovered text", repr(durable))
         self.assertNotIn("locator", repr(durable))
         self.assertNotIn("source_role", repr(durable))
 
@@ -92,6 +95,17 @@ class RecoveryObservationContractTests(unittest.TestCase):
             )
         with self.assertRaisesRegex(ValueError, "backend"):
             RecoveryTool(backend="", version="1", parameters=())
+
+    def test_versioned_schema_is_closed_and_expression_free(self) -> None:
+        root = Path(__file__).resolve().parents[1]
+        schema = json.loads((root / "schemas" / "recovery-observation.schema.json").read_text())
+
+        self.assertFalse(schema["additionalProperties"])
+        self.assertEqual(schema["properties"]["schema"]["const"], "recovery-observation-v1")
+        rendered = json.dumps(schema, sort_keys=True)
+        self.assertNotIn('"recovered_text"', rendered)
+        self.assertNotIn('"locator"', rendered)
+        self.assertNotIn('"source_role"', rendered)
 
 
 if __name__ == "__main__":
