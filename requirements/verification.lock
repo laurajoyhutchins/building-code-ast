@@ -1,0 +1,14 @@
+# Repository CI Contract v1 verification environment for CPython 3.12.13.
+# Install without dependency resolution:
+#   python -m pip install --no-deps --requirement requirements/verification.lock
+setuptools==84.0.0
+wheel==0.48.0
+packaging==26.3
+PyMuPDF==1.28.2
+pypdf==6.16.1
+jsonschema==4.26.0
+attrs==26.1.0
+jsonschema-specifications==2025.9.1
+referencing==0.37.0
+rpds-py==2026.6.3
+typing-extensions==4.16.0

@@ -15,18 +15,10 @@ jobs:
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v5
         with:
-          python-version: "3.12"
-      - name: Install build tooling
-        run: python -m pip install --upgrade "setuptools>=75" wheel
-      - name: Install package
-        run: python -m pip install -e '.[validation,pdf-enrichment]'
-      - name: Run unit tests
-        run: python tools/run_unit_tests.py
-      - name: Validate source-safe IBC corpus
-        run: python tools/validate_ibc_2018_corpus.py corpora/ibc-2018
-      - name: Validate IBC JSON Schemas
-        run: python tools/validate_ibc_2018_schemas.py corpora/ibc-2018 schemas
-      - name: Compile sources
-        run: python -m compileall -q src scripts tools tests
-      - name: Build wheel
-        run: python -m pip wheel . --no-deps --no-build-isolation -w dist
+          python-version: 3.12.13
+      - name: Install locked verification dependencies
+        run: python -m pip install --no-deps --requirement requirements/verification.lock
+      - name: Install package without dependency resolution
+        run: python -m pip install --no-deps --no-build-isolation -e .
+      - name: Verify repository
+        run: python tools/verify_repository.py
