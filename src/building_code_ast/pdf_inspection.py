@@ -26,72 +26,71 @@ class RetainedPdfInspectionError(ValueError):
 
 @dataclass(frozen=True, slots=True)
 class PageSurfaceObservation:
+    """Non-reconstructive page facts used to classify image-only pages."""
+
     page_number: int
     has_embedded_text: bool
-    raster_image_count: int
-    max_image_coverage_ratio: float | None
+    image_placement_count: int
+    maximum_image_coverage_ratio: float
 
     def __post_init__(self) -> None:
         if self.page_number < 1:
             raise ValueError("page_number must be positive")
-        if self.raster_image_count < 0:
-            raise ValueError("raster_image_count must be non-negative")
-        if self.max_image_coverage_ratio is not None and not 0.0 <= self.max_image_coverage_ratio <= 1.0:
-            raise ValueError("max_image_coverage_ratio must be within 0..1")
+        if self.image_placement_count < 0:
+            raise ValueError("image_placement_count must be non-negative")
+        if not 0.0 <= self.maximum_image_coverage_ratio <= 1.0001:
+            raise ValueError("maximum_image_coverage_ratio must be a page-area ratio")
 
 
 PdfObserver = Callable[[Path], Mapping[str, object]]
 
 
-def _full_page_single_image(item: PageSurfaceObservation) -> bool:
-    return (
-        not item.has_embedded_text
-        and item.raster_image_count == 1
-        and item.max_image_coverage_ratio is not None
-        and item.max_image_coverage_ratio >= _FULL_PAGE_IMAGE_COVERAGE
-    )
+def _contiguous_runs(page_numbers: Sequence[int]) -> list[list[int]]:
+    if not page_numbers:
+        return []
+    runs: list[list[int]] = []
+    first = previous = page_numbers[0]
+    for page_number in page_numbers[1:]:
+        if page_number == previous + 1:
+            previous = page_number
+            continue
+        runs.append([first, previous])
+        first = previous = page_number
+    runs.append([first, previous])
+    return runs
 
 
 def summarize_image_only_pages(
     observations: Sequence[PageSurfaceObservation],
 ) -> dict[str, object]:
-    """Return source-safe page-surface coverage for an arbitrary PDF component."""
+    """Return deterministic source-safe page-surface facts for any PDF component."""
 
     ordered = tuple(sorted(observations, key=lambda item: item.page_number))
     expected_pages = tuple(range(1, len(ordered) + 1))
-    actual_pages = tuple(item.page_number for item in ordered)
-    if actual_pages != expected_pages:
-        raise ValueError("observations must cover each one-based component page exactly once")
+    observed_pages = tuple(item.page_number for item in ordered)
+    if observed_pages != expected_pages:
+        raise ValueError("observations must cover each one-based page exactly once")
 
     image_only = tuple(item for item in ordered if not item.has_embedded_text)
-    image_only_pages = tuple(item.page_number for item in image_only)
-
-    runs: list[tuple[int, int]] = []
-    for page in image_only_pages:
-        if not runs or page != runs[-1][1] + 1:
-            runs.append((page, page))
-        else:
-            start, _end = runs[-1]
-            runs[-1] = (start, page)
-
-    single_full_page = tuple(item for item in image_only if _full_page_single_image(item))
+    image_only_pages = [item.page_number for item in image_only]
+    runs = _contiguous_runs(image_only_pages)
+    maximum_run_length = max((last - first + 1 for first, last in runs), default=0)
+    all_single_full_page = all(
+        item.image_placement_count == 1
+        and item.maximum_image_coverage_ratio >= _FULL_PAGE_IMAGE_COVERAGE
+        for item in image_only
+    )
 
     return {
         "page_count": len(ordered),
-        "embedded_text_page_count": len(ordered) - len(image_only),
+        "pages_with_embedded_text": len(ordered) - len(image_only),
         "image_only_page_count": len(image_only),
-        "image_only_pages": list(image_only_pages),
+        "image_only_pages": image_only_pages,
         "image_only_run_count": len(runs),
-        "image_only_runs": [
-            {
-                "start_page": start,
-                "end_page": end,
-                "page_count": end - start + 1,
-            }
-            for start, end in runs
-        ],
-        "single_full_page_image_count": len(single_full_page),
-        "all_image_only_pages_are_single_full_page_images": len(single_full_page) == len(image_only),
+        "maximum_image_only_run_length": maximum_run_length,
+        "all_image_only_pages_are_single_full_page_images": all_single_full_page,
+        "full_page_image_minimum_coverage_ratio": _FULL_PAGE_IMAGE_COVERAGE,
+        "image_only_runs": runs,
     }
 
 
@@ -101,12 +100,14 @@ def _hash_regular_file(source: Path, expected_size_bytes: int) -> tuple[str, int
 
     try:
         before = os.lstat(source)
+    except FileNotFoundError as exc:
+        raise RetainedPdfInspectionError("retained source file does not exist") from exc
     except OSError as exc:
         raise RetainedPdfInspectionError(f"cannot stat retained source: {exc}") from exc
     if os.path.islink(source):
-        raise RetainedPdfInspectionError("retained source must not be a symlink")
+        raise RetainedPdfInspectionError("retained source path must not be a symlink")
     if not source.is_file():
-        raise RetainedPdfInspectionError("retained source must be a regular file")
+        raise RetainedPdfInspectionError("retained source path must be a regular file")
     if before.st_size != expected_size_bytes:
         raise RetainedPdfInspectionError(
             "retained source byte size does not match the expected artifact size: "
@@ -276,9 +277,7 @@ def observe_pdf_with_pymupdf(source: Path) -> dict[str, object]:
                 "pages_with_text": pages_with_text,
                 "pages_without_text": pages_without_text,
             },
-            "page_geometry": {
-                "distinct_page_sizes": distinct_page_sizes,
-            },
+            "page_geometry": {"distinct_page_sizes": distinct_page_sizes},
             "tool": {
                 "name": "PyMuPDF",
                 "version": str(getattr(fitz, "VersionBind", "unknown")),
@@ -299,8 +298,4 @@ def inspect_retained_pdf(
     digest, observed_size = _hash_regular_file(source, expected_size_bytes)
     observer = pdf_observer or observe_pdf_with_pymupdf
     pdf = sanitize_pdf_observation(observer(source))
-    return {
-        "size_bytes": observed_size,
-        "sha256": digest,
-        "pdf": pdf,
-    }
+    return {"size_bytes": observed_size, "sha256": digest, "pdf": pdf}
