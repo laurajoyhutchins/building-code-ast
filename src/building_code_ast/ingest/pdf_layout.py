@@ -7,6 +7,8 @@ from pathlib import Path
 import re
 from typing import Iterable
 
+from ..pdf_observation import ObservedPdfPage, observe_pymupdf_page
+
 
 _BROKEN_WORD_RE = re.compile(r"(?<=[A-Za-z])[\u00ad\u2010-]\n(?=[a-z])")
 _WHITESPACE_RE = re.compile(r"\s+")
@@ -193,53 +195,29 @@ def _table_region_id(
     return None
 
 
-def _line_direction(raw_line: object) -> tuple[float, float]:
-    """Return PyMuPDF writing direction, defaulting to legacy horizontal text."""
+def _line_evidence_by_block(page: ObservedPdfPage) -> dict[int, tuple[PdfLine, ...]]:
+    """Project shared positioned-text observations into the legacy layout shape."""
 
-    if not isinstance(raw_line, dict):
-        return _HORIZONTAL_DIRECTION
-    raw_direction = raw_line.get("dir", _HORIZONTAL_DIRECTION)
-    try:
-        x, y = raw_direction
-        return (float(x), float(y))
-    except (TypeError, ValueError):
-        return _HORIZONTAL_DIRECTION
-
-
-def _line_evidence_by_block(page: object) -> dict[int, tuple[PdfLine, ...]]:
-    """Return visual line/span evidence keyed by PyMuPDF block number."""
-
-    raw = page.get_text("dict", sort=False)
     result: dict[int, tuple[PdfLine, ...]] = {}
-    for raw_block in raw.get("blocks", ()):
-        if int(raw_block.get("type", 0)) != 0:
-            continue
-        block_number = int(raw_block.get("number", -1))
-        if block_number < 0:
-            continue
-        lines: list[PdfLine] = []
-        for raw_line in raw_block.get("lines", ()):
-            spans: list[PdfSpan] = []
-            for raw_span in raw_line.get("spans", ()):
-                bbox = tuple(float(value) for value in raw_span.get("bbox", (0, 0, 0, 0)))
-                spans.append(
+    for block in page.blocks:
+        lines = tuple(
+            PdfLine(
+                bbox=line.bbox,
+                spans=tuple(
                     PdfSpan(
-                        bbox=bbox,
-                        text=str(raw_span.get("text", "")),
-                        font=str(raw_span.get("font", "")),
-                        size=float(raw_span.get("size", 0.0)),
-                        flags=int(raw_span.get("flags", 0)),
+                        bbox=span.bbox,
+                        text=span.text,
+                        font=span.font_name,
+                        size=span.font_size,
+                        flags=span.flags,
                     )
-                )
-            line_bbox = tuple(float(value) for value in raw_line.get("bbox", (0, 0, 0, 0)))
-            lines.append(
-                PdfLine(
-                    bbox=line_bbox,
-                    spans=tuple(spans),
-                    direction=_line_direction(raw_line),
-                )
+                    for span in line.spans
+                ),
+                direction=line.direction,
             )
-        result[block_number] = tuple(lines)
+            for line in block.lines
+        )
+        result[block.block_number] = lines
     return result
 
 
@@ -249,7 +227,8 @@ def extract_pdf_layout(path: Path | str) -> PdfLayoutDocument:
     PyMuPDF is intentionally optional so importing the core package retains an
     empty dependency set. Table-region IDs are geometric candidates only and
     do not imply header roles, cell semantics, or rule interpretation. Visual
-    line/span evidence is additive and never replaces legacy block text.
+    line/span evidence is projected from the publication-neutral PDF observer;
+    legacy block text remains additive and unchanged.
     """
 
     try:
@@ -272,9 +251,11 @@ def extract_pdf_layout(path: Path | str) -> PdfLayoutDocument:
     try:
         pages: list[PdfPage] = []
         for page_index in range(document.page_count):
+            page_number = page_index + 1
             page = document[page_index]
             raw_blocks = tuple(page.get_text("blocks", sort=False))
-            line_evidence = _line_evidence_by_block(page)
+            observed_page = observe_pymupdf_page(page, page_number=page_number)
+            line_evidence = _line_evidence_by_block(observed_page)
             table_regions = _table_region_bboxes(
                 page,
                 (str(block[4]) for block in raw_blocks if len(block) > 4),
@@ -289,7 +270,7 @@ def extract_pdf_layout(path: Path | str) -> PdfLayoutDocument:
                 bbox = (float(x0), float(y0), float(x1), float(y1))
                 blocks.append(
                     PdfBlock(
-                        page_number=page_index + 1,
+                        page_number=page_number,
                         bbox=bbox,
                         text=str(text),
                         block_number=block_number,
@@ -299,7 +280,7 @@ def extract_pdf_layout(path: Path | str) -> PdfLayoutDocument:
                 )
             pages.append(
                 PdfPage(
-                    page_number=page_index + 1,
+                    page_number=page_number,
                     width=float(page.rect.width),
                     height=float(page.rect.height),
                     blocks=tuple(blocks),
