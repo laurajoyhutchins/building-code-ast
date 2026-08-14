@@ -42,6 +42,65 @@
     "next_gate": "Classify the remaining topology-surviving ambiguous ownership candidates before changing caption ownership or table semantics.",
     "remaining_ambiguous_candidates": 16
   },
+  "coverage_acceptance_audit": {
+    "acceptance_result": "passes",
+    "assignment_loss_audit": {
+      "captions_losing_all_baseline_assignments": 3,
+      "captions_still_with_at_least_one_candidate": 12,
+      "captions_with_lower_assignment_multiplicity": 15,
+      "gross_removed_assignments": 25,
+      "removed_assignments_from_still_covered_captions": 20,
+      "removed_assignments_from_zeroed_captions": 5,
+      "source_review_scope": "All 15 caption coordinates whose assignment multiplicity decreased were visually reviewed against the exact retained source. The 12 still-covered captions retained a table candidate while extra pre-caption, prose, or page-spanning envelopes were removed or narrowed; the three zeroed captions lost only false baseline ownership.",
+      "true_recognized_caption_coverage_lost": 0,
+      "zeroed_caption_source_review": [
+        {
+          "caption_bbox": [
+            54.003,
+            71.148,
+            265.431,
+            81.75
+          ],
+          "classification": "baseline assignments were later prose geometry, not the captioned table",
+          "page": 202,
+          "removed_assignment_count": 2
+        },
+        {
+          "caption_bbox": [
+            309.0,
+            500.388,
+            552.513,
+            521.49
+          ],
+          "classification": "baseline assignment was a column-spanning rule envelope, not an ownership-safe table candidate",
+          "page": 563,
+          "removed_assignment_count": 1
+        },
+        {
+          "caption_bbox": [
+            36.0,
+            522.648,
+            556.92,
+            554.25
+          ],
+          "classification": "baseline assignments were pre-caption prose geometry, not the captioned table",
+          "page": 617,
+          "removed_assignment_count": 2
+        }
+      ]
+    },
+    "caption_level_coverage": {
+      "baseline_captions_with_candidate": 154,
+      "delta": 2,
+      "topology_captions_with_candidate": 156
+    },
+    "conclusion": "The lower raw assigned-candidate count reflects removal of false or redundant candidate multiplicity, not a trade of true recognized caption coverage for lower ambiguity.",
+    "raw_assigned_candidate_count": {
+      "baseline": 337,
+      "interpretation": "assignment multiplicity, not caption-level recognized coverage",
+      "topology": 325
+    }
+  },
   "criterion": {
     "caption_semantics_used": false,
     "description": "Within one near-equal horizontal-rule extent, partition adjacent horizontal levels only when observed vertical rules bridge the levels; emit connected runs with at least three horizontal levels as independent rule regions.",
