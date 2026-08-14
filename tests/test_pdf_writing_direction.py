@@ -3,9 +3,17 @@ from __future__ import annotations
 import unittest
 
 from building_code_ast.ingest.pdf_layout import PdfLine, PdfSpan, _line_evidence_by_block
+from building_code_ast.pdf_observation import observe_pymupdf_page
+
+
+class _Rect:
+    width = 612.0
+    height = 792.0
 
 
 class _SyntheticPage:
+    rect = _Rect()
+
     def get_text(self, kind: str, *, sort: bool = False) -> dict[str, object]:
         self.kind = kind
         self.sort = sort
@@ -14,6 +22,7 @@ class _SyntheticPage:
                 {
                     "type": 0,
                     "number": 4,
+                    "bbox": (100.0, 80.0, 112.0, 220.0),
                     "lines": [
                         {
                             "bbox": (100.0, 80.0, 112.0, 220.0),
@@ -32,6 +41,9 @@ class _SyntheticPage:
                 }
             ]
         }
+
+    def get_drawings(self) -> list[object]:
+        return []
 
 
 class PdfWritingDirectionTests(unittest.TestCase):
@@ -53,14 +65,16 @@ class PdfWritingDirectionTests(unittest.TestCase):
         self.assertEqual(line.direction, (0.0, -1.0))
         self.assertEqual(line.to_dict()["direction"], [0.0, -1.0])
 
-    def test_pdf_extractor_preserves_pymupdf_line_direction(self) -> None:
+    def test_pdf_layout_projects_shared_observation_line_direction(self) -> None:
         page = _SyntheticPage()
+        observed = observe_pymupdf_page(page, page_number=1)
 
-        evidence = _line_evidence_by_block(page)
+        evidence = _line_evidence_by_block(observed)
 
         self.assertEqual(page.kind, "dict")
         self.assertFalse(page.sort)
         self.assertEqual(evidence[4][0].direction, (0.0, -1.0))
+        self.assertEqual(evidence[4][0].spans[0].font, "Synthetic")
 
     def test_horizontal_line_serialization_remains_legacy_compatible(self) -> None:
         line = PdfLine(

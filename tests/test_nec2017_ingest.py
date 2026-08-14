@@ -12,6 +12,7 @@ from building_code_ast.ingest.nec2017 import (
     select_article_blocks,
 )
 from building_code_ast.ingest.pdf_layout import (
+    LEGACY_CONTENT_ORDER_POLICY,
     PdfBlock,
     PdfLayoutDocument,
     PdfOutlineItem,
@@ -54,6 +55,16 @@ class PdfLayoutTests(unittest.TestCase):
         ordered = order_content_blocks(blocks, page_width=612.0)
 
         self.assertEqual([block.text for block in ordered], ["content"])
+
+    def test_fixed_band_midpoint_order_is_explicit_legacy_compatibility_policy(self) -> None:
+        self.assertEqual(
+            LEGACY_CONTENT_ORDER_POLICY.name,
+            "legacy-fixed-bands-midpoint-v1",
+        )
+        self.assertEqual(LEGACY_CONTENT_ORDER_POLICY.top_content_y, 65.0)
+        self.assertEqual(LEGACY_CONTENT_ORDER_POLICY.bottom_content_y, 730.0)
+        self.assertIn("compatibility", order_content_blocks.__doc__.casefold())
+        self.assertIn("layout_analysis", order_content_blocks.__doc__)
 
 
 def _synthetic_layout() -> PdfLayoutDocument:
