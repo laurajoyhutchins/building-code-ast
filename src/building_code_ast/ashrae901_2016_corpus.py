@@ -15,7 +15,7 @@ from .ingest.ashrae901_2016 import (
     Ashrae901Observation,
     _APPENDIX_RE,
     _appendix_heading,
-    _automatic_figure_locator,
+    _expand_appendix_observations,
     _numbered_nonprose,
     _numeric_heading,
     parse_ashrae901_2016_observations,
@@ -109,7 +109,12 @@ def measure_ashrae901_2016_corpus(
         if match := _APPENDIX_NATIVE_OUTLINE_RE.match(normalized):
             outline_appendix_sublocators.add(match.group("locator").upper())
 
-    observations: list[Ashrae901Observation] = []
+    raw_observations = [
+        Ashrae901Observation(block=block)
+        for page in layout.pages
+        for block in page.blocks
+    ]
+    observations = _expand_appendix_observations(raw_observations)
     classifier_counts: Counter[str] = Counter()
     candidate_pages: dict[str, set[int]] = defaultdict(set)
     candidate_occurrences: Counter[str] = Counter()
@@ -117,32 +122,30 @@ def measure_ashrae901_2016_corpus(
     current_appendix_sublocators: set[str] = set()
     current_appendix: str | None = None
 
-    for page in layout.pages:
-        for block in page.blocks:
-            observation = Ashrae901Observation(block=block)
-            observations.append(observation)
-            text = normalize_block_text(block.text)
-            if not text:
-                continue
-            kind, locator = _classify(
-                observation,
-                text,
-                current_appendix=current_appendix,
-            )
-            classifier_counts[kind] += 1
-            if kind == "appendix" and locator is not None:
-                recognized_appendices.add(locator)
-                current_appendix = locator
-            if locator is None:
-                continue
-            if kind in {"section", "subsection"}:
-                if locator[0].isdigit():
-                    candidate_pages[locator].add(block.page_number)
-                    candidate_occurrences[locator] += 1
-                elif _APPENDIX_NATIVE_OUTLINE_RE.match(locator):
-                    current_appendix_sublocators.add(locator.upper())
+    for observation in observations:
+        block = observation.block
+        text = normalize_block_text(block.text)
+        if not text:
+            continue
+        kind, locator = _classify(
+            observation,
+            text,
+            current_appendix=current_appendix,
+        )
+        classifier_counts[kind] += 1
+        if kind == "appendix" and locator is not None:
+            recognized_appendices.add(locator)
+            current_appendix = locator
+        if locator is None:
+            continue
+        if kind in {"section", "subsection"}:
+            if locator[0].isdigit():
+                candidate_pages[locator].add(block.page_number)
+                candidate_occurrences[locator] += 1
+            elif _APPENDIX_NATIVE_OUTLINE_RE.match(locator):
+                current_appendix_sublocators.add(locator.upper())
 
-    ast = parse_ashrae901_2016_observations(observations)
+    ast = parse_ashrae901_2016_observations(raw_observations)
     ast_numeric_locators = {
         node.locator.removeprefix("section:")
         for node in ast.walk()
@@ -172,7 +175,7 @@ def measure_ashrae901_2016_corpus(
         "source_sha256": source_sha256,
         "source_size": source_size,
         "page_count": len(layout.pages),
-        "source_block_count": len(observations),
+        "source_block_count": len(raw_observations),
         "classifier_counts": {
             kind: classifier_counts.get(kind, 0)
             for kind in (
