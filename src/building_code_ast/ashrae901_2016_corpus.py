@@ -13,8 +13,8 @@ from typing import Any
 from .ingest.ashrae901_2016 import (
     ASHRAE_90_1_2016_ARTIFACT,
     Ashrae901Observation,
-    _APPENDIX_RE,
     _appendix_heading,
+    _appendix_match,
     _expand_appendix_observations,
     _numbered_nonprose,
     _numeric_heading,
@@ -52,7 +52,7 @@ def _classify(
     *,
     current_appendix: str | None,
 ) -> tuple[str, str | None]:
-    if match := _APPENDIX_RE.match(text):
+    if match := _appendix_match(observation, text):
         return "appendix", match.group("letter").upper()
 
     appendix_heading = _appendix_heading(
