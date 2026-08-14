@@ -89,8 +89,16 @@ def _layout(*, page_count: int = 388) -> PdfLayoutDocument:
         ),
         192: (
             _block(
+                "A1 SYNTHETIC APPENDIX LOCATOR MUST_NOT_LEAK",
+                page=192,
+                block_number=1,
+                font="Helvetica-Bold",
+                size=10.0,
+            ),
+            _block(
                 "Figure Annex1-2 SYNTHETIC LISTING MUST_NOT_LEAK",
                 page=192,
+                block_number=2,
                 font="Helvetica",
                 size=8.5,
             ),
@@ -135,8 +143,8 @@ class Ashrae901CorpusMeasurementTests(unittest.TestCase):
             source_size=ASHRAE_90_1_2016_SOURCE_SIZE,
         )
 
-        self.assertEqual(measurement["measurement_version"], "0.2.0")
-        self.assertEqual(measurement["source_block_count"], 7)
+        self.assertEqual(measurement["measurement_version"], "0.3.0")
+        self.assertEqual(measurement["source_block_count"], 8)
         self.assertEqual(
             measurement["classifier_counts"],
             {
@@ -145,7 +153,7 @@ class Ashrae901CorpusMeasurementTests(unittest.TestCase):
                 "figure": 1,
                 "paragraph": 3,
                 "section": 1,
-                "subsection": 1,
+                "subsection": 2,
                 "table": 0,
             },
         )
@@ -171,7 +179,7 @@ class Ashrae901CorpusMeasurementTests(unittest.TestCase):
                 "outline_top_level_appendices": 1,
                 "recognized_top_level_appendices": 1,
                 "outline_native_sublocators": 1,
-                "current_appendix_sublocator_candidates": 0,
+                "current_appendix_sublocator_candidates": 1,
             },
         )
         self.assertEqual(
