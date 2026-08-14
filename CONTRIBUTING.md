@@ -32,16 +32,18 @@ Do not directly edit:
 - `.lore/transactions/`;
 - `docs/generated/`.
 
-Accepted semantic history is append-only. Reuse stable record IDs, append the next revision, and preserve uncertainty rather than inventing evidence.
+Accepted semantic history is append-only. Reuse stable record IDs, append the next positive revision, and preserve uncertainty rather than inventing evidence.
 
 ## Verification
 
 Run:
 
 ```bash
-python -m unittest discover -s tests -v
+python tools/run_unit_tests.py
 python -m compileall -q src tests
 ```
+
+`python tools/run_unit_tests.py` is the repository's unit-test authority. It first fails closed on module-level `test*` functions that standard-library `unittest` discovery would silently ignore, then executes `unittest` discovery. Tests under `tests/` should use `unittest.TestCase` methods named `test*` rather than pytest-style module functions.
 
 The pinned LORE verification lane runs:
 

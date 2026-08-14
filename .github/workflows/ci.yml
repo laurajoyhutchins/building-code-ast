@@ -21,7 +21,7 @@ jobs:
       - name: Install package
         run: python -m pip install -e '.[validation,pdf-enrichment]'
       - name: Run unit tests
-        run: python -m unittest discover -s tests -v
+        run: python tools/run_unit_tests.py
       - name: Validate source-safe IBC corpus
         run: python tools/validate_ibc_2018_corpus.py corpora/ibc-2018
       - name: Validate IBC JSON Schemas
