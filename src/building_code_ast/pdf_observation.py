@@ -1,16 +1,16 @@
 """Publication-neutral positioned-text and vector PDF observation.
 
-This module converts one PyMuPDF page object into source-faithful geometric
-records. It contains no publication identity, locator grammar, authority role,
-or table semantics. Downstream layout and publication adapters may interpret
-these observations separately.
+This module converts PyMuPDF pages into source-faithful geometric records. It
+contains no publication identity, locator grammar, authority role, or table
+semantics. Downstream layout and publication adapters may interpret these
+observations separately.
 """
 
 from __future__ import annotations
 
 from dataclasses import dataclass
+from pathlib import Path
 import statistics
-from typing import Any
 
 from .ingest.layout_analysis import PageLines, RuleSegment, SourceFragment, VisualLine
 
@@ -78,7 +78,13 @@ class ObservedPdfPage:
     rules: tuple[RuleSegment, ...]
 
     def to_page_lines(self) -> PageLines:
-        """Project extraction evidence into the shared layout-analysis records."""
+        """Project observed evidence into the existing layout-analysis records.
+
+        ``VisualLine`` keeps its established content-derived identifier rather
+        than inheriting the extraction-coordinate ``line_id``. That preserves
+        existing downstream layout and NEC measurement identity semantics while
+        the observed record retains a stable page-local extraction identifier.
+        """
 
         lines: list[VisualLine] = []
         for block in self.blocks:
@@ -104,7 +110,6 @@ class ObservedPdfPage:
                         bbox=line.bbox,
                         text=line.text,
                         fragments=fragments,
-                        line_id=line.line_id,
                         font_size=float(statistics.median(font_sizes or [0.0])),
                         font_name=fragments[0].font_name,
                     )
@@ -214,3 +219,30 @@ def observe_pymupdf_page(page: object, *, page_number: int) -> ObservedPdfPage:
         blocks=tuple(blocks),
         rules=_observe_rules(page, page_number=page_number),
     )
+
+
+def observe_pdf_pages(
+    path: Path | str,
+    *,
+    expected_page_count: int | None = None,
+) -> tuple[ObservedPdfPage, ...]:
+    """Observe all pages of one PDF through the publication-neutral adapter."""
+
+    try:
+        import fitz  # type: ignore[import-not-found]
+    except ImportError as exc:  # pragma: no cover - optional dependency
+        raise RuntimeError(
+            "PyMuPDF is required; install building-code-ast[pdf-inspection]"
+        ) from exc
+
+    with fitz.open(Path(path)) as document:
+        page_count = int(document.page_count)
+        if expected_page_count is not None and page_count != expected_page_count:
+            raise ValueError(
+                "observed PDF page count does not match expected factual page count: "
+                f"expected {expected_page_count}, observed {page_count}"
+            )
+        return tuple(
+            observe_pymupdf_page(document[index], page_number=index + 1)
+            for index in range(page_count)
+        )
