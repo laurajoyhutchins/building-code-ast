@@ -6,6 +6,7 @@ import unittest
 from pathlib import Path
 from unittest.mock import patch
 
+from building_code_ast.pdf_observation import observe_pymupdf_page
 from tools import measure_nec2017_table_geometry as runner
 
 
@@ -82,6 +83,21 @@ class Nec2017TableGeometryToolTests(unittest.TestCase):
         fake_fitz = types.SimpleNamespace(open=lambda _path: _Document())
         with patch.dict(sys.modules, {"fitz": fake_fitz}):
             pages, captions, unsupported = runner._extract(Path("unused.pdf"))
+        self.assertEqual(len(pages), 881)
+        self.assertEqual(len(captions), 1)
+        self.assertEqual(captions[0].caption_id, "p1:b7")
+        self.assertEqual(unsupported, 0)
+
+    def test_replay_consumes_shared_observation_instead_of_walking_pymupdf(self) -> None:
+        observed = tuple(
+            observe_pymupdf_page(_Page(index == 0), page_number=index + 1)
+            for index in range(881)
+        )
+        with patch.object(runner, "observe_pdf_pages", return_value=observed) as shared:
+            with patch.dict(sys.modules, {"fitz": None}):
+                pages, captions, unsupported = runner._extract(Path("unused.pdf"))
+
+        shared.assert_called_once_with(Path("unused.pdf"), expected_page_count=881)
         self.assertEqual(len(pages), 881)
         self.assertEqual(len(captions), 1)
         self.assertEqual(captions[0].caption_id, "p1:b7")
