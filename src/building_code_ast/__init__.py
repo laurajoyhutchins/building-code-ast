@@ -1,6 +1,6 @@
 """Public API for Building Code AST."""
 
-from .document_io import document_ast_from_dict
+from .document_io import document_ast_from_dict, document_node_from_dict
 from .document_model import (
     DOCUMENT_AST_VERSION,
     DocumentAst,
@@ -33,6 +33,7 @@ __all__ = [
     "NFPA13_PRODUCER_SCHEMA",
     "ProvisionAst",
     "document_ast_from_dict",
+    "document_node_from_dict",
     "document_node_id",
     "finalize_raw_nfpa13_bundle",
     "make_document_node",
