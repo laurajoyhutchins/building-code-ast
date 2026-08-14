@@ -1,0 +1,62 @@
+{
+  "schema_version": 1,
+  "publication": "ACI 318-19",
+  "source": {
+    "drive_object_id": "1JBQpBXNqkcR1zDxTiPHg1G_hsfqzqIkK",
+    "byte_size": 10010981,
+    "page_count": 628,
+    "sha256": "7b6b572e9e6532e0da1678080f63cb6b7a233f96caf2fc5a45350a056e18c53c"
+  },
+  "landed_reference": {
+    "prior_measurement": "corpora/aci-318-19/aci-318-19-zero-chapter-collision-measurement.json",
+    "post_zero_chapter_collision_families": 154,
+    "post_zero_chapter_duplicate_occurrences_beyond_first": 187,
+    "post_zero_chapter_unresolved_cross_gutter_blocks": 2481
+  },
+  "classification": {
+    "family": "short decimal-leading blocks collide with valid chapter-number locator stems",
+    "status": "source-observed_not_yet_promoted_to_parser_rule",
+    "representative_observations": [
+      {
+        "source_role": "normative",
+        "locator": "1.0",
+        "pdf_pages": [71, 82, 477, 482],
+        "observation": "Repeated candidates occur as compact numeric or chart-like blocks rather than declaration-bearing structural text."
+      },
+      {
+        "source_role": "commentary",
+        "locator": "1.0",
+        "pdf_pages": [71, 272, 397],
+        "observation": "Repeated compact decimal blocks share a syntactic locator stem with publication structure but lack a source-safe declaration-context discriminator."
+      },
+      {
+        "source_role": "normative",
+        "locator": "1.5",
+        "pdf_pages": [14, 323, 326, 451, 476],
+        "observation": "The family contains both a genuine declaration-bearing structural occurrence and later compact numeric/chart-like occurrences, so rejecting the locator stem itself would be unsound."
+      },
+      {
+        "source_role": "commentary",
+        "locator": "2.0",
+        "pdf_pages": [71, 460],
+        "observation": "Repeated decimal labels demonstrate that positive chapter components alone are insufficient to establish structural authority."
+      }
+    ],
+    "smallest_supported_boundary": "Declaration context must distinguish structural locator promotion from compact numeric/chart labels. Locator value alone is not a safe discriminator.",
+    "unsupported_rule": "No parser correction is promoted from this classification because the current replay did not yet prove a publication-neutral declaration-context predicate that preserves legitimate compact structural headings."
+  },
+  "replay_attempt": {
+    "method": "Direct PyMuPDF block replay using the landed ACI source-role and locator grammar against the exact retained source.",
+    "result": "diagnostic_only",
+    "observed_collision_families": 135,
+    "observed_duplicate_occurrences_beyond_first": 171,
+    "observed_unresolved_cross_gutter_blocks": 2506,
+    "baseline_reproduced": false,
+    "limitation": "These diagnostic denominators do not match the landed post-#267 measurement and therefore are not accepted as replacement denominators. The discrepancy must be resolved before parser promotion or a new whole-document claim."
+  },
+  "provenance": {
+    "source_text_retained": false,
+    "protected_source_expression_retained": false,
+    "independent_verification_performed": false
+  }
+}
