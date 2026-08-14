@@ -27,6 +27,7 @@ from .nds2018_layout import (
     NDS_2018_EDITION_ID,
     NdsLayoutEvidence,
     NdsLayoutPage,
+    NdsPageRole,
 )
 from .pdf_layout import PdfBlock, normalize_block_text
 
@@ -36,7 +37,7 @@ _APPENDIX_RE = re.compile(
     re.IGNORECASE,
 )
 _AMBIGUOUS_APPENDIX_RE = re.compile(
-    r"^Appendix\s+\((?:Non-mandatory|Mandatory)\)",
+    r"^Appendix\s+\((?P<role>Non-mandatory|Mandatory)\)\s+(?P<title>\S.*)$",
     re.IGNORECASE,
 )
 _NUMERIC_TOKEN_RE = re.compile(r"(?<![\w.])(?P<locator>\d{1,2}(?:\.\d+){1,3})(?![\d.])")
@@ -102,6 +103,31 @@ def _canonical_blocks(evidence: NdsLayoutEvidence) -> tuple[str, tuple[_Observed
     if not source_text:
         raise ValueError("NDS 2018 layout evidence contains no readable retained text")
     return source_text, tuple(observations)
+
+
+def _recover_appendix_letter_from_front_matter(
+    observations: tuple[_ObservedBlock, ...],
+    *,
+    title: str,
+    printed_page: str | None,
+) -> str | None:
+    if printed_page is None:
+        return None
+    front_matter_text = " ".join(
+        observation.text
+        for observation in observations
+        if observation.page.page_role is NdsPageRole.FRONT_MATTER
+    )
+    if not front_matter_text:
+        return None
+    pattern = re.compile(
+        rf"(?<![A-Za-z0-9])(?P<letter>[A-N])\s+{re.escape(normalize_block_text(title))}\s+{re.escape(printed_page)}(?!\d)",
+        re.IGNORECASE,
+    )
+    letters = {match.group("letter").upper() for match in pattern.finditer(front_matter_text)}
+    if len(letters) != 1:
+        return None
+    return next(iter(letters))
 
 
 def _is_upper_title(text: str, block: PdfBlock, page: NdsLayoutPage) -> bool:
@@ -431,15 +457,42 @@ def parse_nds2018_hierarchy(evidence: NdsLayoutEvidence) -> DocumentAst:
             current_appendix_letter = letter
             continue
 
-        if _AMBIGUOUS_APPENDIX_RE.match(text):
+        ambiguous_match = _AMBIGUOUS_APPENDIX_RE.match(text)
+        if ambiguous_match:
+            raw_role = ambiguous_match.group("role").casefold()
+            source_role = "non_mandatory" if raw_role.startswith("non-") else "mandatory"
+            title = ambiguous_match.group("title").strip()
+            recovered_letter = _recover_appendix_letter_from_front_matter(
+                observations,
+                title=title,
+                printed_page=observation.page.printed_page,
+            )
             current_chapter = None
             current_chapter_number = None
-            current_appendix = None
-            current_appendix_letter = None
             section_stack = []
             active_definition = None
-            ambiguous_appendix = True
             in_references = False
+            if recovered_letter is not None:
+                ambiguous_appendix = False
+                attributes = _attributes(observation, source_role=source_role)
+                attributes["native_locator_evidence"] = "front_matter_toc_title_page"
+                appendix = _Draft(
+                    DocumentNodeType.APPENDIX,
+                    f"appendix:{recovered_letter}",
+                    observation.start,
+                    observation.end,
+                    label=title,
+                    attributes=attributes,
+                    native_locator=recovered_letter,
+                )
+                root.children.append(appendix)
+                current_appendix = appendix
+                current_appendix_letter = recovered_letter
+                continue
+
+            current_appendix = None
+            current_appendix_letter = None
+            ambiguous_appendix = True
             segment = _Segment(observation, observation.start, observation.end, text)
             node = add_leaf(
                 DocumentNodeType.UNSUPPORTED,
