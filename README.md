@@ -217,3 +217,35 @@ The intended long-term boundary is:
 ```text
 location -> authority and adopted source -> document AST -> selected provision -> provision AST -> reviewed rule model
 ```
+
+Jurisdiction resolution does not imply that code text may be redistributed, and parsing does not imply that a provision has been authoritatively interpreted.
+
+## Verification
+
+Run the Python verification lanes:
+
+```bash
+python tools/run_unit_tests.py
+python -m compileall -q src scripts tools tests
+PYTHONPATH=src python tools/validate_ibc_2018_corpus.py corpora/ibc-2018
+PYTHONPATH=src python tools/validate_ibc_2018_schemas.py corpora/ibc-2018 schemas
+python scripts/validate_archaeology.py
+```
+
+The read-only LORE workflow pins an exact upstream LORE revision and verifies:
+
+```text
+lore extract --check
+lore validate
+lore project --check
+```
+
+CI executes the Python, Deciduous archaeology, and LORE verification lanes independently.
+
+## Data and publication boundary
+
+This repository contains project-authored software, documentation, schemas, and synthetic fixtures. Do not commit proprietary model-code text, standards text, licensed commentary, or bulk source material merely because it is technically obtainable. See [`docs/corpus-policy.md`](docs/corpus-policy.md) and the [`legal source publication reference`](docs/reference/legal-source-publication.md).
+
+## License
+
+Project-authored software and documentation are licensed under the Apache License 2.0. Third-party source material retains its own terms and must be handled according to the corpus policy.
