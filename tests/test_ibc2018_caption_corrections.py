@@ -29,8 +29,8 @@ class Ibc2018CaptionCorrectionTests(unittest.TestCase):
         )
         self.assertIsNone(_caption_identifier("TABLE 100.1", pdf_page=556))
         self.assertEqual(
-            _caption_identifier("TABLE 4-A", pdf_page=100),
-            ("table", "4-A", "", ""),
+            _caption_identifier("TABLE 4-1", pdf_page=100),
+            ("table", "4-1", "", ""),
         )
 
     def test_generic_caption_parser_no_longer_owns_literal_anomaly_branches(self) -> None:
