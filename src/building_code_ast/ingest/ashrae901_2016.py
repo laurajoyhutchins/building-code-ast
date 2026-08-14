@@ -63,6 +63,7 @@ _SUPPORTED_HINTS = {"equation", "table", "figure", "graphical_region"}
 _BODY_MIDPOINT = 306.0
 _TOP_CONTENT_Y = 65.0
 _BOTTOM_CONTENT_Y = 730.0
+_APPENDIX_HEADING_TOP_Y = 40.0
 _HEADING_FONT = "Helvetica-Bold"
 _TOP_HEADING_SIZE = 11.0
 _SUBSECTION_HEADING_SIZE = 10.0
@@ -112,16 +113,46 @@ def _column(block: PdfBlock) -> int:
     return 2
 
 
+def _first_text_span(block: PdfBlock) -> PdfSpan | None:
+    for line in block.lines:
+        for span in line.spans:
+            if span.text.strip():
+                return span
+    return None
+
+
+def _appendix_match(
+    observation: Ashrae901Observation,
+    text: str,
+) -> re.Match[str] | None:
+    """Recognize a publication appendix heading, not a TOC reference."""
+
+    if observation.structure_hint is not None:
+        return None
+    match = _APPENDIX_RE.match(text)
+    if match is None:
+        return None
+    span = _first_text_span(observation.block)
+    if span is None or span.font != _HEADING_FONT:
+        return None
+    if abs(span.size - _TOP_HEADING_SIZE) > _HEADING_SIZE_TOLERANCE:
+        return None
+    return match
+
+
 def _observation_key(observation: Ashrae901Observation) -> tuple[object, ...]:
     block = observation.block
+    text = normalize_block_text(block.text)
+    appendix_priority = 0 if _appendix_match(observation, text) is not None else 1
     return (
         block.page_number,
+        appendix_priority,
         _column(block),
         block.bbox[1],
         block.bbox[0],
         block.bbox[3],
         block.bbox[2],
-        normalize_block_text(block.text),
+        text,
     )
 
 
@@ -158,14 +189,6 @@ def _appendix_role(letter: str, declared_role: str) -> str:
     if declared != expected:
         raise ValueError(f"appendix {letter} is {expected} in the retained publication")
     return expected
-
-
-def _first_text_span(block: PdfBlock) -> PdfSpan | None:
-    for line in block.lines:
-        for span in line.spans:
-            if span.text.strip():
-                return span
-    return None
 
 
 def _numeric_heading(
@@ -239,6 +262,19 @@ def _line_appendix_heading(line: PdfLine) -> bool:
     )
 
 
+def _appendix_heading_content(observation: Ashrae901Observation) -> bool:
+    text = normalize_block_text(observation.block.text)
+    if _APPENDIX_HEADING_RE.fullmatch(text) is None:
+        return False
+    span = _first_text_span(observation.block)
+    if span is None or span.font != _HEADING_FONT:
+        return False
+    if abs(span.size - _SUBSECTION_HEADING_SIZE) > _HEADING_SIZE_TOLERANCE:
+        return False
+    _, y0, _, y1 = observation.block.bbox
+    return y0 >= _APPENDIX_HEADING_TOP_Y and y1 <= _BOTTOM_CONTENT_Y
+
+
 def _derived_block(block: PdfBlock, lines: tuple[PdfLine, ...]) -> PdfBlock:
     return PdfBlock(
         page_number=block.page_number,
@@ -296,19 +332,30 @@ def _expand_embedded_appendix_headings(
 def _expand_appendix_observations(
     observations: Iterable[Ashrae901Observation],
 ) -> tuple[Ashrae901Observation, ...]:
-    ordered = tuple(sorted((item for item in observations if _is_content(item)), key=_observation_key))
+    raw = tuple(sorted(observations, key=_observation_key))
     expanded: list[Ashrae901Observation] = []
     inside_appendix = False
-    for observation in ordered:
+    for observation in raw:
         text = normalize_block_text(observation.block.text)
-        if _APPENDIX_RE.match(text):
+        if _appendix_match(observation, text) is not None:
             inside_appendix = True
             expanded.append(observation)
         elif inside_appendix:
             expanded.extend(_expand_embedded_appendix_headings(observation))
         else:
             expanded.append(observation)
-    return tuple(sorted(expanded, key=_observation_key))
+    return tuple(
+        sorted(
+            (
+                item
+                for item in expanded
+                if _is_content(item)
+                or _appendix_heading_content(item)
+                or _appendix_match(item, normalize_block_text(item.block.text)) is not None
+            ),
+            key=_observation_key,
+        )
+    )
 
 
 def _automatic_figure_locator(
@@ -442,7 +489,7 @@ def parse_ashrae901_2016_observations(
             section.extend_to(end)
 
     for observation, start, end, text in spans:
-        if match := _APPENDIX_RE.match(text):
+        if match := _appendix_match(observation, text):
             letter = match.group("letter").upper()
             role = _appendix_role(letter, match.group("role"))
             appendix = _Draft(
