@@ -159,6 +159,79 @@ class Ashrae901DocumentAstTests(unittest.TestCase):
         self.assertEqual(dict(mandatory.root.children[0].attributes)["source_role"], "mandatory")
         self.assertEqual(dict(informative.root.children[0].attributes)["source_role"], "informative")
 
+    def test_appendix_native_headings_use_source_typography_and_nest_under_appendix(self) -> None:
+        ast = parse_ashrae901_2016_observations(
+            (
+                _observation(
+                    "NORMATIVE APPENDIX A SYNTHETIC MATERIAL",
+                    page=300,
+                    printed_page="296",
+                    block_number=1,
+                    y=80,
+                ),
+                _observation(
+                    "A1 Synthetic Appendix Section",
+                    page=300,
+                    printed_page="296",
+                    block_number=2,
+                    y=110,
+                    font="Helvetica-Bold",
+                    size=10.0,
+                ),
+                _observation(
+                    "A1.1 Synthetic Appendix Subsection",
+                    page=300,
+                    printed_page="296",
+                    block_number=3,
+                    y=140,
+                    font="Helvetica-Bold",
+                    size=10.0,
+                ),
+                _observation(
+                    "Synthetic appendix prose.",
+                    page=300,
+                    printed_page="296",
+                    block_number=4,
+                    y=170,
+                ),
+            )
+        )
+
+        appendix = ast.root.children[0]
+        section = appendix.children[0]
+        subsection = section.children[0]
+        prose = subsection.children[0]
+        self.assertEqual(appendix.locator, "appendix:A")
+        self.assertEqual(section.locator, "section:A1")
+        self.assertEqual(section.node_type, DocumentNodeType.SUBSECTION)
+        self.assertEqual(subsection.locator, "section:A1.1")
+        self.assertEqual(dict(section.attributes)["source_role"], "mandatory")
+        self.assertEqual(dict(subsection.attributes)["source_role"], "mandatory")
+        self.assertEqual(prose.node_type, DocumentNodeType.PARAGRAPH)
+
+    def test_appendix_locator_with_wrong_typography_remains_prose(self) -> None:
+        ast = parse_ashrae901_2016_observations(
+            (
+                _observation(
+                    "INFORMATIVE APPENDIX E SYNTHETIC MATERIAL",
+                    page=302,
+                    printed_page="298",
+                    block_number=1,
+                    y=80,
+                ),
+                _observation(
+                    "E1 Synthetic False Positive",
+                    page=302,
+                    printed_page="298",
+                    block_number=2,
+                    y=110,
+                    font="Helvetica",
+                    size=10.0,
+                ),
+            )
+        )
+        self.assertEqual(ast.root.children[0].children[0].node_type, DocumentNodeType.PARAGRAPH)
+
     def test_appendix_heading_that_conflicts_with_profile_is_rejected(self) -> None:
         with self.assertRaisesRegex(ValueError, "appendix A is mandatory in the retained publication"):
             parse_ashrae901_2016_observations(
