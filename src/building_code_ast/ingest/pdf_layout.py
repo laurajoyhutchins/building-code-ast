@@ -17,6 +17,18 @@ _HORIZONTAL_DIRECTION = (1.0, 0.0)
 
 
 @dataclass(frozen=True, slots=True)
+class LegacyContentOrderPolicy:
+    """Named compatibility policy for the historical fixed-band block order."""
+
+    name: str = "legacy-fixed-bands-midpoint-v1"
+    top_content_y: float = 65.0
+    bottom_content_y: float = 730.0
+
+
+LEGACY_CONTENT_ORDER_POLICY = LegacyContentOrderPolicy()
+
+
+@dataclass(frozen=True, slots=True)
 class PdfSpan:
     """One source text span within a PDF visual line."""
 
@@ -133,10 +145,21 @@ def order_content_blocks(
     blocks: Iterable[PdfBlock],
     page_width: float,
     *,
-    top_content_y: float = 65.0,
-    bottom_content_y: float = 730.0,
+    top_content_y: float | None = None,
+    bottom_content_y: float | None = None,
 ) -> tuple[PdfBlock, ...]:
-    """Filter recurring headers/footers and return two-column reading order."""
+    """Apply the legacy compatibility block order.
+
+    This preserves the historical fixed top/bottom bands and page-midpoint
+    column split for callers that still depend on them. New generic PDF
+    processing should use evidence-based ordering from ``layout_analysis``
+    instead of treating these constants as publication-neutral geometry facts.
+    """
+
+    if top_content_y is None:
+        top_content_y = LEGACY_CONTENT_ORDER_POLICY.top_content_y
+    if bottom_content_y is None:
+        bottom_content_y = LEGACY_CONTENT_ORDER_POLICY.bottom_content_y
 
     midpoint = page_width / 2.0
     retained = [
