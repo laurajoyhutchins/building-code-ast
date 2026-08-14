@@ -516,7 +516,43 @@ def detect_ruled_tables(page: CleanedPage) -> tuple[TableCandidate, ...]:
     return tuple(tables)
 
 
-def group_table_candidates(rows: Sequence[TableRowCandidate]) -> tuple[TableCandidate, ...]:
+def _single_source_block(cell: TableCellCandidate) -> int | None:
+    block_numbers = {fragment.block_number for fragment in cell.fragments}
+    if len(block_numbers) != 1:
+        return None
+    return next(iter(block_numbers))
+
+
+def _is_page_spanning_parallel_source_flow(
+    rows: Sequence[TableRowCandidate],
+    page_width: float,
+) -> bool:
+    if page_width <= 0.0 or not rows:
+        return False
+    candidate_width = max(row.bbox[2] for row in rows) - min(row.bbox[0] for row in rows)
+    if candidate_width < page_width * 0.84 or any(len(row.cells) != 2 for row in rows):
+        return False
+
+    block_rows: list[tuple[int, int]] = []
+    for row in rows:
+        blocks = tuple(_single_source_block(cell) for cell in row.cells)
+        if any(block is None for block in blocks):
+            return False
+        block_rows.append((blocks[0], blocks[1]))  # type: ignore[arg-type]
+
+    same_block_transitions = [0, 0]
+    for previous, current in zip(block_rows, block_rows[1:]):
+        for column in range(2):
+            if previous[column] == current[column]:
+                same_block_transitions[column] += 1
+    return max(same_block_transitions, default=0) >= 2
+
+
+def group_table_candidates(
+    rows: Sequence[TableRowCandidate],
+    *,
+    page_width: float | None = None,
+) -> tuple[TableCandidate, ...]:
     ordered = sorted(rows, key=lambda row: (row.page_number, row.bbox[1], row.bbox[0]))
     groups: list[list[TableRowCandidate]] = []
     current: list[TableRowCandidate] = []
@@ -530,6 +566,8 @@ def group_table_candidates(rows: Sequence[TableRowCandidate]) -> tuple[TableCand
         groups.append(current)
     tables = []
     for group in groups:
+        if page_width is not None and _is_page_spanning_parallel_source_flow(group, page_width):
+            continue
         normalized_text, normalized_rows = _normalize_rows(group)
         alignment = min(_aligned_columns(left, right) for left, right in zip(group, group[1:]))
         confidence = round(min(0.96, 0.72 + len(group) * 0.04 + alignment * 0.03), 3)
