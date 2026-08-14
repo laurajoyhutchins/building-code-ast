@@ -1,0 +1,96 @@
+{
+  "artifact": "ansi-aisc-360-16-pdf-enrichment-pilot-diagnostic",
+  "diagnostic_version": "0.1.0",
+  "status": "blocked_without_derivative",
+  "source": {
+    "drive_object_id": "1Tcqq-YGkjl6iptmaKeBsX8FNMNgN0CyY",
+    "file_name": "03-ansi-aisc-360-16.pdf",
+    "sha256": "6ba073e6549e0c7408909cde2261f2bc393c7e6bfc63392268bd51399338e126",
+    "size_bytes": 64464266,
+    "page_count": 674,
+    "source_authority_preserved": true
+  },
+  "durable_raster_observation_contract": {
+    "artifact": "corpora/aisc-scm-15/ansi-aisc-360-16-raster-hierarchy-observations.json",
+    "observed_pages": [16, 17, 243, 285],
+    "observed_page_count": 4,
+    "protected_source_text_retained": false,
+    "parser_promotion_performed": false,
+    "render_recipe": {
+      "renderer": "pdftoppm",
+      "renderer_version": "25.06.0",
+      "dpi": 600,
+      "output_format": "png"
+    },
+    "declared_recovery_backend": "tesseract_5.5.0_psm6_from_exact_render"
+  },
+  "enrichment_contract_requirement": {
+    "searchable_text_entry_requires_expression": true,
+    "digest_only_searchable_text_entry_supported": false,
+    "new_ocr_or_raster_evidence_permitted_by_gate": false
+  },
+  "diagnostic_replay": {
+    "purpose": "verify whether the existing durable text digests are rematerializable under their declared source/render/recovery provenance; replayed expression was transient and was not admitted as enrichment-plan input",
+    "tools": {
+      "pdftoppm": "25.06.0",
+      "tesseract": "5.5.0",
+      "tesseract_psm": 6
+    },
+    "recovered_expression_retained": false,
+    "used_as_enrichment_plan_input": false,
+    "pages": [
+      {
+        "page": 16,
+        "render_sha256_expected": "2f75a91fa79eab0a463f9c582f2fb927c36c3542216a9b8b7ee5c47af92f78ef",
+        "render_sha256_observed": "2f75a91fa79eab0a463f9c582f2fb927c36c3542216a9b8b7ee5c47af92f78ef",
+        "render_matches": true,
+        "recovered_text_sha256_expected": "1e6ee847b5abe2e90e2115c9ca9fac7b94261dfa02697794072484d96de80dab",
+        "recovered_text_sha256_observed": "1e6ee847b5abe2e90e2115c9ca9fac7b94261dfa02697794072484d96de80dab",
+        "recovered_text_digest_matches": true
+      },
+      {
+        "page": 17,
+        "render_sha256_expected": "5c4f68df15308c80b93e7aa263af080c05b821ac5feb30eb9091115404a608b0",
+        "render_sha256_observed": "5c4f68df15308c80b93e7aa263af080c05b821ac5feb30eb9091115404a608b0",
+        "render_matches": true,
+        "recovered_text_sha256_expected": "c917f1168f123572bb7d1e0be1b50289a51a3754bc74ddbded3e5930e9811f7e",
+        "recovered_text_sha256_observed": "c917f1168f123572bb7d1e0be1b50289a51a3754bc74ddbded3e5930e9811f7e",
+        "recovered_text_digest_matches": true
+      },
+      {
+        "page": 243,
+        "render_sha256_expected": "d8713ae2ff9f53e1373b55cdbbde03276c8a681e58bb5d00cc4f0792790e9b58",
+        "render_sha256_observed": "d8713ae2ff9f53e1373b55cdbbde03276c8a681e58bb5d00cc4f0792790e9b58",
+        "render_matches": true,
+        "recovered_text_sha256_expected": "d2d162d9a930f208f1fc4130ab829502ec642be250675509409046281a24ab4f",
+        "recovered_text_sha256_observed": "1c4f793d6d90d8ee32713fcc72763e219631d115fdd0c2e7826b5f90af98796c",
+        "recovered_text_digest_matches": false
+      },
+      {
+        "page": 285,
+        "render_sha256_expected": "21d815df3e2aab29ee67a013bc492b475130519ec0ccbda946191539c91784fc",
+        "render_sha256_observed": "21d815df3e2aab29ee67a013bc492b475130519ec0ccbda946191539c91784fc",
+        "render_matches": true,
+        "recovered_text_sha256_expected": "eeb1bc96b6901f7347c604283a9c450a1fe06084dbde9f1ae0b7e2e60310db68",
+        "recovered_text_sha256_observed": "14dcbdcf288aa5b5dfe83a3eb9110889d1ad4ce926e9e9f13550c46f118f4e19",
+        "recovered_text_digest_matches": false
+      }
+    ]
+  },
+  "decision": {
+    "pdf_enrichment_plan_constructed": false,
+    "enriched_derivative_materialized": false,
+    "pdf_enrichment_receipt_emitted": false,
+    "reason": "the durable AISC observation boundary intentionally retains recovered-text digests rather than protected recovered expression; the enrichment v1 plan requires the expression itself, and two older durable text digests are not rematerialized by the currently declared recovery recipe. Using regenerated OCR would widen or replace evidence contrary to this pilot gate.",
+    "source_bytes_modified": false,
+    "new_ocr_evidence_promoted": false,
+    "hidden_derivative_text_treated_as_native_source": false
+  },
+  "retry_condition": {
+    "required": "make the already-approved private recovered-text payloads retrievable under a provenance contract that binds them to the existing durable digests, or land an equivalent recovery-payload contract before retrying enrichment",
+    "existing_related_gate": "GitHub #293",
+    "broader_enrichment_gate_created": false
+  },
+  "private_source_locator_retained": false,
+  "protected_source_expression_retained": false
+}
