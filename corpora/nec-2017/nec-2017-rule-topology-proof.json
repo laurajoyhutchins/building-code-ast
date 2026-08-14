@@ -1,0 +1,352 @@
+{
+  "artifact": "nec-2017-rule-topology-proof",
+  "baseline": {
+    "measurement_commit": "985a733a6f865d4d1812dd09cf443ef9a7dc078d",
+    "measurement_sha256": "56c362545289c1bfce5ac15ba92074aef2aa861e3f4701ed5ea95bf45872ba12",
+    "metrics": {
+      "ambiguous_candidates": 26,
+      "candidate_envelopes": 1250,
+      "captions_with_candidate": 154,
+      "captions_with_multiple_candidates": 90,
+      "captions_without_candidate": 68,
+      "geometry_rows": 10235,
+      "recognized_owned_candidates": 337,
+      "ruled_candidates": 218,
+      "unresolved_candidates": 887
+    }
+  },
+  "classified_representative_pages": [
+    {
+      "finding": "same horizontal extent contains distinct vertically disconnected ruled grids",
+      "page": 66
+    },
+    {
+      "finding": "page furniture shares a horizontal extent with later ruled geometry but is not vertically connected",
+      "page": 80
+    },
+    {
+      "finding": "cross-column grouped geometry remains a separate unresolved ownership family",
+      "page": 159
+    },
+    {
+      "finding": "page furniture and lower ruled geometry are vertically disconnected",
+      "page": 206
+    },
+    {
+      "finding": "two full-width ruled table blocks share an extent but have disconnected vertical topology",
+      "page": 696
+    }
+  ],
+  "conclusion": {
+    "criterion_proven_for_bounded_implementation": true,
+    "next_gate": "Classify the remaining topology-surviving ambiguous ownership candidates before changing caption ownership or table semantics.",
+    "remaining_ambiguous_candidates": 16
+  },
+  "coverage_acceptance_audit": {
+    "acceptance_result": "passes",
+    "assignment_loss_audit": {
+      "captions_losing_all_baseline_assignments": 3,
+      "captions_still_with_at_least_one_candidate": 12,
+      "captions_with_lower_assignment_multiplicity": 15,
+      "gross_removed_assignments": 25,
+      "removed_assignments_from_still_covered_captions": 20,
+      "removed_assignments_from_zeroed_captions": 5,
+      "source_review_scope": "All 15 caption coordinates whose assignment multiplicity decreased were visually reviewed against the exact retained source. The 12 still-covered captions retained a table candidate while extra pre-caption, prose, or page-spanning envelopes were removed or narrowed; the three zeroed captions lost only false baseline ownership.",
+      "true_recognized_caption_coverage_lost": 0,
+      "zeroed_caption_source_review": [
+        {
+          "caption_bbox": [
+            54.003,
+            71.148,
+            265.431,
+            81.75
+          ],
+          "classification": "baseline assignments were later prose geometry, not the captioned table",
+          "page": 202,
+          "removed_assignment_count": 2
+        },
+        {
+          "caption_bbox": [
+            309.0,
+            500.388,
+            552.513,
+            521.49
+          ],
+          "classification": "baseline assignment was a column-spanning rule envelope, not an ownership-safe table candidate",
+          "page": 563,
+          "removed_assignment_count": 1
+        },
+        {
+          "caption_bbox": [
+            36.0,
+            522.648,
+            556.92,
+            554.25
+          ],
+          "classification": "baseline assignments were pre-caption prose geometry, not the captioned table",
+          "page": 617,
+          "removed_assignment_count": 2
+        }
+      ]
+    },
+    "caption_level_coverage": {
+      "baseline_captions_with_candidate": 154,
+      "delta": 2,
+      "topology_captions_with_candidate": 156
+    },
+    "conclusion": "The lower raw assigned-candidate count reflects removal of false or redundant candidate multiplicity, not a trade of true recognized caption coverage for lower ambiguity.",
+    "raw_assigned_candidate_count": {
+      "baseline": 337,
+      "interpretation": "assignment multiplicity, not caption-level recognized coverage",
+      "topology": 325
+    }
+  },
+  "criterion": {
+    "caption_semantics_used": false,
+    "description": "Within one near-equal horizontal-rule extent, partition adjacent horizontal levels only when observed vertical rules bridge the levels; emit connected runs with at least three horizontal levels as independent rule regions.",
+    "fallback": "Preserve the original whole horizontal-rule extent when there are no vertical bridges, or when no connected run contains at least three horizontal levels.",
+    "name": "vertical_grid_connectivity_partition",
+    "ownership_semantics_used": false,
+    "publication_specific_text_used": false
+  },
+  "full_source_replay": {
+    "baseline_denominators_reproduced_before_criterion": true,
+    "deltas": {
+      "ambiguous_candidates": -10,
+      "captions_with_candidate": 2,
+      "captions_with_multiple_candidates": -4,
+      "captions_without_candidate": -2,
+      "ruled_candidates": 2,
+      "unresolved_candidates": -38
+    },
+    "metrics": {
+      "ambiguous_candidates": 16,
+      "candidate_envelopes": 1190,
+      "captions_with_candidate": 156,
+      "captions_with_multiple_candidates": 86,
+      "captions_without_candidate": 66,
+      "geometry_rows": 9879,
+      "grouped_candidates": 970,
+      "grouped_rows": 7700,
+      "recognized_owned_candidates": 325,
+      "rule_regions": 852,
+      "ruled_candidates": 220,
+      "unresolved_candidates": 849
+    },
+    "newly_supported_caption_coordinates": [
+      {
+        "caption_coordinate": {
+          "bbox": [
+            54.0,
+            512.828,
+            298.971,
+            533.93
+          ],
+          "page": 66
+        },
+        "topology_candidate": {
+          "bbox": [
+            54.0,
+            613.868,
+            288.427,
+            711.89
+          ],
+          "family": "vector_rule"
+        }
+      },
+      {
+        "caption_coordinate": {
+          "bbox": [
+            36.0,
+            71.148,
+            549.567,
+            102.75
+          ],
+          "page": 155
+        },
+        "topology_candidate": {
+          "bbox": [
+            36.0,
+            381.288,
+            544.95,
+            641.99
+          ],
+          "family": "vector_rule"
+        }
+      },
+      {
+        "caption_coordinate": {
+          "bbox": [
+            326.997,
+            71.148,
+            576.003,
+            113.25
+          ],
+          "page": 442
+        },
+        "topology_candidate": {
+          "bbox": [
+            326.997,
+            320.068,
+            576.0,
+            428.59
+          ],
+          "family": "vector_rule"
+        }
+      },
+      {
+        "caption_coordinate": {
+          "bbox": [
+            36.0,
+            482.648,
+            248.085,
+            493.25
+          ],
+          "page": 501
+        },
+        "topology_candidate": {
+          "bbox": [
+            36.0,
+            622.788,
+            276.381,
+            720.81
+          ],
+          "family": "vector_rule"
+        }
+      },
+      {
+        "caption_coordinate": {
+          "bbox": [
+            53.996,
+            70.898,
+            165.758,
+            81.5
+          ],
+          "page": 696
+        },
+        "topology_candidate": {
+          "bbox": [
+            53.996,
+            175.148,
+            569.201,
+            355.97
+          ],
+          "family": "vector_rule"
+        }
+      }
+    ],
+    "pages_processed": 881,
+    "removed_false_baseline_ownership": [
+      {
+        "baseline_candidates": [
+          {
+            "bbox": [
+              54.0,
+              317.692,
+              481.66,
+              369.152
+            ],
+            "family": "grouped_geometry"
+          },
+          {
+            "bbox": [
+              53.997,
+              414.55,
+              467.401,
+              450.426
+            ],
+            "family": "grouped_geometry"
+          }
+        ],
+        "caption_coordinate": {
+          "bbox": [
+            54.003,
+            71.148,
+            265.431,
+            81.75
+          ],
+          "page": 202
+        },
+        "source_review_classification": "later_prose_geometry_not_caption_owned"
+      },
+      {
+        "baseline_candidates": [
+          {
+            "bbox": [
+              308.996,
+              110.898,
+              558.003,
+              721.81
+            ],
+            "family": "vector_rule"
+          }
+        ],
+        "caption_coordinate": {
+          "bbox": [
+            309.0,
+            500.388,
+            552.513,
+            521.49
+          ],
+          "page": 563
+        },
+        "source_review_classification": "column_spanning_rule_envelope_not_ownership_safe"
+      },
+      {
+        "baseline_candidates": [
+          {
+            "bbox": [
+              35.998,
+              70.898,
+              558.003,
+              127.518
+            ],
+            "family": "grouped_geometry"
+          },
+          {
+            "bbox": [
+              35.998,
+              144.916,
+              544.203,
+              191.518
+            ],
+            "family": "grouped_geometry"
+          }
+        ],
+        "caption_coordinate": {
+          "bbox": [
+            36.0,
+            522.648,
+            556.92,
+            554.25
+          ],
+          "page": 617
+        },
+        "source_review_classification": "pre_caption_prose_geometry_not_caption_owned"
+      }
+    ],
+    "reviewed_false_ownership_removed_count": 3
+  },
+  "implementation_binding": {
+    "base_commit": "85a4ef1004abced2331bcf212cdc9a2c51d7aac2",
+    "implementation_commit": "171b50d5ab0b4dc025706a23436c564a44a60034",
+    "red_test_commit": "64f6d382362e6e343dfa631de222ac509f81b788",
+    "regression_test_blob": "47439f0d5e6c5796a155343161de4d0d2fa68aa2",
+    "table_geometry_blob": "94302ad1989a41052fb7af3bbe0392950597340a"
+  },
+  "proof_version": "0.1.0",
+  "source": {
+    "file_name": "nec-2017.pdf",
+    "page_count": 881,
+    "private_source_locator_retained": false,
+    "protected_source_expression_retained": false,
+    "sha256": "603ef5c461247bacd716e3953222bfb227f1ddc780fffdbfcb90756b02c237c7",
+    "size_bytes": 7422245
+  },
+  "verification_boundary": {
+    "generated_output_is_not_claimed_as_semantic_table_reconstruction": true,
+    "parser_semantics_promoted": false,
+    "source_replay_method": "Offline exact-source replay of the shared geometry and ownership path using the same topology criterion as the bound implementation.",
+    "table_cell_or_compliance_semantics_inferred": false
+  }
+}

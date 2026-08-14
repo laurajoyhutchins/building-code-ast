@@ -270,13 +270,43 @@ def _rule_regions(page: CleanedPage) -> tuple[tuple[float, float, float, float],
             groups.append(matched)
         matched.append(rule)
     regions: list[tuple[float, float, float, float]] = []
+    vertical = [rule for rule in page.rules if rule.vertical]
     for group in groups:
         ys = _cluster_positions([(item.y0 + item.y1) / 2.0 for item in group])
         if len(ys) < 3:
             continue
         x0 = statistics.median(min(item.x0, item.x1) for item in group)
         x1 = statistics.median(max(item.x0, item.x1) for item in group)
-        regions.append((round(x0, 3), ys[0], round(x1, 3), ys[-1]))
+        bridges = tuple(
+            any(
+                x0 - 3.0 <= (rule.x0 + rule.x1) / 2.0 <= x1 + 3.0
+                and min(rule.y0, rule.y1) <= top + 3.0
+                and max(rule.y0, rule.y1) >= bottom - 3.0
+                for rule in vertical
+            )
+            for top, bottom in zip(ys, ys[1:])
+        )
+        if not any(bridges):
+            regions.append((round(x0, 3), ys[0], round(x1, 3), ys[-1]))
+            continue
+
+        runs: list[tuple[float, ...]] = []
+        run = [ys[0]]
+        for index, bridged in enumerate(bridges):
+            if bridged:
+                run.append(ys[index + 1])
+            else:
+                runs.append(tuple(run))
+                run = [ys[index + 1]]
+        runs.append(tuple(run))
+        supported_runs = tuple(run for run in runs if len(run) >= 3)
+        if not supported_runs:
+            regions.append((round(x0, 3), ys[0], round(x1, 3), ys[-1]))
+            continue
+        regions.extend(
+            (round(x0, 3), run[0], round(x1, 3), run[-1])
+            for run in supported_runs
+        )
     return tuple(regions)
 
 
