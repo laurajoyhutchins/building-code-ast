@@ -71,6 +71,9 @@ _HEADING_SIZE_TOLERANCE = 0.05
 _FIGURE_CAPTION_FONT = "Helvetica-Bold"
 _FIGURE_CAPTION_SIZE = 8.5
 _FIGURE_CAPTION_SIZE_TOLERANCE = 0.05
+_ANNEX1_LOCATOR_PREFIX = "annex1-"
+_VERTICAL_UP_X_TOLERANCE = 0.01
+_VERTICAL_UP_Y_THRESHOLD = -0.99
 
 
 @dataclass(frozen=True, slots=True)
@@ -275,6 +278,36 @@ def _appendix_heading_content(observation: Ashrae901Observation) -> bool:
     return y0 >= _APPENDIX_HEADING_TOP_Y and y1 <= _BOTTOM_CONTENT_Y
 
 
+def _rotated_annex_figure_content(observation: Ashrae901Observation) -> bool:
+    """Admit only the measured vertical-up Annex 1 figure-caption family."""
+
+    if observation.structure_hint is not None:
+        return False
+    text = normalize_block_text(observation.block.text)
+    match = _FIGURE_RE.match(text)
+    if match is None or not match.group("locator").casefold().startswith(_ANNEX1_LOCATOR_PREFIX):
+        return False
+    span = _first_text_span(observation.block)
+    if span is None or span.font != _FIGURE_CAPTION_FONT:
+        return False
+    if abs(span.size - _FIGURE_CAPTION_SIZE) > _FIGURE_CAPTION_SIZE_TOLERANCE:
+        return False
+
+    for line in observation.block.lines:
+        if not line.text.strip():
+            continue
+        dx, dy = line.direction
+        magnitude = (dx * dx + dy * dy) ** 0.5
+        if magnitude <= 1e-9:
+            continue
+        if (
+            abs(dx / magnitude) <= _VERTICAL_UP_X_TOLERANCE
+            and dy / magnitude <= _VERTICAL_UP_Y_THRESHOLD
+        ):
+            return True
+    return False
+
+
 def _derived_block(block: PdfBlock, lines: tuple[PdfLine, ...]) -> PdfBlock:
     return PdfBlock(
         page_number=block.page_number,
@@ -350,6 +383,7 @@ def _expand_appendix_observations(
                 item
                 for item in expanded
                 if _is_content(item)
+                or _rotated_annex_figure_content(item)
                 or _appendix_heading_content(item)
                 or _appendix_match(item, normalize_block_text(item.block.text)) is not None
             ),
