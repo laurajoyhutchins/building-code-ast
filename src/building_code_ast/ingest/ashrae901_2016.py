@@ -22,7 +22,7 @@ from ..document_model import (
 from ..document_validation import validate_document_ast
 from ..evidence.model import PublicationIdentity, publication_state_id
 from ..model import Diagnostic, DiagnosticSeverity, SourceSpan
-from .pdf_layout import PdfBlock, PdfSpan, normalize_block_text
+from .pdf_layout import PdfBlock, PdfLine, PdfSpan, normalize_block_text
 
 
 ASHRAE_90_1_2016_PUBLICATION = PublicationIdentity(
@@ -42,6 +42,10 @@ _INFORMATIVE_APPENDICES = frozenset({"B", "D", "E", "F", "H"})
 _NUMERIC_HEADING_RE = re.compile(
     r"^(?P<locator>\d+(?:\.\d+)*)(?:\.)?(?:\s+(?P<title>\S.*))?$"
 )
+_APPENDIX_HEADING_RE = re.compile(
+    r"^(?P<locator>[A-H]\d+(?:\.\d+)*)(?:\.)?(?:\s+(?P<title>\S.*))?$",
+    re.IGNORECASE,
+)
 _APPENDIX_RE = re.compile(
     r"^(?P<role>NORMATIVE|INFORMATIVE)\s+APPENDIX\s+(?P<letter>[A-H])\b(?:\s+(?P<title>.*))?$",
     re.IGNORECASE,
@@ -59,6 +63,7 @@ _SUPPORTED_HINTS = {"equation", "table", "figure", "graphical_region"}
 _BODY_MIDPOINT = 306.0
 _TOP_CONTENT_Y = 65.0
 _BOTTOM_CONTENT_Y = 730.0
+_APPENDIX_HEADING_TOP_Y = 40.0
 _HEADING_FONT = "Helvetica-Bold"
 _TOP_HEADING_SIZE = 11.0
 _SUBSECTION_HEADING_SIZE = 10.0
@@ -108,16 +113,46 @@ def _column(block: PdfBlock) -> int:
     return 2
 
 
+def _first_text_span(block: PdfBlock) -> PdfSpan | None:
+    for line in block.lines:
+        for span in line.spans:
+            if span.text.strip():
+                return span
+    return None
+
+
+def _appendix_match(
+    observation: Ashrae901Observation,
+    text: str,
+) -> re.Match[str] | None:
+    """Recognize a publication appendix heading, not a TOC reference."""
+
+    if observation.structure_hint is not None:
+        return None
+    match = _APPENDIX_RE.match(text)
+    if match is None:
+        return None
+    span = _first_text_span(observation.block)
+    if span is None or span.font != _HEADING_FONT:
+        return None
+    if abs(span.size - _TOP_HEADING_SIZE) > _HEADING_SIZE_TOLERANCE:
+        return None
+    return match
+
+
 def _observation_key(observation: Ashrae901Observation) -> tuple[object, ...]:
     block = observation.block
+    text = normalize_block_text(block.text)
+    appendix_priority = 0 if _appendix_match(observation, text) is not None else 1
     return (
         block.page_number,
+        appendix_priority,
         _column(block),
         block.bbox[1],
         block.bbox[0],
         block.bbox[3],
         block.bbox[2],
-        normalize_block_text(block.text),
+        text,
     )
 
 
@@ -156,14 +191,6 @@ def _appendix_role(letter: str, declared_role: str) -> str:
     return expected
 
 
-def _first_text_span(block: PdfBlock) -> PdfSpan | None:
-    for line in block.lines:
-        for span in line.spans:
-            if span.text.strip():
-                return span
-    return None
-
-
 def _numeric_heading(
     observation: Ashrae901Observation,
     text: str,
@@ -191,6 +218,144 @@ def _numeric_heading(
     if depth == 0 and title is None:
         return None
     return locator, title
+
+
+def _appendix_heading(
+    observation: Ashrae901Observation,
+    text: str,
+    *,
+    appendix_letter: str | None,
+) -> tuple[str, str | None] | None:
+    """Recognize appendix-native hierarchy from exact-source heading typography."""
+
+    if appendix_letter is None or observation.structure_hint is not None:
+        return None
+    match = _APPENDIX_HEADING_RE.fullmatch(text)
+    if match is None:
+        return None
+
+    locator = match.group("locator").upper()
+    if not locator.startswith(appendix_letter.upper()):
+        return None
+
+    span = _first_text_span(observation.block)
+    if span is None or span.font != _HEADING_FONT:
+        return None
+    if abs(span.size - _SUBSECTION_HEADING_SIZE) > _HEADING_SIZE_TOLERANCE:
+        return None
+    return locator, match.group("title")
+
+
+def _appendix_locator_depth(locator: str) -> int:
+    return locator[1:].count(".")
+
+
+def _line_appendix_heading(line: PdfLine) -> bool:
+    text = normalize_block_text(line.text)
+    if _APPENDIX_HEADING_RE.fullmatch(text) is None:
+        return False
+    span = next((span for span in line.spans if span.text.strip()), None)
+    return (
+        span is not None
+        and span.font == _HEADING_FONT
+        and abs(span.size - _SUBSECTION_HEADING_SIZE) <= _HEADING_SIZE_TOLERANCE
+    )
+
+
+def _appendix_heading_content(observation: Ashrae901Observation) -> bool:
+    text = normalize_block_text(observation.block.text)
+    if _APPENDIX_HEADING_RE.fullmatch(text) is None:
+        return False
+    span = _first_text_span(observation.block)
+    if span is None or span.font != _HEADING_FONT:
+        return False
+    if abs(span.size - _SUBSECTION_HEADING_SIZE) > _HEADING_SIZE_TOLERANCE:
+        return False
+    _, y0, _, y1 = observation.block.bbox
+    return y0 >= _APPENDIX_HEADING_TOP_Y and y1 <= _BOTTOM_CONTENT_Y
+
+
+def _derived_block(block: PdfBlock, lines: tuple[PdfLine, ...]) -> PdfBlock:
+    return PdfBlock(
+        page_number=block.page_number,
+        bbox=(
+            min(line.bbox[0] for line in lines),
+            min(line.bbox[1] for line in lines),
+            max(line.bbox[2] for line in lines),
+            max(line.bbox[3] for line in lines),
+        ),
+        text="\n".join(line.text for line in lines),
+        block_number=block.block_number,
+        table_region_id=block.table_region_id,
+        lines=lines,
+    )
+
+
+def _expand_embedded_appendix_headings(
+    observation: Ashrae901Observation,
+) -> tuple[Ashrae901Observation, ...]:
+    block = observation.block
+    if observation.structure_hint is not None or len(block.lines) < 2:
+        return (observation,)
+
+    heading_indexes = tuple(
+        index for index, line in enumerate(block.lines) if _line_appendix_heading(line)
+    )
+    if not heading_indexes:
+        return (observation,)
+
+    reconstructed = "\n".join(line.text for line in block.lines)
+    if normalize_block_text(reconstructed) != normalize_block_text(block.text):
+        return (observation,)
+
+    ranges: list[tuple[int, int]] = []
+    cursor = 0
+    for index in heading_indexes:
+        if cursor < index:
+            ranges.append((cursor, index))
+        ranges.append((index, index + 1))
+        cursor = index + 1
+    if cursor < len(block.lines):
+        ranges.append((cursor, len(block.lines)))
+
+    return tuple(
+        Ashrae901Observation(
+            block=_derived_block(block, block.lines[start:end]),
+            printed_page=observation.printed_page,
+            structure_hint=observation.structure_hint,
+            native_locator=observation.native_locator,
+        )
+        for start, end in ranges
+    )
+
+
+def _expand_appendix_observations(
+    observations: Iterable[Ashrae901Observation],
+) -> tuple[Ashrae901Observation, ...]:
+    raw = tuple(sorted(observations, key=_observation_key))
+    expanded: list[Ashrae901Observation] = []
+    inside_appendix = False
+    for observation in raw:
+        text = normalize_block_text(observation.block.text)
+        if _appendix_match(observation, text) is not None:
+            inside_appendix = True
+            expanded.append(observation)
+        elif inside_appendix:
+            expanded.extend(_expand_embedded_appendix_headings(observation))
+        else:
+            expanded.append(observation)
+    return tuple(
+        sorted(
+            (
+                item
+                for item in expanded
+                if _is_content(item)
+                or _appendix_heading_content(item)
+                or _appendix_match(item, normalize_block_text(item.block.text)) is not None
+            ),
+            key=_observation_key,
+        )
+    )
 
 
 def _automatic_figure_locator(
@@ -280,7 +445,7 @@ def parse_ashrae901_2016_observations(
 ) -> DocumentAst:
     """Build a deterministic ASHRAE 90.1-2016 structural AST from PDF observations."""
 
-    ordered = tuple(sorted((item for item in observations if _is_content(item)), key=_observation_key))
+    ordered = _expand_appendix_observations(observations)
     if not ordered:
         raise ValueError("ASHRAE 90.1-2016 observations must contain body-content regions")
 
@@ -324,7 +489,7 @@ def parse_ashrae901_2016_observations(
             section.extend_to(end)
 
     for observation, start, end, text in spans:
-        if match := _APPENDIX_RE.match(text):
+        if match := _appendix_match(observation, text):
             letter = match.group("letter").upper()
             role = _appendix_role(letter, match.group("role"))
             appendix = _Draft(
@@ -339,6 +504,41 @@ def parse_ashrae901_2016_observations(
             current_appendix = appendix
             section_stack = []
             current_role = role
+            continue
+
+        appendix_letter = (
+            current_appendix.locator.removeprefix("appendix:")
+            if current_appendix is not None
+            else None
+        )
+        appendix_heading = _appendix_heading(
+            observation,
+            text,
+            appendix_letter=appendix_letter,
+        )
+        if appendix_heading is not None:
+            locator, title = appendix_heading
+            depth = _appendix_locator_depth(locator)
+            while (
+                section_stack
+                and _appendix_locator_depth(section_stack[-1].locator.removeprefix("section:"))
+                >= depth
+            ):
+                section_stack.pop()
+            section = _Draft(
+                DocumentNodeType.SUBSECTION,
+                f"section:{locator}",
+                start,
+                end,
+                label=title,
+                attributes=_attributes(observation, source_role=current_role),
+            )
+            parent = section_stack[-1] if section_stack else current_appendix
+            if parent is None:
+                raise AssertionError("appendix heading requires an active appendix")
+            parent.children.append(section)
+            section_stack.append(section)
+            extend_open(end)
             continue
 
         heading = _numeric_heading(

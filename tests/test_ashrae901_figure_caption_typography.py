@@ -51,6 +51,8 @@ class Ashrae901FigureCaptionTypographyTests(unittest.TestCase):
                     "NORMATIVE APPENDIX A SYNTHETIC",
                     page=191,
                     y=80.0,
+                    font="Helvetica-Bold",
+                    size=11.0,
                 ),
                 _observation(
                     "Figure Annex1-2 SYNTHETIC LISTING",
