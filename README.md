@@ -99,11 +99,11 @@ From the repository root:
 
 ```bash
 python -m pip install -e .
-python -m unittest discover -s tests -v
+python tools/run_unit_tests.py
 building-code-ast parse "Doors shall not be obstructed."
 ```
 
-The runtime package has no third-party dependencies. CLI calls default provision source identity and locator to `inline`; durable ingestion should provide stable identifiers tied to a source artifact, edition, and location.
+The unit-test wrapper fails closed on test-shaped module functions that standard-library `unittest` discovery would otherwise ignore, then runs the normal unittest suite. The runtime package has no third-party dependencies. CLI calls default provision source identity and locator to `inline`; durable ingestion should provide stable identifiers tied to a source artifact, edition, and location.
 
 ## 2018 IBC structural corpus
 
@@ -225,7 +225,7 @@ Jurisdiction resolution does not imply that code text may be redistributed, and 
 Run the Python verification lanes:
 
 ```bash
-python -m unittest discover -s tests -v
+python tools/run_unit_tests.py
 python -m compileall -q src scripts tools tests
 PYTHONPATH=src python tools/validate_ibc_2018_corpus.py corpora/ibc-2018
 PYTHONPATH=src python tools/validate_ibc_2018_schemas.py corpora/ibc-2018 schemas

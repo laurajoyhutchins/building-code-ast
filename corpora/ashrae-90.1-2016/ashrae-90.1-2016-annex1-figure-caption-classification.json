@@ -1,0 +1,82 @@
+{
+  "artifact": "ashrae-90.1-2016-annex1-figure-caption-classification",
+  "classification_version": "0.1.0",
+  "source": {
+    "file_name": "ashrae-90_1-2016.pdf",
+    "page_count": 388,
+    "sha256": "275a343724fce483fc3038b261fb00c0c4a3360d3a54078b92a433aba56ec162",
+    "size_bytes": 3475675
+  },
+  "denominators": {
+    "annex1_figure_line_observations": 6,
+    "horizontal_regular_listing_observations": 3,
+    "horizontal_bold_source_caption_observations": 1,
+    "vertical_up_bold_source_caption_observations": 2,
+    "source_caption_unique_locators": 3
+  },
+  "observations": [
+    {
+      "classification": "listing_reference_not_caption",
+      "direction": [1.0, 0.0],
+      "font": "Helvetica",
+      "font_size": 8.5,
+      "locator": "Annex1-1",
+      "pdf_page": 319
+    },
+    {
+      "classification": "listing_reference_not_caption",
+      "direction": [1.0, 0.0],
+      "font": "Helvetica",
+      "font_size": 8.5,
+      "locator": "Annex1-2",
+      "pdf_page": 319
+    },
+    {
+      "classification": "listing_reference_not_caption",
+      "direction": [1.0, 0.0],
+      "font": "Helvetica",
+      "font_size": 8.5,
+      "locator": "Annex1-3",
+      "pdf_page": 319
+    },
+    {
+      "block_bbox_pdf_points": [533.852, 336.552, 542.352, 744.17],
+      "classification": "rotated_source_caption_outside_body_content",
+      "direction": [0.0, -1.0],
+      "font": "Helvetica-Bold",
+      "font_size": 8.5,
+      "locator": "Annex1-1",
+      "pdf_page": 334
+    },
+    {
+      "block_bbox_pdf_points": [60.38, 655.562, 547.864, 673.565],
+      "classification": "horizontal_source_caption_inside_body_content",
+      "direction": [1.0, 0.0],
+      "font": "Helvetica-Bold",
+      "font_size": 8.5,
+      "locator": "Annex1-2",
+      "pdf_page": 382
+    },
+    {
+      "block_bbox_pdf_points": [460.162, 398.827, 468.662, 739.38],
+      "classification": "rotated_source_caption_outside_body_content",
+      "direction": [0.0, -1.0],
+      "font": "Helvetica-Bold",
+      "font_size": 8.5,
+      "locator": "Annex1-3",
+      "pdf_page": 383
+    }
+  ],
+  "recovery_boundary": {
+    "locator_prefix": "Annex1-",
+    "required_direction": "vertical_up",
+    "required_font": "Helvetica-Bold",
+    "required_font_size": 8.5,
+    "ordinary_horizontal_content_rule_unchanged": true,
+    "regular_font_listing_rows_promoted": false,
+    "unrelated_rotated_content_promoted": false
+  },
+  "private_source_locator_retained": false,
+  "protected_source_expression_retained": false,
+  "semantic_interpretation_performed": false
+}
