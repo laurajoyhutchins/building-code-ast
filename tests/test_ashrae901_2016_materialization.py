@@ -77,6 +77,8 @@ def _layout(*, page_count: int = 388) -> PdfLayoutDocument:
                 page=191,
                 y=80.0,
                 block_number=1,
+                font="Helvetica-Bold",
+                size=11.0,
             ),
             _block(
                 "Figure Annex1-2 SYNTHETIC LISTING MUST_NOT_LEAK",
