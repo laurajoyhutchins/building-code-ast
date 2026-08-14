@@ -1,0 +1,284 @@
+{
+  "artifact": "nec-2017-caption-overlap-ownership-proof",
+  "baseline": {
+    "main_commit": "4bd344807eb940481aa10a7e7a86b01fedff64fe",
+    "metrics": {
+      "ambiguous_candidates": 16,
+      "assigned_candidates": 325,
+      "candidate_envelopes": 1190,
+      "captions_with_candidate": 156,
+      "captions_with_multiple_candidates": 86,
+      "captions_without_candidate": 66,
+      "geometry_rows": 9879,
+      "grouped_candidates": 970,
+      "rule_regions": 852,
+      "ruled_candidates": 220,
+      "unresolved_candidates": 849
+    }
+  },
+  "classification": {
+    "cases": [
+      {
+        "bbox": [36.0, 71.148, 555.735, 113.63],
+        "candidate_id": "grouped_geometry:p159:116",
+        "family": "grouped_geometry",
+        "page": 159,
+        "same_inline_overlapping_caption_count": 1,
+        "selected_caption_id": null,
+        "source_review_classification": "false_grouped_geometry_from_non_table_material"
+      },
+      {
+        "bbox": [53.996, 70.898, 576.003, 137.536],
+        "candidate_id": "grouped_geometry:p206:220",
+        "family": "grouped_geometry",
+        "page": 206,
+        "same_inline_overlapping_caption_count": 0,
+        "selected_caption_id": null,
+        "source_review_classification": "false_grouped_geometry_from_non_table_material"
+      },
+      {
+        "bbox": [53.996, 176.934, 576.003, 233.572],
+        "candidate_id": "grouped_geometry:p206:221",
+        "family": "grouped_geometry",
+        "page": 206,
+        "same_inline_overlapping_caption_count": 0,
+        "selected_caption_id": null,
+        "source_review_classification": "false_grouped_geometry_from_non_table_material"
+      },
+      {
+        "bbox": [35.996, 251.898, 558.002, 364.554],
+        "candidate_id": "grouped_geometry:p501:437",
+        "family": "grouped_geometry",
+        "page": 501,
+        "same_inline_overlapping_caption_count": 0,
+        "selected_caption_id": null,
+        "source_review_classification": "false_grouped_geometry_from_non_table_material"
+      },
+      {
+        "bbox": [36.0, 397.934, 558.003, 440.572],
+        "candidate_id": "grouped_geometry:p501:439",
+        "family": "grouped_geometry",
+        "page": 501,
+        "same_inline_overlapping_caption_count": 0,
+        "selected_caption_id": null,
+        "source_review_classification": "false_grouped_geometry_from_non_table_material"
+      },
+      {
+        "bbox": [36.0, 71.148, 276.705, 208.85],
+        "candidate_id": "vector_rule:p81:11",
+        "family": "vector_rule",
+        "page": 81,
+        "same_inline_overlapping_caption_count": 1,
+        "selected_caption_bbox": [36.0, 71.148, 276.705, 92.25],
+        "selected_caption_id": "p81:b13",
+        "source_review_classification": "genuine_rule_table_with_unique_overlapping_caption"
+      },
+      {
+        "bbox": [36.0, 71.148, 550.119, 342.35],
+        "candidate_id": "vector_rule:p155:25",
+        "family": "vector_rule",
+        "page": 155,
+        "same_inline_overlapping_caption_count": 1,
+        "selected_caption_bbox": [36.0, 71.148, 549.567, 102.75],
+        "selected_caption_id": "p155:b2",
+        "source_review_classification": "genuine_rule_table_with_unique_overlapping_caption"
+      },
+      {
+        "bbox": [54.0, 71.148, 439.996, 214.213],
+        "candidate_id": "vector_rule:p172:30",
+        "family": "vector_rule",
+        "page": 172,
+        "same_inline_overlapping_caption_count": 1,
+        "selected_caption_bbox": [54.0, 71.148, 439.996, 92.25],
+        "selected_caption_id": "p172:b2",
+        "source_review_classification": "genuine_rule_table_with_unique_overlapping_caption"
+      },
+      {
+        "bbox": [54.0, 71.148, 565.875, 392.39],
+        "candidate_id": "vector_rule:p252:40",
+        "family": "vector_rule",
+        "page": 252,
+        "same_inline_overlapping_caption_count": 1,
+        "selected_caption_bbox": [54.0, 71.148, 565.875, 92.25],
+        "selected_caption_id": "p252:b2",
+        "source_review_classification": "genuine_rule_table_with_unique_overlapping_caption"
+      },
+      {
+        "bbox": [327.0, 489.825, 575.534, 596.054],
+        "candidate_id": "vector_rule:p304:47",
+        "family": "vector_rule",
+        "page": 304,
+        "same_inline_overlapping_caption_count": 1,
+        "selected_caption_bbox": [327.0, 489.825, 556.221, 500.427],
+        "selected_caption_id": "p304:b31",
+        "source_review_classification": "genuine_rule_table_with_unique_overlapping_caption"
+      },
+      {
+        "bbox": [53.999, 71.148, 575.96, 468.044],
+        "candidate_id": "vector_rule:p404:62",
+        "family": "vector_rule",
+        "page": 404,
+        "same_inline_overlapping_caption_count": 1,
+        "selected_caption_bbox": [54.0, 71.148, 174.141, 81.75],
+        "selected_caption_id": "p404:b2",
+        "source_review_classification": "genuine_rule_table_with_unique_overlapping_caption"
+      },
+      {
+        "bbox": [36.0, 482.648, 283.191, 609.85],
+        "candidate_id": "vector_rule:p501:84",
+        "family": "vector_rule",
+        "page": 501,
+        "same_inline_overlapping_caption_count": 1,
+        "selected_caption_bbox": [36.0, 482.648, 248.085, 493.25],
+        "selected_caption_id": "p501:b9",
+        "source_review_classification": "genuine_rule_table_with_unique_overlapping_caption"
+      },
+      {
+        "bbox": [53.998, 71.148, 289.739, 178.51],
+        "candidate_id": "vector_rule:p640:108",
+        "family": "vector_rule",
+        "page": 640,
+        "same_inline_overlapping_caption_count": 1,
+        "selected_caption_bbox": [54.0, 71.148, 201.141, 81.75],
+        "selected_caption_id": "p640:b2",
+        "source_review_classification": "genuine_rule_table_with_unique_overlapping_caption"
+      },
+      {
+        "bbox": [326.997, 533.828, 566.997, 621.35],
+        "candidate_id": "vector_rule:p654:117",
+        "family": "vector_rule",
+        "page": 654,
+        "same_inline_overlapping_caption_count": 1,
+        "selected_caption_bbox": [327.0, 533.828, 531.201, 544.43],
+        "selected_caption_id": "p654:b22",
+        "source_review_classification": "genuine_rule_table_with_unique_overlapping_caption"
+      },
+      {
+        "bbox": [53.999, 71.148, 540.12, 301.353],
+        "candidate_id": "vector_rule:p694:132",
+        "family": "vector_rule",
+        "page": 694,
+        "same_inline_overlapping_caption_count": 1,
+        "selected_caption_bbox": [54.0, 71.148, 174.681, 81.75],
+        "selected_caption_id": "p694:b2",
+        "source_review_classification": "genuine_rule_table_with_unique_overlapping_caption"
+      },
+      {
+        "bbox": [35.995, 71.148, 554.956, 287.94],
+        "candidate_id": "vector_rule:p695:133",
+        "family": "vector_rule",
+        "page": 695,
+        "same_inline_overlapping_caption_count": 1,
+        "selected_caption_bbox": [36.0, 71.148, 343.377, 81.75],
+        "selected_caption_id": "p695:b2",
+        "source_review_classification": "genuine_rule_table_with_unique_overlapping_caption"
+      }
+    ],
+    "grouped_false_candidates": 5,
+    "rule_backed_genuine_caption_overlap": 11,
+    "total_surviving_ambiguous_candidates": 16,
+    "unsafe_broad_rule": "Prefer-any-overlap is rejected because non-rule-backed grouped geometry can overlap caption material without representing a table."
+  },
+  "conclusion": {
+    "criterion_proven_for_bounded_implementation": true,
+    "next_gate": "Classify a publication-neutral grouped-geometry candidate-quality discriminator for the five remaining false ambiguous candidates without reducing genuine grouped-table coverage.",
+    "remaining_ambiguity_is_candidate_quality_not_rule_backed_ownership": true
+  },
+  "criterion": {
+    "caption_text_used": false,
+    "description": "When multiple same-inline caption anchors match a candidate carrying existing vector_rule_grid evidence, select the caption only when exactly one matched caption overlaps the candidate on the block axis. Preserve ambiguity when multiple captions overlap and preserve existing block-flow fallback when none overlap or the candidate is not rule-backed.",
+    "name": "unique_rule_backed_caption_overlap",
+    "publication_specific_text_used": false,
+    "table_semantics_used": false
+  },
+  "full_source_replay": {
+    "baseline_denominators_reproduced_before_criterion": true,
+    "deltas": {
+      "ambiguous_candidates": -11,
+      "assigned_candidates": 11,
+      "captions_with_candidate": 7,
+      "captions_with_multiple_candidates": 3,
+      "captions_without_candidate": -7,
+      "unresolved_candidates": 0
+    },
+    "grouped_false_candidate_promotions": 0,
+    "metrics": {
+      "ambiguous_candidates": 5,
+      "assigned_candidates": 336,
+      "candidate_envelopes": 1190,
+      "captions_with_candidate": 163,
+      "captions_with_multiple_candidates": 89,
+      "captions_without_candidate": 59,
+      "geometry_rows": 9879,
+      "grouped_candidates": 970,
+      "rule_regions": 852,
+      "ruled_candidates": 220,
+      "unresolved_candidates": 849
+    },
+    "pages_processed": 881,
+    "previously_ambiguous_rule_candidates_resolved": [
+      {"bbox": [36.0, 71.148, 276.705, 208.85], "candidate_id": "vector_rule:p81:11", "caption_bbox": [36.0, 71.148, 276.705, 92.25], "caption_id": "p81:b13", "family": "vector_rule", "page": 81, "resolution_basis": "unique_rule_backed_block_axis_overlap"},
+      {"bbox": [36.0, 71.148, 550.119, 342.35], "candidate_id": "vector_rule:p155:25", "caption_bbox": [36.0, 71.148, 549.567, 102.75], "caption_id": "p155:b2", "family": "vector_rule", "page": 155, "resolution_basis": "unique_rule_backed_block_axis_overlap"},
+      {"bbox": [54.0, 71.148, 439.996, 214.213], "candidate_id": "vector_rule:p172:30", "caption_bbox": [54.0, 71.148, 439.996, 92.25], "caption_id": "p172:b2", "family": "vector_rule", "page": 172, "resolution_basis": "unique_rule_backed_block_axis_overlap"},
+      {"bbox": [54.0, 71.148, 565.875, 392.39], "candidate_id": "vector_rule:p252:40", "caption_bbox": [54.0, 71.148, 565.875, 92.25], "caption_id": "p252:b2", "family": "vector_rule", "page": 252, "resolution_basis": "unique_rule_backed_block_axis_overlap"},
+      {"bbox": [327.0, 489.825, 575.534, 596.054], "candidate_id": "vector_rule:p304:47", "caption_bbox": [327.0, 489.825, 556.221, 500.427], "caption_id": "p304:b31", "family": "vector_rule", "page": 304, "resolution_basis": "unique_rule_backed_block_axis_overlap"},
+      {"bbox": [53.999, 71.148, 575.96, 468.044], "candidate_id": "vector_rule:p404:62", "caption_bbox": [54.0, 71.148, 174.141, 81.75], "caption_id": "p404:b2", "family": "vector_rule", "page": 404, "resolution_basis": "unique_rule_backed_block_axis_overlap"},
+      {"bbox": [36.0, 482.648, 283.191, 609.85], "candidate_id": "vector_rule:p501:84", "caption_bbox": [36.0, 482.648, 248.085, 493.25], "caption_id": "p501:b9", "family": "vector_rule", "page": 501, "resolution_basis": "unique_rule_backed_block_axis_overlap"},
+      {"bbox": [53.998, 71.148, 289.739, 178.51], "candidate_id": "vector_rule:p640:108", "caption_bbox": [54.0, 71.148, 201.141, 81.75], "caption_id": "p640:b2", "family": "vector_rule", "page": 640, "resolution_basis": "unique_rule_backed_block_axis_overlap"},
+      {"bbox": [326.997, 533.828, 566.997, 621.35], "candidate_id": "vector_rule:p654:117", "caption_bbox": [327.0, 533.828, 531.201, 544.43], "caption_id": "p654:b22", "family": "vector_rule", "page": 654, "resolution_basis": "unique_rule_backed_block_axis_overlap"},
+      {"bbox": [53.999, 71.148, 540.12, 301.353], "candidate_id": "vector_rule:p694:132", "caption_bbox": [54.0, 71.148, 174.681, 81.75], "caption_id": "p694:b2", "family": "vector_rule", "page": 694, "resolution_basis": "unique_rule_backed_block_axis_overlap"},
+      {"bbox": [35.995, 71.148, 554.956, 287.94], "candidate_id": "vector_rule:p695:133", "caption_bbox": [36.0, 71.148, 343.377, 81.75], "caption_id": "p695:b2", "family": "vector_rule", "page": 695, "resolution_basis": "unique_rule_backed_block_axis_overlap"}
+    ],
+    "previously_assigned_rule_candidates_reowned": [
+      {"bbox": [54.0, 613.868, 288.427, 711.89], "candidate_id": "vector_rule:p66:2", "corrected_caption_bbox": [54.0, 613.868, 271.791, 634.97], "corrected_caption_id": "p66:b15", "correction_basis": "unique_rule_backed_block_axis_overlap", "family": "vector_rule", "page": 66, "previous_caption_bbox": [54.0, 512.828, 298.971, 533.93], "previous_caption_id": "p66:b12"},
+      {"bbox": [309.0, 633.708, 543.621, 721.81], "candidate_id": "vector_rule:p75:5", "corrected_caption_bbox": [309.0, 633.708, 543.621, 654.81], "corrected_caption_id": "p75:b35", "correction_basis": "unique_rule_backed_block_axis_overlap", "family": "vector_rule", "page": 75, "previous_caption_bbox": [309.0, 351.768, 485.301, 362.37], "previous_caption_id": "p75:b24"},
+      {"bbox": [54.0, 608.288, 548.01, 699.81], "candidate_id": "vector_rule:p80:10", "corrected_caption_bbox": [54.0, 608.288, 526.329, 618.89], "corrected_caption_id": "p80:b26", "correction_basis": "unique_rule_backed_block_axis_overlap", "family": "vector_rule", "page": 80, "previous_caption_bbox": [54.0, 466.568, 302.481, 487.67], "previous_caption_id": "p80:b9"},
+      {"bbox": [35.999, 328.806, 259.119, 416.328], "candidate_id": "vector_rule:p81:12", "corrected_caption_bbox": [36.0, 328.806, 255.087, 339.408], "corrected_caption_id": "p81:b3", "correction_basis": "unique_rule_backed_block_axis_overlap", "family": "vector_rule", "page": 81, "previous_caption_bbox": [36.0, 71.148, 276.705, 92.25], "previous_caption_id": "p81:b13"},
+      {"bbox": [36.0, 381.288, 544.95, 641.99], "candidate_id": "vector_rule:p155:26", "corrected_caption_bbox": [36.0, 381.288, 533.286, 402.39], "corrected_caption_id": "p155:b15", "correction_basis": "unique_rule_backed_block_axis_overlap", "family": "vector_rule", "page": 155, "previous_caption_bbox": [36.0, 71.148, 549.567, 102.75], "previous_caption_id": "p155:b2"},
+      {"bbox": [54.0, 432.231, 575.999, 632.613], "candidate_id": "vector_rule:p172:29", "corrected_caption_bbox": [54.0, 432.231, 575.999, 453.333], "corrected_caption_id": "p172:b11", "correction_basis": "unique_rule_backed_block_axis_overlap", "family": "vector_rule", "page": 172, "previous_caption_bbox": [54.0, 300.151, 389.682, 310.753], "previous_caption_id": "p172:b8"},
+      {"bbox": [36.0, 505.685, 273.719, 627.327], "candidate_id": "vector_rule:p173:31", "corrected_caption_bbox": [36.0, 505.685, 223.461, 516.287], "corrected_caption_id": "p173:b31", "correction_basis": "unique_rule_backed_block_axis_overlap", "family": "vector_rule", "page": 173, "previous_caption_bbox": [36.0, 71.148, 507.402, 81.75], "previous_caption_id": "p173:b2"},
+      {"bbox": [54.0, 517.328, 425.898, 645.11], "candidate_id": "vector_rule:p252:39", "corrected_caption_bbox": [54.0, 517.328, 425.898, 538.43], "corrected_caption_id": "p252:b11", "correction_basis": "unique_rule_backed_block_axis_overlap", "family": "vector_rule", "page": 252, "previous_caption_bbox": [54.0, 71.148, 565.875, 92.25], "previous_caption_id": "p252:b2"},
+      {"bbox": [53.996, 525.03, 575.091, 696.272], "candidate_id": "vector_rule:p404:63", "corrected_caption_bbox": [54.0, 525.03, 367.74, 535.632], "corrected_caption_id": "p404:b9", "correction_basis": "unique_rule_backed_block_axis_overlap", "family": "vector_rule", "page": 404, "previous_caption_bbox": [54.0, 71.148, 174.141, 81.75], "previous_caption_id": "p404:b2"},
+      {"bbox": [326.997, 320.068, 576.0, 428.59], "candidate_id": "vector_rule:p442:76", "corrected_caption_bbox": [326.997, 320.068, 576.0, 351.67], "corrected_caption_id": "p442:b18", "correction_basis": "unique_rule_backed_block_axis_overlap", "family": "vector_rule", "page": 442, "previous_caption_bbox": [326.997, 71.148, 576.003, 113.25], "previous_caption_id": "p442:b13"},
+      {"bbox": [36.0, 622.788, 276.381, 720.81], "candidate_id": "vector_rule:p501:85", "corrected_caption_bbox": [36.0, 622.788, 276.381, 643.89], "corrected_caption_id": "p501:b12", "correction_basis": "unique_rule_backed_block_axis_overlap", "family": "vector_rule", "page": 501, "previous_caption_bbox": [36.0, 482.648, 248.085, 493.25], "previous_caption_id": "p501:b9"},
+      {"bbox": [53.997, 499.466, 298.566, 656.428], "candidate_id": "vector_rule:p640:109", "corrected_caption_bbox": [54.0, 499.466, 174.501, 510.068], "corrected_caption_id": "p640:b16", "correction_basis": "unique_rule_backed_block_axis_overlap", "family": "vector_rule", "page": 640, "previous_caption_bbox": [54.0, 71.148, 201.141, 81.75], "previous_caption_id": "p640:b2"},
+      {"bbox": [327.0, 634.288, 574.144, 721.81], "candidate_id": "vector_rule:p654:118", "corrected_caption_bbox": [327.0, 634.288, 539.121, 644.89], "corrected_caption_id": "p654:b25", "correction_basis": "unique_rule_backed_block_axis_overlap", "family": "vector_rule", "page": 654, "previous_caption_bbox": [327.0, 533.828, 531.201, 544.43], "previous_caption_id": "p654:b22"},
+      {"bbox": [35.999, 333.253, 551.896, 558.78], "candidate_id": "vector_rule:p695:134", "corrected_caption_bbox": [36.0, 333.253, 323.901, 343.855], "corrected_caption_id": "p695:b17", "correction_basis": "unique_rule_backed_block_axis_overlap", "family": "vector_rule", "page": 695, "previous_caption_bbox": [36.0, 71.148, 343.377, 81.75], "previous_caption_id": "p695:b2"},
+      {"bbox": [53.996, 175.148, 569.201, 355.97], "candidate_id": "vector_rule:p696:135", "corrected_caption_bbox": [54.0, 175.148, 309.033, 185.75], "corrected_caption_id": "p696:b5", "correction_basis": "unique_rule_backed_block_axis_overlap", "family": "vector_rule", "page": 696, "previous_caption_bbox": [53.996, 70.898, 165.758, 81.5], "previous_caption_id": "p696:b2"},
+      {"bbox": [53.996, 380.923, 569.205, 552.98], "candidate_id": "vector_rule:p696:136", "corrected_caption_bbox": [54.0, 380.923, 289.557, 391.525], "corrected_caption_id": "p696:b16", "correction_basis": "unique_rule_backed_block_axis_overlap", "family": "vector_rule", "page": 696, "previous_caption_bbox": [54.0, 175.148, 309.033, 185.75], "previous_caption_id": "p696:b5"}
+    ],
+    "remaining_ambiguous_candidates": [
+      {"bbox": [36.0, 71.148, 555.735, 113.63], "candidate_id": "grouped_geometry:p159:116", "family": "grouped_geometry", "page": 159, "source_review_classification": "false_grouped_geometry_from_non_table_material"},
+      {"bbox": [53.996, 70.898, 576.003, 137.536], "candidate_id": "grouped_geometry:p206:220", "family": "grouped_geometry", "page": 206, "source_review_classification": "false_grouped_geometry_from_non_table_material"},
+      {"bbox": [53.996, 176.934, 576.003, 233.572], "candidate_id": "grouped_geometry:p206:221", "family": "grouped_geometry", "page": 206, "source_review_classification": "false_grouped_geometry_from_non_table_material"},
+      {"bbox": [35.996, 251.898, 558.002, 364.554], "candidate_id": "grouped_geometry:p501:437", "family": "grouped_geometry", "page": 501, "source_review_classification": "false_grouped_geometry_from_non_table_material"},
+      {"bbox": [36.0, 397.934, 558.003, 440.572], "candidate_id": "grouped_geometry:p501:439", "family": "grouped_geometry", "page": 501, "source_review_classification": "false_grouped_geometry_from_non_table_material"}
+    ],
+    "true_recognized_caption_coverage_lost": 0
+  },
+  "implementation_binding": {
+    "base_commit": "4bd344807eb940481aa10a7e7a86b01fedff64fe",
+    "candidate_ownership_blob": "c50fc288e16f1b7487e8935ff4dee6f47b3f7529",
+    "measurement_blob": "054110c8e07ee106a9844b0a136d4a74ee7b195a",
+    "measurement_wiring_commit": "d9d581c0abed06422cec687a7fb943562846c11c",
+    "ownership_implementation_commit": "349d3966729cd7883361197f2bd995c2c8a23111",
+    "red_test_commit": "e7ee88f58953c59f6aa0733135994f77356ae5d3",
+    "table_geometry_blob": "94302ad1989a41052fb7af3bbe0392950597340a",
+    "test_blob": "88b7ff80a300d2c45c56aba8546175421aac0c4b"
+  },
+  "proof_version": "0.1.0",
+  "source": {
+    "file_name": "nec-2017.pdf",
+    "page_count": 881,
+    "private_source_locator_retained": false,
+    "protected_source_expression_retained": false,
+    "sha256": "603ef5c461247bacd716e3953222bfb227f1ddc780fffdbfcb90756b02c237c7",
+    "size_bytes": 7422245
+  },
+  "verification_boundary": {
+    "generated_output_is_not_semantic_table_reconstruction": true,
+    "parser_semantics_promoted": false,
+    "source_replay_method": "Offline exact-source replay of the landed topology geometry with the production-equivalent rule-backed overlap criterion.",
+    "table_cell_lookup_or_compliance_semantics_inferred": false
+  }
+}
