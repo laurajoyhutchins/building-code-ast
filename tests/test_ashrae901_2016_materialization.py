@@ -25,27 +25,30 @@ def _block(
     block_number: int,
     font: str | None = None,
     size: float | None = None,
+    direction: tuple[float, float] = (1.0, 0.0),
+    bbox: tuple[float, float, float, float] | None = None,
 ) -> PdfBlock:
+    block_bbox = bbox or (72.0, y, 540.0, y + 18.0)
     lines = ()
     if font is not None and size is not None:
         span = PdfSpan(
-            bbox=(72.0, y, 540.0, y + size),
+            bbox=block_bbox,
             text=text,
             font=font,
             size=size,
             flags=0,
         )
-        lines = (PdfLine(bbox=span.bbox, spans=(span,)),)
+        lines = (PdfLine(bbox=span.bbox, spans=(span,), direction=direction),)
     return PdfBlock(
         page_number=page,
-        bbox=(72.0, y, 540.0, y + 18.0),
+        bbox=block_bbox,
         text=text,
         block_number=block_number,
         lines=lines,
     )
 
 
-def _layout(*, page_count: int = 388) -> PdfLayoutDocument:
+def _layout(*, page_count: int = 388, include_rotated_annex_caption: bool = False) -> PdfLayoutDocument:
     blocks = {
         9: (
             _block(
@@ -77,6 +80,8 @@ def _layout(*, page_count: int = 388) -> PdfLayoutDocument:
                 page=191,
                 y=80.0,
                 block_number=1,
+                font="Helvetica-Bold",
+                size=11.0,
             ),
             _block(
                 "Figure Annex1-2 SYNTHETIC LISTING MUST_NOT_LEAK",
@@ -96,6 +101,19 @@ def _layout(*, page_count: int = 388) -> PdfLayoutDocument:
             ),
         ),
     }
+    if include_rotated_annex_caption:
+        blocks[334] = (
+            _block(
+                "Figure Annex1-1 SYNTHETIC ROTATED CAPTION MUST_NOT_LEAK",
+                page=334,
+                y=336.0,
+                block_number=1,
+                font="Helvetica-Bold",
+                size=8.5,
+                direction=(0.0, -1.0),
+                bbox=(533.85, 336.55, 542.35, 744.17),
+            ),
+        )
     return PdfLayoutDocument(
         file_name="synthetic-ashrae901.pdf",
         pages=tuple(
@@ -136,6 +154,20 @@ class Ashrae901MaterializationTests(unittest.TestCase):
         self.assertEqual(receipt["diagnostic_counts"], {})
         self.assertNotIn("source_text", receipt)
         self.assertNotIn("root", receipt)
+        self.assertNotIn("MUST_NOT_LEAK", json.dumps(receipt, sort_keys=True))
+
+    def test_receipt_includes_bounded_rotated_annex_caption_and_stays_valid(self) -> None:
+        receipt = materialize_ashrae901_2016_document_receipt(
+            _layout(include_rotated_annex_caption=True),
+            source_sha256=ASHRAE_90_1_2016_SOURCE_SHA256,
+            source_size=ASHRAE_90_1_2016_SOURCE_SIZE,
+        )
+
+        self.assertEqual(receipt["status"], "validated")
+        self.assertEqual(receipt["source_block_count"], 7)
+        self.assertEqual(receipt["node_count"], 8)
+        self.assertEqual(receipt["node_type_counts"]["figure"], 2)
+        self.assertEqual(receipt["diagnostic_counts"], {})
         self.assertNotIn("MUST_NOT_LEAK", json.dumps(receipt, sort_keys=True))
 
     def test_receipt_fails_closed_on_wrong_exact_source_identity(self) -> None:

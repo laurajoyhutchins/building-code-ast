@@ -1,0 +1,69 @@
+{
+  "schema_version": 1,
+  "publication": "ACI 318-19",
+  "source": {
+    "drive_object_id": "1JBQpBXNqkcR1zDxTiPHg1G_hsfqzqIkK",
+    "byte_size": 10010981,
+    "page_count": 628,
+    "sha256": "7b6b572e9e6532e0da1678080f63cb6b7a233f96caf2fc5a45350a056e18c53c"
+  },
+  "landed_reference": {
+    "prior_measurement": "corpora/aci-318-19/aci-318-19-zero-chapter-collision-measurement.json",
+    "measurement_method": "PR #267 page-adapter recognition rules across all 628 pages using the repository PyMuPDF layout contract",
+    "post_zero_chapter_total_occurrences": 4076,
+    "post_zero_chapter_unique_locators": 3889,
+    "post_zero_chapter_pages_with_recognized_structure": 490,
+    "post_zero_chapter_collision_families": 154,
+    "post_zero_chapter_duplicate_occurrences_beyond_first": 187,
+    "post_zero_chapter_unresolved_cross_gutter_blocks": 2481,
+    "post_zero_chapter_duplicate_locator_fragments_suppressed": 113,
+    "post_zero_chapter_zero_chapter_candidate_diagnostics": 133
+  },
+  "classification": {
+    "family": "short decimal-leading blocks collide with valid chapter-number locator stems",
+    "status": "source-observed_not_yet_promoted_to_parser_rule",
+    "representative_observations": [
+      {
+        "source_role": "normative",
+        "locator": "1.0",
+        "pdf_pages": [71, 82, 477, 482],
+        "observation": "Repeated candidates occur as compact numeric or chart-like blocks rather than declaration-bearing structural text."
+      },
+      {
+        "source_role": "commentary",
+        "locator": "1.0",
+        "pdf_pages": [71, 272, 397],
+        "observation": "Repeated compact decimal blocks share a syntactic locator stem with publication structure but lack a source-safe declaration-context discriminator."
+      },
+      {
+        "source_role": "normative",
+        "locator": "1.5",
+        "pdf_pages": [14, 323, 326, 451, 476],
+        "observation": "The family contains both a genuine declaration-bearing structural occurrence and later compact numeric/chart-like occurrences, so rejecting the locator stem itself would be unsound."
+      },
+      {
+        "source_role": "commentary",
+        "locator": "2.0",
+        "pdf_pages": [71, 460],
+        "observation": "Repeated decimal labels demonstrate that positive chapter components alone are insufficient to establish structural authority."
+      }
+    ],
+    "smallest_supported_boundary": "Declaration context must distinguish structural locator promotion from compact numeric/chart labels. Locator value alone is not a safe discriminator.",
+    "unsupported_rule": "No parser correction is promoted from this classification because the current source evidence does not prove a publication-neutral declaration-context predicate that preserves legitimate compact structural headings."
+  },
+  "replay_reconciliation": {
+    "authoritative_post_zero_chapter_denominators_reestablished": true,
+    "authoritative_source": "landed PR #267 measurement artifact at the branch parent",
+    "diagnostic_replay_method": "Direct PyMuPDF block replay against the exact retained source without the complete PR #267 page-adapter measurement pipeline.",
+    "diagnostic_collision_families": 135,
+    "diagnostic_duplicate_occurrences_beyond_first": 171,
+    "diagnostic_unresolved_cross_gutter_blocks": 2506,
+    "diagnostic_matches_authoritative_pipeline": false,
+    "disposition": "The 135/171/2506 diagnostic is not a reproduction of the complete landed measurement pipeline and is not a replacement denominator. The landed 154/187/2481 post-discriminator measurement remains authoritative for this classification gate."
+  },
+  "provenance": {
+    "source_text_retained": false,
+    "protected_source_expression_retained": false,
+    "independent_verification_performed": false
+  }
+}

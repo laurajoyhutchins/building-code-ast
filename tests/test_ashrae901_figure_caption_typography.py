@@ -19,21 +19,24 @@ def _observation(
     size: float | None = None,
     hint: str | None = None,
     locator: str | None = None,
+    direction: tuple[float, float] = (1.0, 0.0),
+    block_bbox: tuple[float, float, float, float] | None = None,
 ) -> Ashrae901Observation:
+    bbox = block_bbox or (72.0, y, 540.0, y + 18.0)
     lines = ()
     if font is not None and size is not None:
         span = PdfSpan(
-            bbox=(72.0, y, 540.0, y + size),
+            bbox=bbox,
             text=text,
             font=font,
             size=size,
             flags=0,
         )
-        lines = (PdfLine(bbox=span.bbox, spans=(span,)),)
+        lines = (PdfLine(bbox=span.bbox, spans=(span,), direction=direction),)
     return Ashrae901Observation(
         block=PdfBlock(
             page_number=page,
-            bbox=(72.0, y, 540.0, y + 18.0),
+            bbox=bbox,
             text=text,
             block_number=1,
             lines=lines,
@@ -51,6 +54,8 @@ class Ashrae901FigureCaptionTypographyTests(unittest.TestCase):
                     "NORMATIVE APPENDIX A SYNTHETIC",
                     page=191,
                     y=80.0,
+                    font="Helvetica-Bold",
+                    size=11.0,
                 ),
                 _observation(
                     "Figure Annex1-2 SYNTHETIC LISTING",
@@ -75,6 +80,88 @@ class Ashrae901FigureCaptionTypographyTests(unittest.TestCase):
             [DocumentNodeType.PARAGRAPH, DocumentNodeType.FIGURE],
         )
         self.assertEqual(appendix.children[1].locator, "figure:Annex1-2")
+
+    def test_rotated_annex_caption_outside_body_content_is_recovered(self) -> None:
+        ast = parse_ashrae901_2016_observations(
+            (
+                _observation(
+                    "NORMATIVE APPENDIX A SYNTHETIC",
+                    page=191,
+                    y=80.0,
+                    font="Helvetica-Bold",
+                    size=11.0,
+                ),
+                _observation(
+                    "Figure Annex1-1 SYNTHETIC ROTATED CAPTION",
+                    page=334,
+                    y=336.0,
+                    font="Helvetica-Bold",
+                    size=8.5,
+                    direction=(0.0, -1.0),
+                    block_bbox=(533.85, 336.55, 542.35, 744.17),
+                ),
+            )
+        )
+
+        appendix = ast.root.children[0]
+        figures = [
+            child for child in appendix.children if child.node_type is DocumentNodeType.FIGURE
+        ]
+        self.assertEqual([figure.locator for figure in figures], ["figure:Annex1-1"])
+
+    def test_horizontal_annex_caption_outside_body_content_stays_unpromoted(self) -> None:
+        ast = parse_ashrae901_2016_observations(
+            (
+                _observation(
+                    "NORMATIVE APPENDIX A SYNTHETIC",
+                    page=191,
+                    y=80.0,
+                    font="Helvetica-Bold",
+                    size=11.0,
+                ),
+                _observation(
+                    "Figure Annex1-1 SYNTHETIC HORIZONTAL FURNITURE",
+                    page=334,
+                    y=736.0,
+                    font="Helvetica-Bold",
+                    size=8.5,
+                    direction=(1.0, 0.0),
+                    block_bbox=(72.0, 736.0, 300.0, 744.5),
+                ),
+            )
+        )
+
+        appendix = ast.root.children[0]
+        self.assertFalse(
+            any(child.node_type is DocumentNodeType.FIGURE for child in appendix.children)
+        )
+
+    def test_rotated_non_annex_figure_outside_body_content_stays_unpromoted(self) -> None:
+        ast = parse_ashrae901_2016_observations(
+            (
+                _observation(
+                    "NORMATIVE APPENDIX A SYNTHETIC",
+                    page=191,
+                    y=80.0,
+                    font="Helvetica-Bold",
+                    size=11.0,
+                ),
+                _observation(
+                    "Figure 6-1 SYNTHETIC ROTATED FURNITURE",
+                    page=334,
+                    y=736.0,
+                    font="Helvetica-Bold",
+                    size=8.5,
+                    direction=(0.0, -1.0),
+                    block_bbox=(533.0, 336.0, 542.0, 744.5),
+                ),
+            )
+        )
+
+        appendix = ast.root.children[0]
+        self.assertFalse(
+            any(child.node_type is DocumentNodeType.FIGURE for child in appendix.children)
+        )
 
     def test_automatic_figure_without_visual_font_evidence_remains_prose(self) -> None:
         ast = parse_ashrae901_2016_observations(

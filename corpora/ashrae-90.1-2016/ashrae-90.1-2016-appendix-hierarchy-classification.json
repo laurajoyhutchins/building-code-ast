@@ -1,0 +1,54 @@
+{
+  "artifact": "ashrae-90.1-2016-appendix-hierarchy-classification",
+  "source": {
+    "drive_object_id": "15gg44UJDHQ4TOI8VZll43mEByRY_X0wc",
+    "filename": "ashrae-90_1-2016.pdf",
+    "size_bytes": 3475675,
+    "sha256": "275a343724fce483fc3038b261fb00c0c4a3360d3a54078b92a433aba56ec162",
+    "pages": 388,
+    "pdf_version": "1.4",
+    "encrypted": true
+  },
+  "baseline": {
+    "repository_main": "2b4cf0adedc5ab597d719f46d27ce4d0b1a8449b",
+    "appendix_native_outline_sublocators_without_candidates": 251,
+    "unmatched_numeric_outline_locators": 73
+  },
+  "classification": {
+    "oracle_scope": "native PDF outline used only to enumerate and locate the missing appendix-native family",
+    "outline_locator_pattern": "^[A-H]\\d+(?:\\.\\d+)*$",
+    "outline_locator_count": 251,
+    "locators_with_literal_text_on_destination_page": 251,
+    "locators_with_matching_helvetica_bold_10pt_heading_span": 251,
+    "source_family": "appendix-native alphanumeric hierarchy headings",
+    "parser_deficiency": "The ASHRAE 90.1 adapter deliberately disables numeric-heading recognition inside appendices and lacked corresponding source-typography recognition for letter-prefixed appendix locators.",
+    "conservative_correction_available": true,
+    "correction_boundary": "Inside an already-recognized source-typography appendix boundary only, recognize A-H-prefixed hierarchical locators when the heading line is Helvetica-Bold at 10 pt within the existing tolerance. Recover such heading lines when embedded in a larger PDF block, preserve the current appendix source role, and nest by locator depth.",
+    "outline_is_runtime_truth": false,
+    "synthetic_locators_required": false
+  },
+  "implementation_replay": {
+    "method": "exact retained PDF replay of the implemented typography and embedded-line classifier; source-safe aggregate only",
+    "appendix_outline_locators": 251,
+    "appendix_candidate_occurrences": 251,
+    "appendix_candidate_unique_locators": 251,
+    "appendix_missing_outline_locators": 0,
+    "appendix_unexpected_candidate_locators": 0,
+    "appendix_duplicate_candidate_occurrences": 0,
+    "recognized_top_level_appendices": 8,
+    "note": "This is implementation evidence from the source lane, not an independent verification verdict."
+  },
+  "representative_observations": [
+    {"locator": "A1.1", "pdf_page": 191, "font": "Helvetica-Bold", "size_pt": 10.0},
+    {"locator": "A2.3.2.5", "pdf_page": 192, "font": "Helvetica-Bold", "size_pt": 10.0},
+    {"locator": "C3.5.5.3.1", "pdf_page": 254, "font": "Helvetica-Bold", "size_pt": 10.0},
+    {"locator": "G3.1.2.6.1", "pdf_page": 283, "font": "Helvetica-Bold", "size_pt": 10.0},
+    {"locator": "G3.1.3.19", "pdf_page": 287, "font": "Helvetica-Bold", "size_pt": 10.0}
+  ],
+  "status": {
+    "classification_complete": true,
+    "parser_correction_implemented": true,
+    "implementation_replay_complete": true,
+    "independent_verification_ready": true
+  }
+}

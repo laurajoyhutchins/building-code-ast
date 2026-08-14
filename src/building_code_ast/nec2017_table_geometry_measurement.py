@@ -30,10 +30,10 @@ MEASUREMENT_VERSION = "0.1.0"
 NEC2017_SHA256 = "603ef5c461247bacd716e3953222bfb227f1ddc780fffdbfcb90756b02c237c7"
 NEC2017_SIZE_BYTES = 7_422_245
 NEC2017_PAGE_COUNT = 881
-IMPLEMENTATION_BASE_COMMIT = "b195c7a695b9e00ef8993fa1a4a23f8be60b5abb"
+IMPLEMENTATION_BASE_COMMIT = "03126df41ed03c517edd65aefe5aca05e77d25bc"
 LAYOUT_ANALYSIS_BLOB = "69c9d139fa0c3272122331eda3be1a3e7181e352"
-TABLE_GEOMETRY_BLOB = "6549710d958ff5ea6b0a782496ca15d8acbe20f0"
-CANDIDATE_OWNERSHIP_BLOB = "bca59beea96a23743cef9f5d89b5999d75036a1f"
+TABLE_GEOMETRY_BLOB = "eae38044e1917469daf569ee9cdda1a12a765d53"
+CANDIDATE_OWNERSHIP_BLOB = "c50fc288e16f1b7487e8935ff4dee6f47b3f7529"
 
 
 def _candidate_bbox(candidate: TableCandidate) -> tuple[float, float, float, float]:
@@ -98,7 +98,7 @@ def measure_nec2017_table_geometry(
         row_total += len(rows)
         if rows:
             row_pages += 1
-        grouped_page = group_table_candidates(rows)
+        grouped_page = group_table_candidates(rows, page_width=page.width)
         grouped.extend(grouped_page)
         grouped_rows += sum(len(candidate.rows) for candidate in grouped_page)
         regions = _rule_regions(page)
@@ -115,6 +115,7 @@ def measure_nec2017_table_geometry(
                     candidate_id=f"{family}:p{candidate.page_number}:{index}",
                     page_number=candidate.page_number,
                     bbox=_candidate_bbox(candidate),
+                    evidence=candidate.evidence,
                 )
             )
 

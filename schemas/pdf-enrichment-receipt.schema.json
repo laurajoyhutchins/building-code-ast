@@ -1,0 +1,168 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://laurajoyhutchins.github.io/building-code-ast/schemas/pdf-enrichment-receipt.schema.json",
+  "title": "PDF Enrichment Receipt v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["receipt_version", "type", "status", "source", "derivative", "plan_sha256", "tools", "operations", "verification", "warnings"],
+  "properties": {
+    "receipt_version": {"const": "1"},
+    "type": {"const": "pdf_enrichment_receipt"},
+    "status": {"const": "verified"},
+    "source": {"$ref": "#/$defs/source"},
+    "derivative": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["sha256", "size"],
+      "properties": {
+        "sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+        "size": {"type": "integer", "minimum": 1}
+      }
+    },
+    "plan_sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "tools": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["name", "version"],
+        "properties": {
+          "name": {"type": "string", "minLength": 1},
+          "version": {"type": "string", "minLength": 1}
+        }
+      }
+    },
+    "operations": {
+      "type": "array",
+      "items": {
+        "oneOf": [
+          {"$ref": "#/$defs/searchable_text_summary"},
+          {"$ref": "#/$defs/outline_summary"},
+          {"$ref": "#/$defs/page_labels_summary"},
+          {"$ref": "#/$defs/metadata_summary"}
+        ]
+      }
+    },
+    "verification": {"$ref": "#/$defs/verification"},
+    "warnings": {"type": "array", "items": {"type": "string"}}
+  },
+  "$defs": {
+    "sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "evidence_origin": {
+      "enum": ["native_pdf", "source_register", "document_ast", "reviewed_source_observation", "owner_supplied"]
+    },
+    "source": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["source_id", "sha256", "size", "media_type", "page_count"],
+      "properties": {
+        "source_id": {"type": "string", "minLength": 1},
+        "sha256": {"$ref": "#/$defs/sha256"},
+        "size": {"type": "integer", "minimum": 1},
+        "media_type": {"const": "application/pdf"},
+        "page_count": {"type": "integer", "minimum": 1}
+      }
+    },
+    "searchable_text_summary": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["kind", "evidence_origin", "entries"],
+      "properties": {
+        "kind": {"const": "searchable_text"},
+        "evidence_origin": {"$ref": "#/$defs/evidence_origin"},
+        "entries": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": ["page_number", "text_sha256", "text_origin"],
+            "properties": {
+              "page_number": {"type": "integer", "minimum": 1},
+              "text_sha256": {"$ref": "#/$defs/sha256"},
+              "text_origin": {"enum": ["ocr", "raster_recovery", "derived_text"]}
+            }
+          }
+        }
+      }
+    },
+    "outline_summary": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["kind", "evidence_origin", "entries"],
+      "properties": {
+        "kind": {"const": "outline"},
+        "evidence_origin": {"$ref": "#/$defs/evidence_origin"},
+        "entries": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": ["level", "page_number", "title_sha256"],
+            "properties": {
+              "level": {"type": "integer", "minimum": 1},
+              "page_number": {"type": "integer", "minimum": 1},
+              "title_sha256": {"$ref": "#/$defs/sha256"}
+            }
+          }
+        }
+      }
+    },
+    "page_labels_summary": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["kind", "evidence_origin", "ranges"],
+      "properties": {
+        "kind": {"const": "page_labels"},
+        "evidence_origin": {"$ref": "#/$defs/evidence_origin"},
+        "ranges": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": ["start_page_number", "style", "first_page_number", "prefix"],
+            "properties": {
+              "start_page_number": {"type": "integer", "minimum": 1},
+              "style": {"enum": ["decimal", "roman_lower", "roman_upper", "alpha_lower", "alpha_upper"]},
+              "first_page_number": {"type": "integer", "minimum": 1},
+              "prefix": {"type": "string"}
+            }
+          }
+        }
+      }
+    },
+    "metadata_summary": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["kind", "evidence_origin", "values"],
+      "properties": {
+        "kind": {"const": "descriptive_metadata"},
+        "evidence_origin": {"$ref": "#/$defs/evidence_origin"},
+        "values": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "title": {"$ref": "#/$defs/sha256"},
+            "author": {"$ref": "#/$defs/sha256"},
+            "subject": {"$ref": "#/$defs/sha256"},
+            "keywords": {"$ref": "#/$defs/sha256"},
+            "creator": {"$ref": "#/$defs/sha256"}
+          }
+        }
+      }
+    },
+    "verification": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["structural_valid", "visual_pages_identical", "tagged_structure_preserved", "independent_backend", "page_count", "searchable_text_target_pages", "unchanged_native_text_pages"],
+      "properties": {
+        "structural_valid": {"const": true},
+        "visual_pages_identical": {"const": true},
+        "tagged_structure_preserved": {"type": "boolean"},
+        "independent_backend": {"type": "string", "minLength": 1},
+        "page_count": {"type": "integer", "minimum": 1},
+        "unchanged_native_text_pages": {"type": "array", "items": {"type": "integer", "minimum": 1}},
+        "searchable_text_target_pages": {"type": "array", "items": {"type": "integer", "minimum": 1}}
+      }
+    }
+  }
+}

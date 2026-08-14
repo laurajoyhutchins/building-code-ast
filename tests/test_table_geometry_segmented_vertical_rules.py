@@ -58,6 +58,36 @@ def _page(vertical_rules: tuple[RuleSegment, ...]) -> CleanedPage:
     )
 
 
+def _two_disconnected_tables_page() -> CleanedPage:
+    fragments = (
+        _fragment(20.0, 20.0, 50.0, "A", 1),
+        _fragment(120.0, 20.0, 150.0, "B", 2),
+        _fragment(20.0, 50.0, 50.0, "C", 3),
+        _fragment(120.0, 50.0, 150.0, "D", 4),
+        _fragment(20.0, 100.0, 50.0, "E", 5),
+        _fragment(120.0, 100.0, 150.0, "F", 6),
+        _fragment(20.0, 130.0, 50.0, "G", 7),
+        _fragment(120.0, 130.0, 150.0, "H", 8),
+    )
+    horizontal_rules = tuple(
+        RuleSegment(1, 10.0, y, 210.0, y)
+        for y in (10.0, 40.0, 70.0, 90.0, 120.0, 150.0)
+    )
+    vertical_rules = tuple(
+        RuleSegment(1, x, top, x, bottom)
+        for x in (10.0, 110.0, 210.0)
+        for top, bottom in ((10.0, 70.0), (90.0, 150.0))
+    )
+    return CleanedPage(
+        page_number=1,
+        width=220.0,
+        height=170.0,
+        retained=tuple(_line(fragment) for fragment in fragments),
+        removed=(),
+        rules=horizontal_rules + vertical_rules,
+    )
+
+
 class TableGeometrySegmentedVerticalRuleTests(unittest.TestCase):
     def test_repeated_rule_aligned_vertical_segments_establish_grid_columns(self) -> None:
         vertical_rules = tuple(
@@ -81,6 +111,15 @@ class TableGeometrySegmentedVerticalRuleTests(unittest.TestCase):
         )
 
         self.assertEqual(detect_ruled_tables(_page(vertical_rules)), ())
+
+    def test_disconnected_vertical_grids_with_same_horizontal_extent_stay_separate(self) -> None:
+        tables = detect_ruled_tables(_two_disconnected_tables_page())
+
+        self.assertEqual(len(tables), 2)
+        self.assertEqual(
+            [table.normalized_text for table in tables],
+            ["A\tB\nC\tD", "E\tF\nG\tH"],
+        )
 
 
 if __name__ == "__main__":

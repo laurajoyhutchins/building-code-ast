@@ -1,0 +1,142 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://laurajoyhutchins.github.io/building-code-ast/schemas/pdf-enrichment-plan.schema.json",
+  "title": "PDF Enrichment Plan v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["plan_version", "type", "source", "operations", "policy"],
+  "properties": {
+    "plan_version": {"const": "1"},
+    "type": {"const": "pdf_enrichment_plan"},
+    "source": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["source_id", "sha256", "size", "media_type", "page_count"],
+      "properties": {
+        "source_id": {"type": "string", "minLength": 1},
+        "sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+        "size": {"type": "integer", "minimum": 1},
+        "media_type": {"const": "application/pdf"},
+        "page_count": {"type": "integer", "minimum": 1}
+      }
+    },
+    "operations": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "oneOf": [
+          {"$ref": "#/$defs/searchable_text"},
+          {"$ref": "#/$defs/outline"},
+          {"$ref": "#/$defs/page_labels"},
+          {"$ref": "#/$defs/descriptive_metadata"}
+        ]
+      }
+    },
+    "policy": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["visible_content_change", "replace_existing_features"],
+      "properties": {
+        "visible_content_change": {"const": "forbidden"},
+        "replace_existing_features": {"const": false}
+      }
+    }
+  },
+  "$defs": {
+    "evidence_origin": {
+      "enum": ["native_pdf", "source_register", "document_ast", "reviewed_source_observation", "owner_supplied"]
+    },
+    "searchable_text": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["kind", "evidence_origin", "entries"],
+      "properties": {
+        "kind": {"const": "searchable_text"},
+        "evidence_origin": {"$ref": "#/$defs/evidence_origin"},
+        "entries": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": ["page_number", "text", "bbox", "text_origin"],
+            "properties": {
+              "page_number": {"type": "integer", "minimum": 1},
+              "text": {"type": "string", "minLength": 1},
+              "bbox": {"type": "array", "minItems": 4, "maxItems": 4, "items": {"type": "number"}},
+              "text_origin": {"enum": ["ocr", "raster_recovery", "derived_text"]}
+            }
+          }
+        }
+      }
+    },
+    "outline": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["kind", "evidence_origin", "entries"],
+      "properties": {
+        "kind": {"const": "outline"},
+        "evidence_origin": {"$ref": "#/$defs/evidence_origin"},
+        "entries": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": ["level", "title", "page_number"],
+            "properties": {
+              "level": {"type": "integer", "minimum": 1},
+              "title": {"type": "string", "minLength": 1},
+              "page_number": {"type": "integer", "minimum": 1}
+            }
+          }
+        }
+      }
+    },
+    "page_labels": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["kind", "evidence_origin", "ranges"],
+      "properties": {
+        "kind": {"const": "page_labels"},
+        "evidence_origin": {"$ref": "#/$defs/evidence_origin"},
+        "ranges": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": ["start_page_number", "style", "first_page_number", "prefix"],
+            "properties": {
+              "start_page_number": {"type": "integer", "minimum": 1},
+              "style": {"enum": ["decimal", "roman_lower", "roman_upper", "alpha_lower", "alpha_upper"]},
+              "first_page_number": {"type": "integer", "minimum": 1},
+              "prefix": {"type": "string"}
+            }
+          }
+        }
+      }
+    },
+    "descriptive_metadata": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["kind", "evidence_origin", "values"],
+      "properties": {
+        "kind": {"const": "descriptive_metadata"},
+        "evidence_origin": {"$ref": "#/$defs/evidence_origin"},
+        "values": {
+          "type": "object",
+          "additionalProperties": false,
+          "minProperties": 1,
+          "properties": {
+            "title": {"type": "string", "minLength": 1},
+            "author": {"type": "string", "minLength": 1},
+            "subject": {"type": "string", "minLength": 1},
+            "keywords": {"type": "string", "minLength": 1},
+            "creator": {"type": "string", "minLength": 1}
+          }
+        }
+      }
+    }
+  }
+}
