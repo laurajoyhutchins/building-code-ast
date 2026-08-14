@@ -22,7 +22,7 @@ from ..document_model import (
 from ..document_validation import validate_document_ast
 from ..evidence.model import PublicationIdentity, publication_state_id
 from ..model import Diagnostic, DiagnosticSeverity, SourceSpan
-from .pdf_layout import PdfBlock, PdfSpan, normalize_block_text
+from .pdf_layout import PdfBlock, PdfLine, PdfSpan, normalize_block_text
 
 
 ASHRAE_90_1_2016_PUBLICATION = PublicationIdentity(
@@ -227,6 +227,90 @@ def _appendix_locator_depth(locator: str) -> int:
     return locator[1:].count(".")
 
 
+def _line_appendix_heading(line: PdfLine) -> bool:
+    text = normalize_block_text(line.text)
+    if _APPENDIX_HEADING_RE.fullmatch(text) is None:
+        return False
+    span = next((span for span in line.spans if span.text.strip()), None)
+    return (
+        span is not None
+        and span.font == _HEADING_FONT
+        and abs(span.size - _SUBSECTION_HEADING_SIZE) <= _HEADING_SIZE_TOLERANCE
+    )
+
+
+def _derived_block(block: PdfBlock, lines: tuple[PdfLine, ...]) -> PdfBlock:
+    return PdfBlock(
+        page_number=block.page_number,
+        bbox=(
+            min(line.bbox[0] for line in lines),
+            min(line.bbox[1] for line in lines),
+            max(line.bbox[2] for line in lines),
+            max(line.bbox[3] for line in lines),
+        ),
+        text="\n".join(line.text for line in lines),
+        block_number=block.block_number,
+        table_region_id=block.table_region_id,
+        lines=lines,
+    )
+
+
+def _expand_embedded_appendix_headings(
+    observation: Ashrae901Observation,
+) -> tuple[Ashrae901Observation, ...]:
+    block = observation.block
+    if observation.structure_hint is not None or len(block.lines) < 2:
+        return (observation,)
+
+    heading_indexes = tuple(
+        index for index, line in enumerate(block.lines) if _line_appendix_heading(line)
+    )
+    if not heading_indexes:
+        return (observation,)
+
+    reconstructed = "\n".join(line.text for line in block.lines)
+    if normalize_block_text(reconstructed) != normalize_block_text(block.text):
+        return (observation,)
+
+    ranges: list[tuple[int, int]] = []
+    cursor = 0
+    for index in heading_indexes:
+        if cursor < index:
+            ranges.append((cursor, index))
+        ranges.append((index, index + 1))
+        cursor = index + 1
+    if cursor < len(block.lines):
+        ranges.append((cursor, len(block.lines)))
+
+    return tuple(
+        Ashrae901Observation(
+            block=_derived_block(block, block.lines[start:end]),
+            printed_page=observation.printed_page,
+            structure_hint=observation.structure_hint,
+            native_locator=observation.native_locator,
+        )
+        for start, end in ranges
+    )
+
+
+def _expand_appendix_observations(
+    observations: Iterable[Ashrae901Observation],
+) -> tuple[Ashrae901Observation, ...]:
+    ordered = tuple(sorted((item for item in observations if _is_content(item)), key=_observation_key))
+    expanded: list[Ashrae901Observation] = []
+    inside_appendix = False
+    for observation in ordered:
+        text = normalize_block_text(observation.block.text)
+        if _APPENDIX_RE.match(text):
+            inside_appendix = True
+            expanded.append(observation)
+        elif inside_appendix:
+            expanded.extend(_expand_embedded_appendix_headings(observation))
+        else:
+            expanded.append(observation)
+    return tuple(sorted(expanded, key=_observation_key))
+
+
 def _automatic_figure_locator(
     observation: Ashrae901Observation,
     text: str,
@@ -314,7 +398,7 @@ def parse_ashrae901_2016_observations(
 ) -> DocumentAst:
     """Build a deterministic ASHRAE 90.1-2016 structural AST from PDF observations."""
 
-    ordered = tuple(sorted((item for item in observations if _is_content(item)), key=_observation_key))
+    ordered = _expand_appendix_observations(observations)
     if not ordered:
         raise ValueError("ASHRAE 90.1-2016 observations must contain body-content regions")
 
