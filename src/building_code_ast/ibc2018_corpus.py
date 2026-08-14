@@ -15,6 +15,8 @@ import re
 from pathlib import Path
 from typing import Any, Iterable, Mapping, Sequence
 
+from .ibc2018_caption_corrections import apply_caption_corrections
+
 CORPUS_SCHEMA_VERSION = "0.1.0"
 COUNTING_POLICY_VERSION = "0.1.0"
 SOURCE_SHA256 = "c8f0b75522707a39daf5202edee25d7fdce6c177c382f828a6dc1dfd5cc0b18d"
@@ -268,16 +270,18 @@ def _caption_identifier(text: str, *, pdf_page: int) -> tuple[str, str, str, str
     match = _CAPTION_RE.match(text)
     if not match:
         return None
+    kind = match.group("kind").lower()
     identifier = normalize_locator(match.group("identifier"))
     suffix = match.group("suffix").strip()
-    if text.startswith("TABLE 1 010"):
-        identifier = "1010" + identifier[len("1"):]
-    if pdf_page == 556 and match.group("kind") == "TABLE":
-        return None
-    if identifier == "4" and suffix.startswith("-"):
-        identifier = f"4{suffix[:2]}"
-        suffix = suffix[2:].strip()
-    return match.group("kind").lower(), identifier, suffix, (match.group("designation") or "").strip()
+    designation = (match.group("designation") or "").strip()
+    return apply_caption_corrections(
+        text=text,
+        pdf_page=pdf_page,
+        kind=kind,
+        identifier=identifier,
+        suffix=suffix,
+        designation=designation,
+    )
 
 
 def _short_caption(lines: Sequence[PageLine], index: int) -> str | None:
