@@ -30,9 +30,9 @@ MEASUREMENT_VERSION = "0.1.0"
 NEC2017_SHA256 = "603ef5c461247bacd716e3953222bfb227f1ddc780fffdbfcb90756b02c237c7"
 NEC2017_SIZE_BYTES = 7_422_245
 NEC2017_PAGE_COUNT = 881
-IMPLEMENTATION_BASE_COMMIT = "4bd344807eb940481aa10a7e7a86b01fedff64fe"
+IMPLEMENTATION_BASE_COMMIT = "03126df41ed03c517edd65aefe5aca05e77d25bc"
 LAYOUT_ANALYSIS_BLOB = "69c9d139fa0c3272122331eda3be1a3e7181e352"
-TABLE_GEOMETRY_BLOB = "94302ad1989a41052fb7af3bbe0392950597340a"
+TABLE_GEOMETRY_BLOB = "eae38044e1917469daf569ee9cdda1a12a765d53"
 CANDIDATE_OWNERSHIP_BLOB = "c50fc288e16f1b7487e8935ff4dee6f47b3f7529"
 
 
@@ -98,7 +98,7 @@ def measure_nec2017_table_geometry(
         row_total += len(rows)
         if rows:
             row_pages += 1
-        grouped_page = group_table_candidates(rows)
+        grouped_page = group_table_candidates(rows, page_width=page.width)
         grouped.extend(grouped_page)
         grouped_rows += sum(len(candidate.rows) for candidate in grouped_page)
         regions = _rule_regions(page)
