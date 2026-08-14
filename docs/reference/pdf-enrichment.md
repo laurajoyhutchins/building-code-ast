@@ -21,6 +21,8 @@ Every operation names its evidence origin. Existing features are preserved. Conf
 
 `schemas/pdf-enrichment-receipt.schema.json` defines the source-safe `pdf_enrichment_receipt` v1 contract. Receipts record source and derivative identity, the canonical plan digest, tool versions, mutation summaries, and verification evidence. Searchable text, outline titles, and metadata values are represented in receipts by SHA-256 rather than copied expression.
 
+Recovered raster/OCR expression may enter a searchable-text operation only through the [`recovery-observation-v1`](recovery-observation.md) boundary. A `digest_only` recovery observation proves a text digest but cannot authorize enrichment. A `private_retrievable` observation may be used only after the supplied private payload matches the durable recovered-text digest and carries an explicit PDF-point region. This binding does not promote recovered text to native PDF text or change source authority.
+
 ## Materialization
 
 Install the optional runtime:
