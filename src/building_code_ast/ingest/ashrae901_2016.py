@@ -42,6 +42,10 @@ _INFORMATIVE_APPENDICES = frozenset({"B", "D", "E", "F", "H"})
 _NUMERIC_HEADING_RE = re.compile(
     r"^(?P<locator>\d+(?:\.\d+)*)(?:\.)?(?:\s+(?P<title>\S.*))?$"
 )
+_APPENDIX_HEADING_RE = re.compile(
+    r"^(?P<locator>[A-H]\d+(?:\.\d+)*)(?:\.)?(?:\s+(?P<title>\S.*))?$",
+    re.IGNORECASE,
+)
 _APPENDIX_RE = re.compile(
     r"^(?P<role>NORMATIVE|INFORMATIVE)\s+APPENDIX\s+(?P<letter>[A-H])\b(?:\s+(?P<title>.*))?$",
     re.IGNORECASE,
@@ -193,6 +197,36 @@ def _numeric_heading(
     return locator, title
 
 
+def _appendix_heading(
+    observation: Ashrae901Observation,
+    text: str,
+    *,
+    appendix_letter: str | None,
+) -> tuple[str, str | None] | None:
+    """Recognize appendix-native hierarchy from exact-source heading typography."""
+
+    if appendix_letter is None or observation.structure_hint is not None:
+        return None
+    match = _APPENDIX_HEADING_RE.fullmatch(text)
+    if match is None:
+        return None
+
+    locator = match.group("locator").upper()
+    if not locator.startswith(appendix_letter.upper()):
+        return None
+
+    span = _first_text_span(observation.block)
+    if span is None or span.font != _HEADING_FONT:
+        return None
+    if abs(span.size - _SUBSECTION_HEADING_SIZE) > _HEADING_SIZE_TOLERANCE:
+        return None
+    return locator, match.group("title")
+
+
+def _appendix_locator_depth(locator: str) -> int:
+    return locator[1:].count(".")
+
+
 def _automatic_figure_locator(
     observation: Ashrae901Observation,
     text: str,
@@ -339,6 +373,41 @@ def parse_ashrae901_2016_observations(
             current_appendix = appendix
             section_stack = []
             current_role = role
+            continue
+
+        appendix_letter = (
+            current_appendix.locator.removeprefix("appendix:")
+            if current_appendix is not None
+            else None
+        )
+        appendix_heading = _appendix_heading(
+            observation,
+            text,
+            appendix_letter=appendix_letter,
+        )
+        if appendix_heading is not None:
+            locator, title = appendix_heading
+            depth = _appendix_locator_depth(locator)
+            while (
+                section_stack
+                and _appendix_locator_depth(section_stack[-1].locator.removeprefix("section:"))
+                >= depth
+            ):
+                section_stack.pop()
+            section = _Draft(
+                DocumentNodeType.SUBSECTION,
+                f"section:{locator}",
+                start,
+                end,
+                label=title,
+                attributes=_attributes(observation, source_role=current_role),
+            )
+            parent = section_stack[-1] if section_stack else current_appendix
+            if parent is None:
+                raise AssertionError("appendix heading requires an active appendix")
+            parent.children.append(section)
+            section_stack.append(section)
+            extend_open(end)
             continue
 
         heading = _numeric_heading(
