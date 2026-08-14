@@ -1,17 +1,22 @@
 #!/usr/bin/env python3
-"""NFPA 13 (2019) publication adapter over shared PDF observation.
+"""NFPA 13 (2019) publication adapter over shared repository infrastructure.
 
 Publication-specific AST grammar remains in the preserved legacy compiler while
-generic positioned line/span extraction is routed through
-``building_code_ast.pdf_observation``.
+generic positioned PDF observation, Document AST construction, node identity,
+and deterministic bundle serialization are routed through shared Building Code
+AST components.
 """
 from __future__ import annotations
 
 import importlib.util
 from pathlib import Path
 import sys
-from typing import Any
+from typing import Any, Sequence as _Sequence
 
+import building_code_ast.document_io as _document_io
+import building_code_ast.document_model as _document_model
+from building_code_ast.model import SourceSpan as _SourceSpan
+from building_code_ast.nfpa13_bundle import canonical_json_bytes as _shared_canonical_json_bytes
 from building_code_ast.pdf_observation import observe_pymupdf_page
 
 
@@ -31,6 +36,50 @@ _LEGACY_SPEC.loader.exec_module(_legacy)
 for _name in dir(_legacy):
     if not _name.startswith("__"):
         globals()[_name] = getattr(_legacy, _name)
+
+# Reassert shared primitives after copying the legacy public surface so the
+# adapter cannot accidentally expose a duplicate implementation by name.
+canonical_json_bytes = _shared_canonical_json_bytes
+_SOURCE_ARTIFACT = _document_model.DocumentSourceArtifact(
+    artifact_id=ARTIFACT_ID,
+    edition_id=EDITION_ID,
+)
+
+
+def _node_id(locator: str, node_type: str) -> str:
+    """Return the shared deterministic Document AST node identity."""
+
+    return _document_model.document_node_id(
+        artifact_id=ARTIFACT_ID,
+        edition_id=EDITION_ID,
+        node_type=node_type,
+        locator=locator,
+    )
+
+
+def _node(
+    source: str,
+    *,
+    node_type: str,
+    locator: str,
+    start: int,
+    end: int,
+    label: str | None = None,
+    attributes: Mapping[str, str] | None = None,
+    children: _Sequence[dict[str, Any]] = (),
+) -> dict[str, Any]:
+    """Construct the legacy NFPA dictionary surface through shared Document AST."""
+
+    child_nodes = tuple(_document_io.document_node_from_dict(child) for child in children)
+    return _document_model.make_document_node(
+        source_artifact=_SOURCE_ARTIFACT,
+        node_type=node_type,
+        locator=locator,
+        span=_SourceSpan(start=start, end=end, text=source[start:end]),
+        label=label,
+        attributes=attributes,
+        children=child_nodes,
+    ).to_dict()
 
 
 def raw_lines_from_document(doc: Any, first_page: int, last_page: int) -> list[RawLine]:
@@ -64,8 +113,11 @@ def raw_lines_from_document(doc: Any, first_page: int, last_page: int) -> list[R
 
 
 # Existing build and CLI functions execute in the legacy module's globals. Point
-# that one generic seam back at this adapter so every legacy call path traverses
-# the shared observer too.
+# migrated generic seams back at this adapter/shared infrastructure so every
+# legacy call path uses the current repository contracts.
+_legacy._node_id = _node_id
+_legacy._node = _node
+_legacy.canonical_json_bytes = canonical_json_bytes
 _legacy.raw_lines_from_document = raw_lines_from_document
 
 

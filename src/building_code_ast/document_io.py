@@ -120,6 +120,12 @@ def _node(value: Any, path: str) -> DocumentNode:
     )
 
 
+def document_node_from_dict(value: Mapping[str, Any]) -> DocumentNode:
+    """Read one strict JSON-compatible Document AST node mapping."""
+
+    return _node(value, "document node")
+
+
 def document_ast_from_dict(value: Mapping[str, Any]) -> DocumentAst:
     """Read and validate a JSON-compatible document AST mapping."""
 
