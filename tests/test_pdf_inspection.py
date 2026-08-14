@@ -68,6 +68,23 @@ class PdfInspectionTests(unittest.TestCase):
                     pdf_observer=lambda _path: self._pdf_observation(),
                 )
 
+    def test_malformed_or_nonserializable_pdf_metadata_fails_closed(self) -> None:
+        payload = b"abcdef"
+        for observation, message in (
+            ({"page_count": True}, "page_count"),
+            ({"page_count": 3, "tool": {"value": object()}}, "non-serializable"),
+        ):
+            with self.subTest(observation=observation):
+                with tempfile.TemporaryDirectory() as directory:
+                    source = Path(directory) / "arbitrary.pdf"
+                    source.write_bytes(payload)
+                    with self.assertRaisesRegex(RetainedPdfInspectionError, message):
+                        inspect_retained_pdf(
+                            source,
+                            expected_size_bytes=len(payload),
+                            pdf_observer=lambda _path, value=observation: value,
+                        )
+
     def test_page_surface_summary_is_publication_neutral(self) -> None:
         summary = summarize_image_only_pages(
             (
@@ -80,6 +97,15 @@ class PdfInspectionTests(unittest.TestCase):
         self.assertEqual(summary["image_only_pages"], [2, 3])
         self.assertEqual(summary["image_only_run_count"], 1)
         self.assertTrue(summary["all_image_only_pages_are_single_full_page_images"])
+
+    def test_page_surface_summary_requires_contiguous_component_pages(self) -> None:
+        with self.assertRaisesRegex(ValueError, "each one-based component page"):
+            summarize_image_only_pages(
+                (
+                    PageSurfaceObservation(1, True, 0, None),
+                    PageSurfaceObservation(3, False, 1, 1.0),
+                )
+            )
 
 
 if __name__ == "__main__":
