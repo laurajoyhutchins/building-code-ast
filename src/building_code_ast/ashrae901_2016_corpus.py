@@ -23,6 +23,7 @@ from .ingest.ashrae901_2016 import (
     _is_content,
     _numeric_heading,
     _observation_key,
+    _rotated_annex_figure_content,
     parse_ashrae901_2016_observations,
 )
 from .ingest.pdf_layout import PdfLayoutDocument, normalize_block_text
@@ -64,7 +65,11 @@ def _ordered_observations(layout: PdfLayoutDocument) -> tuple[Ashrae901Observati
     )
     return tuple(
         sorted(
-            (observation for observation in observations if _is_content(observation)),
+            (
+                observation
+                for observation in observations
+                if _is_content(observation) or _rotated_annex_figure_content(observation)
+            ),
             key=_observation_key,
         )
     )
