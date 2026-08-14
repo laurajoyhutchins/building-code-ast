@@ -2,9 +2,9 @@
 """NFPA 13 (2019) publication adapter over shared repository infrastructure.
 
 Publication-specific AST grammar remains in the preserved legacy compiler while
-generic positioned PDF observation, Document AST construction, node identity,
-and deterministic bundle serialization are routed through shared Building Code
-AST components.
+generic positioned PDF observation, Document AST construction and validation,
+node identity, and deterministic bundle serialization are routed through shared
+Building Code AST components.
 """
 from __future__ import annotations
 
@@ -44,6 +44,7 @@ _SOURCE_ARTIFACT = _document_model.DocumentSourceArtifact(
     artifact_id=ARTIFACT_ID,
     edition_id=EDITION_ID,
 )
+_legacy_validation_report = validate_bundle
 
 
 def _node_id(locator: str, node_type: str) -> str:
@@ -82,6 +83,15 @@ def _node(
     ).to_dict()
 
 
+def validate_bundle(bundle: Mapping[str, Any]) -> dict[str, Any]:
+    """Preserve NFPA report fields while making shared Document AST validation authoritative."""
+
+    report = _legacy_validation_report(bundle)
+    if report.get("passed") is True:
+        _document_io.document_ast_from_dict(bundle["document_ast"])
+    return report
+
+
 def raw_lines_from_document(doc: Any, first_page: int, last_page: int) -> list[RawLine]:
     """Project shared positioned-text observations into NFPA-specific raw lines."""
 
@@ -117,6 +127,7 @@ def raw_lines_from_document(doc: Any, first_page: int, last_page: int) -> list[R
 # legacy call path uses the current repository contracts.
 _legacy._node_id = _node_id
 _legacy._node = _node
+_legacy.validate_bundle = validate_bundle
 _legacy.canonical_json_bytes = canonical_json_bytes
 _legacy.raw_lines_from_document = raw_lines_from_document
 
