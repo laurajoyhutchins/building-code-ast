@@ -25,6 +25,7 @@ class TableCandidateEnvelope:
     candidate_id: str
     page_number: int
     bbox: BBox
+    evidence: tuple[str, ...] = ()
 
 
 @dataclass(frozen=True, slots=True)
@@ -46,6 +47,13 @@ def _validate_bbox(bbox: BBox) -> None:
         raise ValueError("bbox must be ordered as (x0, y0, x1, y1)")
 
 
+def _overlaps_block_axis(caption: TableCaptionAnchor, candidate: TableCandidateEnvelope, tolerance: float) -> bool:
+    return (
+        caption.bbox[1] <= candidate.bbox[3] + tolerance
+        and caption.bbox[3] >= candidate.bbox[1] - tolerance
+    )
+
+
 def associate_table_candidates(
     captions: tuple[TableCaptionAnchor, ...],
     candidates: tuple[TableCandidateEnvelope, ...],
@@ -59,10 +67,13 @@ def associate_table_candidates(
     owns the candidate even when their block-axis spans overlap, which is
     necessary for captions embedded along a rotated rule frame.
 
-    When multiple captions share the same inline anchor, block-flow order is
-    used only to partition that already-matched anchor family: the latest
-    caption ending no later than the candidate start wins. Ties are ambiguous.
-    Candidates with no matching inline anchor remain unresolved.
+    When multiple captions share the same inline anchor, an observed vector
+    rule grid may disambiguate ownership when exactly one matched caption
+    overlaps the candidate on the block axis. If multiple matched captions
+    overlap, ownership remains ambiguous. Otherwise block-flow order partitions
+    the already-matched anchor family: the latest caption ending no later than
+    the candidate start wins. Ties are ambiguous. Candidates with no matching
+    inline anchor remain unresolved.
     """
 
     if inline_tolerance < 0.0:
@@ -100,6 +111,19 @@ def associate_table_candidates(
         if len(anchor_matches) == 1:
             owned[anchor_matches[0].caption_id].append(candidate.candidate_id)
             continue
+
+        if "vector_rule_grid" in candidate.evidence:
+            overlapping = [
+                caption
+                for caption in anchor_matches
+                if _overlaps_block_axis(caption, candidate, inline_tolerance)
+            ]
+            if len(overlapping) == 1:
+                owned[overlapping[0].caption_id].append(candidate.candidate_id)
+                continue
+            if len(overlapping) > 1:
+                ambiguous.append(candidate.candidate_id)
+                continue
 
         candidate_block_start = candidate.bbox[1]
         eligible = [
