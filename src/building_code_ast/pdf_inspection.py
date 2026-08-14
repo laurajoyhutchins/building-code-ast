@@ -8,11 +8,16 @@ meaning, authority role, or semantic interpretation.
 
 from __future__ import annotations
 
+from collections import Counter
 from dataclasses import dataclass
 import hashlib
+import json
 import os
 from pathlib import Path
 from typing import Callable, Mapping, Sequence
+
+
+_FULL_PAGE_IMAGE_COVERAGE = 0.999
 
 
 class RetainedPdfInspectionError(ValueError):
@@ -43,7 +48,7 @@ def _full_page_single_image(item: PageSurfaceObservation) -> bool:
         not item.has_embedded_text
         and item.raster_image_count == 1
         and item.max_image_coverage_ratio is not None
-        and item.max_image_coverage_ratio >= 0.995
+        and item.max_image_coverage_ratio >= _FULL_PAGE_IMAGE_COVERAGE
     )
 
 
@@ -104,7 +109,8 @@ def _hash_regular_file(source: Path, expected_size_bytes: int) -> tuple[str, int
         raise RetainedPdfInspectionError("retained source must be a regular file")
     if before.st_size != expected_size_bytes:
         raise RetainedPdfInspectionError(
-            f"retained source size mismatch: expected {expected_size_bytes}, got {before.st_size}"
+            "retained source byte size does not match the expected artifact size: "
+            f"expected {expected_size_bytes}, observed {before.st_size}"
         )
 
     digest = hashlib.sha256()
@@ -128,12 +134,18 @@ def _hash_regular_file(source: Path, expected_size_bytes: int) -> tuple[str, int
         or before.st_mtime_ns != after.st_mtime_ns
         or observed_size != expected_size_bytes
     ):
-        raise RetainedPdfInspectionError("retained source changed during hashing")
+        raise RetainedPdfInspectionError(
+            "retained source changed while exact-byte verification was running"
+        )
     return digest.hexdigest(), observed_size
 
 
 def sanitize_pdf_observation(observation: Mapping[str, object]) -> dict[str, object]:
     """Keep only factual, source-safe PDF inspection fields."""
+
+    page_count = observation.get("page_count")
+    if isinstance(page_count, bool) or not isinstance(page_count, int) or page_count < 1:
+        raise RetainedPdfInspectionError("PDF observation page_count must be positive")
 
     allowed = (
         "page_count",
@@ -147,12 +159,14 @@ def sanitize_pdf_observation(observation: Mapping[str, object]) -> dict[str, obj
         "page_geometry",
         "tool",
     )
-    missing = [key for key in allowed if key not in observation]
-    if missing:
+    sanitized = {key: observation[key] for key in allowed if key in observation}
+    try:
+        json.dumps(sanitized, sort_keys=True)
+    except (TypeError, ValueError) as exc:
         raise RetainedPdfInspectionError(
-            "PDF observer omitted required factual fields: " + ", ".join(missing)
-        )
-    return {key: observation[key] for key in allowed}
+            "PDF observation contains non-serializable factual metadata"
+        ) from exc
+    return sanitized
 
 
 def observe_pdf_with_pymupdf(source: Path) -> dict[str, object]:
@@ -162,68 +176,113 @@ def observe_pdf_with_pymupdf(source: Path) -> dict[str, object]:
         import fitz  # type: ignore[import-not-found]
     except ImportError as exc:  # pragma: no cover
         raise RetainedPdfInspectionError(
-            "PyMuPDF is required for retained PDF inspection; install building-code-ast[pdf-inspection]"
+            "PyMuPDF is required for PDF inspection; install building-code-ast[pdf-inspection]"
         ) from exc
 
     try:
         document = fitz.open(source)
     except Exception as exc:  # pragma: no cover - delegated parser boundary
-        raise RetainedPdfInspectionError(f"cannot open retained PDF: {exc}") from exc
+        raise RetainedPdfInspectionError("retained source could not be opened as PDF") from exc
 
     try:
-        page_count = document.page_count
+        page_count = int(document.page_count)
         metadata = document.metadata or {}
-        toc = document.get_toc(simple=False) or []
-        labels = document.get_page_labels() or []
-        pages_without_text: list[int] = []
-        sizes: set[tuple[float, float]] = set()
-        for page_index in range(page_count):
-            page = document[page_index]
-            text = page.get_text("text")
-            if not text.strip():
-                pages_without_text.append(page_index + 1)
-            sizes.add((round(float(page.rect.width), 3), round(float(page.rect.height), 3)))
+        format_text = str(metadata.get("format") or "").strip()
+        pdf_version = format_text.removeprefix("PDF ").strip() if format_text else "unknown"
+        encrypted = bool(getattr(document, "is_encrypted", False))
+        needs_password = bool(getattr(document, "needs_pass", False))
+        permissions_raw = int(getattr(document, "permissions", 0))
+        if needs_password:
+            raise RetainedPdfInspectionError(
+                "retained PDF requires a password before physical inspection"
+            )
 
-        valid_targets = 0
-        invalid_targets = 0
-        max_depth = 0
-        for item in toc:
-            if len(item) < 3:
+        page_label_rules: list[dict[str, object]] = []
+        try:
+            raw_labels = document.get_page_labels() or []
+        except Exception:
+            raw_labels = []
+        for rule in raw_labels:
+            if not isinstance(rule, Mapping):
                 continue
-            level = int(item[0])
-            target = int(item[2])
-            max_depth = max(max_depth, level)
-            if 1 <= target <= page_count:
-                valid_targets += 1
-            else:
-                invalid_targets += 1
+            page_label_rules.append(
+                {
+                    "pdf_page_start": int(rule.get("startpage", 0)) + 1,
+                    "style": str(rule.get("style", "")),
+                    "prefix": str(rule.get("prefix", "")),
+                    "first_page_number": int(rule.get("firstpagenum", 1)),
+                }
+            )
 
-        version = str(metadata.get("format", ""))
-        if version.lower().startswith("pdf "):
-            version = version[4:]
+        try:
+            toc = document.get_toc(simple=False) or []
+        except Exception:
+            toc = []
+        outline_depths: list[int] = []
+        valid_target_count = 0
+        invalid_target_count = 0
+        for entry in toc:
+            if not isinstance(entry, Sequence) or len(entry) < 3:
+                invalid_target_count += 1
+                continue
+            try:
+                depth = int(entry[0])
+                target_page = int(entry[2])
+            except (TypeError, ValueError):
+                invalid_target_count += 1
+                continue
+            outline_depths.append(depth)
+            if 1 <= target_page <= page_count:
+                valid_target_count += 1
+            else:
+                invalid_target_count += 1
+
+        pages_with_text = 0
+        pages_without_text: list[int] = []
+        page_sizes: Counter[tuple[float, float]] = Counter()
+        for page_index in range(page_count):
+            page = document.load_page(page_index)
+            if page.get_text("words"):
+                pages_with_text += 1
+            else:
+                pages_without_text.append(page_index + 1)
+            page_sizes[
+                (round(float(page.rect.width), 3), round(float(page.rect.height), 3))
+            ] += 1
+
+        distinct_page_sizes = [
+            {
+                "width_points": width,
+                "height_points": height,
+                "page_count": count,
+            }
+            for (width, height), count in sorted(page_sizes.items())
+        ]
+
         return {
             "page_count": page_count,
-            "pdf_version": version,
-            "encrypted": bool(document.is_encrypted),
-            "needs_password": bool(document.needs_pass),
-            "permissions_raw": int(document.permissions),
-            "page_label_rules": labels,
+            "pdf_version": pdf_version,
+            "encrypted": encrypted,
+            "needs_password": needs_password,
+            "permissions_raw": permissions_raw,
+            "page_label_rules": page_label_rules,
             "outline": {
                 "entry_count": len(toc),
-                "max_depth": max_depth,
-                "valid_target_count": valid_targets,
-                "invalid_target_count": invalid_targets,
+                "max_depth": max(outline_depths, default=0),
+                "valid_target_count": valid_target_count,
+                "invalid_target_count": invalid_target_count,
             },
             "text_layer": {
-                "pages_with_text": page_count - len(pages_without_text),
+                "pages_with_text": pages_with_text,
                 "pages_without_text": pages_without_text,
             },
             "page_geometry": {
-                "distinct_page_sizes": [
-                    {"width": width, "height": height} for width, height in sorted(sizes)
-                ]
+                "distinct_page_sizes": distinct_page_sizes,
             },
-            "tool": {"name": "PyMuPDF", "version": getattr(fitz, "VersionBind", "unknown")},
+            "tool": {
+                "name": "PyMuPDF",
+                "version": str(getattr(fitz, "VersionBind", "unknown")),
+            },
         }
     finally:
         document.close()
