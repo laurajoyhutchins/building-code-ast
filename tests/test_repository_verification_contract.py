@@ -40,6 +40,25 @@ class RepositoryVerificationContractTests(unittest.TestCase):
         pyproject = tomllib.loads((ROOT / "pyproject.toml").read_text(encoding="utf-8"))
         self.assertEqual(pyproject["build-system"]["requires"], ["setuptools==84.0.0"])
 
+    def test_hosted_ci_bootstraps_lock_and_runs_same_gate(self) -> None:
+        workflow = (ROOT / ".github" / "workflows" / "ci.yml").read_text(encoding="utf-8")
+
+        self.assertIn("python-version: 3.12.13", workflow)
+        self.assertIn(
+            "python -m pip install --no-deps --requirement requirements/verification.lock",
+            workflow,
+        )
+        self.assertIn(
+            "python -m pip install --no-deps --no-build-isolation -e .",
+            workflow,
+        )
+        self.assertIn("python tools/verify_repository.py", workflow)
+        self.assertNotIn("python tools/run_unit_tests.py", workflow)
+        self.assertNotIn("python tools/validate_ibc_2018_corpus.py", workflow)
+        self.assertNotIn("python tools/validate_ibc_2018_schemas.py", workflow)
+        self.assertNotIn("python -m compileall", workflow)
+        self.assertNotIn("python -m pip wheel", workflow)
+
     def test_receipt_path_is_ignored(self) -> None:
         ignored = (ROOT / ".gitignore").read_text(encoding="utf-8").splitlines()
         self.assertIn(".building-code-ast/ci-evidence/", ignored)
