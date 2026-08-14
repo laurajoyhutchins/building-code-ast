@@ -1,0 +1,183 @@
+{
+  "artifact": "nec-2017-table-ownership-classification",
+  "candidate_classification": {
+    "ambiguous": {
+      "grouped_geometry_caption_overlap": {
+        "count": 1,
+        "description": "One grouped-geometry envelope begins with and overlaps a caption-bearing row while another caption shares the same inline anchor; it is not safe to assign by current block-flow evidence.",
+        "representative_coordinates": [
+          {
+            "candidate_bbox": [
+              36.0,
+              71.148,
+              555.735,
+              113.63
+            ],
+            "overlapping_caption_count": 1,
+            "page": 159,
+            "same_inline_caption_count": 2
+          }
+        ]
+      },
+      "grouped_geometry_pre_caption": {
+        "count": 8,
+        "description": "Grouped-geometry envelopes share the inline anchor of multiple later captions but end before all of them, so block-flow ownership correctly remains ambiguous.",
+        "representative_coordinates": [
+          {
+            "candidate_bbox": [
+              53.996,
+              70.88,
+              576.004,
+              147.536
+            ],
+            "page": 80,
+            "same_inline_caption_count": 2
+          },
+          {
+            "candidate_bbox": [
+              53.996,
+              176.934,
+              576.003,
+              233.572
+            ],
+            "page": 206,
+            "same_inline_caption_count": 2
+          }
+        ]
+      },
+      "total": 26,
+      "vector_rule_multi_anchor": {
+        "count": 17,
+        "description": "Every ambiguous vector-rule envelope has at least two same-page caption anchors within the 3-point inline-start tolerance; none has an eligible caption ending before candidate block start.",
+        "overlaps_multiple_caption_boxes": 14,
+        "overlaps_one_caption_box": 3,
+        "representative_coordinates": [
+          {
+            "candidate_bbox": [
+              54.0,
+              512.828,
+              298.971,
+              711.89
+            ],
+            "overlapping_caption_count": 2,
+            "page": 66,
+            "same_inline_caption_count": 2
+          },
+          {
+            "candidate_bbox": [
+              53.996,
+              70.88,
+              576.004,
+              699.81
+            ],
+            "overlapping_caption_count": 2,
+            "page": 80,
+            "same_inline_caption_count": 2
+          },
+          {
+            "candidate_bbox": [
+              53.996,
+              70.898,
+              576.005,
+              552.98
+            ],
+            "overlapping_caption_count": 3,
+            "page": 696,
+            "same_inline_caption_count": 3
+          }
+        ]
+      }
+    },
+    "unassigned_caption_partition": {
+      "no_candidate_envelope_on_page": 6,
+      "same_inline_anchor_assigned_elsewhere": 3,
+      "same_inline_anchor_has_ambiguous_candidate": 20,
+      "same_page_candidate_but_no_inline_anchor_match": 39,
+      "total": 68
+    },
+    "unresolved": {
+      "grouped_geometry": {
+        "caption_page_inline_mismatch": 254,
+        "pages_without_caption": 520,
+        "total": 774
+      },
+      "total": 887,
+      "vector_rule": {
+        "caption_page_inline_mismatch": 9,
+        "pages_without_caption": 104,
+        "total": 113
+      }
+    }
+  },
+  "classification_version": "0.1.0",
+  "conclusion": {
+    "next_gate": "Establish a publication-neutral, source-safe rule-topology discriminator that separates page furniture and multiple distinct ruled table blocks without reducing the landed NEC coverage denominators; prove it on the classified representative pages before changing ownership or table semantics.",
+    "parser_promotion_performed": false,
+    "private_source_locator_retained": false,
+    "protected_source_expression_retained": false
+  },
+  "disproved_remediations": [
+    {
+      "diagnostic_denominators": {
+        "captions_with_candidate": 105,
+        "captions_without_candidate": 117,
+        "geometry_rows": 9601,
+        "grouped_candidates": 1252,
+        "recognized_owned_candidates": 206,
+        "rule_regions": 599,
+        "ruled_candidates": 59,
+        "unresolved_candidates": 1100
+      },
+      "experiment": "split rule regions at vertical gaps greater than 45 points",
+      "reason": "reduced ambiguous candidates from 26 to 5 but materially degraded verified coverage",
+      "result": "rejected"
+    },
+    {
+      "diagnostic_denominators": {
+        "captions_with_candidate": 136,
+        "captions_without_candidate": 86,
+        "geometry_rows": 9957,
+        "grouped_candidates": 1114,
+        "recognized_owned_candidates": 269,
+        "rule_regions": 602,
+        "ruled_candidates": 151,
+        "unresolved_candidates": 987
+      },
+      "experiment": "discard long horizontal rules in the top 10 percent and bottom 5.5 percent of the page before rule-region construction",
+      "reason": "reduced ambiguous candidates to 9 but materially degraded verified coverage",
+      "result": "rejected"
+    }
+  ],
+  "measurement_basis": {
+    "candidate_ownership_blob": "bca59beea96a23743cef9f5d89b5999d75036a1f",
+    "implementation_base_commit": "b195c7a695b9e00ef8993fa1a4a23f8be60b5abb",
+    "layout_analysis_blob": "69c9d139fa0c3272122331eda3be1a3e7181e352",
+    "measurement_commit": "985a733a6f865d4d1812dd09cf443ef9a7dc078d",
+    "measurement_sha256": "56c362545289c1bfce5ac15ba92074aef2aa861e3f4701ed5ea95bf45872ba12",
+    "table_geometry_blob": "6549710d958ff5ea6b0a782496ca15d8acbe20f0"
+  },
+  "replay_confirmation": {
+    "ambiguous_candidates": 26,
+    "candidate_envelopes": 1250,
+    "captions_with_candidate": 154,
+    "captions_with_multiple_candidates": 90,
+    "captions_without_candidate": 68,
+    "geometry_rows": 10235,
+    "published_denominators_reproduced": true,
+    "recognized_owned_candidates": 337,
+    "rule_regions": 757,
+    "table_caption_occurrences": 222,
+    "unresolved_candidates": 887
+  },
+  "source": {
+    "file_name": "nec-2017.pdf",
+    "page_count": 881,
+    "sha256": "603ef5c461247bacd716e3953222bfb227f1ddc780fffdbfcb90756b02c237c7",
+    "size_bytes": 7422245
+  },
+  "source_review_findings": [
+    "Representative exact-source pages confirm that some broad vector-rule envelopes span multiple visually distinct captioned tables rather than one ownership-safe table candidate.",
+    "Representative pages also show grouped-geometry false candidates formed from two-column prose or caption/header material before the actual table captions.",
+    "These are geometry/ownership evidence failures only; this classification does not infer table continuation, headers, cells, lookup meaning, or compliance semantics."
+  ]
+}
