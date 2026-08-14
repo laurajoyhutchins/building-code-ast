@@ -2,9 +2,9 @@
 
 This stage combines embedded-text top-level hierarchy anchors with the durable,
 source-safe raster hierarchy observations produced by
-``aisc360_raster_hierarchy_observation``. It deliberately does not accept or
-persist recovered raster prose and does not yet materialize promoted candidates
-as Document AST nodes.
+``aisc360_raster_hierarchy_observation``. Generic recovery provenance is
+validated by the shared recovery-observation contract; this module owns only
+AISC component and locator semantics.
 """
 
 from __future__ import annotations
@@ -17,12 +17,14 @@ from .aisc360_hierarchy_characterization import (
     characterize_hierarchy,
 )
 from .aisc360_raster_hierarchy_observation import (
+    AISC360_COMPONENT_PAGE_COUNT,
     AISC360_DERIVATIVE_SHA256,
+    AISC360_DERIVATIVE_SIZE_BYTES,
     AISC360_REPRESENTATIVE_RENDER_RECIPE,
+    recovery_observation_from_source_safe_fields,
 )
 
 
-_SHA256_RE = re.compile(r"^[0-9a-f]{64}$")
 _DOTTED_LOCATOR_RE = re.compile(r"^\d+(?:\.\d+)+$")
 _RASTER_SCHEMA = "aisc360-raster-hierarchy-observation-v1"
 _AISC360_COMPONENT = "ansi-aisc-360-16"
@@ -47,7 +49,7 @@ def _durable_receipt_as_summary(
     *,
     expected_page_count: int,
 ) -> Mapping[str, object]:
-    """Normalize the committed source-safe receipt to the in-memory summary shape."""
+    """Normalize the committed AISC receipt to the legacy in-memory summary shape."""
 
     if "observations" in raster_evidence:
         return raster_evidence
@@ -61,11 +63,12 @@ def _durable_receipt_as_summary(
         raise ValueError("raster hierarchy receipt requires source derivative identity")
     if source.get("sha256") != AISC360_DERIVATIVE_SHA256:
         raise ValueError("raster hierarchy receipt references the wrong source derivative")
-    byte_count = source.get("byte_count")
-    if not isinstance(byte_count, int) or byte_count < 1:
-        raise ValueError("raster hierarchy receipt byte count must be positive")
-    if source.get("page_count") != expected_page_count:
-        raise ValueError("raster hierarchy receipt page count does not match component coverage")
+    if source.get("byte_count") != AISC360_DERIVATIVE_SIZE_BYTES:
+        raise ValueError("raster hierarchy receipt source derivative size is not exact")
+    if source.get("page_count") != AISC360_COMPONENT_PAGE_COUNT:
+        raise ValueError("raster hierarchy receipt source derivative page count is not exact")
+    if expected_page_count > AISC360_COMPONENT_PAGE_COUNT:
+        raise ValueError("component coverage exceeds the exact retained AISC derivative")
 
     boundary = raster_evidence.get("observation_boundary")
     if not isinstance(boundary, Mapping):
@@ -150,18 +153,27 @@ def _raster_items(
         if raw.get("source_kind") != "raster_recovery":
             raise ValueError("raster hierarchy observation source kind must remain explicit")
 
-        render_sha256 = raw.get("render_sha256")
-        recovered_sha256 = raw.get("recovered_text_sha256")
-        if not isinstance(render_sha256, str) or _SHA256_RE.fullmatch(render_sha256) is None:
-            raise ValueError("raster hierarchy render SHA-256 is invalid")
-        if not isinstance(recovered_sha256, str) or _SHA256_RE.fullmatch(recovered_sha256) is None:
-            raise ValueError("raster hierarchy recovered-text SHA-256 is invalid")
-        if raw.get("render_recipe") != AISC360_REPRESENTATIVE_RENDER_RECIPE:
-            raise ValueError("raster hierarchy observation does not match the declared render recipe")
-
+        render_recipe = raw.get("render_recipe")
+        if not isinstance(render_recipe, Mapping):
+            raise ValueError("raster hierarchy observation requires a render recipe")
         backend = raw.get("recovery_backend")
         if not isinstance(backend, str) or not backend.strip():
             raise ValueError("raster hierarchy recovery backend must be non-empty")
+        render_sha256 = raw.get("render_sha256")
+        recovered_sha256 = raw.get("recovered_text_sha256")
+        if not isinstance(render_sha256, str) or not isinstance(recovered_sha256, str):
+            raise ValueError("raster hierarchy observation requires render and recovered-text digests")
+
+        recovery_observation_from_source_safe_fields(
+            page_number=page,
+            source_derivative_sha256=AISC360_DERIVATIVE_SHA256,
+            source_size_bytes=AISC360_DERIVATIVE_SIZE_BYTES,
+            source_page_count=AISC360_COMPONENT_PAGE_COUNT,
+            render_sha256=render_sha256,
+            render_recipe=render_recipe,
+            recovery_backend=backend,
+            recovered_text_sha256=recovered_sha256,
+        )
 
         locators = raw.get("dotted_hierarchy_locators")
         if not isinstance(locators, list) or any(
@@ -188,20 +200,14 @@ def promote_aisc360_hierarchy(
     ``summarize_raster_hierarchy_observations`` or the durable repository receipt
     shape committed for the same observation boundary.
 
-    Embedded text contributes only the already-characterized top-level chapter
-    and appendix anchors. Raster recovery contributes only durable dotted
-    locator candidates plus provenance hashes. Recovered raster prose and
-    embedded body prose never appear in the returned value.
-
-    ``combined_hierarchy_complete`` is a coverage claim only: it becomes true
-    when every image-only source page has a durable raster observation. It does
-    not claim semantic completeness or Document AST integration.
+    Generic raster recovery identity and tooling are validated by the shared
+    recovery contract. This module adds only AISC-specific image-only-page and
+    dotted-locator rules. Recovered raster prose and embedded body prose never
+    appear in the returned value.
     """
 
     ordered = _require_pages(observations, expected_page_count=expected_page_count)
-    image_only_pages = {
-        item.page_number for item in ordered if item.embedded_text is None
-    }
+    image_only_pages = {item.page_number for item in ordered if item.embedded_text is None}
     normalized_raster_summary = _durable_receipt_as_summary(
         raster_summary,
         expected_page_count=expected_page_count,
