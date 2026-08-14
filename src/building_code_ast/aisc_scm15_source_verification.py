@@ -1,23 +1,26 @@
 from __future__ import annotations
 
 import argparse
-import hashlib
 import json
-import stat
-from collections import Counter
 from dataclasses import dataclass
 from datetime import datetime, timezone
 from pathlib import Path
-from typing import Callable, Mapping, Sequence
+from typing import Mapping, Sequence
+
+from .pdf_inspection import (
+    PdfObserver,
+    RetainedPdfInspectionError,
+    inspect_retained_pdf,
+)
 
 
 PUBLICATION_KEY = "aisc-scm-15"
 RETAINED_FILENAME = "scm-15.pdf"
 EXPECTED_SIZE_BYTES = 221_820_282
 
-
-class SourceVerificationError(ValueError):
-    """Raised when exact-source verification cannot establish its contract."""
+# Compatibility name for existing AISC callers. The underlying failure is now
+# publication-neutral retained-PDF inspection failure.
+SourceVerificationError = RetainedPdfInspectionError
 
 
 @dataclass(frozen=True, slots=True)
@@ -74,206 +77,24 @@ def _verified_at_now() -> str:
     )
 
 
-def _hash_regular_file(source: Path, *, expected_size_bytes: int) -> tuple[int, str]:
-    try:
-        initial = source.stat(follow_symlinks=False)
-    except FileNotFoundError as exc:
-        raise SourceVerificationError("retained source file does not exist") from exc
-
-    if stat.S_ISLNK(initial.st_mode):
-        raise SourceVerificationError("retained source path must not be a symlink")
-    if not stat.S_ISREG(initial.st_mode):
-        raise SourceVerificationError("retained source path must be a regular file")
-    if initial.st_size != expected_size_bytes:
-        raise SourceVerificationError(
-            "retained source byte size does not match the expected artifact size: "
-            f"expected {expected_size_bytes}, observed {initial.st_size}"
-        )
-
-    digest = hashlib.sha256()
-    bytes_read = 0
-    with source.open("rb") as handle:
-        while chunk := handle.read(1024 * 1024):
-            digest.update(chunk)
-            bytes_read += len(chunk)
-
-    final = source.stat(follow_symlinks=False)
-    if (
-        bytes_read != initial.st_size
-        or final.st_size != initial.st_size
-        or final.st_mtime_ns != initial.st_mtime_ns
-    ):
-        raise SourceVerificationError(
-            "retained source changed while exact-byte verification was running"
-        )
-    return bytes_read, digest.hexdigest()
-
-
-def _sanitize_pdf_observation(observation: Mapping[str, object]) -> dict[str, object]:
-    page_count = observation.get("page_count")
-    if isinstance(page_count, bool) or not isinstance(page_count, int) or page_count < 1:
-        raise SourceVerificationError("PDF observation page_count must be positive")
-
-    allowed_keys = (
-        "page_count",
-        "pdf_version",
-        "encrypted",
-        "needs_password",
-        "permissions_raw",
-        "page_label_rules",
-        "outline",
-        "text_layer",
-        "page_geometry",
-        "tool",
-    )
-    sanitized = {
-        key: observation[key]
-        for key in allowed_keys
-        if key in observation
-    }
-    try:
-        json.dumps(sanitized, sort_keys=True)
-    except (TypeError, ValueError) as exc:
-        raise SourceVerificationError(
-            "PDF observation contains non-serializable factual metadata"
-        ) from exc
-    return sanitized
-
-
-def _observe_pdf_with_pymupdf(source: Path) -> dict[str, object]:
-    try:
-        import fitz  # type: ignore[import-not-found]
-    except ImportError as exc:
-        raise SourceVerificationError(
-            "PyMuPDF is required for PDF inspection; install the evidence-pdf extra"
-        ) from exc
-
-    try:
-        document = fitz.open(source)
-    except Exception as exc:
-        raise SourceVerificationError("retained source could not be opened as PDF") from exc
-
-    try:
-        page_count = int(document.page_count)
-        metadata = document.metadata or {}
-        format_text = str(metadata.get("format") or "").strip()
-        pdf_version = (
-            format_text.removeprefix("PDF ").strip() if format_text else "unknown"
-        )
-        encrypted = bool(getattr(document, "is_encrypted", False))
-        needs_password = bool(getattr(document, "needs_pass", False))
-        permissions_raw = int(getattr(document, "permissions", 0))
-        if needs_password:
-            raise SourceVerificationError(
-                "retained PDF requires a password before physical inspection"
-            )
-
-        page_label_rules: list[dict[str, object]] = []
-        try:
-            raw_labels = document.get_page_labels() or []
-        except Exception:
-            raw_labels = []
-        for rule in raw_labels:
-            if not isinstance(rule, Mapping):
-                continue
-            page_label_rules.append(
-                {
-                    "pdf_page_start": int(rule.get("startpage", 0)) + 1,
-                    "style": str(rule.get("style", "")),
-                    "prefix": str(rule.get("prefix", "")),
-                    "first_page_number": int(rule.get("firstpagenum", 1)),
-                }
-            )
-
-        try:
-            toc = document.get_toc(simple=False) or []
-        except Exception:
-            toc = []
-        outline_depths: list[int] = []
-        valid_target_count = 0
-        invalid_target_count = 0
-        for entry in toc:
-            if not isinstance(entry, Sequence) or len(entry) < 3:
-                invalid_target_count += 1
-                continue
-            try:
-                depth = int(entry[0])
-                target_page = int(entry[2])
-            except (TypeError, ValueError):
-                invalid_target_count += 1
-                continue
-            outline_depths.append(depth)
-            if 1 <= target_page <= page_count:
-                valid_target_count += 1
-            else:
-                invalid_target_count += 1
-
-        pages_with_text = 0
-        pages_without_text: list[int] = []
-        page_sizes: Counter[tuple[float, float]] = Counter()
-        for page_index in range(page_count):
-            page = document.load_page(page_index)
-            if page.get_text("words"):
-                pages_with_text += 1
-            else:
-                pages_without_text.append(page_index + 1)
-            page_sizes[
-                (round(float(page.rect.width), 3), round(float(page.rect.height), 3))
-            ] += 1
-
-        distinct_page_sizes = [
-            {
-                "width_points": width,
-                "height_points": height,
-                "page_count": count,
-            }
-            for (width, height), count in sorted(page_sizes.items())
-        ]
-
-        return {
-            "page_count": page_count,
-            "pdf_version": pdf_version,
-            "encrypted": encrypted,
-            "needs_password": needs_password,
-            "permissions_raw": permissions_raw,
-            "page_label_rules": page_label_rules,
-            "outline": {
-                "entry_count": len(toc),
-                "max_depth": max(outline_depths, default=0),
-                "valid_target_count": valid_target_count,
-                "invalid_target_count": invalid_target_count,
-            },
-            "text_layer": {
-                "pages_with_text": pages_with_text,
-                "pages_without_text": pages_without_text,
-            },
-            "page_geometry": {
-                "distinct_page_sizes": distinct_page_sizes,
-            },
-            "tool": {
-                "name": "PyMuPDF",
-                "version": str(getattr(fitz, "VersionBind", "unknown")),
-            },
-        }
-    finally:
-        document.close()
-
-
 def inspect_source(
     source: Path | str,
     *,
     expected_size_bytes: int = EXPECTED_SIZE_BYTES,
-    pdf_observer: Callable[[Path], Mapping[str, object]] | None = None,
+    pdf_observer: PdfObserver | None = None,
     component_ranges: Sequence[ComponentRange] = (),
     verified_at_utc: str | None = None,
 ) -> dict[str, object]:
-    source_path = Path(source)
-    size_bytes, sha256 = _hash_regular_file(
-        source_path,
+    """Wrap generic retained-PDF facts in the AISC publication receipt contract."""
+
+    inspected = inspect_retained_pdf(
+        Path(source),
         expected_size_bytes=expected_size_bytes,
+        pdf_observer=pdf_observer,
     )
-    observer = pdf_observer or _observe_pdf_with_pymupdf
-    pdf = _sanitize_pdf_observation(observer(source_path))
+    pdf = inspected["pdf"]
+    if not isinstance(pdf, Mapping):  # pragma: no cover - generic contract guard
+        raise SourceVerificationError("generic PDF inspection returned invalid factual metadata")
     page_count = int(pdf["page_count"])
 
     seen_components: set[str] = set()
@@ -306,10 +127,10 @@ def inspect_source(
         "verified_at_utc": verified_at_utc or _verified_at_now(),
         "artifact": {
             "filename": RETAINED_FILENAME,
-            "size_bytes": size_bytes,
-            "sha256": sha256,
+            "size_bytes": inspected["size_bytes"],
+            "sha256": inspected["sha256"],
         },
-        "pdf": pdf,
+        "pdf": dict(pdf),
         "component_ranges": [item.to_dict() for item in normalized_ranges],
     }
 
