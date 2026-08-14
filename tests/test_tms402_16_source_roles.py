@@ -5,6 +5,8 @@ import unittest
 from building_code_ast import DocumentSourceArtifact
 from building_code_ast.ingest.pdf_layout import PdfBlock
 from building_code_ast.ingest.tms402_16_source_roles import (
+    TMS402_AUTHORITY_POLICY,
+    Tms402AuthorityPolicy,
     Tms402PageLayout,
     Tms402RecoveredRegion,
     Tms402SourceRole,
@@ -68,6 +70,27 @@ class Tms402SourceRoleProducerTests(unittest.TestCase):
         self.assertEqual(production.observations[0].text_origin, "ocr")
         self.assertEqual(production.observations[0].block.bbox, (72.0, 100.0, 280.0, 118.0))
         self.assertEqual(production.observations[0].block.page_number, 67)
+
+    def test_authority_boundary_is_publication_policy_not_recovery_semantics(self) -> None:
+        policy = Tms402AuthorityPolicy(
+            first_component_page=TMS402_AUTHORITY_POLICY.first_component_page,
+            first_code_page=TMS402_AUTHORITY_POLICY.first_code_page,
+            last_component_page=TMS402_AUTHORITY_POLICY.last_component_page,
+            top_content_y=TMS402_AUTHORITY_POLICY.top_content_y,
+            bottom_content_y=TMS402_AUTHORITY_POLICY.bottom_content_y,
+            code_commentary_boundary_x=250.0,
+        )
+        production = produce_tms402_16_observations(
+            [_region(x0=240.0, x1=260.0)],
+            source_artifact=ARTIFACT,
+            authority_policy=policy,
+        )
+
+        self.assertEqual(
+            production.classified_regions[0].source_role,
+            Tms402SourceRole.AMBIGUOUS,
+        )
+        self.assertIn("publication policy", production.classified_regions[0].role_evidence)
 
     def test_crossing_authority_boundary_remains_explicitly_ambiguous(self) -> None:
         production = produce_tms402_16_observations(
