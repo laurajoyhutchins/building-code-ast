@@ -9,9 +9,15 @@
   },
   "landed_reference": {
     "prior_measurement": "corpora/aci-318-19/aci-318-19-zero-chapter-collision-measurement.json",
+    "measurement_method": "PR #267 page-adapter recognition rules across all 628 pages using the repository PyMuPDF layout contract",
+    "post_zero_chapter_total_occurrences": 4076,
+    "post_zero_chapter_unique_locators": 3889,
+    "post_zero_chapter_pages_with_recognized_structure": 490,
     "post_zero_chapter_collision_families": 154,
     "post_zero_chapter_duplicate_occurrences_beyond_first": 187,
-    "post_zero_chapter_unresolved_cross_gutter_blocks": 2481
+    "post_zero_chapter_unresolved_cross_gutter_blocks": 2481,
+    "post_zero_chapter_duplicate_locator_fragments_suppressed": 113,
+    "post_zero_chapter_zero_chapter_candidate_diagnostics": 133
   },
   "classification": {
     "family": "short decimal-leading blocks collide with valid chapter-number locator stems",
@@ -43,16 +49,17 @@
       }
     ],
     "smallest_supported_boundary": "Declaration context must distinguish structural locator promotion from compact numeric/chart labels. Locator value alone is not a safe discriminator.",
-    "unsupported_rule": "No parser correction is promoted from this classification because the current replay did not yet prove a publication-neutral declaration-context predicate that preserves legitimate compact structural headings."
+    "unsupported_rule": "No parser correction is promoted from this classification because the current source evidence does not prove a publication-neutral declaration-context predicate that preserves legitimate compact structural headings."
   },
-  "replay_attempt": {
-    "method": "Direct PyMuPDF block replay using the landed ACI source-role and locator grammar against the exact retained source.",
-    "result": "diagnostic_only",
-    "observed_collision_families": 135,
-    "observed_duplicate_occurrences_beyond_first": 171,
-    "observed_unresolved_cross_gutter_blocks": 2506,
-    "baseline_reproduced": false,
-    "limitation": "These diagnostic denominators do not match the landed post-#267 measurement and therefore are not accepted as replacement denominators. The discrepancy must be resolved before parser promotion or a new whole-document claim."
+  "replay_reconciliation": {
+    "authoritative_post_zero_chapter_denominators_reestablished": true,
+    "authoritative_source": "landed PR #267 measurement artifact at the branch parent",
+    "diagnostic_replay_method": "Direct PyMuPDF block replay against the exact retained source without the complete PR #267 page-adapter measurement pipeline.",
+    "diagnostic_collision_families": 135,
+    "diagnostic_duplicate_occurrences_beyond_first": 171,
+    "diagnostic_unresolved_cross_gutter_blocks": 2506,
+    "diagnostic_matches_authoritative_pipeline": false,
+    "disposition": "The 135/171/2506 diagnostic is not a reproduction of the complete landed measurement pipeline and is not a replacement denominator. The landed 154/187/2481 post-discriminator measurement remains authoritative for this classification gate."
   },
   "provenance": {
     "source_text_retained": false,
