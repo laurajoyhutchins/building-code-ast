@@ -256,8 +256,8 @@ def extract_pdf_layout(path: Path | str) -> PdfLayoutDocument:
         import fitz  # type: ignore[import-not-found]
     except ImportError as exc:  # pragma: no cover - exercised without optional extra
         raise RuntimeError(
-            "PyMuPDF is required for PDF ingestion; install "
-            "building-code-ast[nec-pdf]"
+            "PyMuPDF is required for PDF layout extraction; install "
+            "building-code-ast[pdf-inspection]"
         ) from exc
 
     source = Path(path)
