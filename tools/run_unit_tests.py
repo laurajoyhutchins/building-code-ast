@@ -6,8 +6,8 @@ from __future__ import annotations
 import argparse
 import ast
 from pathlib import Path
+import subprocess
 import sys
-import unittest
 
 
 def unsupported_test_shapes(tests_root: Path) -> tuple[str, ...]:
@@ -65,9 +65,19 @@ def main(argv: list[str] | None = None) -> int:
     if args.check_only:
         return 0
 
-    suite = unittest.defaultTestLoader.discover(str(tests_root))
-    result = unittest.TextTestRunner(verbosity=2).run(suite)
-    return 0 if result.wasSuccessful() else 1
+    result = subprocess.run(
+        [
+            sys.executable,
+            "-m",
+            "unittest",
+            "discover",
+            "-s",
+            str(args.tests_root),
+            "-v",
+        ],
+        check=False,
+    )
+    return result.returncode
 
 
 if __name__ == "__main__":
