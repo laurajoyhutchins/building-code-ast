@@ -13,7 +13,7 @@ import sys
 from typing import Any
 
 from building_code_ast import document_model
-from building_code_ast.nfpa13_bundle import canonical_json_bytes
+from building_code_ast.nfpa13_bundle import canonical_json_bytes as _shared_canonical_json_bytes
 from building_code_ast.pdf_observation import observe_pymupdf_page
 
 
@@ -33,6 +33,10 @@ _LEGACY_SPEC.loader.exec_module(_legacy)
 for _name in dir(_legacy):
     if not _name.startswith("__"):
         globals()[_name] = getattr(_legacy, _name)
+
+# Reassert shared primitives after copying the legacy public surface so the
+# adapter cannot accidentally expose a duplicate implementation by name.
+canonical_json_bytes = _shared_canonical_json_bytes
 
 
 def _node_id(locator: str, node_type: str) -> str:
