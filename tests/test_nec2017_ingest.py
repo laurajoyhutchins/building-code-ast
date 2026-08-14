@@ -180,73 +180,80 @@ class ArticleSeedTests(unittest.TestCase):
             select_article_blocks(_synthetic_layout(), "250")
 
 
+def _load_cli_module():
+    script_path = Path(__file__).resolve().parents[1] / "scripts" / "ingest_nec_2017.py"
+    spec = importlib.util.spec_from_file_location("ingest_nec_2017_cli", script_path)
+    if spec is None or spec.loader is None:
+        raise RuntimeError("unable to load ingestion CLI")
+    module = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(module)
+    return module
+
+
 class CliTests(unittest.TestCase):
-    def _module(self):
-        module_path = Path(__file__).resolve().parents[1] / "tools" / "ingest_nec2017.py"
-        spec = importlib.util.spec_from_file_location("ingest_nec2017", module_path)
-        self.assertIsNotNone(spec)
-        self.assertIsNotNone(spec.loader)
-        module = importlib.util.module_from_spec(spec)
-        spec.loader.exec_module(module)
-        return module
+    def test_nonempty_output_directory_requires_force(self) -> None:
+        cli = _load_cli_module()
+        with tempfile.TemporaryDirectory() as temporary:
+            output_dir = Path(temporary) / "output"
+            output_dir.mkdir()
+            (output_dir / "existing.txt").write_text("occupied", encoding="utf-8")
+
+            with self.assertRaisesRegex(FileExistsError, "--force"):
+                cli.prepare_output_dir(output_dir, force=False)
 
     def test_force_refuses_to_delete_unrecognized_directory_contents(self) -> None:
-        module = self._module()
-        with tempfile.TemporaryDirectory() as directory:
-            output = Path(directory) / "output"
-            output.mkdir()
-            (output / "unrecognized.txt").write_text("keep me", encoding="utf-8")
+        cli = _load_cli_module()
+        with tempfile.TemporaryDirectory() as temporary:
+            output_dir = Path(temporary) / "output"
+            output_dir.mkdir()
+            (output_dir / "keep-me.txt").write_text("owner data", encoding="utf-8")
 
-            with self.assertRaisesRegex(RuntimeError, "unrecognized"):
-                module.prepare_output_directory(output, force=True)
+            with self.assertRaisesRegex(FileExistsError, "unexpected entries"):
+                cli.prepare_output_dir(output_dir, force=True)
 
-            self.assertTrue((output / "unrecognized.txt").exists())
+            self.assertTrue((output_dir / "keep-me.txt").exists())
 
     def test_force_replaces_only_known_generated_files(self) -> None:
-        module = self._module()
-        with tempfile.TemporaryDirectory() as directory:
-            output = Path(directory) / "output"
-            output.mkdir()
-            for name in module.KNOWN_OUTPUT_FILES:
-                (output / name).write_text("old", encoding="utf-8")
+        cli = _load_cli_module()
+        with tempfile.TemporaryDirectory() as temporary:
+            output_dir = Path(temporary) / "output"
+            output_dir.mkdir()
+            (output_dir / "manifest.json").write_text("{}", encoding="utf-8")
+            (output_dir / "article-100.json").write_text("{}", encoding="utf-8")
 
-            module.prepare_output_directory(output, force=True)
+            cli.prepare_output_dir(output_dir, force=True)
 
-            self.assertEqual(list(output.iterdir()), [])
-
-    def test_nonempty_output_directory_requires_force(self) -> None:
-        module = self._module()
-        with tempfile.TemporaryDirectory() as directory:
-            output = Path(directory) / "output"
-            output.mkdir()
-            (output / next(iter(module.KNOWN_OUTPUT_FILES))).write_text(
-                "old", encoding="utf-8"
-            )
-
-            with self.assertRaisesRegex(RuntimeError, "not empty"):
-                module.prepare_output_directory(output, force=False)
+            self.assertEqual(list(output_dir.iterdir()), [])
 
     def test_written_manifest_does_not_disclose_absolute_source_path(self) -> None:
-        module = self._module()
-        with tempfile.TemporaryDirectory() as directory:
-            output = Path(directory) / "output"
-            output.mkdir()
-            source = Path(directory) / "private-nec.pdf"
-            source.write_bytes(b"synthetic")
-            payload = {
-                "source_manifest": {
-                    "artifact_id": "nfpa:70",
-                    "edition_id": "2017:pdf:sha256:" + "a" * 64,
-                    "file_name": source.name,
-                    "sha256": "a" * 64,
-                    "size_bytes": source.stat().st_size,
-                }
-            }
-            module.write_json(output / "manifest.json", payload)
-            rendered = (output / "manifest.json").read_text(encoding="utf-8")
+        cli = _load_cli_module()
+        with tempfile.TemporaryDirectory() as temporary:
+            root = Path(temporary)
+            source = root / "private" / "synthetic-nec.pdf"
+            source.parent.mkdir()
+            source.write_bytes(b"synthetic-pdf-bytes")
+            output_dir = root / "generated"
 
-            self.assertNotIn(str(source.parent), rendered)
-            self.assertIn(source.name, rendered)
+            written = cli.write_outputs(
+                _synthetic_layout(),
+                source,
+                output_dir,
+                articles=("100", "110"),
+                force=False,
+            )
+
+            self.assertEqual(
+                {path.name for path in written},
+                {"manifest.json", "article-100.json", "article-110.json"},
+            )
+            manifest_text = (output_dir / "manifest.json").read_text(encoding="utf-8")
+            manifest = json.loads(manifest_text)
+            self.assertNotIn(str(root), manifest_text)
+            self.assertEqual(
+                manifest["source_manifest"]["file_name"],
+                "synthetic-nec.pdf",
+            )
+            self.assertTrue(manifest_text.endswith("\n"))
 
 
 if __name__ == "__main__":
