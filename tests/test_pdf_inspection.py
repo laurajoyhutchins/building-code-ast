@@ -94,15 +94,18 @@ class PdfInspectionTests(unittest.TestCase):
             )
         )
 
+        self.assertEqual(summary["pages_with_embedded_text"], 1)
         self.assertEqual(summary["image_only_pages"], [2, 3])
         self.assertEqual(summary["image_only_run_count"], 1)
+        self.assertEqual(summary["maximum_image_only_run_length"], 2)
+        self.assertEqual(summary["image_only_runs"], [[2, 3]])
         self.assertTrue(summary["all_image_only_pages_are_single_full_page_images"])
 
     def test_page_surface_summary_requires_contiguous_component_pages(self) -> None:
-        with self.assertRaisesRegex(ValueError, "each one-based component page"):
+        with self.assertRaisesRegex(ValueError, "each one-based page"):
             summarize_image_only_pages(
                 (
-                    PageSurfaceObservation(1, True, 0, None),
+                    PageSurfaceObservation(1, True, 0, 0.0),
                     PageSurfaceObservation(3, False, 1, 1.0),
                 )
             )
