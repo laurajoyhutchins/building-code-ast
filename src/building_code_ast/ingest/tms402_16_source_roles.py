@@ -2,10 +2,9 @@
 
 The retained TMS 402/602-16 artifact is image-based and presents normative
 code beside informational commentary on many, but not all, TMS 402 pages.
-This module consumes coordinate-bearing OCR/recovery regions and requires
-explicit page-layout evidence before assigning normative authority. Unsupported
-layouts, page furniture, front matter, and regions crossing the code/commentary
-boundary remain explicitly ambiguous and are not emitted as parser inputs.
+This module consumes coordinate-bearing OCR/recovery regions and requires an
+explicit publication-specific authority policy before assigning source role.
+Generic recovery provenance contains no left/right authority semantics.
 """
 
 from __future__ import annotations
@@ -23,12 +22,6 @@ _TMS402_ARTIFACT_ID = (
     "sha256:947476cf326fef261cb6af581565c8089945c6651eb054d791b5c910431f8e1d"
 )
 _TMS402_COMPONENT_ID = "tms-402-16"
-_TMS402_FIRST_PAGE = 57
-_TMS402_FIRST_CODE_PAGE = 67
-_TMS402_LAST_PAGE = 320
-_TOP_CONTENT_Y = 65.0
-_BOTTOM_CONTENT_Y = 750.0
-_BODY_MIDPOINT = 306.0
 _SUPPORTED_TEXT_ORIGINS = {"ocr"}
 
 
@@ -43,6 +36,45 @@ class Tms402PageLayout(StrEnum):
 
     PARALLEL_CODE_COMMENTARY = "parallel_code_commentary"
     UNSUPPORTED = "unsupported"
+
+
+@dataclass(frozen=True, slots=True)
+class Tms402AuthorityPolicy:
+    """Publication evidence required to map recovered regions to source roles."""
+
+    first_component_page: int
+    first_code_page: int
+    last_component_page: int
+    top_content_y: float
+    bottom_content_y: float
+    code_commentary_boundary_x: float
+    required_parallel_layout: Tms402PageLayout = Tms402PageLayout.PARALLEL_CODE_COMMENTARY
+
+    def __post_init__(self) -> None:
+        if self.first_component_page < 1:
+            raise ValueError("TMS 402 authority policy first component page must be positive")
+        if not self.first_component_page <= self.first_code_page <= self.last_component_page:
+            raise ValueError("TMS 402 authority policy page extent is invalid")
+        if self.bottom_content_y <= self.top_content_y:
+            raise ValueError("TMS 402 authority policy body bounds are invalid")
+        if self.code_commentary_boundary_x <= 0.0:
+            raise ValueError("TMS 402 authority policy column boundary must be positive")
+        if not isinstance(self.required_parallel_layout, Tms402PageLayout):
+            object.__setattr__(
+                self,
+                "required_parallel_layout",
+                Tms402PageLayout(self.required_parallel_layout),
+            )
+
+
+TMS402_AUTHORITY_POLICY = Tms402AuthorityPolicy(
+    first_component_page=57,
+    first_code_page=67,
+    last_component_page=320,
+    top_content_y=65.0,
+    bottom_content_y=750.0,
+    code_commentary_boundary_x=306.0,
+)
 
 
 @dataclass(frozen=True, slots=True)
@@ -139,50 +171,57 @@ def _validate_source_artifact(source_artifact: DocumentSourceArtifact) -> None:
         )
 
 
-def _classify_region(region: Tms402RecoveredRegion) -> RoleQualifiedTms402Region:
+def _classify_region(
+    region: Tms402RecoveredRegion,
+    policy: Tms402AuthorityPolicy,
+) -> RoleQualifiedTms402Region:
     page = region.block.page_number
-    if page < _TMS402_FIRST_PAGE or page > _TMS402_LAST_PAGE:
-        raise ValueError("TMS 402 observation production is bounded to PDF pages 57-320")
+    if page < policy.first_component_page or page > policy.last_component_page:
+        raise ValueError(
+            "TMS 402 observation production is bounded to PDF pages "
+            f"{policy.first_component_page}-{policy.last_component_page}"
+        )
 
-    if page < _TMS402_FIRST_CODE_PAGE:
+    if page < policy.first_code_page:
         return RoleQualifiedTms402Region(
             region=region,
             source_role=Tms402SourceRole.AMBIGUOUS,
-            role_evidence="component front matter precedes the canonical C-1 code page",
+            role_evidence="component front matter precedes the publication policy's first code page",
         )
 
     _, y0, _, y1 = region.block.bbox
-    if y0 < _TOP_CONTENT_Y or y1 > _BOTTOM_CONTENT_Y:
+    if y0 < policy.top_content_y or y1 > policy.bottom_content_y:
         return RoleQualifiedTms402Region(
             region=region,
             source_role=Tms402SourceRole.AMBIGUOUS,
-            role_evidence="region lies outside the canonical TMS 402 body-content bounds",
+            role_evidence="region lies outside the publication policy's body-content bounds",
         )
 
-    if region.page_layout is not Tms402PageLayout.PARALLEL_CODE_COMMENTARY:
+    if region.page_layout is not policy.required_parallel_layout:
         return RoleQualifiedTms402Region(
             region=region,
             source_role=Tms402SourceRole.AMBIGUOUS,
-            role_evidence="page layout is not explicitly recovered as parallel code/commentary",
+            role_evidence="page layout does not satisfy the explicit publication authority policy",
         )
 
     x0, _, x1, _ = region.block.bbox
-    if x1 <= _BODY_MIDPOINT:
+    boundary = policy.code_commentary_boundary_x
+    if x1 <= boundary:
         return RoleQualifiedTms402Region(
             region=region,
             source_role=Tms402SourceRole.NORMATIVE,
-            role_evidence="parallel code/commentary layout; region lies wholly left of boundary",
+            role_evidence="publication parallel-layout policy; region lies wholly on code side",
         )
-    if x0 >= _BODY_MIDPOINT:
+    if x0 >= boundary:
         return RoleQualifiedTms402Region(
             region=region,
             source_role=Tms402SourceRole.COMMENTARY,
-            role_evidence="parallel code/commentary layout; region lies wholly right of boundary",
+            role_evidence="publication parallel-layout policy; region lies wholly on commentary side",
         )
     return RoleQualifiedTms402Region(
         region=region,
         source_role=Tms402SourceRole.AMBIGUOUS,
-        role_evidence="region crosses the normative/commentary authority boundary",
+        role_evidence="region crosses the publication policy's code/commentary authority boundary",
     )
 
 
@@ -190,18 +229,19 @@ def produce_tms402_16_observations(
     regions: Iterable[Tms402RecoveredRegion],
     *,
     source_artifact: DocumentSourceArtifact,
+    authority_policy: Tms402AuthorityPolicy = TMS402_AUTHORITY_POLICY,
 ) -> Tms402ObservationProduction:
     """Classify recovered regions and emit only authority-safe parser inputs.
 
-    The producer is intentionally bounded to the canonical TMS 402 component in
-    the exact retained artifact. A region becomes normative or commentary only
-    when it lies within body-content bounds, recovery has explicitly established
-    the parallel code/commentary page layout, and the region lies wholly on one
-    side of the artifact-local 306 pt boundary. All other in-range regions remain
-    explicit ambiguous evidence.
+    Generic OCR/recovery provenance does not imply authority. A region becomes
+    normative or commentary only when the explicit TMS publication policy says
+    the page/layout/coordinates support that role. All other in-range regions
+    remain explicit ambiguous evidence.
     """
 
     _validate_source_artifact(source_artifact)
     return Tms402ObservationProduction(
-        classified_regions=tuple(_classify_region(region) for region in regions)
+        classified_regions=tuple(
+            _classify_region(region, authority_policy) for region in regions
+        )
     )

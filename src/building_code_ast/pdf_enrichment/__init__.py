@@ -17,6 +17,7 @@ from .model import (
     TextOrigin,
     plan_from_dict,
 )
+from .recovery import searchable_text_entry_from_recovery
 from .runtime import enrich_pdf
 
 __all__ = [
@@ -36,4 +37,5 @@ __all__ = [
     "TextOrigin",
     "enrich_pdf",
     "plan_from_dict",
+    "searchable_text_entry_from_recovery",
 ]

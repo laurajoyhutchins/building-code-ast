@@ -5,7 +5,9 @@ import unittest
 from building_code_ast.aisc360_hierarchy_characterization import HierarchyPageObservation
 from building_code_ast.aisc360_hierarchy_promotion import promote_aisc360_hierarchy
 from building_code_ast.aisc360_raster_hierarchy_observation import (
+    AISC360_COMPONENT_PAGE_COUNT,
     AISC360_DERIVATIVE_SHA256,
+    AISC360_DERIVATIVE_SIZE_BYTES,
     AISC360_REPRESENTATIVE_RENDER_RECIPE,
     RasterHierarchyPageObservation,
     summarize_raster_hierarchy_observations,
@@ -36,8 +38,8 @@ def _durable_raster_receipt(*, page: int, locator: str) -> dict[str, object]:
         "component": "ansi-aisc-360-16",
         "source_derivative": {
             "sha256": AISC360_DERIVATIVE_SHA256,
-            "byte_count": 1,
-            "page_count": 2,
+            "byte_count": AISC360_DERIVATIVE_SIZE_BYTES,
+            "page_count": AISC360_COMPONENT_PAGE_COUNT,
         },
         "observation_boundary": {
             "source_kind": "raster_recovery",

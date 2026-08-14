@@ -1,0 +1,95 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://laurajoyhutchins.github.io/building-code-ast/schemas/recovery-observation.schema.json",
+  "title": "Recovery Observation v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema",
+    "source",
+    "region",
+    "source_kind",
+    "render",
+    "recovery",
+    "recovered_text_sha256",
+    "payload_state",
+    "performed_operations",
+    "omitted_operations",
+    "warnings"
+  ],
+  "properties": {
+    "schema": {"const": "recovery-observation-v1"},
+    "source": {"$ref": "#/$defs/source"},
+    "region": {"$ref": "#/$defs/region"},
+    "source_kind": {"enum": ["raster_recovery", "ocr_recovery"]},
+    "render": {"$ref": "#/$defs/tool"},
+    "recovery": {"$ref": "#/$defs/tool"},
+    "recovered_text_sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "payload_state": {"enum": ["digest_only", "private_retrievable"]},
+    "performed_operations": {"$ref": "#/$defs/string_set"},
+    "omitted_operations": {"$ref": "#/$defs/string_set"},
+    "warnings": {"$ref": "#/$defs/string_set"}
+  },
+  "$defs": {
+    "source": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["sha256", "size_bytes", "page_count", "media_type"],
+      "properties": {
+        "sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+        "size_bytes": {"type": "integer", "minimum": 1},
+        "page_count": {"type": "integer", "minimum": 1},
+        "media_type": {"type": "string", "minLength": 1}
+      }
+    },
+    "region": {
+      "oneOf": [
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["page_number", "scope", "coordinate_space"],
+          "properties": {
+            "page_number": {"type": "integer", "minimum": 1},
+            "scope": {"const": "full_page"},
+            "coordinate_space": {"enum": ["pdf_points", "raster_pixels"]}
+          }
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["page_number", "scope", "coordinate_space", "bbox"],
+          "properties": {
+            "page_number": {"type": "integer", "minimum": 1},
+            "scope": {"const": "region"},
+            "coordinate_space": {"enum": ["pdf_points", "raster_pixels"]},
+            "bbox": {
+              "type": "array",
+              "minItems": 4,
+              "maxItems": 4,
+              "items": {"type": "number"}
+            }
+          }
+        }
+      ]
+    },
+    "tool": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["backend", "version", "parameters"],
+      "properties": {
+        "backend": {"type": "string", "minLength": 1},
+        "version": {"type": "string", "minLength": 1},
+        "parameters": {
+          "type": "object",
+          "additionalProperties": {"type": "string", "minLength": 1}
+        },
+        "output_sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"}
+      }
+    },
+    "string_set": {
+      "type": "array",
+      "uniqueItems": true,
+      "items": {"type": "string", "minLength": 1}
+    }
+  }
+}
