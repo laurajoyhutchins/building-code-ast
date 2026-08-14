@@ -139,6 +139,8 @@ class Ashrae901DocumentAstTests(unittest.TestCase):
                     printed_page="296",
                     block_number=1,
                     y=80,
+                    font="Helvetica-Bold",
+                    size=11.0,
                 ),
                 _observation("Synthetic appendix prose.", page=300, printed_page="296", block_number=2, y=110),
             )
@@ -151,6 +153,8 @@ class Ashrae901DocumentAstTests(unittest.TestCase):
                     printed_page="298",
                     block_number=1,
                     y=80,
+                    font="Helvetica-Bold",
+                    size=11.0,
                 ),
                 _observation("Synthetic explanatory prose.", page=302, printed_page="298", block_number=2, y=110),
             )
@@ -168,6 +172,8 @@ class Ashrae901DocumentAstTests(unittest.TestCase):
                     printed_page="296",
                     block_number=1,
                     y=80,
+                    font="Helvetica-Bold",
+                    size=11.0,
                 ),
                 _observation(
                     "A1 Synthetic Appendix Section",
@@ -218,6 +224,8 @@ class Ashrae901DocumentAstTests(unittest.TestCase):
                     printed_page="298",
                     block_number=1,
                     y=80,
+                    font="Helvetica-Bold",
+                    size=11.0,
                 ),
                 _observation(
                     "E1 Synthetic False Positive",
@@ -242,6 +250,8 @@ class Ashrae901DocumentAstTests(unittest.TestCase):
                         printed_page="296",
                         block_number=1,
                         y=80,
+                        font="Helvetica-Bold",
+                        size=11.0,
                     ),
                 )
             )
