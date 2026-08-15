@@ -15,7 +15,7 @@ from building_code_ast.ingest.ibc2018 import (
     parse_chapter_numbers,
 )
 from building_code_ast.ingest.local_runner import (
-    prepare_output_dir,
+    prepare_output_dir as _prepare_output_dir,
     source_digest,
     warn_private_output,
     write_json,
@@ -34,6 +34,16 @@ def parse_chapters(value: str) -> tuple[str, ...]:
         raise argparse.ArgumentTypeError(str(exc)) from exc
 
 
+def prepare_output_dir(output_dir: Path, *, force: bool) -> None:
+    """Prepare the IBC output directory using the shared local runner policy."""
+
+    _prepare_output_dir(
+        output_dir,
+        force=force,
+        generated_name_pattern=r"chapter-\d+\.json",
+    )
+
+
 def write_outputs(
     source_path: Path,
     output_dir: Path,
@@ -46,7 +56,7 @@ def write_outputs(
         raise FileNotFoundError(source)
     selected = parse_chapter_numbers(chapters)
     output = Path(output_dir)
-    prepare_output_dir(output, force=force, generated_name_pattern=r"chapter-\d+\.json")
+    prepare_output_dir(output, force=force)
     layout = extract_ibc2018_layout(source, selected)
     source_sha256, source_size = source_digest(source)
     records: list[dict[str, object]] = []
