@@ -1,0 +1,34 @@
+{
+  "schema": "nec11026-capability-delta-v1",
+  "source": {
+    "sha256": "603ef5c461247bacd716e3953222bfb227f1ddc780fffdbfcb90756b02c237c7",
+    "size_bytes": 7422245,
+    "pages": 881,
+    "encrypted": false,
+    "pdf_version": "1.7"
+  },
+  "section": {
+    "locator": "110.26",
+    "layout_text_sha256": "cb08b63a57e3672545384d598aaaaaad8072cbea51f3f77473a1c28c8b4b29ec",
+    "layout_text_characters": 12377,
+    "exception_markers": 5,
+    "table_references": 3,
+    "section_or_article_references": 2,
+    "normative_sentences_with_table_reference": 2
+  },
+  "classification": {
+    "current_review_contract": "nec_section_review/0.1.0",
+    "current_generic_provision_ast": "0.3.0",
+    "missing_family": "reviewed code-reference dependency projection",
+    "selected_relationship": "table dependency",
+    "reason": "SectionReview already preserves typed section, article, and table references with exact spans, while the generic Provision AST has no general dependency relationship surface."
+  },
+  "implementation": {
+    "projection_contract": "nec_reviewed_provision_projection/0.1.0",
+    "state": "reviewed",
+    "reparses_source_expression": false,
+    "dependencies_come_from_reviewed_evidence": true,
+    "unsupported_condition_mapping_fails_closed": true,
+    "protected_source_expression_deposited": false
+  }
+}
