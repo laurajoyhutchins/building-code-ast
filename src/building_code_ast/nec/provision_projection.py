@@ -1,7 +1,7 @@
 """Source-safe projection from reviewed NEC clauses into generic provision AST values.
 
 The projection preserves the reviewed clause as the semantic authority. It does
-not reparses protected source text or infer relationships that were not already
+not reparse protected source text or infer relationships that were not already
 established by ``SectionReview``.
 """
 
@@ -11,6 +11,7 @@ from dataclasses import dataclass, field
 from enum import StrEnum
 from typing import Any
 
+from ..document_model import DocumentSourceArtifact
 from ..model import (
     AST_VERSION,
     Action,
@@ -40,7 +41,7 @@ class SemanticProjectionState(StrEnum):
 
 @dataclass(frozen=True, slots=True)
 class ReviewedProvisionProjection:
-    source_artifact: Any
+    source_artifact: DocumentSourceArtifact
     section_locator: str
     clause_id: str
     state: SemanticProjectionState
