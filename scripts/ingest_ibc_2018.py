@@ -4,11 +4,7 @@
 from __future__ import annotations
 
 import argparse
-import hashlib
-import json
 from pathlib import Path
-import re
-import sys
 from typing import Iterable
 
 from building_code_ast.ingest.ibc2018 import (
@@ -17,6 +13,13 @@ from building_code_ast.ingest.ibc2018 import (
     build_chapter_seed,
     extract_ibc2018_layout,
     parse_chapter_numbers,
+)
+from building_code_ast.ingest.local_runner import (
+    prepare_output_dir as _prepare_output_dir,
+    source_digest,
+    warn_private_output,
+    write_json,
+    write_manifest,
 )
 
 DEFAULT_CHAPTERS = ("1", "2", "3")
@@ -32,52 +35,12 @@ def parse_chapters(value: str) -> tuple[str, ...]:
 
 
 def prepare_output_dir(output_dir: Path, *, force: bool) -> None:
-    if output_dir.exists() and not output_dir.is_dir():
-        raise NotADirectoryError(output_dir)
-    if not output_dir.exists():
-        output_dir.mkdir(parents=True, exist_ok=False)
-        return
+    """Prepare the IBC output directory using the shared local runner policy."""
 
-    children = tuple(output_dir.iterdir())
-    if not children:
-        return
-    if not force:
-        raise FileExistsError(
-            f"output directory is not empty: {output_dir}; pass --force to replace it"
-        )
-
-    unexpected = [
-        child.name
-        for child in children
-        if not child.is_file()
-        or (
-            child.name != "manifest.json"
-            and re.fullmatch(r"chapter-\d+\.json", child.name) is None
-        )
-    ]
-    if unexpected:
-        raise FileExistsError(
-            "output directory contains unexpected entries and will not be deleted: "
-            + ", ".join(sorted(unexpected))
-        )
-    for child in children:
-        child.unlink()
-
-
-def _source_digest(path: Path) -> tuple[str, int]:
-    digest = hashlib.sha256()
-    size = 0
-    with path.open("rb") as stream:
-        while chunk := stream.read(1024 * 1024):
-            digest.update(chunk)
-            size += len(chunk)
-    return digest.hexdigest(), size
-
-
-def _write_json(path: Path, payload: object) -> None:
-    path.write_text(
-        json.dumps(payload, indent=2, sort_keys=True, ensure_ascii=False) + "\n",
-        encoding="utf-8",
+    _prepare_output_dir(
+        output_dir,
+        force=force,
+        generated_name_pattern=r"chapter-\d+\.json",
     )
 
 
@@ -92,9 +55,10 @@ def write_outputs(
     if not source.is_file():
         raise FileNotFoundError(source)
     selected = parse_chapter_numbers(chapters)
-    prepare_output_dir(Path(output_dir), force=force)
+    output = Path(output_dir)
+    prepare_output_dir(output, force=force)
     layout = extract_ibc2018_layout(source, selected)
-    source_sha256, source_size = _source_digest(source)
+    source_sha256, source_size = source_digest(source)
     records: list[dict[str, object]] = []
     written: list[Path] = []
     first_manifest: dict[str, object] | None = None
@@ -106,8 +70,8 @@ def write_outputs(
             source_sha256=source_sha256,
             source_size=source_size,
         )
-        chapter_path = Path(output_dir) / f"chapter-{chapter_number}.json"
-        _write_json(chapter_path, seed.to_dict())
+        chapter_path = output / f"chapter-{chapter_number}.json"
+        write_json(chapter_path, seed.to_dict())
         written.append(chapter_path)
         records.append(
             {
@@ -123,9 +87,8 @@ def write_outputs(
     if first_manifest is None:
         raise ValueError("at least one chapter number is required")
 
-    manifest_path = Path(output_dir) / "manifest.json"
-    _write_json(
-        manifest_path,
+    return write_manifest(
+        output,
         {
             "seed_set_version": SEED_VERSION,
             "layout_analysis_version": LAYOUT_ANALYSIS_VERSION,
@@ -134,8 +97,8 @@ def write_outputs(
             "publication_boundary": "private-local-output",
             "reconstruction": "positioned-glyph adaptive layout reconstruction",
         },
+        written,
     )
-    return (manifest_path, *written)
 
 
 def build_parser() -> argparse.ArgumentParser:
@@ -168,11 +131,7 @@ def build_parser() -> argparse.ArgumentParser:
 
 def main(argv: list[str] | None = None) -> int:
     args = build_parser().parse_args(argv)
-    print(
-        "Warning: generated files may contain copyrighted IBC text. "
-        "Keep the output private and outside public Git.",
-        file=sys.stderr,
-    )
+    warn_private_output("IBC")
     written = write_outputs(
         args.pdf,
         args.output_dir,
