@@ -4,13 +4,16 @@
 from __future__ import annotations
 
 import argparse
-import hashlib
-import json
 from pathlib import Path
-import re
-import sys
 from typing import Iterable
 
+from building_code_ast.ingest.local_runner import (
+    prepare_output_dir,
+    source_digest,
+    warn_private_output,
+    write_json,
+    write_manifest,
+)
 from building_code_ast.ingest.nec2017 import build_article_seed
 from building_code_ast.ingest.pdf_layout import PdfLayoutDocument, extract_pdf_layout
 
@@ -29,56 +32,6 @@ def parse_articles(value: str) -> tuple[str, ...]:
     return articles
 
 
-def prepare_output_dir(output_dir: Path, *, force: bool) -> None:
-    if output_dir.exists() and not output_dir.is_dir():
-        raise NotADirectoryError(output_dir)
-    if not output_dir.exists():
-        output_dir.mkdir(parents=True, exist_ok=False)
-        return
-
-    children = tuple(output_dir.iterdir())
-    if not children:
-        return
-    if not force:
-        raise FileExistsError(
-            f"output directory is not empty: {output_dir}; pass --force to replace it"
-        )
-
-    unexpected = [
-        child.name
-        for child in children
-        if not child.is_file()
-        or (
-            child.name != "manifest.json"
-            and re.fullmatch(r"article-\d+\.json", child.name) is None
-        )
-    ]
-    if unexpected:
-        raise FileExistsError(
-            "output directory contains unexpected entries and will not be deleted: "
-            + ", ".join(sorted(unexpected))
-        )
-    for child in children:
-        child.unlink()
-
-
-def _source_digest(path: Path) -> tuple[str, int]:
-    digest = hashlib.sha256()
-    size = 0
-    with path.open("rb") as stream:
-        while chunk := stream.read(1024 * 1024):
-            digest.update(chunk)
-            size += len(chunk)
-    return digest.hexdigest(), size
-
-
-def _write_json(path: Path, payload: object) -> None:
-    path.write_text(
-        json.dumps(payload, indent=2, sort_keys=True, ensure_ascii=False) + "\n",
-        encoding="utf-8",
-    )
-
-
 def write_outputs(
     layout: PdfLayoutDocument,
     source_path: Path,
@@ -92,9 +45,10 @@ def write_outputs(
     source = Path(source_path)
     if not source.is_file():
         raise FileNotFoundError(source)
-    prepare_output_dir(Path(output_dir), force=force)
+    output = Path(output_dir)
+    prepare_output_dir(output, force=force, generated_name_pattern=r"article-\d+\.json")
 
-    source_sha256, source_size = _source_digest(source)
+    source_sha256, source_size = source_digest(source)
     article_records: list[dict[str, str]] = []
     written: list[Path] = []
     first_manifest: dict[str, object] | None = None
@@ -106,9 +60,8 @@ def write_outputs(
             source_sha256=source_sha256,
             source_size=source_size,
         )
-        payload = seed.to_dict()
-        article_path = Path(output_dir) / f"article-{article_number}.json"
-        _write_json(article_path, payload)
+        article_path = output / f"article-{article_number}.json"
+        write_json(article_path, seed.to_dict())
         written.append(article_path)
         article_records.append(
             {
@@ -123,17 +76,16 @@ def write_outputs(
     if first_manifest is None:
         raise ValueError("at least one article number is required")
 
-    manifest_path = Path(output_dir) / "manifest.json"
-    _write_json(
-        manifest_path,
+    return write_manifest(
+        output,
         {
             "seed_set_version": "0.1.0",
             "source_manifest": first_manifest,
             "articles": article_records,
             "publication_boundary": "private-local-output",
         },
+        written,
     )
-    return (manifest_path, *written)
 
 
 def build_parser() -> argparse.ArgumentParser:
@@ -166,11 +118,7 @@ def build_parser() -> argparse.ArgumentParser:
 
 def main(argv: list[str] | None = None) -> int:
     args = build_parser().parse_args(argv)
-    print(
-        "Warning: generated files may contain copyrighted NEC text. "
-        "Keep the output private and outside public Git.",
-        file=sys.stderr,
-    )
+    warn_private_output("NEC")
     layout = extract_pdf_layout(args.pdf)
     written = write_outputs(
         layout,
