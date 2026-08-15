@@ -219,6 +219,28 @@ def _line_to_block(line: VisualLine) -> PdfBlock:
     )
 
 
+def _exact_block_evidence_key(block: PdfBlock) -> tuple[object, ...]:
+    """Return extractor evidence identity, excluding only the block sequence number."""
+
+    return (
+        block.page_number,
+        block.bbox,
+        block.text,
+        block.table_region_id,
+        tuple(
+            (
+                line.bbox,
+                line.direction,
+                tuple(
+                    (span.bbox, span.text, span.font, span.size, span.flags)
+                    for span in line.spans
+                ),
+            )
+            for line in block.lines
+        ),
+    )
+
+
 def analyze_nds2018_pages(pages: Sequence[PdfPage]) -> tuple[NdsLayoutPage, ...]:
     """Return deterministic page-local layout evidence without structural parsing."""
 
@@ -233,6 +255,7 @@ def analyze_nds2018_pages(pages: Sequence[PdfPage]) -> tuple[NdsLayoutPage, ...]
     for page in ordered_pages:
         retained: list[PdfBlock] = []
         removed: list[NdsRemovedBlock] = []
+        exact_blocks: set[tuple[object, ...]] = set()
         for block in sorted(page.blocks, key=_block_sort_key):
             if not normalize_block_text(block.text):
                 removed.append(NdsRemovedBlock(block, "empty_text"))
@@ -241,8 +264,13 @@ def analyze_nds2018_pages(pages: Sequence[PdfPage]) -> tuple[NdsLayoutPage, ...]
             if key is not None and key in furniture_keys:
                 region = key.split(":", 1)[0]
                 removed.append(NdsRemovedBlock(block, f"recurring_{region}_furniture"))
-            else:
-                retained.append(block)
+                continue
+            exact_key = _exact_block_evidence_key(block)
+            if exact_key in exact_blocks:
+                removed.append(NdsRemovedBlock(block, "exact_duplicate_extraction"))
+                continue
+            exact_blocks.add(exact_key)
+            retained.append(block)
 
         lines = tuple(_visual_line(block) for block in retained)
         cleaned = CleanedPage(
