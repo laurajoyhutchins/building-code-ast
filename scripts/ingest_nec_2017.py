@@ -8,7 +8,7 @@ from pathlib import Path
 from typing import Iterable
 
 from building_code_ast.ingest.local_runner import (
-    prepare_output_dir,
+    prepare_output_dir as _prepare_output_dir,
     source_digest,
     warn_private_output,
     write_json,
@@ -32,6 +32,16 @@ def parse_articles(value: str) -> tuple[str, ...]:
     return articles
 
 
+def prepare_output_dir(output_dir: Path, *, force: bool) -> None:
+    """Prepare the NEC output directory using the shared local runner policy."""
+
+    _prepare_output_dir(
+        output_dir,
+        force=force,
+        generated_name_pattern=r"article-\d+\.json",
+    )
+
+
 def write_outputs(
     layout: PdfLayoutDocument,
     source_path: Path,
@@ -46,7 +56,7 @@ def write_outputs(
     if not source.is_file():
         raise FileNotFoundError(source)
     output = Path(output_dir)
-    prepare_output_dir(output, force=force, generated_name_pattern=r"article-\d+\.json")
+    prepare_output_dir(output, force=force)
 
     source_sha256, source_size = source_digest(source)
     article_records: list[dict[str, str]] = []
