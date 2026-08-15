@@ -1,0 +1,14 @@
+{
+  "$schema": "https://raw.githubusercontent.com/laurajoyhutchins/personal-codex-skills/main/docs/reference/repository-ci-contract-v1.schema.json",
+  "version": 1,
+  "verify": {
+    "commands": [["python", "tools/verify_repository.py"]]
+  },
+  "evidence": {
+    "path": ".building-code-ast/ci-evidence/verification.json"
+  },
+  "requirements": {
+    "clean_tree": true,
+    "locked_dependencies": true
+  }
+}
