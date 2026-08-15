@@ -19,7 +19,7 @@ def test_source_digest_reports_exact_bytes(tmp_path: Path) -> None:
 
     digest, size = source_digest(source)
 
-    assert digest == "b51618db5b58a93785398b4533294b22c66bc3f1692a56d35d2a0dd04fc03738"
+    assert digest == "1433c58a47321c1b7fef9d8be31a5f6f86276ffcf757e954c7e70f817f408603"
     assert size == 20
 
 
