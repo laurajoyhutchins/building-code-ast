@@ -161,16 +161,16 @@ def nds2018_printed_page(page_number: int) -> str | None:
     return None
 
 
-def _single_observed_style(block: PdfBlock) -> tuple[str, float, int] | None:
-    styles = {
-        (span.font, round(span.size, 3), span.flags)
+def _single_observed_face(block: PdfBlock) -> tuple[str, int] | None:
+    faces = {
+        (span.font, span.flags)
         for line in block.lines
         for span in line.spans
         if normalize_block_text(span.text)
     }
-    if len(styles) != 1:
+    if len(faces) != 1:
         return None
-    return next(iter(styles))
+    return next(iter(faces))
 
 
 def _split_caption_locator(text: str) -> str | None:
@@ -187,9 +187,11 @@ def recover_nds2018_split_caption_locators(
 
     Recovery is deliberately raw-source and fail-closed: the isolated keyword and
     locator/title block must be on a numbered-body page, use one identical observed
-    font style, overlap vertically, and be separated by no more than the measured
+    font face, overlap vertically, and be separated by no more than the measured
     small horizontal gap. Locator text must begin with an explicit ASCII token that
-    contains a digit; private-use glyph substitution is never attempted.
+    contains a digit; private-use glyph substitution is never attempted. Font size
+    may vary within the adjacent title block because the exact source does so while
+    retaining one observed face.
     """
 
     observed = tuple(blocks)
@@ -204,8 +206,8 @@ def recover_nds2018_split_caption_locators(
             continue
         if nds2018_page_role(keyword.page_number) is not NdsPageRole.NUMBERED_BODY:
             continue
-        keyword_style = _single_observed_style(keyword)
-        if keyword_style is None:
+        keyword_face = _single_observed_face(keyword)
+        if keyword_face is None:
             continue
 
         _, ky0, kx1, ky1 = keyword.bbox
@@ -213,7 +215,7 @@ def recover_nds2018_split_caption_locators(
         for candidate in observed:
             if candidate is keyword or candidate.page_number != keyword.page_number:
                 continue
-            if _single_observed_style(candidate) != keyword_style:
+            if _single_observed_face(candidate) != keyword_face:
                 continue
             cx0, cy0, _, cy1 = candidate.bbox
             horizontal_gap = cx0 - kx1
