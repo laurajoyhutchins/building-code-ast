@@ -12,7 +12,14 @@ from building_code_ast.ingest.nds2018_layout import (
     nds2018_page_role,
     nds2018_printed_page,
 )
-from building_code_ast.ingest.pdf_layout import PdfBlock, PdfLayoutDocument, PdfOutlineItem, PdfPage
+from building_code_ast.ingest.pdf_layout import (
+    PdfBlock,
+    PdfLayoutDocument,
+    PdfLine,
+    PdfOutlineItem,
+    PdfPage,
+    PdfSpan,
+)
 
 
 def _block(page: int, bbox: tuple[float, float, float, float], text: str, number: int) -> PdfBlock:
@@ -92,6 +99,43 @@ class Nds2018LayoutTests(unittest.TestCase):
             for removed in page.removed_blocks:
                 self.assertEqual(removed.block.page_number, page.page_number)
                 self.assertEqual(len(removed.block.bbox), 4)
+
+    def test_exact_duplicate_blocks_are_removed_without_collapsing_distinct_line_evidence(self) -> None:
+        bbox = (100.0, 100.0, 200.0, 120.0)
+        exact_line = PdfLine(
+            bbox=bbox,
+            spans=(PdfSpan(bbox=bbox, text="Exact duplicate", font="Font A", size=10.0, flags=0),),
+        )
+        distinct_line = PdfLine(
+            bbox=bbox,
+            spans=(PdfSpan(bbox=bbox, text="Exact duplicate", font="Font B", size=10.0, flags=0),),
+        )
+        page = PdfPage(
+            page_number=13,
+            width=612.0,
+            height=783.0,
+            blocks=(
+                PdfBlock(13, bbox, "Exact duplicate", 9, lines=(exact_line,)),
+                PdfBlock(13, bbox, "Exact duplicate", 4, lines=(exact_line,)),
+                PdfBlock(13, bbox, "Exact duplicate", 11, lines=(distinct_line,)),
+                PdfBlock(13, bbox, "Distinct evidence", 12),
+            ),
+        )
+
+        analyzed = analyze_nds2018_pages((page,))[0]
+
+        self.assertEqual(
+            [(removed.block.block_number, removed.reason) for removed in analyzed.removed_blocks],
+            [(9, "exact_duplicate_extraction")],
+        )
+        self.assertEqual(
+            {(block.block_number, block.text) for block in analyzed.ordered_blocks},
+            {
+                (4, "Exact duplicate"),
+                (11, "Exact duplicate"),
+                (12, "Distinct evidence"),
+            },
+        )
 
     def test_complete_layout_evidence_is_exact_identity_and_geometry_gated(self) -> None:
         pages = tuple(
