@@ -2,7 +2,8 @@
 
 This module binds the characterized NDS artifact to positioned PDF evidence,
 coarse page roles, printed-page provenance, artifact/page-furniture removal, and
-publication-neutral reading-order analysis. It deliberately does not recognize
+publication-neutral reading-order analysis. It also exposes one bounded raw-block
+locator recovery for a measured split-caption source family; it does not promote
 chapters, sections, appendices, equations, tables, figures, or semantics.
 """
 
@@ -12,6 +13,7 @@ from collections import Counter
 from dataclasses import dataclass
 from enum import StrEnum
 import math
+import re
 from typing import Sequence
 
 from ..evidence import AstSourceIdentity
@@ -33,6 +35,10 @@ NDS_2018_EDITION_ID = f"2018:pdf:sha256:{NDS_2018_SHA256}"
 _NDS_PAGE_COUNT = 206
 _NDS_PAGE_WIDTH = 612.0
 _NDS_PAGE_HEIGHT = 783.0
+_SPLIT_CAPTION_MAX_HORIZONTAL_GAP = 8.0
+_SPLIT_CAPTION_LOCATOR_RE = re.compile(
+    r"^(?P<locator>(?=[A-Za-z0-9.-]*\d)[A-Za-z0-9]+(?:[.-][A-Za-z0-9]+)*)\s+\S"
+)
 
 
 class NdsPageRole(StrEnum):
@@ -40,6 +46,15 @@ class NdsPageRole(StrEnum):
     FRONT_MATTER = "front_matter"
     NUMBERED_BODY = "numbered_body"
     TRAILING_MATTER = "trailing_matter"
+
+
+@dataclass(frozen=True, slots=True)
+class NdsSplitCaptionLocator:
+    kind: str
+    locator: str
+    page_number: int
+    keyword_block_number: int
+    locator_block_number: int
 
 
 @dataclass(frozen=True, slots=True)
@@ -144,6 +159,101 @@ def nds2018_printed_page(page_number: int) -> str | None:
     if 13 <= page_number <= 204:
         return str(page_number - 12)
     return None
+
+
+def _single_observed_face(block: PdfBlock) -> tuple[str, int] | None:
+    faces = {
+        (span.font, span.flags)
+        for line in block.lines
+        for span in line.spans
+        if normalize_block_text(span.text)
+    }
+    if len(faces) != 1:
+        return None
+    return next(iter(faces))
+
+
+def _split_caption_locator(text: str) -> str | None:
+    match = _SPLIT_CAPTION_LOCATOR_RE.match(normalize_block_text(text))
+    if match is None:
+        return None
+    return match.group("locator").upper()
+
+
+def recover_nds2018_split_caption_locators(
+    blocks: Sequence[PdfBlock],
+) -> tuple[NdsSplitCaptionLocator, ...]:
+    """Recover explicit native locators from the measured split-caption block family.
+
+    Recovery is deliberately raw-source and fail-closed: the isolated keyword and
+    locator/title block must be on a numbered-body page, use one identical observed
+    font face, overlap vertically, and be separated by no more than the measured
+    small horizontal gap. Locator text must begin with an explicit ASCII token that
+    contains a digit; private-use glyph substitution is never attempted. Font size
+    may vary within the adjacent title block because the exact source does so while
+    retaining one observed face.
+    """
+
+    observed = tuple(blocks)
+    for block in observed:
+        _validate_page_number(block.page_number)
+
+    recovered: list[NdsSplitCaptionLocator] = []
+    for keyword in observed:
+        keyword_text = normalize_block_text(keyword.text)
+        kind = keyword_text.casefold()
+        if kind not in {"table", "figure"}:
+            continue
+        if nds2018_page_role(keyword.page_number) is not NdsPageRole.NUMBERED_BODY:
+            continue
+        keyword_face = _single_observed_face(keyword)
+        if keyword_face is None:
+            continue
+
+        _, ky0, kx1, ky1 = keyword.bbox
+        candidates: list[tuple[PdfBlock, str]] = []
+        for candidate in observed:
+            if candidate is keyword or candidate.page_number != keyword.page_number:
+                continue
+            if _single_observed_face(candidate) != keyword_face:
+                continue
+            cx0, cy0, _, cy1 = candidate.bbox
+            horizontal_gap = cx0 - kx1
+            vertical_overlap = min(ky1, cy1) - max(ky0, cy0)
+            if horizontal_gap < 0.0 or horizontal_gap > _SPLIT_CAPTION_MAX_HORIZONTAL_GAP:
+                continue
+            if vertical_overlap <= 0.0:
+                continue
+            locator = _split_caption_locator(candidate.text)
+            if locator is None:
+                continue
+            candidates.append((candidate, locator))
+
+        if len(candidates) != 1:
+            continue
+        candidate, locator = candidates[0]
+        recovered.append(
+            NdsSplitCaptionLocator(
+                kind=kind,
+                locator=locator,
+                page_number=keyword.page_number,
+                keyword_block_number=keyword.block_number,
+                locator_block_number=candidate.block_number,
+            )
+        )
+
+    return tuple(
+        sorted(
+            recovered,
+            key=lambda item: (
+                item.page_number,
+                item.keyword_block_number,
+                item.locator_block_number,
+                item.kind,
+                item.locator,
+            ),
+        )
+    )
 
 
 def _margin_region(block: PdfBlock, page: PdfPage) -> str | None:
