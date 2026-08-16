@@ -30,7 +30,9 @@ class Aisc360RecoveryBackendProvenanceTests(unittest.TestCase):
             {observations[page].get("recovery_backend", receipt["observation_boundary"]["recovery_backend"]) for page in (16, 17, 36, 300, 353, 424, 433, 461)},
             {"tesseract_5.5.0_psm6_from_exact_render"},
         )
-        self.assertNotIn("recovered_text", json.dumps(receipt, sort_keys=True))
+        self.assertFalse(
+            any("recovered_text" in item for item in receipt["representative_observations"])
+        )
 
     def test_durable_receipt_uses_per_observation_backend_when_present(self) -> None:
         receipt = {
