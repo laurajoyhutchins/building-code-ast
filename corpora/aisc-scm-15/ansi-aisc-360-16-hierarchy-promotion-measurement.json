@@ -9,8 +9,8 @@
   "measurement": {
     "embedded_text_page_count": 561,
     "image_only_page_count": 113,
-    "raster_observed_image_only_page_count": 4,
-    "unobserved_image_only_page_count": 109,
+    "raster_observed_image_only_page_count": 10,
+    "unobserved_image_only_page_count": 103,
     "candidate_count": 46,
     "embedded_chapter_candidate_count": 28,
     "embedded_appendix_candidate_count": 10,
@@ -35,5 +35,5 @@
     "single_level_raster_numbering_promoted": false,
     "document_ast_promotion_performed": false
   },
-  "next_boundary": "expand_raster_observation_coverage_before_complete_hierarchy_measurement"
+  "next_boundary": "verify_expanded_denominator_then_measure_next_source_backed_raster_cohort"
 }

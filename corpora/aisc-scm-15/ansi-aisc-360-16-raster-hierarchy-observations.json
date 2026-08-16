@@ -21,6 +21,29 @@
     "protected_source_text_retained": false,
     "parser_promotion_performed": false
   },
+  "cohort_selection": {
+    "basis": "source_layout_stratification",
+    "existing_pages": [16, 17, 243, 285],
+    "new_pages": [36, 300, 353, 424, 433, 461],
+    "image_size_threshold_bytes": 100000,
+    "selection_rule": "Within each previously uncovered 0/1/2-overlay x small/large embedded-image stratum, sort remaining image-only pages by page number and choose the lower-quartile member using round((n-1)*0.25).",
+    "covered_strata": [
+      "zero_overlay/large_image",
+      "zero_overlay/small_image",
+      "one_overlay/large_image",
+      "one_overlay/small_image",
+      "two_overlay/large_image",
+      "two_overlay/small_image"
+    ],
+    "remaining_stratum_population_counts": {
+      "zero_overlay/large_image": 11,
+      "zero_overlay/small_image": 15,
+      "one_overlay/large_image": 16,
+      "one_overlay/small_image": 8,
+      "two_overlay/large_image": 6,
+      "two_overlay/small_image": 7
+    }
+  },
   "representative_observations": [
     {
       "page": 16,
@@ -35,6 +58,21 @@
       "dotted_hierarchy_locators": ["5.3"]
     },
     {
+      "page": 36,
+      "render_sha256": "477d1c8092d07715e37697f648517c4c3389a6b13b2fda3d2fa8df386f5e21bb",
+      "recovered_text_sha256": "564b05846d40cfee8fd15f2b2a16177424d11143a201576c6bdd07afafd5b259",
+      "dotted_hierarchy_locators": [],
+      "layout_stratum": "zero_overlay/large_image",
+      "source_safe_recovery_metrics": {
+        "drawing_count": 0,
+        "embedded_image_bytes": 110906,
+        "image_count": 1,
+        "line_count": 48,
+        "word_count": 530,
+        "single_level_line_start_count": 0
+      }
+    },
+    {
       "page": 243,
       "render_sha256": "d8713ae2ff9f53e1373b55cdbbde03276c8a681e58bb5d00cc4f0792790e9b58",
       "recovered_text_sha256": "d2d162d9a930f208f1fc4130ab829502ec642be250675509409046281a24ab4f",
@@ -45,8 +83,83 @@
       "render_sha256": "21d815df3e2aab29ee67a013bc492b475130519ec0ccbda946191539c91784fc",
       "recovered_text_sha256": "eeb1bc96b6901f7347c604283a9c450a1fe06084dbde9f1ae0b7e2e60310db68",
       "dotted_hierarchy_locators": ["4.2"]
+    },
+    {
+      "page": 300,
+      "render_sha256": "7938355aa3447a87a9d4de6edae6dd7fa470dd75a2f47b16aab6cb87fd02944f",
+      "recovered_text_sha256": "345b32669063017e5227a4880926369ebae63956f4d92e7cb98dd2834dc043a2",
+      "dotted_hierarchy_locators": [],
+      "layout_stratum": "two_overlay/small_image",
+      "source_safe_recovery_metrics": {
+        "drawing_count": 2,
+        "embedded_image_bytes": 53978,
+        "image_count": 1,
+        "line_count": 19,
+        "word_count": 208,
+        "single_level_line_start_count": 0
+      }
+    },
+    {
+      "page": 353,
+      "render_sha256": "70e2bd3af200119db965968ae062401bbdb51b8224329d598ceb18bd141f3fc6",
+      "recovered_text_sha256": "f10d68ed1bc8f841ba2866c8d06ff9af3b0b17b731609232eef478823494fc9a",
+      "dotted_hierarchy_locators": [],
+      "layout_stratum": "zero_overlay/small_image",
+      "source_safe_recovery_metrics": {
+        "drawing_count": 0,
+        "embedded_image_bytes": 40064,
+        "image_count": 1,
+        "line_count": 12,
+        "word_count": 127,
+        "single_level_line_start_count": 0
+      }
+    },
+    {
+      "page": 424,
+      "render_sha256": "87eb0a6d6b37461b46ba936de73e6f704707d71ea12e4a7ce02ba9a19fa286bd",
+      "recovered_text_sha256": "fd1a2f2ea0fb47952f203473a389b40a1058590a0a716a84e6791f9e215f6262",
+      "dotted_hierarchy_locators": [],
+      "layout_stratum": "one_overlay/small_image",
+      "source_safe_recovery_metrics": {
+        "drawing_count": 1,
+        "embedded_image_bytes": 33697,
+        "image_count": 1,
+        "line_count": 10,
+        "word_count": 108,
+        "single_level_line_start_count": 0
+      }
+    },
+    {
+      "page": 433,
+      "render_sha256": "8481b40cd5758357ca2e915c38a3d33f65ec4e7de9bfccfd8d2b611417fdbbb3",
+      "recovered_text_sha256": "ea7898e93de8d660d6591893cebf529b2af1a8db1812d6d9c0e5286ef5c1fd2d",
+      "dotted_hierarchy_locators": [],
+      "layout_stratum": "two_overlay/large_image",
+      "source_safe_recovery_metrics": {
+        "drawing_count": 2,
+        "embedded_image_bytes": 111975,
+        "image_count": 1,
+        "line_count": 43,
+        "word_count": 461,
+        "single_level_line_start_count": 1
+      }
+    },
+    {
+      "page": 461,
+      "render_sha256": "3e7b7e9bf2b47316b8e0f969f5a5abe7ad144f225959d3e17eebdddfad56bde9",
+      "recovered_text_sha256": "8e532229da9b5a9ae88f7b3be5b67f7f990ab9cb3c540e309c6728ac122bc5f4",
+      "dotted_hierarchy_locators": [],
+      "layout_stratum": "one_overlay/large_image",
+      "source_safe_recovery_metrics": {
+        "drawing_count": 1,
+        "embedded_image_bytes": 132724,
+        "image_count": 1,
+        "line_count": 47,
+        "word_count": 544,
+        "single_level_line_start_count": 1
+      }
     }
   ],
-  "claim": "a bounded four-page image-only cohort exposes provenance-visible hierarchy-bearing dotted locators through the raster-derived observation boundary",
-  "next_boundary": "rerun_whole_component_hierarchy_measurement_then_independent_exact_head_verification"
+  "claim": "a bounded ten-page image-only cohort expands provenance-visible hierarchy observation across measured source-layout strata without widening AISC locator grammar",
+  "next_boundary": "verify_expanded_denominator_then_measure_next_source_backed_raster_cohort"
 }
