@@ -95,13 +95,16 @@ def _durable_receipt_as_summary(
             raise ValueError("raster hierarchy receipt observations must be mappings")
         if "recovered_text" in raw:
             raise ValueError("raster hierarchy receipt must not retain recovered source text")
+        observation_backend = raw.get("recovery_backend", backend)
+        if not isinstance(observation_backend, str) or not observation_backend.strip():
+            raise ValueError("raster hierarchy observation recovery backend must be non-empty")
         observations.append(
             {
                 "page": raw.get("page"),
                 "source_kind": "raster_recovery",
                 "render_sha256": raw.get("render_sha256"),
                 "render_recipe": dict(AISC360_REPRESENTATIVE_RENDER_RECIPE),
-                "recovery_backend": backend,
+                "recovery_backend": observation_backend,
                 "recovered_text_sha256": raw.get("recovered_text_sha256"),
                 "dotted_hierarchy_locators": raw.get("dotted_hierarchy_locators"),
             }
