@@ -127,6 +127,7 @@ def recovery_observation_from_source_safe_fields(
     render_recipe: Mapping[str, object],
     recovery_backend: str,
     recovered_text_sha256: str,
+    bbox: tuple[float, float, float, float] | None = None,
     payload_state: RecoveredTextPayloadState = RecoveredTextPayloadState.DIGEST_ONLY,
 ) -> RecoveryObservation:
     """Map source-safe AISC fields into the shared recovery provenance contract."""
@@ -145,6 +146,18 @@ def recovery_observation_from_source_safe_fields(
     except (KeyError, TypeError, ValueError) as exc:
         raise ValueError("raster hierarchy observation render recipe is incomplete") from exc
 
+    payload_retained = payload_state == RecoveredTextPayloadState.PRIVATE_RETRIEVABLE
+    performed_operations = (
+        ("render", "text_recovery", "protected_text_retention")
+        if payload_retained
+        else ("render", "text_recovery")
+    )
+    omitted_operations = (
+        ("document_ast_promotion",)
+        if payload_retained
+        else ("document_ast_promotion", "protected_text_retention")
+    )
+
     return RecoveryObservation(
         source=RecoverySourceIdentity(
             sha256=source_derivative_sha256,
@@ -155,6 +168,7 @@ def recovery_observation_from_source_safe_fields(
         region=RecoveryRegion(
             page_number=page_number,
             coordinate_space=CoordinateSpace.PDF_POINTS,
+            bbox=bbox,
         ),
         source_kind=RecoverySourceKind.RASTER_RECOVERY,
         render=RecoveryTool(
@@ -171,8 +185,8 @@ def recovery_observation_from_source_safe_fields(
         recovery=_recovery_tool_from_label(recovery_backend),
         recovered_text_sha256=recovered_text_sha256,
         payload_state=payload_state,
-        performed_operations=("render", "text_recovery"),
-        omitted_operations=("document_ast_promotion", "protected_text_retention"),
+        performed_operations=performed_operations,
+        omitted_operations=omitted_operations,
     )
 
 

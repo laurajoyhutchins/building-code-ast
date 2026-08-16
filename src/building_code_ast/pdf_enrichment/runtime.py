@@ -102,6 +102,22 @@ def _validate_conflicts(document: Any, plan: PdfEnrichmentPlan) -> None:
                     raise ValueError(f"existing metadata field {key!r} conflicts with requested enrichment")
 
 
+def _insert_hidden_text(page: Any, entry: Any, fitz: Any) -> None:
+    rectangle = fitz.Rect(*entry.bbox)
+    for fontsize in range(10, 0, -1):
+        shape = page.new_shape()
+        result = shape.insert_textbox(
+            rectangle,
+            entry.text,
+            fontsize=fontsize,
+            render_mode=3,
+        )
+        if result >= 0:
+            shape.commit(overlay=True)
+            return
+    raise ValueError(f"searchable text does not fit requested bbox on page {entry.page_number}")
+
+
 def _apply_operations(document: Any, plan: PdfEnrichmentPlan, fitz: Any) -> tuple[dict[str, Any], ...]:
     summaries: list[dict[str, Any]] = []
     for operation in plan.operations:
@@ -109,15 +125,7 @@ def _apply_operations(document: Any, plan: PdfEnrichmentPlan, fitz: Any) -> tupl
             entries = []
             for entry in operation.entries:
                 page = document[entry.page_number - 1]
-                result = page.insert_textbox(
-                    fitz.Rect(*entry.bbox),
-                    entry.text,
-                    fontsize=10,
-                    render_mode=3,
-                    overlay=True,
-                )
-                if result < 0:
-                    raise ValueError(f"searchable text does not fit requested bbox on page {entry.page_number}")
+                _insert_hidden_text(page, entry, fitz)
                 entries.append(
                     {
                         "page_number": entry.page_number,
