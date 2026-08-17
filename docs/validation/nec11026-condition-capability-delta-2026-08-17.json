@@ -1,0 +1,35 @@
+{
+  "schema": "nec11026-condition-capability-delta-v1",
+  "source": {
+    "sha256": "603ef5c461247bacd716e3953222bfb227f1ddc780fffdbfcb90756b02c237c7",
+    "size_bytes": 7422245,
+    "pages": 881,
+    "encrypted": false,
+    "pdf_version": "1.7"
+  },
+  "review_evidence": {
+    "section_locator": "110.26",
+    "review_contract": "nec_section_review/0.1.0",
+    "review_baseline": "5f4d6974c134c3f306cd747894e2f23820e384fc",
+    "clause_count": 48,
+    "reviewed_condition_count": 6,
+    "leading_condition_count": 6
+  },
+  "classification": {
+    "predecessor_generic_provision_ast": "0.3.0",
+    "candidate_generic_provision_ast": "0.3.0",
+    "selected_family": "reviewed clause-leading condition/applicability span",
+    "representation": "source_text",
+    "semantic_decomposition_claimed": false
+  },
+  "implementation": {
+    "projection_contract": "nec_reviewed_provision_projection/0.1.0",
+    "state": "reviewed",
+    "requires_condition_start_at_clause_start": true,
+    "requires_condition_end_before_or_at_predicate_start": true,
+    "exact_condition_text_and_span_preserved": true,
+    "unsupported_condition_mapping_fails_closed": true,
+    "reviewed_dependency_projection_unchanged": true,
+    "protected_source_expression_deposited": false
+  }
+}

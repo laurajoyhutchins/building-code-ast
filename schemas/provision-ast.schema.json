@@ -90,6 +90,7 @@
     "conditionExpression": {
       "oneOf": [
         { "$ref": "#/$defs/comparisonCondition" },
+        { "$ref": "#/$defs/sourceTextCondition" },
         { "$ref": "#/$defs/logicalCondition" }
       ]
     },
@@ -100,8 +101,18 @@
       "properties": {
         "type": { "const": "comparison" },
         "subject_property": { "type": "string" },
-        "operator": { "enum": [">", ">=", "<", "<=", "=="] },
+        "operator": { "enum": [">", ">=", "<", "<=", "==" ] },
         "threshold": { "$ref": "#/$defs/quantity" },
+        "span": { "$ref": "#/$defs/sourceSpan" }
+      }
+    },
+    "sourceTextCondition": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["type", "text", "span"],
+      "properties": {
+        "type": { "const": "source_text" },
+        "text": { "type": "string", "minLength": 1 },
         "span": { "$ref": "#/$defs/sourceSpan" }
       }
     },

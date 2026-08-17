@@ -3,7 +3,7 @@ from __future__ import annotations
 import unittest
 
 from building_code_ast.document_model import DocumentSourceArtifact
-from building_code_ast.model import Modality, SourceSpan
+from building_code_ast.model import Modality, SourceSpan, SourceTextCondition
 from building_code_ast.nec.model import (
     CodeReference,
     CodeReferenceKind,
@@ -24,19 +24,21 @@ def _span(source: str, text: str, start: int = 0) -> SourceSpan:
     return SourceSpan(left, left + len(text), text)
 
 
-def _review() -> SectionReview:
-    source = (
-        "110.26 Synthetic Working Space. "
-        "Equipment shall comply with Table 110.26(A)(1)."
-    )
+def _review(*, conditioned: bool = False) -> SectionReview:
+    condition_text = "When synthetic access is limited, " if conditioned else ""
+    clause_text = f"{condition_text}Equipment shall comply with Table 110.26(A)(1)."
+    source = f"110.26 Synthetic Working Space. {clause_text}"
     artifact = DocumentSourceArtifact(
         artifact_id="synthetic-nec",
         edition_id="NFPA-70-synthetic",
     )
-    clause_span = _span(source, "Equipment shall comply with Table 110.26(A)(1).")
+    clause_span = _span(source, clause_text)
     modal_span = _span(source, "shall", clause_span.start)
     subject_span = _span(source, "Equipment", clause_span.start)
     predicate_span = _span(source, "comply with Table 110.26(A)(1).", clause_span.start)
+    condition_span = (
+        _span(source, condition_text.rstrip(), clause_span.start) if conditioned else None
+    )
     reference_span = _span(source, "110.26(A)(1)", clause_span.start)
     reference = CodeReference(
         CodeReferenceKind.TABLE,
@@ -55,7 +57,7 @@ def _review() -> SectionReview:
         modal_span=modal_span,
         subject_span=subject_span,
         predicate_span=predicate_span,
-        condition_span=None,
+        condition_span=condition_span,
         semantic_tags=("working_space",),
         definition_ids=(),
         references=(reference,),
@@ -110,8 +112,20 @@ class ReviewedProvisionProjectionTests(unittest.TestCase):
             review.source_artifact.to_dict(),
         )
 
-    def test_reviewed_condition_fails_closed_when_generic_shape_is_unknown(self) -> None:
-        review = _review()
+    def test_reviewed_leading_condition_becomes_source_text_condition(self) -> None:
+        review = _review(conditioned=True)
+        projection = project_reviewed_clause(review, review.clauses[0].clause_id)
+
+        self.assertIsInstance(projection.provision.condition, SourceTextCondition)
+        condition = projection.provision.condition
+        assert condition is not None
+        self.assertEqual(condition.text, condition.span.text)
+        self.assertEqual(condition.span.start, 0)
+        self.assertEqual(projection.provision.diagnostics, ())
+        self.assertEqual(len(projection.dependencies), 1)
+
+    def test_reviewed_nonleading_condition_still_fails_closed(self) -> None:
+        review = _review(conditioned=True)
         clause = review.clauses[0]
         conditioned = ReviewedClause(
             clause_id=clause.clause_id,

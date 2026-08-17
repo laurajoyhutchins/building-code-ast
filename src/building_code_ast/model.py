@@ -95,9 +95,24 @@ class ComparisonCondition:
 
 
 @dataclass(frozen=True, slots=True)
+class SourceTextCondition:
+    """Condition evidence whose internal semantics have not been decomposed."""
+
+    text: str
+    span: SourceSpan
+
+    def to_dict(self) -> dict[str, Any]:
+        return {
+            "type": "source_text",
+            "text": self.text,
+            "span": self.span.to_dict(),
+        }
+
+
+@dataclass(frozen=True, slots=True)
 class LogicalCondition:
     type: LogicalConditionType
-    operands: tuple[ComparisonCondition | LogicalCondition, ...]
+    operands: tuple[ComparisonCondition | SourceTextCondition | LogicalCondition, ...]
     span: SourceSpan
 
     def to_dict(self) -> dict[str, Any]:
@@ -108,7 +123,7 @@ class LogicalCondition:
         }
 
 
-ConditionExpression = ComparisonCondition | LogicalCondition
+ConditionExpression = ComparisonCondition | SourceTextCondition | LogicalCondition
 
 
 @dataclass(frozen=True, slots=True)

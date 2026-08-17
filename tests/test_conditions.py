@@ -14,6 +14,7 @@ from building_code_ast.model import (
     Quantity,
     SourceArtifact,
     SourceSpan,
+    SourceTextCondition,
 )
 
 
@@ -50,7 +51,7 @@ def _area_condition() -> ComparisonCondition:
 
 
 def _group(
-    *operands: ComparisonCondition | LogicalCondition,
+    *operands: ComparisonCondition | SourceTextCondition | LogicalCondition,
     span: SourceSpan | None = None,
 ) -> LogicalCondition:
     return LogicalCondition(
@@ -60,7 +61,9 @@ def _group(
     )
 
 
-def _ast(condition: ComparisonCondition | LogicalCondition | None) -> ProvisionAst:
+def _ast(
+    condition: ComparisonCondition | SourceTextCondition | LogicalCondition | None,
+) -> ProvisionAst:
     return ProvisionAst(
         source_text=SOURCE,
         source_artifact=SourceArtifact(
@@ -100,6 +103,16 @@ class ConditionModelTests(unittest.TestCase):
             ["height", "floor area"],
         )
 
+    def test_source_text_condition_serializes_exact_evidence(self) -> None:
+        text = SOURCE[6:33]
+        ast = _ast(SourceTextCondition(text=text, span=SourceSpan(6, 33, text)))
+
+        payload = ast.to_dict()
+
+        self.assertEqual(payload["condition"]["type"], "source_text")
+        self.assertEqual(payload["condition"]["text"], text)
+        self.assertEqual(payload["condition"]["span"]["text"], text)
+
 
 class ConditionValidationTests(unittest.TestCase):
     def test_valid_logical_condition_passes(self) -> None:
@@ -114,6 +127,15 @@ class ConditionValidationTests(unittest.TestCase):
 
         with self.assertRaisesRegex(ValueError, "original text"):
             validate_ast(_ast(bad_height))
+
+    def test_source_text_condition_must_match_span(self) -> None:
+        condition = SourceTextCondition(
+            text="different evidence",
+            span=SourceSpan(6, 33, SOURCE[6:33]),
+        )
+
+        with self.assertRaisesRegex(ValueError, "exactly match"):
+            validate_ast(_ast(condition))
 
     def test_group_must_start_at_first_operand(self) -> None:
         group = _group(
