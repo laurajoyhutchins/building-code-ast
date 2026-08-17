@@ -21,6 +21,7 @@ from ..model import (
     ProvisionAst,
     SourceArtifact,
     SourceSpan,
+    SourceTextCondition,
 )
 from ..validation import validate_ast
 from .model import CodeReference, ReviewedClause, ReviewedModality, SectionReview
@@ -101,9 +102,9 @@ def project_reviewed_clause(
     """Project one reviewed clause without reinterpreting source expression.
 
     General section, article, and table references are exposed as dependency
-    relationships beside the generic Provision AST. Structured conditions are
-    only emitted when the reviewed contract already has an equivalent generic
-    representation; otherwise the exact condition evidence remains diagnostic.
+    relationships beside the generic Provision AST. A reviewed clause-leading
+    condition may be preserved as an opaque source-text expression when its
+    boundary is unambiguous; other condition shapes remain fail-closed.
     """
 
     validate_section_review(review)
@@ -123,20 +124,27 @@ def project_reviewed_clause(
     )
     local_predicate = _local_span(source, clause, clause.predicate_span)
 
+    condition: SourceTextCondition | None = None
     diagnostics: list[Diagnostic] = []
     if clause.condition_span is not None:
         local_condition = _local_span(source, clause, clause.condition_span)
-        diagnostics.append(
-            Diagnostic(
-                code="reviewed-condition-unprojected",
-                severity=DiagnosticSeverity.WARNING,
-                message=(
-                    "Reviewed condition evidence is preserved, but no equivalent generic "
-                    "Provision AST condition expression was established."
-                ),
+        if local_condition.start == 0 and local_condition.end <= local_predicate.start:
+            condition = SourceTextCondition(
+                text=local_condition.text,
                 span=local_condition,
             )
-        )
+        else:
+            diagnostics.append(
+                Diagnostic(
+                    code="reviewed-condition-unprojected",
+                    severity=DiagnosticSeverity.WARNING,
+                    message=(
+                        "Reviewed condition evidence is preserved, but it does not match the "
+                        "supported clause-leading source-text condition boundary."
+                    ),
+                    span=local_condition,
+                )
+            )
 
     provision = ProvisionAst(
         source_text=source,
@@ -157,7 +165,7 @@ def project_reviewed_clause(
             span=local_predicate,
         ),
         source_span=SourceSpan(0, len(source), source),
-        condition=None,
+        condition=condition,
         diagnostics=tuple(diagnostics),
     )
     validate_ast(provision)

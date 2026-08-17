@@ -13,6 +13,7 @@ from .model import (
     Modality,
     ProvisionAst,
     SourceSpan,
+    SourceTextCondition,
 )
 
 
@@ -25,7 +26,7 @@ def _validate_span(source: str, span: SourceSpan, label: str) -> None:
 
 def _validate_condition(
     source: str,
-    condition: ComparisonCondition | LogicalCondition,
+    condition: ComparisonCondition | SourceTextCondition | LogicalCondition,
     label: str,
     active_path: set[int],
 ) -> None:
@@ -35,6 +36,14 @@ def _validate_condition(
             raise ValueError(f"{label} has an unsupported operator")
         if condition.threshold.original_text != condition.span.text:
             raise ValueError(f"{label} threshold original text must match its span text")
+        return
+
+    if isinstance(condition, SourceTextCondition):
+        _validate_span(source, condition.span, label)
+        if not condition.text:
+            raise ValueError(f"{label} source text must not be empty")
+        if condition.text != condition.span.text:
+            raise ValueError(f"{label} source text must exactly match its span text")
         return
 
     if not isinstance(condition, LogicalCondition):
@@ -53,7 +62,7 @@ def _validate_condition(
     try:
         previous_span: SourceSpan | None = None
         for index, operand in enumerate(condition.operands):
-            if not isinstance(operand, (ComparisonCondition, LogicalCondition)):
+            if not isinstance(operand, (ComparisonCondition, SourceTextCondition, LogicalCondition)):
                 raise ValueError(f"{label}.operands[{index}] has an unsupported condition expression type")
 
             child_span = operand.span
