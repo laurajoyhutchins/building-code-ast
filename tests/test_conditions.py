@@ -95,7 +95,7 @@ class ConditionModelTests(unittest.TestCase):
 
         payload = ast.to_dict()
 
-        self.assertEqual(payload["ast_version"], "0.4.0")
+        self.assertEqual(payload["ast_version"], "0.3.0")
         self.assertNotIn("conditions", payload)
         self.assertEqual(payload["condition"]["type"], "all_of")
         self.assertEqual(

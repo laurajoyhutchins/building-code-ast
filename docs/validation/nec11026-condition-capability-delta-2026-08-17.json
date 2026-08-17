@@ -17,7 +17,7 @@
   },
   "classification": {
     "predecessor_generic_provision_ast": "0.3.0",
-    "candidate_generic_provision_ast": "0.4.0",
+    "candidate_generic_provision_ast": "0.3.0",
     "selected_family": "reviewed clause-leading condition/applicability span",
     "representation": "source_text",
     "semantic_decomposition_claimed": false

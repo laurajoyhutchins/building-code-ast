@@ -20,7 +20,7 @@
     "diagnostics"
   ],
   "properties": {
-    "ast_version": { "const": "0.4.0" },
+    "ast_version": { "const": "0.3.0" },
     "type": { "const": "provision" },
     "source_text": { "type": "string", "minLength": 1 },
     "source_artifact": { "$ref": "#/$defs/sourceArtifact" },
@@ -101,7 +101,7 @@
       "properties": {
         "type": { "const": "comparison" },
         "subject_property": { "type": "string" },
-        "operator": { "enum": [">", ">=", "<", "<=", "=="] },
+        "operator": { "enum": [">", ">=", "<", "<=", "==" ] },
         "threshold": { "$ref": "#/$defs/quantity" },
         "span": { "$ref": "#/$defs/sourceSpan" }
       }
