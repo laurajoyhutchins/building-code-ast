@@ -3,16 +3,17 @@ from __future__ import annotations
 import hashlib
 import json
 import unittest
+
+from provenance_fixtures import bound_source
 from pathlib import Path
 
 from building_code_ast.evidence import (
+    PublicationState,
+    BoundArtifact,
     AccessScope,
     AstSourceIdentity,
     EvidenceRole,
-    PublicationIdentity,
     RightsStatus,
-    SourceRegisterEntry,
-    publication_state_id,
     run_evidence_adapter,
 )
 from building_code_ast.evidence.amendments import (
@@ -33,7 +34,7 @@ from building_code_ast.evidence.errata import IccErrataPdfAdapter
 
 
 ROOT = Path(__file__).resolve().parents[1]
-BASE_STATE = PublicationIdentity(
+BASE_STATE = PublicationState(
     publication_family="IBC",
     edition="2021",
     printing="first-printing",
@@ -50,8 +51,8 @@ def _source(
     correction_set: str | None = None,
     effective_on: str | None = None,
     jurisdiction: str | None = None,
-) -> SourceRegisterEntry:
-    return SourceRegisterEntry(
+) -> BoundArtifact:
+    return bound_source(
         source_id=source_id,
         ast_source=AstSourceIdentity(
             artifact_id="icc:ibc",
@@ -60,7 +61,7 @@ def _source(
         title="Synthetic second-review source",
         issuing_body="Synthetic Issuing Body",
         evidence_role=role,
-        publication=PublicationIdentity(
+        publication=PublicationState(
             publication_family="Synthetic evidence",
             edition="2021",
             correction_set=correction_set,
@@ -91,7 +92,7 @@ def _patch(
         source_id=source_id,
         jurisdiction="US-WA",
         authority="Synthetic Authority",
-        base_publication_state_id=publication_state_id(BASE_STATE),
+        base_publication_state_id=BASE_STATE.publication_id,
         wac_citation="51-50-0107",
         locator=locator,
         operation=operation,
@@ -183,7 +184,7 @@ class EvidenceSecondReviewTests(unittest.TestCase):
 </section></body></html>
 """
         adapter = NormalizedWashingtonWacHtmlAdapter(
-            base_publication_state_id=publication_state_id(BASE_STATE),
+            base_publication_state_id=BASE_STATE.publication_id,
             effective_from="2024-03-15",
             known_base_locators=frozenset({"12"}),
         )
@@ -212,7 +213,7 @@ class EvidenceSecondReviewTests(unittest.TestCase):
 </body></html>
 """
         adapter = NormalizedWashingtonWacHtmlAdapter(
-            base_publication_state_id=publication_state_id(BASE_STATE),
+            base_publication_state_id=BASE_STATE.publication_id,
             effective_from="2024-03-15",
             known_base_locators=frozenset({"108"}),
         )
@@ -239,7 +240,7 @@ class EvidenceSecondReviewTests(unittest.TestCase):
 </body></html>
 """.encode("utf-8")
         adapter = WashingtonWacHtmlAdapter(
-            base_publication_state_id=publication_state_id(BASE_STATE),
+            base_publication_state_id=BASE_STATE.publication_id,
             known_base_locators=frozenset({"107.2", "403.5.4"}),
             effective_dates_by_wac={"51-50-0403": "2024-03-16"},
         )
@@ -267,7 +268,7 @@ class EvidenceSecondReviewTests(unittest.TestCase):
 </body></html>
 """.encode("utf-8")
         adapter = WashingtonWacHtmlAdapter(
-            base_publication_state_id=publication_state_id(BASE_STATE),
+            base_publication_state_id=BASE_STATE.publication_id,
             known_base_locators=frozenset({"403.4.8.3", "403.5.4"}),
             effective_dates_by_wac={"51-50-0403": "2024-03-15"},
             effective_dates_by_locator={"403.5.4": "2024-03-16"},
@@ -297,7 +298,7 @@ class EvidenceSecondReviewTests(unittest.TestCase):
 </body></html>
 """.encode("utf-8")
         adapter = WashingtonWacHtmlAdapter(
-            base_publication_state_id=publication_state_id(BASE_STATE),
+            base_publication_state_id=BASE_STATE.publication_id,
             known_base_locators=frozenset({"107.2"}),
             effective_dates_by_wac={"51-50-0107": "2024-03-15"},
         )
@@ -376,7 +377,7 @@ Synthetic replacement.
 """,
         )
         adapter = IccErrataPdfAdapter(
-            base_publication_state_id=publication_state_id(BASE_STATE),
+            base_publication_state_id=BASE_STATE.publication_id,
             applies_to_printings=("first-printing",),
             page_text_extractor=lambda _: pages,
         )

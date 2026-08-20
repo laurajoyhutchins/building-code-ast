@@ -3,7 +3,11 @@ from __future__ import annotations
 import hashlib
 import unittest
 
+from provenance_fixtures import bound_source
+
 from building_code_ast.evidence import (
+    PublicationState,
+    BoundArtifact,
     AccessScope,
     AstSourceIdentity,
     DevelopmentDisposition,
@@ -13,9 +17,7 @@ from building_code_ast.evidence import (
     IccActionStage,
     IccCommitteeActionPdfAdapter,
     IccProposalMonographPdfAdapter,
-    PublicationIdentity,
     RightsStatus,
-    SourceRegisterEntry,
     run_evidence_adapter,
 )
 
@@ -24,8 +26,8 @@ PROPOSAL_BYTES = b"official-shaped proposal bytes"
 ACTION_BYTES = b"official-shaped action bytes"
 
 
-def _source(source_id: str, content: bytes) -> SourceRegisterEntry:
-    return SourceRegisterEntry(
+def _source(source_id: str, content: bytes) -> BoundArtifact:
+    return bound_source(
         source_id=source_id,
         ast_source=AstSourceIdentity(
             artifact_id="icc:ibc",
@@ -34,7 +36,7 @@ def _source(source_id: str, content: bytes) -> SourceRegisterEntry:
         title="Official-shaped ICC development artifact",
         issuing_body="International Code Council",
         evidence_role=EvidenceRole.DEVELOPMENT_HISTORY,
-        publication=PublicationIdentity(
+        publication=PublicationState(
             publication_family="IBC development process",
             edition="2024",
             published_on="2024-03-01",

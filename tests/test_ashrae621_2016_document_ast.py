@@ -3,7 +3,6 @@ from __future__ import annotations
 import unittest
 
 from building_code_ast.document_model import DocumentNodeType
-from building_code_ast.evidence.model import publication_state_id
 from building_code_ast.ingest.ashrae621_2016 import (
     ASHRAE_62_1_2016_ARTIFACT,
     ASHRAE_62_1_2016_PUBLICATION,
@@ -50,7 +49,7 @@ class Ashrae621DocumentAstTests(unittest.TestCase):
         )
         self.assertEqual(
             ASHRAE_62_1_2016_ARTIFACT.edition_id,
-            publication_state_id(ASHRAE_62_1_2016_PUBLICATION),
+            ASHRAE_62_1_2016_PUBLICATION.publication_id,
         )
 
     def test_structural_slice_preserves_procedure_hierarchy_coordinates_and_explicit_nonprose(self) -> None:

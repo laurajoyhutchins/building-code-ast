@@ -4,15 +4,17 @@ import copy
 import hashlib
 import json
 import unittest
+
+from provenance_fixtures import bound_source
 from pathlib import Path
 
 from building_code_ast.evidence import (
+    PublicationState,
+    BoundArtifact,
     AccessScope,
     AstSourceIdentity,
     EvidenceRole,
-    PublicationIdentity,
     RightsStatus,
-    SourceRegisterEntry,
     run_evidence_adapter,
 )
 from building_code_ast.evidence.development import (
@@ -32,8 +34,8 @@ ROOT = Path(__file__).resolve().parents[1]
 SOURCE_BYTES = b"synthetic ICC development monograph bytes"
 
 
-def _source() -> SourceRegisterEntry:
-    return SourceRegisterEntry(
+def _source() -> BoundArtifact:
+    return bound_source(
         source_id="icc:ibc:2024:group-a-development",
         ast_source=AstSourceIdentity(
             artifact_id="icc:ibc",
@@ -42,7 +44,7 @@ def _source() -> SourceRegisterEntry:
         title="Synthetic ICC Group A development records",
         issuing_body="International Code Council",
         evidence_role=EvidenceRole.DEVELOPMENT_HISTORY,
-        publication=PublicationIdentity(
+        publication=PublicationState(
             publication_family="IBC development process",
             edition="2024",
             printing=None,

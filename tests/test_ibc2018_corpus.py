@@ -5,7 +5,7 @@ import json
 from pathlib import Path
 import unittest
 
-from building_code_ast.evidence import source_register_from_dict
+from building_code_ast.evidence import load_source_package
 from building_code_ast.ibc2018_corpus import (
     BoundingBox,
     PageLine,
@@ -84,15 +84,17 @@ class Ibc2018CorpusTests(unittest.TestCase):
         with self.assertRaisesRegex(ValueError, "source SHA-256"):
             validate_private_evidence_identity(pages, seed, images)
 
-    def test_source_register_round_trips_and_is_restricted(self) -> None:
-        payload = json.loads((CORPUS / "ibc-2018-source-register.json").read_text())
-        register = source_register_from_dict(payload)
-        self.assertEqual(register.to_dict(), payload)
-        entry = register.entries[0]
-        self.assertEqual(entry.sha256, SOURCE_SHA256)
-        self.assertEqual(entry.access_scope.value, "private_local")
-        self.assertEqual(entry.rights_status.value, "uncertain_restricted")
-        self.assertIsNotNone(entry.rights_note)
+    def test_source_package_is_canonical_and_restricted(self) -> None:
+        package = load_source_package(CORPUS / "source-package.json")
+        binding = package.binding_for_source("source:icc:ibc:2018:pdf:c8f0b755")
+        artifact = package.artifact(binding.artifact_id)
+
+        self.assertEqual(package.package_id, "ibc-2018")
+        self.assertEqual(artifact.sha256, SOURCE_SHA256)
+        self.assertEqual(artifact.access_scope.value, "private_local")
+        self.assertEqual(artifact.rights_status.value, "uncertain_restricted")
+        self.assertIsNotNone(artifact.rights_note)
+        self.assertEqual(binding.evidence_role.value, "normative_text")
 
     def test_printed_page_mapping(self) -> None:
         self.assertEqual(printed_page(4), "iii")

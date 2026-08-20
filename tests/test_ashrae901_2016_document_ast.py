@@ -3,7 +3,6 @@ from __future__ import annotations
 import unittest
 
 from building_code_ast.document_model import DocumentNodeType
-from building_code_ast.evidence.model import publication_state_id
 from building_code_ast.ingest.ashrae901_2016 import (
     ASHRAE_90_1_2016_ARTIFACT,
     ASHRAE_90_1_2016_PUBLICATION,
@@ -65,7 +64,7 @@ class Ashrae901DocumentAstTests(unittest.TestCase):
         )
         self.assertEqual(
             ASHRAE_90_1_2016_ARTIFACT.edition_id,
-            publication_state_id(ASHRAE_90_1_2016_PUBLICATION),
+            ASHRAE_90_1_2016_PUBLICATION.publication_id,
         )
 
     def test_structural_slice_preserves_hierarchy_role_coordinates_table_and_unsupported(self) -> None:

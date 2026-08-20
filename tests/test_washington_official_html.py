@@ -3,15 +3,16 @@ from __future__ import annotations
 import hashlib
 import unittest
 
+from provenance_fixtures import bound_source
+
 from building_code_ast.evidence import (
+    PublicationState,
+    BoundArtifact,
     AccessScope,
     AstSourceIdentity,
     EvidenceRole,
-    PublicationIdentity,
     RightsStatus,
-    SourceRegisterEntry,
     WashingtonWacHtmlAdapter,
-    publication_state_id,
     run_evidence_adapter,
 )
 from building_code_ast.evidence.amendments import (
@@ -19,7 +20,7 @@ from building_code_ast.evidence.amendments import (
 )
 
 
-BASE_STATE = PublicationIdentity(
+BASE_STATE = PublicationState(
     publication_family="IBC",
     edition="2021",
     printing="first-printing",
@@ -27,8 +28,8 @@ BASE_STATE = PublicationIdentity(
 )
 
 
-def _source(content: bytes) -> SourceRegisterEntry:
-    return SourceRegisterEntry(
+def _source(content: bytes) -> BoundArtifact:
+    return bound_source(
         source_id="wa:wac:51-50-0403:official-shaped",
         ast_source=AstSourceIdentity(
             artifact_id="wa:wac:51-50",
@@ -37,7 +38,7 @@ def _source(content: bytes) -> SourceRegisterEntry:
         title="Official-shaped WAC 51-50-0403",
         issuing_body="Washington State Building Code Council",
         evidence_role=EvidenceRole.JURISDICTIONAL_LAW,
-        publication=PublicationIdentity(
+        publication=PublicationState(
             publication_family="WAC 51-50",
             edition="2021 IBC adoption",
             published_on="2023-11-15",
@@ -70,7 +71,7 @@ class WashingtonOfficialHtmlTests(unittest.TestCase):
 </body></html>
 """.encode("utf-8")
         adapter = WashingtonWacHtmlAdapter(
-            base_publication_state_id=publication_state_id(BASE_STATE),
+            base_publication_state_id=BASE_STATE.publication_id,
             known_base_locators=frozenset({"403.4.8.3", "403.5.4"}),
             effective_dates_by_locator={
                 "403.4.8.3": "2024-03-16",
@@ -100,7 +101,7 @@ class WashingtonOfficialHtmlTests(unittest.TestCase):
 </body></html>
 """.encode("utf-8")
         adapter = WashingtonWacHtmlAdapter(
-            base_publication_state_id=publication_state_id(BASE_STATE),
+            base_publication_state_id=BASE_STATE.publication_id,
             known_base_locators=frozenset({"107.2"}),
             effective_dates_by_wac={"51-50-0107": "2024-03-15"},
         )

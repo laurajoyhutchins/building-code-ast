@@ -3,14 +3,15 @@ from __future__ import annotations
 import hashlib
 import unittest
 
+from provenance_fixtures import bound_source
+
 from building_code_ast.evidence import (
+    PublicationState,
+    BoundArtifact,
     AccessScope,
     AstSourceIdentity,
     EvidenceRole,
-    PublicationIdentity,
     RightsStatus,
-    SourceRegisterEntry,
-    publication_state_id,
     run_evidence_adapter,
 )
 from building_code_ast.evidence.amendments import (
@@ -20,7 +21,7 @@ from building_code_ast.evidence.amendments import (
 from building_code_ast.evidence.errata import ErratumOperation, IccErrataPdfAdapter
 
 
-BASE_STATE = PublicationIdentity(
+BASE_STATE = PublicationState(
     publication_family="IBC",
     edition="2021",
     printing="first-printing",
@@ -36,8 +37,8 @@ def _source(
     correction_set: str | None = None,
     effective_on: str | None = None,
     jurisdiction: str | None = None,
-) -> SourceRegisterEntry:
-    return SourceRegisterEntry(
+) -> BoundArtifact:
+    return bound_source(
         source_id=f"synthetic:{role.value}",
         ast_source=AstSourceIdentity(
             artifact_id="icc:ibc",
@@ -46,7 +47,7 @@ def _source(
         title="Synthetic review source",
         issuing_body="Synthetic Issuing Body",
         evidence_role=role,
-        publication=PublicationIdentity(
+        publication=PublicationState(
             publication_family="Synthetic evidence",
             edition="2021",
             correction_set=correction_set,
@@ -75,7 +76,7 @@ class EvidenceReviewEdgeCaseTests(unittest.TestCase):
 </body></html>
 """.encode("utf-8")
         adapter = WashingtonWacHtmlAdapter(
-            base_publication_state_id=publication_state_id(BASE_STATE),
+            base_publication_state_id=BASE_STATE.publication_id,
             known_base_locators=frozenset({"107.2"}),
             effective_dates_by_wac={"51-50-0107": "2024-03-15"},
         )
@@ -106,7 +107,7 @@ class EvidenceReviewEdgeCaseTests(unittest.TestCase):
 </body></html>
 """.encode("utf-8")
         adapter = WashingtonWacHtmlAdapter(
-            base_publication_state_id=publication_state_id(BASE_STATE),
+            base_publication_state_id=BASE_STATE.publication_id,
             known_base_locators=frozenset({"107.2", "110"}),
             effective_dates_by_wac={"51-50-0110": "2024-03-15"},
         )
@@ -140,7 +141,7 @@ Synthetic renumbered replacement.
 """,
         )
         adapter = IccErrataPdfAdapter(
-            base_publication_state_id=publication_state_id(BASE_STATE),
+            base_publication_state_id=BASE_STATE.publication_id,
             applies_to_printings=("first-printing",),
             page_text_extractor=lambda _: pages,
         )
