@@ -25,6 +25,22 @@ The contract does **not** contain publication locator grammar, normative/comment
 
 Changing `digest_only` to `private_retrievable` is not a formatting operation. It requires an authoritative private payload/provenance binding.
 
+## Private retained-object resolution
+
+Private retained artifacts are resolved by canonical logical object identity, not by Google Drive folder names, filenames, or provider file IDs. The logical `object_id` is a stable public identity coordinate; the private provider locator remains an implementation detail outside Git.
+
+For the retained ANSI/AISC 360-16 derivative, the canonical source object is:
+
+`engineering-sources/aisc-scm-15/derivatives/ansi-aisc-360-16`
+
+Private recovery payloads for that derivative, when they exist and have been canonically captured, belong under:
+
+`engineering-sources/aisc-scm-15/recovery/ansi-aisc-360-16/…`
+
+Private tooling must resolve the source and any recovery payload through the verified object lookup path, then verify the current retained-object identity and the recovered-expression digest before marking an observation `private_retrievable`. Drive discovery is not authority. If no verified recovery child object exists, the gate remains fail-closed.
+
+The recovery child namespace does not itself authorize a payload. A candidate remains unusable until its provenance binding is authoritative and its recovered text exactly matches the durable `recovered_text_sha256`.
+
 ## Publication-specific interpretation stays outside
 
 The shared contract deliberately stops before structural or authority interpretation.
