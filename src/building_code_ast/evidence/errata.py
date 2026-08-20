@@ -12,7 +12,8 @@ from typing import Any
 
 from ..model import DiagnosticSeverity
 from .adapters import AdapterResult, EvidenceDiagnostic, SourceRegion
-from .model import EvidenceRole, SourceRegisterEntry
+from .model import EvidenceRole
+from .source_packages import BoundArtifact
 
 
 ERRATA_RECORD_VERSION = "0.1.0"
@@ -352,7 +353,7 @@ class IccErrataPdfAdapter:
 
     def extract(
         self,
-        source: SourceRegisterEntry,
+        source: BoundArtifact,
         content: bytes,
     ) -> AdapterResult[ErratumRecord]:
         correction_set = source.publication.correction_set

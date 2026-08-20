@@ -9,7 +9,7 @@ from typing import Any, Generic, Protocol, TypeVar
 
 from ..model import DiagnosticSeverity
 from .model import EvidenceRole
-from .source_packages import Artifact, ArtifactBinding
+from .source_packages import BoundArtifact
 
 RecordT = TypeVar("RecordT")
 
@@ -26,38 +26,6 @@ def _coordinate(value: object, label: str) -> float:
     if not math.isfinite(normalized):
         raise ValueError(f"{label} must be a finite number")
     return normalized
-
-
-@dataclass(frozen=True, slots=True)
-class BoundArtifact:
-    binding: ArtifactBinding
-    artifact: Artifact
-
-    def __post_init__(self) -> None:
-        if not isinstance(self.binding, ArtifactBinding) or not isinstance(self.artifact, Artifact):
-            raise ValueError("binding and artifact must use normalized provenance types")
-        if self.binding.artifact_id != self.artifact.artifact_id:
-            raise ValueError("binding artifact_id does not match artifact identity")
-
-    @property
-    def source_id(self) -> str:
-        return self.binding.source_id
-
-    @property
-    def evidence_role(self) -> EvidenceRole:
-        return self.binding.evidence_role
-
-    @property
-    def media_type(self) -> str:
-        return self.artifact.media_type
-
-    @property
-    def sha256(self) -> str:
-        return self.artifact.sha256
-
-    @property
-    def ast_source(self):
-        return self.binding.ast_source
 
 
 @dataclass(frozen=True, slots=True)
@@ -140,8 +108,9 @@ def _adapter_metadata(adapter: EvidenceAdapter[RecordT]):
     return adapter_id, adapter_version, supported_roles, supported_media_types
 
 
-def run_evidence_adapter(adapter: EvidenceAdapter[RecordT], binding: ArtifactBinding, artifact: Artifact, content: bytes) -> AdapterResult[RecordT]:
-    source = BoundArtifact(binding=binding, artifact=artifact)
+def run_evidence_adapter(adapter: EvidenceAdapter[RecordT], source: BoundArtifact, content: bytes) -> AdapterResult[RecordT]:
+    if not isinstance(source, BoundArtifact):
+        raise TypeError("source must be a BoundArtifact from canonical provenance")
     if not isinstance(content, bytes):
         raise ValueError("content must be bytes")
     adapter_id, adapter_version, supported_roles, supported_media_types = _adapter_metadata(adapter)

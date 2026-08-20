@@ -14,7 +14,8 @@ from typing import Any
 
 from ..model import DiagnosticSeverity
 from .adapters import AdapterResult, EvidenceDiagnostic, SourceRegion
-from .model import EvidenceRole, SourceRegisterEntry
+from .model import EvidenceRole
+from .source_packages import BoundArtifact
 
 
 AMENDMENT_PATCH_VERSION = "0.2.0"
@@ -460,7 +461,7 @@ class NormalizedWashingtonWacHtmlAdapter:
 
     def extract(
         self,
-        source: SourceRegisterEntry,
+        source: BoundArtifact,
         content: bytes,
     ) -> AdapterResult[JurisdictionalAmendmentPatch]:
         if source.jurisdiction is None:
@@ -765,7 +766,7 @@ class WashingtonWacHtmlAdapter:
         self,
         citation: str,
         locator: str,
-        source: SourceRegisterEntry,
+        source: BoundArtifact,
     ) -> str | None:
         return (
             self.effective_dates_by_locator.get(locator)
@@ -781,7 +782,7 @@ class WashingtonWacHtmlAdapter:
 
     def extract(
         self,
-        source: SourceRegisterEntry,
+        source: BoundArtifact,
         content: bytes,
     ) -> AdapterResult[JurisdictionalAmendmentPatch]:
         if source.jurisdiction is None:

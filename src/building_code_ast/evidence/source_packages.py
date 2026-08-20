@@ -201,6 +201,49 @@ class Derivation:
 
 
 @dataclass(frozen=True, slots=True)
+class BoundArtifact:
+    publication: PublicationState
+    artifact: Artifact
+    binding: ArtifactBinding
+
+    def __post_init__(self) -> None:
+        if self.binding.publication_id != self.publication.publication_id:
+            raise ValueError("binding publication_id does not match publication identity")
+        if self.binding.artifact_id != self.artifact.artifact_id:
+            raise ValueError("binding artifact_id does not match artifact identity")
+
+    @property
+    def source_id(self) -> str:
+        return self.binding.source_id
+
+    @property
+    def evidence_role(self) -> EvidenceRole:
+        return self.binding.evidence_role
+
+    @property
+    def media_type(self) -> str:
+        return self.artifact.media_type
+
+    @property
+    def sha256(self) -> str:
+        return self.artifact.sha256
+
+    @property
+    def ast_source(self) -> AstSourceIdentity:
+        return self.binding.ast_source
+
+    @property
+    def jurisdiction(self) -> str | None:
+        return self.binding.jurisdiction
+
+    @property
+    def issuing_body(self) -> str:
+        if self.binding.issuing_body is None:
+            raise ValueError("binding issuing_body is required by this evidence adapter")
+        return self.binding.issuing_body
+
+
+@dataclass(frozen=True, slots=True)
 class SourcePackage:
     package_id: str
     publications: tuple[PublicationState, ...]
@@ -254,6 +297,13 @@ class SourcePackage:
         if len(matches) != 1:
             raise KeyError(source_id)
         return matches[0]
+
+    def bound_artifact(self, source_id: str) -> BoundArtifact:
+        binding = self.binding_for_source(source_id)
+        publication = next((item for item in self.publications if item.publication_id == binding.publication_id), None)
+        if publication is None:
+            raise KeyError(binding.publication_id)
+        return BoundArtifact(publication=publication, artifact=self.artifact(binding.artifact_id), binding=binding)
 
     def to_dict(self) -> dict[str, Any]:
         return {"package_version": self.package_version, "type": "source_package", "package_id": self.package_id, "publications": [item.to_dict() for item in sorted(self.publications, key=lambda x: x.publication_id)], "artifacts": [item.to_dict() for item in sorted(self.artifacts, key=lambda x: x.artifact_id)], "bindings": [item.to_dict() for item in sorted(self.bindings, key=lambda x: x.binding_id)], "derivations": [item.to_dict() for item in sorted(self.derivations, key=lambda x: x.derivation_id)]}
