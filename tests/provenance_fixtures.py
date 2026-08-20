@@ -26,9 +26,9 @@ def bound_source(
     media_type: str,
     access_scope: AccessScope,
     rights_status: RightsStatus,
-    source_url: str | None,
-    jurisdiction: str | None,
-    rights_note: str | None,
+    source_url: str | None = None,
+    jurisdiction: str | None = None,
+    rights_note: str | None = None,
 ) -> BoundArtifact:
     artifact = Artifact(
         object_key=f"tests/{sha256}",
