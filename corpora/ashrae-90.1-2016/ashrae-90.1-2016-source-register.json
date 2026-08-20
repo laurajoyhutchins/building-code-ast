@@ -1,9 +1,0 @@
-{
-  "register_version": "0.1.0", "type": "source_register", "entries": [{
-    "source_id": "source:ashrae:90.1:2016:pdf:275a3437",
-    "ast_source": {"artifact_id": "sha256:275a343724fce483fc3038b261fb00c0c4a3360d3a54078b92a433aba56ec162", "edition_id": "ashrae-90.1-2016"},
-    "title": "Energy Standard for Buildings Except Low-Rise Residential Buildings", "issuing_body": "ASHRAE and Illuminating Engineering Society", "evidence_role": "normative_text",
-    "publication": {"state_id": "publication:beab87d7b2b19e7a76f221bd6aae452c8734cd79f935f616399f5adcb24f8fd4", "publication_family": "ANSI/ASHRAE/IES Standard 90.1", "edition": "2016 I-P Edition", "printing": null, "digital_revision": null, "addenda_set": "all addenda to Standard 90.1-2013 enumerated by retained Informative Appendix H", "correction_set": "post-publication errata/corrections unresolved for exact retained bytes", "published_on": null, "effective_on": null},
-    "retrieved_at": "2026-08-10T15:36:00+00:00", "sha256": "275a343724fce483fc3038b261fb00c0c4a3360d3a54078b92a433aba56ec162", "media_type": "application/pdf", "access_scope": "private_local", "rights_status": "uncertain_restricted", "source_url": null, "jurisdiction": null,
-    "rights_note": "Restricted retained publication; public Git stores only exact source identity, publication state, and source-safe measurements."
-  }]}

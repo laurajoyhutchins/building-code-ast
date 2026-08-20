@@ -1,9 +1,0 @@
-{
-  "register_version": "0.1.0", "type": "source_register", "entries": [{
-    "source_id": "source:ashrae:62.1:2016:pdf:a751d154",
-    "ast_source": {"artifact_id": "sha256:a751d154a734a6fb2f04ea2b6878d39a1878d270da49686d179e4e627808b759", "edition_id": "ashrae-62.1-2016"},
-    "title": "ANSI/ASHRAE Standard 62.1-2016", "issuing_body": "ASHRAE", "evidence_role": "normative_text",
-    "publication": {"state_id": "publication:3da61d11cc305090f84363c85a45c3730a52fbabcb9e36f60b3c834e2f481387", "publication_family": "ANSI/ASHRAE Standard 62.1", "edition": "2016", "printing": null, "digital_revision": null, "addenda_set": "a,c,d,e,f,g,h,i,j,k,p,q,r,s", "correction_set": "no incorporated correction layer established by exact retained artifact", "published_on": null, "effective_on": null},
-    "retrieved_at": "2026-08-10T15:36:00+00:00", "sha256": "a751d154a734a6fb2f04ea2b6878d39a1878d270da49686d179e4e627808b759", "media_type": "application/pdf", "access_scope": "private_local", "rights_status": "uncertain_restricted", "source_url": null, "jurisdiction": null,
-    "rights_note": "Restricted retained publication; public Git stores only exact source identity, publication state, and source-safe measurements."
-  }]}
