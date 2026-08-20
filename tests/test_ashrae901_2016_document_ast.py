@@ -56,12 +56,9 @@ class Ashrae901DocumentAstTests(unittest.TestCase):
         )
         self.assertEqual(
             ASHRAE_90_1_2016_PUBLICATION.addenda_set,
-            "ashrae-90.1-2013:addenda-enumerated-in-90.1-2016-appendix-h",
+            "all addenda to Standard 90.1-2013 enumerated by retained Informative Appendix H",
         )
-        self.assertEqual(
-            ASHRAE_90_1_2016_PUBLICATION.correction_set,
-            "unresolved:no-incorporated-post-publication-correction-established",
-        )
+        self.assertIsNone(ASHRAE_90_1_2016_PUBLICATION.correction_set)
         self.assertEqual(
             ASHRAE_90_1_2016_ARTIFACT.edition_id,
             ASHRAE_90_1_2016_PUBLICATION.publication_id,

@@ -43,10 +43,10 @@ class Ashrae621DocumentAstTests(unittest.TestCase):
             "sha256:a751d154a734a6fb2f04ea2b6878d39a1878d270da49686d179e4e627808b759",
         )
         self.assertEqual(
-            ASHRAE_62_1_2016_PUBLICATION.correction_set,
-            "incorporated-addenda:ashrae-62.1-2013:a,c,d,e,f,g,h,i,j,k,p,q,r,s;"
-            "correction-layer:unresolved:no-incorporated-correction-layer-established",
+            ASHRAE_62_1_2016_PUBLICATION.addenda_set,
+            "a,c,d,e,f,g,h,i,j,k,p,q,r,s",
         )
+        self.assertIsNone(ASHRAE_62_1_2016_PUBLICATION.correction_set)
         self.assertEqual(
             ASHRAE_62_1_2016_ARTIFACT.edition_id,
             ASHRAE_62_1_2016_PUBLICATION.publication_id,
