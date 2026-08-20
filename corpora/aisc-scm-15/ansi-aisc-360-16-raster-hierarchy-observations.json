@@ -2,7 +2,7 @@
   "schema": "aisc360-raster-hierarchy-observation-v1",
   "component": "ansi-aisc-360-16",
   "source_derivative": {
-    "drive_object_id": "1Tcqq-YGkjl6iptmaKeBsX8FNMNgN0CyY",
+    "object_id": "engineering-sources/aisc-scm-15/derivatives/ansi-aisc-360-16",
     "byte_count": 64464266,
     "page_count": 674,
     "sha256": "6ba073e6549e0c7408909cde2261f2bc393c7e6bfc63392268bd51399338e126"
