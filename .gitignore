@@ -18,3 +18,5 @@ generated-private/
 .lore/context/
 .lore/proposals/*.generated.yaml
 .building-code-ast/ci-evidence/
+.deciduous/deciduous.db
+.deciduous/deciduous.db-*
