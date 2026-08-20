@@ -1,0 +1,94 @@
+name: provenance-test-migrate
+
+on:
+  push:
+    branches: [refactor/source-provenance-cutover]
+    paths:
+      - tests/provenance_fixtures.py
+      - .github/workflows/provenance-test-migrate.yml
+
+permissions:
+  contents: write
+
+jobs:
+  migrate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: refactor/source-provenance-cutover
+          fetch-depth: 0
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Migrate test consumers
+        shell: python
+        run: |
+          from pathlib import Path
+          import re
+
+          root = Path('.')
+          failed = [
+              'test_evidence_review_edge_cases.py',
+              'test_evidence_review_regressions.py',
+              'test_evidence_second_review.py',
+              'test_icc_development.py',
+              'test_icc_errata.py',
+              'test_icc_official_development.py',
+              'test_washington_amendments.py',
+              'test_washington_official_html.py',
+          ]
+          for name in failed:
+              path = root / 'tests' / name
+              text = path.read_text(encoding='utf-8')
+              text = text.replace('PublicationIdentity', 'PublicationState')
+              text = text.replace('SourceRegisterEntry(', 'bound_source(')
+              text = text.replace('-> SourceRegisterEntry', '-> BoundArtifact')
+              text = text.replace(': SourceRegisterEntry', ': BoundArtifact')
+              text = text.replace('    SourceRegisterEntry,\n', '    BoundArtifact,\n')
+              text = re.sub(r'publication_state_id\(([^()]+)\)', r'\1.publication_id', text)
+              text = text.replace('    publication_state_id,\n', '')
+              if 'bound_source(' in text and 'from provenance_fixtures import bound_source' not in text:
+                  marker = 'from pathlib import Path\n'
+                  if marker in text:
+                      text = text.replace(marker, marker + '\nfrom provenance_fixtures import bound_source\n', 1)
+                  else:
+                      insert = text.find('\n\nfrom building_code_ast')
+                      text = text[:insert] + '\nfrom provenance_fixtures import bound_source\n' + text[insert:]
+              path.write_text(text, encoding='utf-8')
+
+          # ASHRAE tests assert the new normalized publication IDs directly.
+          for name in ('test_ashrae621_2016_document_ast.py', 'test_ashrae901_2016_document_ast.py'):
+              path = root / 'tests' / name
+              text = path.read_text(encoding='utf-8')
+              text = text.replace('from building_code_ast.evidence.model import publication_state_id\n', '')
+              text = re.sub(r'publication_state_id\((ASHRAE_[^)]+_PUBLICATION)\)', r'\1.publication_id', text)
+              path.write_text(text, encoding='utf-8')
+
+          # IBC corpus contract now round-trips the canonical package instead of a deleted register.
+          path = root / 'tests' / 'test_ibc2018_corpus.py'
+          text = path.read_text(encoding='utf-8')
+          text = text.replace('from building_code_ast.evidence import source_register_from_dict', 'from building_code_ast.evidence import load_source_package')
+          old = '''    def test_source_register_round_trips_and_is_restricted(self) -> None:\n        payload = json.loads((CORPUS / "ibc-2018-source-register.json").read_text())\n        register = source_register_from_dict(payload)\n        self.assertEqual(register.to_dict(), payload)\n        entry = register.entries[0]\n        self.assertEqual(entry.sha256, SOURCE_SHA256)\n        self.assertEqual(entry.access_scope.value, "private_local")\n        self.assertEqual(entry.rights_status.value, "uncertain_restricted")\n        self.assertIsNotNone(entry.rights_note)\n'''
+          new = '''    def test_source_package_round_trips_and_is_restricted(self) -> None:\n        package = load_source_package(CORPUS / "source-package.json")\n        artifact = package.artifacts[0]\n        self.assertEqual(artifact.sha256, SOURCE_SHA256)\n        self.assertEqual(artifact.access_scope.value, "private_local")\n        self.assertEqual(artifact.rights_status.value, "uncertain_restricted")\n        self.assertIsNotNone(artifact.rights_note)\n        binding = package.binding_for_source("source:icc:ibc:2018:pdf:c8f0b755")\n        self.assertEqual(binding.assurance.publisher_equivalence, "unverified")\n'''
+          if old not in text:
+              raise SystemExit('IBC legacy test block not found')
+          path.write_text(text.replace(old, new), encoding='utf-8')
+
+          # All migrated test modules must be free of the strangled API names.
+          forbidden = ('SourceRegisterEntry', 'PublicationIdentity', 'publication_state_id', 'source_register_from_dict')
+          hits = []
+          for path in [root / 'tests' / name for name in failed + ['test_ashrae621_2016_document_ast.py', 'test_ashrae901_2016_document_ast.py', 'test_ibc2018_corpus.py']]:
+              body = path.read_text(encoding='utf-8')
+              for item in forbidden:
+                  if item in body:
+                      hits.append(f'{path}:{item}')
+          if hits:
+              raise SystemExit('legacy test consumers remain: ' + ', '.join(hits))
+      - name: Commit test migration
+        run: |
+          git config user.name github-actions[bot]
+          git config user.email 41898282+github-actions[bot]@users.noreply.github.com
+          git add -A tests
+          git commit -m 'test: migrate provenance consumers to canonical fixtures'
+          git push origin HEAD:refactor/source-provenance-cutover
