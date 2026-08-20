@@ -63,6 +63,14 @@ Read the current `using-lauras-skills` guidance first. Use `architecture-review`
 - Record compatibility and schema-version implications.
 - Prefer simplification and deletion when provenance and semantics are preserved.
 
+## Deciduous
+
+- Use upstream Deciduous directly. The Git-shared graph state is native sync state under `.deciduous/sync/**`; `.deciduous/deciduous.db` is local operational state.
+- Rebuild local database state from `.deciduous/sync/**` when needed and inspect `deciduous pulse` before relying on graph context.
+- Include material native sync changes with the repository work that caused the decision, outcome, supersession, or unresolved question.
+- Do not build BCAST-specific Deciduous wrappers, schemas, parsers, validators, mirrors, replay systems, or recovery machinery.
+- If Deciduous cannot run in the current environment, do not emulate it. Use Git and GitHub as the durable technical authority and defer graph mutation until the stock CLI is available.
+
 ## Testing
 
 Verify source identity, span bounds and round trips, deterministic IDs and serialization, strict deserialization, diagnostic stability, unsupported-structure preservation, NEC and IBC hierarchy fixtures, tables, figures, definitions, references, units, modalities, amendment targets, schema compatibility, publication exclusions, and deterministic private-source runs.
