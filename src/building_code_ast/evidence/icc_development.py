@@ -13,7 +13,8 @@ from .development import (
     DevelopmentRecord,
     DevelopmentRecordKind,
 )
-from .model import EvidenceRole, SourceRegisterEntry
+from .model import EvidenceRole
+from .source_packages import BoundArtifact
 
 
 _PROPOSAL_HEADING_RE = re.compile(
@@ -120,7 +121,7 @@ class IccProposalMonographPdfAdapter:
 
     def extract(
         self,
-        source: SourceRegisterEntry,
+        source: BoundArtifact,
         content: bytes,
     ) -> AdapterResult[DevelopmentRecord]:
         pages = _page_lines(self.page_text_extractor(content))

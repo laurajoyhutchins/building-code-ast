@@ -21,24 +21,20 @@ from ..document_model import (
     make_document_node,
 )
 from ..document_validation import validate_document_ast
-from ..evidence.model import PublicationIdentity, publication_state_id
+from ..evidence.source_packages import PublicationState
 from ..model import Diagnostic, DiagnosticSeverity, SourceSpan
 from .pdf_layout import PdfBlock, PdfLine, normalize_block_text
 from .structural_occurrences import LocatorOccurrence, group_locator_occurrences
 
 
-ASHRAE_62_1_2016_PUBLICATION = PublicationIdentity(
-    publication_family="ashrae-62.1",
+ASHRAE_62_1_2016_PUBLICATION = PublicationState(
+    publication_family="ANSI/ASHRAE Standard 62.1",
     edition="2016",
-    printing="artifact-mark:3/16;numbered-printing:unresolved",
-    correction_set=(
-        "incorporated-addenda:ashrae-62.1-2013:a,c,d,e,f,g,h,i,j,k,p,q,r,s;"
-        "correction-layer:unresolved:no-incorporated-correction-layer-established"
-    ),
+    addenda_set="a,c,d,e,f,g,h,i,j,k,p,q,r,s",
 )
 ASHRAE_62_1_2016_ARTIFACT = DocumentSourceArtifact(
     artifact_id="sha256:a751d154a734a6fb2f04ea2b6878d39a1878d270da49686d179e4e627808b759",
-    edition_id=publication_state_id(ASHRAE_62_1_2016_PUBLICATION),
+    edition_id=ASHRAE_62_1_2016_PUBLICATION.publication_id,
 )
 
 _MANDATORY_APPENDICES = frozenset({"A", "B"})

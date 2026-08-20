@@ -20,21 +20,19 @@ from ..document_model import (
     make_document_node,
 )
 from ..document_validation import validate_document_ast
-from ..evidence.model import PublicationIdentity, publication_state_id
+from ..evidence.source_packages import PublicationState
 from ..model import Diagnostic, DiagnosticSeverity, SourceSpan
 from .pdf_layout import PdfBlock, PdfLine, PdfSpan, normalize_block_text
 
 
-ASHRAE_90_1_2016_PUBLICATION = PublicationIdentity(
-    publication_family="ashrae-90.1",
-    edition="2016 I-P",
-    printing="artifact-code:10/16;numbered-printing:unresolved",
-    addenda_set="ashrae-90.1-2013:addenda-enumerated-in-90.1-2016-appendix-h",
-    correction_set="unresolved:no-incorporated-post-publication-correction-established",
+ASHRAE_90_1_2016_PUBLICATION = PublicationState(
+    publication_family="ANSI/ASHRAE/IES Standard 90.1",
+    edition="2016 I-P Edition",
+    addenda_set="all addenda to Standard 90.1-2013 enumerated by retained Informative Appendix H",
 )
 ASHRAE_90_1_2016_ARTIFACT = DocumentSourceArtifact(
     artifact_id="sha256:275a343724fce483fc3038b261fb00c0c4a3360d3a54078b92a433aba56ec162",
-    edition_id=publication_state_id(ASHRAE_90_1_2016_PUBLICATION),
+    edition_id=ASHRAE_90_1_2016_PUBLICATION.publication_id,
 )
 
 _MANDATORY_APPENDICES = frozenset({"A", "C", "G"})

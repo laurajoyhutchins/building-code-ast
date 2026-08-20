@@ -22,7 +22,8 @@ from .amendments import (
     _validated_locator_mapping,
     _wac_sections,
 )
-from .model import EvidenceRole, SourceRegisterEntry
+from .model import EvidenceRole
+from .source_packages import BoundArtifact
 
 
 class _ScopedOfficialWacBlockParser(HTMLParser):
@@ -161,7 +162,7 @@ class WashingtonOfficialWacHtmlAdapter:
         self,
         citation: str,
         locator: str,
-        source: SourceRegisterEntry,
+        source: BoundArtifact,
     ) -> str | None:
         return (
             self.effective_dates_by_locator.get(locator)
@@ -177,7 +178,7 @@ class WashingtonOfficialWacHtmlAdapter:
 
     def extract(
         self,
-        source: SourceRegisterEntry,
+        source: BoundArtifact,
         content: bytes,
     ) -> AdapterResult[JurisdictionalAmendmentPatch]:
         if source.jurisdiction is None:

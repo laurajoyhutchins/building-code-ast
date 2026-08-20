@@ -4,16 +4,17 @@ import copy
 import hashlib
 import json
 import unittest
+
+from provenance_fixtures import bound_source
 from pathlib import Path
 
 from building_code_ast.evidence import (
+    PublicationState,
+    BoundArtifact,
     AccessScope,
     AstSourceIdentity,
     EvidenceRole,
-    PublicationIdentity,
     RightsStatus,
-    SourceRegisterEntry,
-    publication_state_id,
     run_evidence_adapter,
 )
 from building_code_ast.evidence.errata import (
@@ -30,7 +31,7 @@ from building_code_ast.evidence.errata import (
 
 ROOT = Path(__file__).resolve().parents[1]
 PDF_BYTES = b"synthetic ICC errata PDF bytes"
-BASE_STATE = PublicationIdentity(
+BASE_STATE = PublicationState(
     publication_family="IBC",
     edition="2021",
     printing="first-printing",
@@ -41,8 +42,8 @@ BASE_STATE = PublicationIdentity(
 )
 
 
-def _source(*, correction_set: str | None = "second-printing-editorial") -> SourceRegisterEntry:
-    return SourceRegisterEntry(
+def _source(*, correction_set: str | None = "second-printing-editorial") -> BoundArtifact:
+    return bound_source(
         source_id="icc:ibc:2021:errata:second-printing",
         ast_source=AstSourceIdentity(
             artifact_id="icc:ibc",
@@ -51,7 +52,7 @@ def _source(*, correction_set: str | None = "second-printing-editorial") -> Sour
         title="2021 IBC editorial changes second printing",
         issuing_body="International Code Council",
         evidence_role=EvidenceRole.OFFICIAL_CORRECTION,
-        publication=PublicationIdentity(
+        publication=PublicationState(
             publication_family="IBC",
             edition="2021",
             printing="second-printing",
@@ -75,7 +76,7 @@ def _record() -> ErratumRecord:
     return ErratumRecord(
         source_id="icc:ibc:2021:errata:second-printing",
         sequence=1,
-        base_publication_state_id=publication_state_id(BASE_STATE),
+        base_publication_state_id=BASE_STATE.publication_id,
         correction_set="second-printing-editorial",
         applies_to_printings=("first-printing",),
         target_kind=TargetKind.SECTION,
@@ -99,7 +100,7 @@ class IccErrataTests(unittest.TestCase):
         self.assertEqual(restored.to_dict(), payload)
         self.assertEqual(payload["record_version"], ERRATA_RECORD_VERSION)
         self.assertRegex(payload["record_id"], r"^erratum:[0-9a-f]{64}$")
-        self.assertEqual(payload["base_publication_state_id"], publication_state_id(BASE_STATE))
+        self.assertEqual(payload["base_publication_state_id"], BASE_STATE.publication_id)
 
     def test_record_identity_is_printing_and_content_sensitive(self) -> None:
         record = _record()
@@ -159,7 +160,7 @@ Synthetic corrected line.
 """,
         )
         adapter = IccErrataPdfAdapter(
-            base_publication_state_id=publication_state_id(BASE_STATE),
+            base_publication_state_id=BASE_STATE.publication_id,
             applies_to_printings=("first-printing",),
             page_text_extractor=lambda _: pages,
         )
@@ -184,7 +185,7 @@ Synthetic ambiguous correction text.
 """,
         )
         adapter = IccErrataPdfAdapter(
-            base_publication_state_id=publication_state_id(BASE_STATE),
+            base_publication_state_id=BASE_STATE.publication_id,
             applies_to_printings=("first-printing",),
             page_text_extractor=lambda _: pages,
         )
@@ -198,7 +199,7 @@ Synthetic ambiguous correction text.
 
     def test_adapter_requires_correction_set_and_printing_scope(self) -> None:
         adapter = IccErrataPdfAdapter(
-            base_publication_state_id=publication_state_id(BASE_STATE),
+            base_publication_state_id=BASE_STATE.publication_id,
             applies_to_printings=("first-printing",),
             page_text_extractor=lambda _: (),
         )
@@ -207,14 +208,14 @@ Synthetic ambiguous correction text.
 
         with self.assertRaisesRegex(ValueError, "applies_to_printings"):
             IccErrataPdfAdapter(
-                base_publication_state_id=publication_state_id(BASE_STATE),
+                base_publication_state_id=BASE_STATE.publication_id,
                 applies_to_printings=(),
                 page_text_extractor=lambda _: (),
             )
 
     def test_default_pdf_extractor_reports_optional_dependency(self) -> None:
         adapter = IccErrataPdfAdapter(
-            base_publication_state_id=publication_state_id(BASE_STATE),
+            base_publication_state_id=BASE_STATE.publication_id,
             applies_to_printings=("first-printing",),
         )
         try:

@@ -16,7 +16,8 @@ from .icc_development import (
     _page_lines,
     _unsupported_multipart,
 )
-from .model import EvidenceRole, SourceRegisterEntry
+from .model import EvidenceRole
+from .source_packages import BoundArtifact
 
 
 _ACTION_PREFIX_RE = re.compile(r"^Committee\s+Action\s*:?\s*(?P<action>.*)$", re.IGNORECASE)
@@ -74,7 +75,7 @@ class IccCommitteeActionReportPdfAdapter:
 
     def extract(
         self,
-        source: SourceRegisterEntry,
+        source: BoundArtifact,
         content: bytes,
     ) -> AdapterResult[DevelopmentRecord]:
         pages = _page_lines(self.page_text_extractor(content))

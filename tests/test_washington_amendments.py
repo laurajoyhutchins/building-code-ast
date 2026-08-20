@@ -4,16 +4,17 @@ import copy
 import hashlib
 import json
 import unittest
+
+from provenance_fixtures import bound_source
 from pathlib import Path
 
 from building_code_ast.evidence import (
+    PublicationState,
+    BoundArtifact,
     AccessScope,
     AstSourceIdentity,
     EvidenceRole,
-    PublicationIdentity,
     RightsStatus,
-    SourceRegisterEntry,
-    publication_state_id,
     run_evidence_adapter,
 )
 from building_code_ast.evidence.amendments import (
@@ -29,7 +30,7 @@ from building_code_ast.evidence.amendments import (
 
 ROOT = Path(__file__).resolve().parents[1]
 HTML_BYTES = b"<html>synthetic Washington WAC amendments</html>"
-BASE_STATE = PublicationIdentity(
+BASE_STATE = PublicationState(
     publication_family="IBC",
     edition="2021",
     printing="first-printing",
@@ -40,8 +41,8 @@ BASE_STATE = PublicationIdentity(
 )
 
 
-def _source(content: bytes = HTML_BYTES) -> SourceRegisterEntry:
-    return SourceRegisterEntry(
+def _source(content: bytes = HTML_BYTES) -> BoundArtifact:
+    return bound_source(
         source_id="wa:wac:51-50:2021-ibc-amendments",
         ast_source=AstSourceIdentity(
             artifact_id="icc:ibc",
@@ -50,7 +51,7 @@ def _source(content: bytes = HTML_BYTES) -> SourceRegisterEntry:
         title="Synthetic chapter 51-50 WAC amendments",
         issuing_body="Washington State Building Code Council",
         evidence_role=EvidenceRole.JURISDICTIONAL_LAW,
-        publication=PublicationIdentity(
+        publication=PublicationState(
             publication_family="WAC 51-50",
             edition="2021 IBC adoption",
             printing=None,
@@ -85,7 +86,7 @@ def _patch(
         source_id="wa:wac:51-50:2021-ibc-amendments",
         jurisdiction="US-WA",
         authority="Washington State Building Code Council",
-        base_publication_state_id=publication_state_id(BASE_STATE),
+        base_publication_state_id=BASE_STATE.publication_id,
         wac_citation=wac_citation,
         locator=locator,
         operation=operation,
@@ -219,7 +220,7 @@ class WashingtonAmendmentTests(unittest.TestCase):
 """
         content = html.encode("utf-8")
         adapter = NormalizedWashingtonWacHtmlAdapter(
-            base_publication_state_id=publication_state_id(BASE_STATE),
+            base_publication_state_id=BASE_STATE.publication_id,
             effective_from="2024-03-15",
             known_base_locators=frozenset({"107.3", "403", "110", "312", "101.4.7"}),
         )
@@ -250,7 +251,7 @@ class WashingtonAmendmentTests(unittest.TestCase):
 """
         content = html.encode("utf-8")
         adapter = NormalizedWashingtonWacHtmlAdapter(
-            base_publication_state_id=publication_state_id(BASE_STATE),
+            base_publication_state_id=BASE_STATE.publication_id,
             effective_from="2024-03-15",
             known_base_locators=frozenset({"107.3"}),
         )

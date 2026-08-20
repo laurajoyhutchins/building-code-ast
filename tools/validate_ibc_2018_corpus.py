@@ -9,13 +9,13 @@ import json
 from pathlib import Path
 from typing import Any, Mapping, Sequence
 
-from building_code_ast.evidence.io import source_register_from_dict
+from building_code_ast.evidence import load_source_package
 from building_code_ast.ibc2018_corpus import SOURCE_PAGE_COUNT, SOURCE_SHA256
 
 EXPECTED_FILES = {
     "README.md",
     "ibc-2018-source-manifest.json",
-    "ibc-2018-source-register.json",
+    "source-package.json",
     "ibc-2018-corpus-manifest.json",
     "ibc-2018-table-inventory.csv",
     "ibc-2018-table-inventory.json",
@@ -130,9 +130,11 @@ def validate(corpus_dir: Path) -> dict[str, Any]:
     if source_manifest.get("pdf_page_count") != SOURCE_PAGE_COUNT:
         discrepancies.append({"code": "page-count-mismatch"})
 
-    source_register = source_register_from_dict(load(corpus_dir / "ibc-2018-source-register.json"))
-    if source_register.entries[0].sha256 != SOURCE_SHA256:
-        discrepancies.append({"code": "source-register-hash-mismatch"})
+    source_package = load_source_package(corpus_dir / "source-package.json")
+    source_binding = source_package.binding_for_source("source:icc:ibc:2018:pdf:c8f0b755")
+    source_artifact = source_package.artifact(source_binding.artifact_id)
+    if source_artifact.sha256 != SOURCE_SHA256:
+        discrepancies.append({"code": "source-package-hash-mismatch"})
 
     manifest = load(corpus_dir / "ibc-2018-corpus-manifest.json")
     coverage = load(corpus_dir / "ibc-2018-coverage-report.json")

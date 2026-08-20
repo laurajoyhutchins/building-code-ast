@@ -13,7 +13,8 @@ from typing import Any
 
 from ..model import DiagnosticSeverity
 from .adapters import AdapterResult, EvidenceDiagnostic, SourceRegion
-from .model import EvidenceRole, SourceRegisterEntry
+from .model import EvidenceRole
+from .source_packages import BoundArtifact
 
 
 DEVELOPMENT_RECORD_VERSION = "0.1.0"
@@ -408,7 +409,7 @@ class IccDevelopmentTextAdapter:
 
     def extract(
         self,
-        source: SourceRegisterEntry,
+        source: BoundArtifact,
         content: bytes,
     ) -> AdapterResult[DevelopmentRecord]:
         pages = self.page_text_extractor(content)

@@ -1,9 +1,0 @@
-{
-  "register_version": "0.1.0", "type": "source_register", "entries": [{
-    "source_id": "source:nfpa:70:2017:pdf:603ef5c4",
-    "ast_source": {"artifact_id": "sha256:603ef5c461247bacd716e3953222bfb227f1ddc780fffdbfcb90756b02c237c7", "edition_id": "nec-2017"},
-    "title": "NFPA 70 National Electrical Code, 2017 Edition", "issuing_body": "National Fire Protection Association", "evidence_role": "normative_text",
-    "publication": {"state_id": "publication:36b1cbe13fd67d3c1c6d7df2226738017d19ac95e34f7588fb98284101b57bf7", "publication_family": "NFPA 70 National Electrical Code", "edition": "2017", "printing": null, "digital_revision": null, "correction_set": "no separate correction layer established by exact retained artifact", "published_on": null, "effective_on": null},
-    "retrieved_at": "2026-08-10T15:36:00+00:00", "sha256": "603ef5c461247bacd716e3953222bfb227f1ddc780fffdbfcb90756b02c237c7", "media_type": "application/pdf", "access_scope": "private_local", "rights_status": "uncertain_restricted", "source_url": null, "jurisdiction": null,
-    "rights_note": "Restricted retained publication; public Git stores only exact source identity, publication state, and source-safe measurements."
-  }]}
