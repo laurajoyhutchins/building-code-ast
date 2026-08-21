@@ -135,3 +135,27 @@ def source_text_from_ibc_source_map(
         document_ast=document_ast,
         diagnostics=_diagnostics(diagnostics),
     )
+
+def source_text_from_nec_article_seed(seed: Any) -> SourceTextBundle:
+    """Compile an existing NEC ``ArticleSeed`` into ``source-text/v1`` without PDF work."""
+
+    return source_text_from_nec_source_map(
+        source_manifest=seed.source_manifest,
+        canonical_text=seed.document_ast.source_text,
+        source_map=seed.source_map,
+        document_ast=seed.document_ast,
+        diagnostics=seed.diagnostics,
+    )
+
+
+def source_text_from_ibc_chapter_seed(seed: Any) -> SourceTextBundle:
+    """Compile an existing IBC ``ChapterSeed`` into the same generic IR without PDF work."""
+
+    return source_text_from_ibc_source_map(
+        source_manifest=seed.source_manifest,
+        canonical_text=seed.document_ast.source_text,
+        source_map=seed.source_map,
+        document_ast=seed.document_ast,
+        diagnostics=seed.diagnostics,
+    )
+

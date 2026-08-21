@@ -20,8 +20,8 @@ from building_code_ast.source_text import (
     write_source_text_bundle,
 )
 from building_code_ast.source_text_adapters import (
-    source_text_from_ibc_source_map,
-    source_text_from_nec_source_map,
+    source_text_from_ibc_chapter_seed,
+    source_text_from_nec_article_seed,
 )
 
 
@@ -85,24 +85,12 @@ class SourceTextProducerEquivalenceTests(unittest.TestCase):
 
     def test_nec_document_ast_is_recoverable_from_persisted_generic_ir(self) -> None:
         seed = build_article_seed(_nec_layout(), "110", source_sha256="a" * 64, source_size=1234)
-        bundle = source_text_from_nec_source_map(
-            source_manifest=seed.source_manifest,
-            canonical_text=seed.document_ast.source_text,
-            source_map=seed.source_map,
-            document_ast=seed.document_ast,
-            diagnostics=seed.diagnostics,
-        )
+        bundle = source_text_from_nec_article_seed(seed)
         self._round_trip(bundle, seed.document_ast)
 
     def test_ibc_document_ast_is_recoverable_from_same_persisted_contract(self) -> None:
         seed = build_chapter_seed(_ibc_layout(), "1", source_sha256="b" * 64, source_size=5678)
-        bundle = source_text_from_ibc_source_map(
-            source_manifest=seed.source_manifest,
-            canonical_text=seed.document_ast.source_text,
-            source_map=seed.source_map,
-            document_ast=seed.document_ast,
-            diagnostics=seed.diagnostics,
-        )
+        bundle = source_text_from_ibc_chapter_seed(seed)
         self._round_trip(bundle, seed.document_ast)
 
 
