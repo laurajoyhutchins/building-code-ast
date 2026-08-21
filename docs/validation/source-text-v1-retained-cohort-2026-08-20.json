@@ -1,0 +1,105 @@
+{
+  "candidate_head": "96600ad7afd751de3c26ba86a74e97d487be0bbe",
+  "cases": [
+    {
+      "bundle_sha256": "dd7becbbbf83a155a857cae7e3ec24365275bd594922a3d28a5fdf573797bc08",
+      "canonical_characters": 41193,
+      "canonical_text_sha256": "b7e11518270060c41f8bc10e0c1ef1c21a861aec3300caba07f63c8a7f4064a9",
+      "cohort_first_page": 50,
+      "cohort_last_page": 56,
+      "cohort_page_count": 7,
+      "document_ast_roundtrip_equal": true,
+      "fragment_count": 7,
+      "lookup_locator": "110.26",
+      "lookup_text_sha256": "b7e11518270060c41f8bc10e0c1ef1c21a861aec3300caba07f63c8a7f4064a9",
+      "manifest_sha256": "38ec94073e2f9075965e62012ebec79374efd77dbe35f096c9da32906b89d4cb",
+      "package_id": "nec-2017",
+      "page_observation_hashes": [
+        {
+          "characters": 6427,
+          "page": 50,
+          "text_sha256": "e862e440742f79180bf7123c60c95f2dfbc146a92e6cc93afcc7a5773527c25f"
+        },
+        {
+          "characters": 6128,
+          "page": 51,
+          "text_sha256": "805637838739dec29181da51a01355c9475d728094ddbd927e2a23ccd2e73e93"
+        },
+        {
+          "characters": 6324,
+          "page": 52,
+          "text_sha256": "689173ed6a5a1a9f3ac9df015cf94d6c0d6ffab7f0ea730cd46e6e496e493bb4"
+        },
+        {
+          "characters": 3471,
+          "page": 53,
+          "text_sha256": "d8ad65d0a7c817f5957a469acf4abcbee4ddff4cad1f7d568f3afbac8614f3e6"
+        },
+        {
+          "characters": 6637,
+          "page": 54,
+          "text_sha256": "4b11a33158c46e1af7d1695620d028c06887b5de67365f152373e4f49b5e96fe"
+        },
+        {
+          "characters": 5767,
+          "page": 55,
+          "text_sha256": "9370dfa104f219b7125cf1a814341b46b1a7c0ebdb31691c46aecd606e6a201f"
+        },
+        {
+          "characters": 6439,
+          "page": 56,
+          "text_sha256": "40299281a29183a8e20f580c5d4418c532c492f81cbaeaafae41074bc7cc5b7d"
+        }
+      ],
+      "pdf_pages": 881,
+      "protected_source_expression_deposited": false,
+      "source_sha256": "603ef5c461247bacd716e3953222bfb227f1ddc780fffdbfcb90756b02c237c7",
+      "source_size": 7422245
+    },
+    {
+      "bundle_sha256": "7b763f026653c58f4184228fc39d36f0bda65cf290cec7d1961974cd4edbf4b5",
+      "canonical_characters": 23264,
+      "canonical_text_sha256": "9f76666e429598f56e5db79318d37b421a43c48a53501b52836398199e083fe7",
+      "cohort_first_page": 72,
+      "cohort_last_page": 74,
+      "cohort_page_count": 3,
+      "document_ast_roundtrip_equal": true,
+      "fragment_count": 3,
+      "lookup_locator": "301.1",
+      "lookup_text_sha256": "9f76666e429598f56e5db79318d37b421a43c48a53501b52836398199e083fe7",
+      "manifest_sha256": "88f1b195b5a82cadf8ab817d8494a6cb53b2512ced15cb2b4fe1ebc2932e8d5a",
+      "package_id": "ibc-2018",
+      "page_observation_hashes": [
+        {
+          "characters": 8268,
+          "page": 72,
+          "text_sha256": "c0124775750db7d24e69204503457f225792cc05fc37678a30dee9dcc2906fd3"
+        },
+        {
+          "characters": 7338,
+          "page": 73,
+          "text_sha256": "fa20623c645b777325a8a7ed44bce37d9a4d1c7a694007afb55d1d4dfc12ec5a"
+        },
+        {
+          "characters": 7658,
+          "page": 74,
+          "text_sha256": "aea8ae8c7d250cc46fead77be16db0a419ec36d3643ef702d1136a4528d4a354"
+        }
+      ],
+      "pdf_pages": 761,
+      "protected_source_expression_deposited": false,
+      "source_sha256": "c8f0b75522707a39daf5202edee25d7fdce6c177c382f828a6dc1dfd5cc0b18d",
+      "source_size": 32608171
+    }
+  ],
+  "schema": "source-text-v1-retained-cohort-v1",
+  "source_text_version": "source-text/v1",
+  "verification_scope": {
+    "full_publication_ingestion": "not required by this bounded retained-source receipt",
+    "private_roundtrip": "write/load/hash/lookup and Document AST regeneration exercised on bounded NEC and IBC cohorts",
+    "producer_equivalence": "separate exact-head CI covers synthetic NEC ArticleSeed and IBC ChapterSeed adapters through persisted source-text/v1",
+    "retained_observation_method": "bounded PyMuPDF text observations from exact retained bytes",
+    "retained_source_identity": "exact SHA-256 and byte size verified against canonical source packages and private Drive objects",
+    "source_text_candidate": "exact source-text/v1 implementation at candidate_head"
+  }
+}
