@@ -1,6 +1,11 @@
 from __future__ import annotations
 
+from contextlib import redirect_stdout
+import io
 import json
+from pathlib import Path
+import tempfile
+import unittest
 
 from building_code_ast.source_text import (
     SourceTextFragment,
@@ -11,7 +16,7 @@ from building_code_ast.source_text import (
 from building_code_ast.source_text_cli import main
 
 
-def _write_bundle(tmp_path):
+def _write_bundle(directory: str):
     text = "101.1 Scope.\n\nSynthetic requirement."
     identity = SourceTextIdentity(
         artifact_id="example:code",
@@ -38,37 +43,50 @@ def _write_bundle(tmp_path):
             SourceTextIndexEntry("101.1", "docnode:synthetic", 0, len(text)),
         ),
     )
-    path = tmp_path / "source-text.json"
+    path = Path(directory) / "source-text.json"
     bundle.save(path)
     return path, bundle
 
 
-def test_text_get_loads_persisted_bundle_without_pdf_pipeline(tmp_path, capsys) -> None:
-    path, bundle = _write_bundle(tmp_path)
+class SourceTextCliTests(unittest.TestCase):
+    def test_text_get_loads_persisted_bundle_without_pdf_pipeline(self) -> None:
+        with tempfile.TemporaryDirectory() as directory:
+            path, bundle = _write_bundle(directory)
+            output = io.StringIO()
+            with redirect_stdout(output):
+                result = main(["get", str(path), "101.1", "--compact"])
 
-    assert main(["get", str(path), "101.1", "--compact"]) == 0
-    payload = json.loads(capsys.readouterr().out)
+        self.assertEqual(result, 0)
+        payload = json.loads(output.getvalue())
+        self.assertEqual(payload["command"], "text.get")
+        self.assertEqual(payload["text"], bundle.canonical_text)
+        self.assertEqual(payload["provenance"][0]["provenance"]["page_number"], 1)
+        self.assertEqual(payload["bundle_sha256"], bundle.bundle_sha256)
 
-    assert payload["command"] == "text.get"
-    assert payload["text"] == bundle.canonical_text
-    assert payload["provenance"][0]["provenance"]["page_number"] == 1
-    assert payload["bundle_sha256"] == bundle.bundle_sha256
+    def test_text_status_validates_and_summarizes_bundle(self) -> None:
+        with tempfile.TemporaryDirectory() as directory:
+            path, bundle = _write_bundle(directory)
+            output = io.StringIO()
+            with redirect_stdout(output):
+                result = main(["status", str(path), "--compact"])
+
+        self.assertEqual(result, 0)
+        payload = json.loads(output.getvalue())
+        self.assertEqual(
+            payload,
+            {
+                "bundle_sha256": bundle.bundle_sha256,
+                "canonical_text_bytes": len(bundle.canonical_text.encode("utf-8")),
+                "command": "text.status",
+                "diagnostic_count": 0,
+                "fragment_count": 1,
+                "identity": bundle.identity.to_dict(),
+                "index_count": 1,
+                "schema": "source-text/v1",
+                "text_sha256": bundle.text_sha256,
+            },
+        )
 
 
-def test_text_status_validates_and_summarizes_bundle(tmp_path, capsys) -> None:
-    path, bundle = _write_bundle(tmp_path)
-
-    assert main(["status", str(path), "--compact"]) == 0
-    payload = json.loads(capsys.readouterr().out)
-
-    assert payload == {
-        "bundle_sha256": bundle.bundle_sha256,
-        "canonical_text_bytes": len(bundle.canonical_text.encode("utf-8")),
-        "command": "text.status",
-        "diagnostic_count": 0,
-        "fragment_count": 1,
-        "identity": bundle.identity.to_dict(),
-        "index_count": 1,
-        "schema": "source-text/v1",
-        "text_sha256": bundle.text_sha256,
-    }
+if __name__ == "__main__":
+    unittest.main()
