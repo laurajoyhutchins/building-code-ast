@@ -10,6 +10,8 @@ The project is a compiler pipeline, not a question-answering wrapper around an o
 
 ```text
 source artifact and edition
+  -> page/layout observations
+  -> durable Source Text IR
   -> document structure tree
   -> selected provision text
   -> provision AST
@@ -18,7 +20,24 @@ source artifact and edition
   -> separately governed project evaluation
 ```
 
-The document-structure and provision-AST slices exist today. Reference resolution, amendment application, reviewed normalization, and project evaluation remain future stages.
+The durable Source Text, document-structure, and provision-AST slices exist today. Retained-source migration into Source Text is incremental. Reference resolution, amendment application, reviewed normalization, and project evaluation remain future stages.
+
+## Source Text contract
+
+Source Text IR `source-text/v1` is the publication-neutral boundary between source extraction/layout reconstruction and downstream document structure. It records:
+
+- exact artifact and edition identity;
+- exact source SHA-256 and byte size;
+- extractor and projection identity/version;
+- one canonical UTF-8 text coordinate space;
+- ordered provenance-bearing source fragments;
+- deterministic text and bundle hashes;
+- exact locator/document-node ranges over canonical text; and
+- explicit diagnostics.
+
+Persisted bundles fail closed when source identity, text hash, fragment spans, index ranges, or complete-bundle serialization do not validate. Ordinary locator lookup reads the persisted bundle rather than reopening the retained PDF or rerunning extraction and hierarchy reconstruction.
+
+Generated Source Text bundles may contain protected source expression. They belong in private retained-object storage. The public repository contains the contract, implementation, synthetic fixtures, hashes, and lawful source-safe verification evidence. See `docs/reference/source-text-ir.md`.
 
 ## Document structure contract
 
@@ -58,7 +77,8 @@ Every derived node that depends on a source phrase carries an exact character sp
 The deterministic core owns:
 
 - source identity and spans;
-- AST schema versions;
+- Source Text and AST schema versions;
+- canonical text and bundle hashes;
 - document node identities and structural locators;
 - unit normalization;
 - structural validation;
