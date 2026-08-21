@@ -59,3 +59,4 @@ jobs:
             .lore/records
             .lore/transactions
             docs/generated
+          retention-days: 7
