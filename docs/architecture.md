@@ -10,6 +10,8 @@ The project is a compiler pipeline, not a question-answering wrapper around an o
 
 ```text
 source artifact and edition
+  -> page/block observations and layout reconstruction
+  -> durable Source Text IR
   -> document structure tree
   -> selected provision text
   -> provision AST
@@ -18,7 +20,27 @@ source artifact and edition
   -> separately governed project evaluation
 ```
 
-The document-structure and provision-AST slices exist today. Reference resolution, amendment application, reviewed normalization, and project evaluation remain future stages.
+The durable Source Text, document-structure, and provision-AST slices exist today. Source Text is the reusable boundary between expensive source-family extraction/layout work and ordinary structural lookup. Reference resolution, amendment application, reviewed normalization, and project evaluation remain later stages.
+
+## Durable Source Text contract
+
+Source Text `source-text/v1` records canonical extracted text and provenance before publication structure is interpreted. It includes:
+
+- exact source artifact and edition identity;
+- exact retained-source SHA-256 and byte size;
+- extractor and projection identities and versions;
+- canonical UTF-8 text with Unicode-codepoint offsets compatible with `SourceSpan`;
+- ordered non-overlapping fragments whose text hashes round-trip to canonical text;
+- one or more source observations per fragment, including physical PDF page and available geometry/observation identity;
+- a deterministic structural index projected from validated Document AST locators and node IDs;
+- exact text, component, and bundle hashes;
+- explicit extraction diagnostics.
+
+Private bundle persistence is storage-neutral and immutable-on-write. The canonical bundle consists of `manifest.json`, `document.txt`, `fragments.jsonl`, `sections.jsonl`, and `diagnostics.jsonl`. Loading verifies every component hash and source identity before lookup. Restricted source prose and private generated bundles stay outside public Git.
+
+The canonical text stream plus its structural index is authoritative for compiled-text lookup. Per-section text shards are not authority. `building-code-text get <bundle> <locator>` loads only the persisted Source Text bundle; it does not import the PDF extraction stack or rerun layout reconstruction, hierarchy building, or semantic parsing.
+
+Source Text must not encode modality, conditions, actions, compliance conclusions, legal interpretation, or publication-family semantic meaning. NEC normalized block/source-map records and IBC logical-block/source-fragment records project into the same generic contract after their existing extraction/layout work.
 
 ## Document structure contract
 
@@ -58,7 +80,8 @@ Every derived node that depends on a source phrase carries an exact character sp
 The deterministic core owns:
 
 - source identity and spans;
-- AST schema versions;
+- Source Text and AST schema versions;
+- canonical compiled-text hashes and source provenance;
 - document node identities and structural locators;
 - unit normalization;
 - structural validation;
