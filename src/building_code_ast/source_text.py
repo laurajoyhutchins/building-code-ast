@@ -15,7 +15,15 @@ from pathlib import Path
 import re
 from typing import Any, Iterable, Mapping, Sequence
 
-from .document_model import DocumentAst, DocumentNode, DocumentSourceArtifact
+from .document_model import (
+    DocumentAst,
+    DocumentNode,
+    DocumentNodeType,
+    DocumentSourceArtifact,
+    make_document_node,
+)
+from .document_validation import validate_document_ast
+from .model import Diagnostic, DiagnosticSeverity, SourceSpan
 
 
 SOURCE_TEXT_VERSION = "source-text/v1"
@@ -148,41 +156,58 @@ def _expected_fragment_id(fragment: SourceTextFragment) -> str:
 
 @dataclass(frozen=True, slots=True)
 class SourceTextSection:
-    """Deterministic structural lookup range projected from a Document AST."""
+    """Deterministic structural lookup range projected from a Document AST.
+
+    Structural node metadata is retained so a validated persisted bundle can
+    regenerate the same Document AST without source-family PDF machinery.
+    These fields remain publication-structure evidence, not provision semantics.
+    """
 
     locator: str
     node_id: str
+    node_type: str
     parent_locator: str | None
     start: int
     end: int
     text_sha256: str
     first_page: int
     last_page: int
+    label: str | None = None
+    attributes: tuple[tuple[str, str], ...] = ()
 
     def to_dict(self) -> dict[str, Any]:
         return {
             "locator": self.locator,
             "node_id": self.node_id,
+            "node_type": self.node_type,
             "parent_locator": self.parent_locator,
             "start": self.start,
             "end": self.end,
             "text_sha256": self.text_sha256,
             "first_page": self.first_page,
             "last_page": self.last_page,
+            "label": self.label,
+            "attributes": dict(self.attributes),
         }
 
     @classmethod
     def from_dict(cls, payload: Mapping[str, Any]) -> "SourceTextSection":
         parent = payload.get("parent_locator")
+        attributes = payload.get("attributes") or {}
+        if not isinstance(attributes, Mapping):
+            raise ValueError("source-text section attributes must be an object")
         return cls(
             locator=str(payload["locator"]),
             node_id=str(payload["node_id"]),
+            node_type=str(payload["node_type"]),
             parent_locator=None if parent is None else str(parent),
             start=int(payload["start"]),
             end=int(payload["end"]),
             text_sha256=str(payload["text_sha256"]),
             first_page=int(payload["first_page"]),
             last_page=int(payload["last_page"]),
+            label=None if payload.get("label") is None else str(payload["label"]),
+            attributes=tuple(sorted((str(key), str(value)) for key, value in attributes.items())),
         )
 
 
@@ -361,6 +386,19 @@ def validate_source_text_bundle(bundle: SourceTextBundle) -> None:
     for section in bundle.sections:
         _require_text(section.locator, "source-text section locator")
         _require_text(section.node_id, "source-text section node_id")
+        try:
+            DocumentNodeType(section.node_type)
+        except ValueError as error:
+            raise ValueError("source-text section node_type is not a Document AST node type") from error
+        if section.label is not None:
+            _require_text(section.label, "source-text section label")
+        if tuple(sorted(section.attributes)) != section.attributes:
+            raise ValueError("source-text section attributes must be in deterministic key order")
+        if len({key for key, _ in section.attributes}) != len(section.attributes):
+            raise ValueError("source-text section attribute keys must be unique")
+        for key, value in section.attributes:
+            _require_text(key, "source-text section attribute key")
+            _require_text(value, "source-text section attribute value")
         if section.locator in locators or section.node_id in node_ids:
             raise ValueError("source-text section identities must be unique")
         locators.add(section.locator)
@@ -441,12 +479,15 @@ def build_section_index(
             SourceTextSection(
                 locator=node.locator,
                 node_id=node.node_id,
+                node_type=node.node_type.value,
                 parent_locator=parent_locator,
                 start=node.span.start,
                 end=node.span.end,
                 text_sha256=_sha256_text(node.span.text),
                 first_page=first_page,
                 last_page=last_page,
+                label=node.label,
+                attributes=node.attributes,
             )
         )
         for child in node.children:
@@ -503,6 +544,81 @@ def make_source_text_bundle(
     validate_source_text_bundle(bundle)
     return bundle
 
+
+
+def document_ast_from_source_text(bundle: SourceTextBundle) -> DocumentAst:
+    """Regenerate a validated Document AST using only a persisted Source Text IR.
+
+    This is the cheap compiler continuation path: no PDF extraction, page-order
+    inference, or source-family layout module is imported or invoked.
+    """
+
+    validate_source_text_bundle(bundle)
+    if not bundle.sections:
+        raise ValueError("source-text bundle has no structural section index")
+
+    by_locator = {section.locator: section for section in bundle.sections}
+    child_locators: dict[str | None, list[str]] = {}
+    for section in bundle.sections:
+        child_locators.setdefault(section.parent_locator, []).append(section.locator)
+    roots = child_locators.get(None, [])
+    if len(roots) != 1:
+        raise ValueError("source-text section index must contain exactly one document root")
+
+    visiting: set[str] = set()
+    built: set[str] = set()
+
+    def build(locator: str) -> DocumentNode:
+        if locator in visiting:
+            raise ValueError("source-text section index contains a parent cycle")
+        section = by_locator[locator]
+        visiting.add(locator)
+        children = tuple(build(child) for child in child_locators.get(locator, ()))
+        visiting.remove(locator)
+        span_text = bundle.canonical_text[section.start : section.end]
+        node = make_document_node(
+            source_artifact=bundle.source_artifact,
+            node_type=DocumentNodeType(section.node_type),
+            locator=section.locator,
+            span=SourceSpan(section.start, section.end, span_text),
+            label=section.label,
+            attributes=dict(section.attributes),
+            children=children,
+        )
+        if node.node_id != section.node_id:
+            raise ValueError("source-text section node ID does not match reconstructed Document AST identity")
+        built.add(locator)
+        return node
+
+    root = build(roots[0])
+    if built != set(by_locator):
+        raise ValueError("source-text section index contains nodes disconnected from the document root")
+
+    diagnostics: list[Diagnostic] = []
+    for item in bundle.diagnostics:
+        span = None
+        if item.start is not None and item.end is not None:
+            span = SourceSpan(
+                item.start,
+                item.end,
+                bundle.canonical_text[item.start : item.end],
+            )
+        diagnostics.append(
+            Diagnostic(
+                code=item.code,
+                severity=DiagnosticSeverity(item.severity),
+                message=item.message,
+                span=span,
+            )
+        )
+    document = DocumentAst(
+        source_text=bundle.canonical_text,
+        source_artifact=bundle.source_artifact,
+        root=root,
+        diagnostics=tuple(diagnostics),
+    )
+    validate_document_ast(document)
+    return document
 
 def _parse_artifact(payload: Mapping[str, Any]) -> DocumentSourceArtifact:
     return DocumentSourceArtifact(
