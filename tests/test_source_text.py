@@ -2,8 +2,9 @@ from __future__ import annotations
 
 from dataclasses import dataclass
 import json
-
-import pytest
+from pathlib import Path
+import tempfile
+import unittest
 
 from building_code_ast.document_model import (
     DocumentAst,
@@ -95,51 +96,54 @@ def _seed() -> FakeSeed:
     )
 
 
-def test_seed_projection_round_trips_text_index_and_provenance(tmp_path) -> None:
-    bundle = bundle_from_document_seed(_seed())
+class SourceTextTests(unittest.TestCase):
+    def test_seed_projection_round_trips_text_index_and_provenance(self) -> None:
+        bundle = bundle_from_document_seed(_seed())
 
-    assert bundle.schema == "source-text/v1"
-    assert bundle.text_sha256 != bundle.bundle_sha256
-    assert bundle.get("101.1").text == bundle.canonical_text
-    paragraph = bundle.get("101.1/p1")
-    assert paragraph.text == "Synthetic requirement."
-    assert paragraph.fragments[0].provenance["page_number"] == 1
+        self.assertEqual(bundle.schema, "source-text/v1")
+        self.assertNotEqual(bundle.text_sha256, bundle.bundle_sha256)
+        self.assertEqual(bundle.get("101.1").text, bundle.canonical_text)
+        paragraph = bundle.get("101.1/p1")
+        self.assertEqual(paragraph.text, "Synthetic requirement.")
+        self.assertEqual(paragraph.fragments[0].provenance["page_number"], 1)
 
-    path = tmp_path / "source-text.json"
-    bundle.save(path)
-    loaded = SourceTextBundle.load(path)
-    assert loaded == bundle
-    assert loaded.get("101.1/p1").text == "Synthetic requirement."
+        with tempfile.TemporaryDirectory() as directory:
+            path = Path(directory) / "source-text.json"
+            bundle.save(path)
+            loaded = SourceTextBundle.load(path)
+        self.assertEqual(loaded, bundle)
+        self.assertEqual(loaded.get("101.1/p1").text, "Synthetic requirement.")
+
+    def test_bundle_load_fails_closed_on_text_tampering(self) -> None:
+        bundle = bundle_from_document_seed(_seed())
+        payload = bundle.to_dict()
+        payload["canonical_text"] = "tampered"
+        with tempfile.TemporaryDirectory() as directory:
+            path = Path(directory) / "tampered.json"
+            path.write_text(json.dumps(payload), encoding="utf-8")
+            with self.assertRaisesRegex(ValueError, "canonical text hash mismatch"):
+                SourceTextBundle.load(path)
+
+    def test_bundle_load_fails_closed_on_provenance_tampering(self) -> None:
+        bundle = bundle_from_document_seed(_seed())
+        payload = bundle.to_dict()
+        payload["fragments"][0]["provenance"]["page_number"] = 99
+        with tempfile.TemporaryDirectory() as directory:
+            path = Path(directory) / "tampered-provenance.json"
+            path.write_text(json.dumps(payload), encoding="utf-8")
+            with self.assertRaisesRegex(ValueError, "bundle hash mismatch"):
+                SourceTextBundle.load(path)
+
+    def test_bundle_load_fails_closed_on_source_identity_tampering(self) -> None:
+        bundle = bundle_from_document_seed(_seed())
+        payload = bundle.to_dict()
+        payload["identity"]["source_sha256"] = "b" * 64
+        with tempfile.TemporaryDirectory() as directory:
+            path = Path(directory) / "tampered-identity.json"
+            path.write_text(json.dumps(payload), encoding="utf-8")
+            with self.assertRaisesRegex(ValueError, "bundle hash mismatch"):
+                SourceTextBundle.load(path)
 
 
-def test_bundle_load_fails_closed_on_text_tampering(tmp_path) -> None:
-    bundle = bundle_from_document_seed(_seed())
-    payload = bundle.to_dict()
-    payload["canonical_text"] = "tampered"
-    path = tmp_path / "tampered.json"
-    path.write_text(json.dumps(payload), encoding="utf-8")
-
-    with pytest.raises(ValueError, match="canonical text hash mismatch"):
-        SourceTextBundle.load(path)
-
-
-def test_bundle_load_fails_closed_on_provenance_tampering(tmp_path) -> None:
-    bundle = bundle_from_document_seed(_seed())
-    payload = bundle.to_dict()
-    payload["fragments"][0]["provenance"]["page_number"] = 99
-    path = tmp_path / "tampered-provenance.json"
-    path.write_text(json.dumps(payload), encoding="utf-8")
-
-    with pytest.raises(ValueError, match="bundle hash mismatch"):
-        SourceTextBundle.load(path)
-
-
-def test_bundle_load_fails_closed_on_source_identity_tampering(tmp_path) -> None:
-    bundle = bundle_from_document_seed(_seed())
-    payload = bundle.to_dict()
-    payload["identity"]["source_sha256"] = "b" * 64
-    path = tmp_path / "tampered-identity.json"
-    path.write_text(json.dumps(payload), encoding="utf-8")
-
-    with pytest.raises(ValueError, match="bundle hash mismatch"):
-        SourceTextBundle.load(path)
+if __name__ == "__main__":
+    unittest.main()
