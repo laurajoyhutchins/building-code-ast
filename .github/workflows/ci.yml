@@ -9,7 +9,7 @@ permissions:
   contents: read
 
 jobs:
-  test:
+  verify:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -41,10 +41,3 @@ jobs:
         run: |
           node _lore_tool/dist/cli/main.js validate .
           node _lore_tool/dist/cli/main.js project . --check
-
-  verify:
-    runs-on: ubuntu-latest
-    needs: test
-    steps:
-      - name: Preserve required verification gate
-        run: echo "Repository and LORE verification passed in the test job."
