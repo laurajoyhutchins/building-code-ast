@@ -1,0 +1,138 @@
+id: repository.building-code-ast
+kind: overview
+title: Building Code AST repository
+summary: A provenance-preserving compiler substrate for representing selected regulatory publication structure and bounded provision semantics.
+details:
+  - Convert selected regulatory publications into reviewable structural and semantic representations without erasing source identity, exact spans, uncertainty, or unsupported language.
+  - Do not automatically interpret arbitrary building-code language or decide whether a real project complies.
+  - Do not redistribute licensed model-code or standards text.
+  - Keep publication structure, semantic parsing, reviewed rule evaluation, and project evaluation as distinct stages.
+  - Source artifacts, parser output, generated documentation, and model-assisted proposals are evidence-bearing inputs, not authoritative legal interpretation or compliance determinations.
+evidence:
+  - path: README.md
+  - path: pyproject.toml
+  - path: docs/architecture.md
+---
+id: component.document-structure
+kind: component
+title: Document structure AST
+summary: Represents publication structure, deterministic node identity, and exact source provenance before semantic interpretation.
+details:
+  - Represent document, chapter, section, subsection, paragraph, list, definition, table, heading, note, footnote, and unsupported nodes.
+  - Derive stable node identity from source artifact, edition, node type, and structural locator.
+  - Preserve exact source spans and recursively validate containment, uniqueness, and identity.
+evidence:
+  - path: src/building_code_ast/document_model.py
+  - path: src/building_code_ast/document_io.py
+  - path: src/building_code_ast/document_validation.py
+  - path: docs/reference/document-ast.md
+related:
+  - repository.building-code-ast
+---
+id: component.provision-parser
+kind: component
+title: Provision parser
+summary: Parses a deliberately bounded family of synthetic code-style provisions into semantic AST nodes while preserving unsupported or ambiguous language.
+details:
+  - Recognize requirement, prohibition, permission, subject, numeric condition, action, and section-reference exception structures.
+  - Preserve exact original input and evidence spans for recognized structures.
+  - Emit diagnostics rather than silently guessing beyond the supported grammar.
+evidence:
+  - path: src/building_code_ast/parser.py
+  - path: src/building_code_ast/model.py
+  - path: src/building_code_ast/validation.py
+  - path: README.md
+related:
+  - repository.building-code-ast
+---
+id: component.validation
+kind: component
+title: Validation and contracts
+summary: Enforces schema, identity, source-span, containment, and malformed-input invariants for both public AST representations.
+details:
+  - Prove that source spans round-trip to exact source text.
+  - Reject duplicate, malformed, out-of-bounds, or identity-inconsistent structures.
+  - Keep JSON Schema projections aligned with runtime contracts.
+evidence:
+  - path: src/building_code_ast/document_validation.py
+  - path: src/building_code_ast/validation.py
+  - path: schemas/document-ast.schema.json
+  - path: schemas/provision-ast.schema.json
+related:
+  - component.document-structure
+  - component.provision-parser
+---
+id: constraint.corpus-and-legal-boundary
+kind: constraint
+title: Respect corpus and legal safety boundaries
+summary: Repository contents and outputs must not imply redistribution rights, authoritative interpretation, or project compliance.
+details:
+  - Only project-authored software, documentation, schemas, and synthetic fixtures belong in the repository unless a source has been reviewed for lawful inclusion.
+  - Do not commit proprietary model-code text, standards text, licensed commentary, or bulk source material for convenience.
+  - Label parsed output as non-authoritative and preserve source provenance.
+  - Keep jurisdiction resolution, parsing, interpretation, and professional judgment as separate responsibilities.
+evidence:
+  - path: docs/corpus-policy.md
+  - path: docs/legal-safety-boundary.md
+  - path: README.md
+---
+id: decision.composable-condition-expressions
+kind: decision
+title: Adopt composable condition expressions for provision AST 0.3.0
+summary: The approved 0.3.0 design replaces flat comparison tuples with a required nullable recursive condition expression while keeping parser output conservative and provenance-preserving.
+details:
+  - Replace ProvisionAst.conditions with ProvisionAst.condition, whose value is null, one comparison, an all_of group, or an any_of group.
+  - Provision AST 0.3.0 is intentionally incompatible with 0.2.0.
+  - Mixed, grouped, or malformed candidate chains fail closed with deterministic diagnostics and no partial semantic output.
+evidence:
+  - path: docs/superpowers/specs/2026-08-01-composable-condition-expressions-design.md
+related:
+  - component.provision-parser
+  - component.validation
+---
+id: decision.provenance-before-interpretation
+kind: decision
+title: Preserve provenance before interpretation
+summary: Exact source identity, original text, spans, deterministic identities, and diagnostics are mandatory before semantic claims are trusted.
+details:
+  - Treat provenance and uncertainty as first-class contract data rather than incidental parser metadata.
+  - Derived nodes carry exact evidence spans and unsupported language remains visible through diagnostics.
+  - Model-assisted extensions must satisfy the same deterministic contracts.
+evidence:
+  - path: docs/architecture.md
+  - path: src/building_code_ast/document_validation.py
+  - path: src/building_code_ast/validation.py
+related:
+  - component.document-structure
+  - component.provision-parser
+  - component.validation
+---
+id: decision.staged-representations
+kind: decision
+title: Keep compiler representations staged
+summary: Publication structure, provision semantics, cross-reference resolution, reviewed normalization, and project evaluation remain distinct representations.
+details:
+  - Do not place modality, applicability, actions, compliance conclusions, or professional interpretation in the document structure AST.
+  - Document and provision ASTs are versioned independently.
+  - Later stages retain links to earlier source evidence.
+evidence:
+  - path: docs/architecture.md
+  - path: src/building_code_ast/document_model.py
+  - path: src/building_code_ast/parser.py
+related:
+  - component.document-structure
+  - component.provision-parser
+---
+id: procedure.verification
+kind: procedure
+title: Verify repository changes
+summary: Run the repository-owned Python verification contract, then validate reviewed LORE knowledge and committed projections.
+details:
+  - Run python tools/verify_repository.py from the repository root on Python 3.12.13.
+  - Run the pinned LORE validate and project --check commands.
+  - Report the exact commands actually run and do not claim validation that was not performed.
+  - Reviewed knowledge changes use normal Git commits and pull requests; there is no proposal or apply lifecycle.
+evidence:
+  - path: CONTRIBUTING.md
+  - path: .github/workflows/ci.yml
+  - path: lore.yaml

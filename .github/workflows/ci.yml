@@ -16,9 +16,35 @@ jobs:
       - uses: actions/setup-python@v5
         with:
           python-version: 3.12.13
+      - uses: actions/setup-node@v5
+        with:
+          node-version: 22.14.0
+      - name: Check out pinned LORE
+        uses: actions/checkout@v4
+        with:
+          repository: laurajoyhutchins/LORE
+          ref: 4f11b8d40c11bc5ba973fbfaadfca9b62957c06c
+          path: _lore_tool
+      - name: Build LORE documentation utility
+        run: |
+          corepack enable
+          cd _lore_tool
+          pnpm install --no-frozen-lockfile
+          pnpm build
       - name: Install locked verification dependencies
         run: python -m pip install --no-deps --requirement requirements/verification.lock
       - name: Install package without dependency resolution
         run: python -m pip install --no-deps --no-build-isolation -e .
       - name: Verify repository
         run: python tools/verify_repository.py
+      - name: Verify repository knowledge
+        run: |
+          node _lore_tool/dist/cli/main.js validate .
+          node _lore_tool/dist/cli/main.js project . --check
+
+  verify:
+    runs-on: ubuntu-latest
+    needs: test
+    steps:
+      - name: Preserve required verification gate
+        run: echo "Repository and LORE verification passed in the test job."

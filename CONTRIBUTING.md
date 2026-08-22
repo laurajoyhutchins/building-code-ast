@@ -14,25 +14,9 @@ Do not add a field solely because one example is difficult to parse. Prefer a sm
 
 ## Repository knowledge changes
 
-Before changing architecture, component boundaries, decisions, constraints, findings, relationships, or maintenance procedures, read `skills/maintain-repository-documentation/SKILL.md` and evaluate the documentation impact.
+Reviewed repository knowledge lives in `.lore/knowledge/`. Edit it directly in the same Git branch as the repository change it documents. Cite stable repository evidence paths, run LORE validation, and review the result through the normal Git pull-request workflow.
 
-The LORE maintenance workflow is:
-
-1. generate a bounded maintainer context packet for the task;
-2. use the shipped maintenance skill to produce exactly one `lore-proposal/v1` artifact;
-3. cite repository evidence at full Git commit SHAs;
-4. validate the proposal with LORE;
-5. apply it through LORE's transaction engine;
-6. validate accepted records and check deterministic projections.
-
-Do not directly edit:
-
-- `.lore/extracted/`;
-- `.lore/records/`;
-- `.lore/transactions/`;
-- `docs/generated/`.
-
-Accepted semantic history is append-only. Reuse stable record IDs, append the next positive revision, and preserve uncertainty rather than inventing evidence.
+Generated files under `docs/lore/` are non-authoritative projections. Do not hand-edit them; regenerate them with LORE after changing reviewed knowledge. There is no LORE proposal, apply, transaction, receipt, or append-only semantic-history workflow.
 
 ## Verification
 
@@ -45,12 +29,11 @@ python -m compileall -q src tests
 
 `python tools/run_unit_tests.py` is the repository's unit-test authority. It first fails closed on module-level `test*` functions that standard-library `unittest` discovery would silently ignore, then executes `unittest` discovery. Tests under `tests/` should use `unittest.TestCase` methods named `test*` rather than pytest-style module functions.
 
-The pinned LORE verification lane runs:
+CI also runs the pinned LORE documentation checks:
 
 ```text
-lore extract --check
-lore validate
-lore project --check
+lore validate .
+lore project . --check
 ```
 
 Pull requests should report the exact commands actually run and must not claim validation that was not performed.
