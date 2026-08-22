@@ -23,7 +23,7 @@ jobs:
         uses: actions/checkout@v4
         with:
           repository: laurajoyhutchins/LORE
-          ref: f483cd40b54fcdcb9a358f00086f4498bb29b790
+          ref: 4f11b8d40c11bc5ba973fbfaadfca9b62957c06c
           path: _lore_tool
       - name: Build LORE documentation utility
         run: |
