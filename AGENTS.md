@@ -56,12 +56,13 @@ Read the current `using-lauras-skills` guidance first. Use `architecture-review`
 
 ## Working method
 
-- Inspect models, schemas, validators, adapters, source registers, corpus contracts, tests, open PRs, recent decisions, and LORE state before editing.
+- Inspect models, schemas, validators, adapters, source registers, corpus contracts, tests, open PRs, recent decisions, and reviewed repository knowledge before editing.
 - Use an isolated branch or worktree.
 - Use test-driven development for behavioral changes.
 - Change authoritative models and schemas before regenerating lawful projections.
 - Record compatibility and schema-version implications.
 - Prefer simplification and deletion when provenance and semantics are preserved.
+- Reviewed repository knowledge lives under `.lore/knowledge/`; edit it directly and use normal Git review. LORE has no proposal or transaction lifecycle in this repository.
 
 ## Deciduous
 
